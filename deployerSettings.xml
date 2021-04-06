@@ -1,0 +1,31 @@
+<settings>
+    <deployer>
+        <tagForArtifacts>
+            <artifact>
+                <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
+                <artifactId>antifraud</artifactId>
+            </artifact>
+        </tagForArtifacts>
+        <ignoreTestDependencies>true</ignoreTestDependencies>
+        <ignoreProvidedDependencies>true</ignoreProvidedDependencies>
+        <ignoreTestSources>true</ignoreTestSources>
+        <additionalUnmanagedFiles>
+            <additionalFile>./model/src/main/resources/model/model/</additionalFile>
+        </additionalUnmanagedFiles>
+        <additionalFiles>
+            <additionalFile>./model/src/main/resources/model/model.xml</additionalFile>
+        </additionalFiles>
+    </deployer>
+    <maven>
+        <options>-P meta-export</options>
+    </maven>
+    <version>
+        <inheritParentVersion>true</inheritParentVersion>
+        <inheritProjectVersion>true</inheritProjectVersion>
+        <format>PPRB_1_1_HF1</format>
+        <forceUpdate>true</forceUpdate>
+    </version>
+    <git>
+        <tagPrefix>SBP-</tagPrefix>
+    </git>
+</settings>

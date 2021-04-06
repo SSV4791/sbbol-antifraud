@@ -33,4 +33,5 @@ test*.txt
 
 /deployer2-*
 /model/src/main/resources/model/localmodel/
-/dataspace-eventfeed/eventfeed-application/src/test/resources/dataspace-core-local-runner.properties
+/dataspace-antifraud/antifraud-application/src/test/resources/dataspace-core-local-runner.properties
+/dataspace-antifraud/antifraud-application/src/test/resources/application-test.properties

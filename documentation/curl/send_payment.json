@@ -1,0 +1,11 @@
+{
+  "jsonrpc": "2.0",
+  "method": "sendData",
+  "id": 1,
+  "params": {
+    "sendparams": {
+      "dboOperation": "PAYMENT_DT_0401060",
+      "docId": "docId"
+    }
+  }
+}

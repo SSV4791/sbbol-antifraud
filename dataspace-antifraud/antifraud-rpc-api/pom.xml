@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>dataspace-antifraud</artifactId>
+        <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
+        <version>DEV-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>antifraud-rpc-api</artifactId>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
+            <artifactId>antifraud-api</artifactId>
+            <version>DEV-SNAPSHOT</version>
+        </dependency>
+        <!--jsonrpc4j-->
+        <dependency>
+            <groupId>sbp.com.sbt.dataspace</groupId>
+            <artifactId>jsonrpc4j</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>
