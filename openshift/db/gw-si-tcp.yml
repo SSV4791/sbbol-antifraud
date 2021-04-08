@@ -1,0 +1,14 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: gw-si-tcp
+spec:
+  selector:
+    istio: egressgateway-${NAMESPACE}
+  servers:
+    - hosts:
+        - ${SI_DB_HOST}
+      port:
+        name: tcp-${DB_SI_TCP_PORT}
+        number: ${DB_SI_TCP_PORT}
+        protocol: TCP

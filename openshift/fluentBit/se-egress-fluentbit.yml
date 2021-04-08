@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: se-egress-fluentbit
+spec:
+  exportTo:
+    - .
+  hosts:
+    - ${FLUENT_BIT_HTTPS_HOST}
+  location: MESH_EXTERNAL
+  ports:
+    - name: http-80
+      number: 80
+      protocol: HTTP
+    - name: https-443
+      number: 443
+      protocol: TLS
+  resolution: DNS

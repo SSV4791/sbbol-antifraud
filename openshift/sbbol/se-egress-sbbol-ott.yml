@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: se-egress-sbbol-ott
+spec:
+  exportTo:
+    - .
+  hosts:
+    - ${SBBOL_SYNAPSE_ADAPTER_HOST_OTT}
+  location: MESH_EXTERNAL
+  ports:
+    - name: http-80
+      number: 80
+      protocol: HTTP
+    - name: https-${SBBOL_SYNAPSE_ADAPTER_PORT_OTT}
+      number: ${SBBOL_SYNAPSE_ADAPTER_PORT_OTT}
+      protocol: TLS
+  resolution: DNS
