@@ -1,0 +1,22 @@
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: ingress-${NAMESPACE}
+    istio: ingress-${NAMESPACE}
+  name: svc-ingressgateway
+spec:
+  ports:
+    - name: https-${INGRESS_HOST_TLS_PORT}
+      port: ${INGRESS_HOST_TLS_PORT}
+    - name: https-${INGRESS_HOST_GEO_TLS_PORT}
+      port: ${INGRESS_HOST_GEO_TLS_PORT}
+    - name: https-${INGRESS_HOST_OTT_PORT}
+      port: ${INGRESS_HOST_OTT_PORT}
+    - name: https-${INGRESS_HOST_GEO_OTT_PORT}
+      port: ${INGRESS_HOST_GEO_OTT_PORT}
+  selector:
+    app: ingress-${NAMESPACE}
+    istio: ingress-${NAMESPACE}
+    release: istio
+  type: ClusterIP

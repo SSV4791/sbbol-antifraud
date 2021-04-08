@@ -1,0 +1,62 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: gw-ingressgateway
+spec:
+  selector:
+    istio: ingress-${NAMESPACE}
+  servers:
+    #TLS
+    - hosts:
+        - ${INGRESS_HOST_TLS}
+      port:
+        name: https-${INGRESS_HOST_TLS_PORT}
+        number: ${INGRESS_HOST_TLS_PORT}
+        protocol: HTTPS
+      tls:
+        caCertificates: /etc/istio/ingressgateway-ca-certs/${CHAIN_PEM_TLS}
+        mode: MUTUAL
+        privateKey: /etc/istio/ingressgateway-certs/${CERT_KEY_TLS}
+        serverCertificate: /etc/istio/ingressgateway-certs/${CERT_TLS}
+        subjectAltNames:
+          - ${SBBOL_SAN}
+          - ${OSIRIS_SAN}
+    #GEO_TLS
+    - hosts:
+        - ${INGRESS_HOST_GEO_TLS}
+      port:
+        name: https-${INGRESS_HOST_GEO_TLS_PORT}
+        number: ${INGRESS_HOST_GEO_TLS_PORT}
+        protocol: HTTPS
+      tls:
+        caCertificates: /etc/istio/ingressgateway-ca-certs/${CHAIN_PEM_GEO_TLS}
+        mode: MUTUAL
+        privateKey: /etc/istio/ingressgateway-certs/${CERT_KEY_GEO_TLS}
+        serverCertificate: /etc/istio/ingressgateway-certs/${CERT_GEO_TLS}
+        subjectAltNames:
+          - ${SBBOL_SAN}
+          - ${OSIRIS_SAN}
+    #OTT
+    - hosts:
+        - ${INGRESS_HOST_OTT}
+      port:
+        name: https-${INGRESS_HOST_OTT_PORT}
+        number: ${INGRESS_HOST_OTT_PORT}
+        protocol: HTTPS
+      tls:
+        caCertificates: /etc/istio/ingressgateway-ca-certs/${CHAIN_PEM_OTT}
+        mode: MUTUAL
+        privateKey: /etc/istio/ingressgateway-certs/${CERT_KEY_OTT}
+        serverCertificate: /etc/istio/ingressgateway-certs/${CERT_OTT}
+    #GEO_OTT
+    - hosts:
+        - ${INGRESS_HOST_GEO_OTT}
+      port:
+        name: https-${INGRESS_HOST_GEO_OTT_PORT}
+        number: ${INGRESS_HOST_GEO_OTT_PORT}
+        protocol: HTTPS
+      tls:
+        caCertificates: /etc/istio/ingressgateway-ca-certs/${CHAIN_PEM_GEO_OTT}
+        mode: MUTUAL
+        privateKey: /etc/istio/ingressgateway-certs/${CERT_KEY_GEO_OTT}
+        serverCertificate: /etc/istio/ingressgateway-certs/${CERT_GEO_OTT}

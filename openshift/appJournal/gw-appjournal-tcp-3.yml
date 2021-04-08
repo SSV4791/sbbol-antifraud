@@ -1,0 +1,14 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: gw-appjournal-tcp-3
+spec:
+  selector:
+    istio: egressgateway-${NAMESPACE}
+  servers:
+    - hosts:
+        - ${APPJOURNAL_HOST_3}
+      port:
+        name: tcp-${APPJOURNAL_PORT_LISTENER_3}
+        number: ${APPJOURNAL_PORT_LISTENER_3}
+        protocol: TCP
