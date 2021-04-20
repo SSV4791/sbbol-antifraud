@@ -2,7 +2,7 @@ package ru.sberbank.pprb.sbbol.antifraud.payment;
 
 import org.junit.jupiter.api.Test;
 import ru.sberbank.pprb.sbbol.antifraud.data.RequestId;
-import ru.sberbank.pprb.sbbol.antifraud.graph.get.PaymentGet;
+import ru.sberbank.pprb.sbbol.antifraud.graph.get.PaymentOperationGet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -17,7 +17,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
         RequestId actual = generatePayment(docId, docNumber);
         assertNotNull(actual);
 
-        PaymentGet paymentGet = searchPayment(docId);
+        PaymentOperationGet paymentGet = searchPayment(docId);
         assertEquals(paymentGet.getRequestId(), actual.getId());
         assertNotNull(paymentGet.getTimeStamp());
         assertNotNull(paymentGet.getOrgGuid());
@@ -41,7 +41,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
         assertThirdSign(paymentGet);
     }
 
-    private void assertDoc(PaymentGet paymentGet, String docId, Integer docNumber) {
+    private void assertDoc(PaymentOperationGet paymentGet, String docId, Integer docNumber) {
         assertEquals(docId, paymentGet.getDocId());
         assertEquals(docNumber, paymentGet.getDocNumber());
         assertNotNull(paymentGet.getDocDate());
@@ -63,7 +63,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
         assertNotNull(paymentGet.getPayerInn());
     }
 
-    private void assertFirstSign(PaymentGet paymentGet) {
+    private void assertFirstSign(PaymentOperationGet paymentGet) {
         assertEquals("2020-03-23T15:01:15", paymentGet.getFirstSignTime().toString());
         assertNotNull(paymentGet.getFirstSignIp());
         assertEquals(paymentGet.getFirstSignIp(), paymentGet.getIpAddress());
@@ -81,7 +81,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
         assertNotNull(paymentGet.getFirstSignSource());
     }
 
-    private void assertSecondSign(PaymentGet paymentGet) {
+    private void assertSecondSign(PaymentOperationGet paymentGet) {
         assertEquals("2020-03-23T15:28:25", paymentGet.getSecondSignTime().toString());
         assertNotNull(paymentGet.getSecondSignIp());
         assertNotNull(paymentGet.getSecondSignLogin());
@@ -97,7 +97,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
         assertNotNull(paymentGet.getSecondSignSource());
     }
 
-    private void assertThirdSign(PaymentGet paymentGet) {
+    private void assertThirdSign(PaymentOperationGet paymentGet) {
         assertEquals("2020-03-23T16:00:05", paymentGet.getThirdSignTime().toString());
         assertEquals(paymentGet.getThirdSignTime(), paymentGet.getSenderSignTime());
         assertEquals(paymentGet.getThirdSignIp(), paymentGet.getSenderIp());
@@ -119,7 +119,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
         RequestId actual = generatePayment(DOC_ID, 1);
         assertEquals(requestId, actual.getId());
 
-        PaymentGet paymentGet = searchPayment(DOC_ID);
+        PaymentOperationGet paymentGet = searchPayment(DOC_ID);
         assertEquals(requestId, paymentGet.getRequestId());
         assertEquals(1, paymentGet.getDocNumber());
     }

@@ -12,7 +12,7 @@ import ru.sberbank.pprb.sbbol.antifraud.data.Operation;
 import ru.sberbank.pprb.sbbol.antifraud.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.grasp.DataspaceCoreSearchClient;
 import ru.sberbank.pprb.sbbol.antifraud.send.SendRequest;
-import ru.sberbank.pprb.sbbol.antifraud.send.response.AnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.send.payment.response.PaymentAnalyzeResponse;
 import sbp.com.sbt.dataspace.core.local.runner.junit5.JUnit5DataSpaceCoreLocalRunnerExtension;
 
 import java.net.MalformedURLException;
@@ -38,7 +38,7 @@ public abstract class DataSpaceIntegrationTest {
     @BeforeAll
     static void setup() throws MalformedURLException {
         createRpcClient = new JsonRpcRestClient(new URL(URL_ROOT + "/savedata"), Collections.emptyMap());
-        searchRpcClient = new JsonRpcRestClient(new URL(URL_ROOT + "/senddata"), Collections.emptyMap());
+        searchRpcClient = new JsonRpcRestClient(new URL(URL_ROOT + "/analyzeoperation"), Collections.emptyMap());
     }
 
     protected static RequestId saveOrUpdateData(Operation record) throws Throwable {
@@ -49,11 +49,11 @@ public abstract class DataSpaceIntegrationTest {
         );
     }
 
-    protected static AnalyzeResponse sendData(SendRequest request) throws Throwable {
+    protected static PaymentAnalyzeResponse sendData(SendRequest request) throws Throwable {
         return searchRpcClient.invoke(
-                "sendData",
-                Collections.singletonMap("sendparams", request),
-                AnalyzeResponse.class
+                "analyzeOperation",
+                Collections.singletonMap("analyzeparams", request),
+                PaymentAnalyzeResponse.class
         );
     }
 

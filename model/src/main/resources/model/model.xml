@@ -1,7 +1,7 @@
 <model model-name="antifraud" version="DEV-SNAPSHOT">
 
-    <class name="Payment" label="Модель платежного поручения">
-        <property name="requestId" type="String" length="36" label="Идентификатор запроса"/>
+    <class name="PaymentOperation" label="Модель платежного поручения">
+        <property name="requestId" type="String" length="36" label="Идентификатор запроса во ФродМониторинг"/>
         <property name="timeStamp" type="LocalDateTime" label="Дата и время формирования события"/>
         <property name="orgGuid" type="String" length="38" label="Уникальный идентификатор клиента"/>
         <property name="userGuid" type="String" length="38" label="Уникальный идентификатор пользователя"/>

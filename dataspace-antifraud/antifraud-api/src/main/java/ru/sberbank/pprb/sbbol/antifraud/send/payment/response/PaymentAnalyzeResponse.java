@@ -1,11 +1,13 @@
-package ru.sberbank.pprb.sbbol.antifraud.send.response;
+package ru.sberbank.pprb.sbbol.antifraud.send.payment.response;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import ru.sberbank.pprb.sbbol.antifraud.send.AnalyzeResponse;
 
 /**
  * Ответ от ФП ИС, с результатами анализа
  */
-public class AnalyzeResponse implements Serializable {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class PaymentAnalyzeResponse implements AnalyzeResponse {
 
     private static final long serialVersionUID = -1531854116701758604L;
 

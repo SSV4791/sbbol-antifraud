@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import ru.sberbank.pprb.sbbol.antifraud.common.DataSpaceIntegrationTest;
 import ru.sberbank.pprb.sbbol.antifraud.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.data.payment.PaymentOperation;
-import ru.sberbank.pprb.sbbol.antifraud.graph.get.PaymentGet;
+import ru.sberbank.pprb.sbbol.antifraud.graph.get.PaymentOperationGet;
 import sbp.sbt.sdk.exception.SdkJsonRpcClientException;
 
 public abstract class PaymentIntegrationTest extends DataSpaceIntegrationTest {
@@ -29,8 +29,8 @@ public abstract class PaymentIntegrationTest extends DataSpaceIntegrationTest {
         return saveOrUpdateData(payment);
     }
 
-    protected PaymentGet searchPayment(String docId) throws SdkJsonRpcClientException {
-        GraphCollection<PaymentGet> collection = searchClient.searchPayment(pWith -> pWith
+    protected PaymentOperationGet searchPayment(String docId) throws SdkJsonRpcClientException {
+        GraphCollection<PaymentOperationGet> collection = searchClient.searchPaymentOperation(pWith -> pWith
                 .withRequestId()
                 .withTimeStamp()
                 .withOrgGuid()

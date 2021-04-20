@@ -2,7 +2,7 @@ package ru.sberbank.pprb.sbbol.antifraud.processor.payment;
 
 import ru.sberbank.pprb.sbbol.antifraud.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.data.payment.PaymentOperation;
-import ru.sberbank.pprb.sbbol.antifraud.packet.PaymentRef;
+import ru.sberbank.pprb.sbbol.antifraud.packet.PaymentOperationRef;
 import ru.sberbank.pprb.sbbol.antifraud.packet.packet.Packet;
 
 import java.util.UUID;
@@ -25,7 +25,7 @@ public class PaymentPacketCommandAdder {
      */
     public static RequestId addCreateCommandToPaket(Packet packet, PaymentOperation payment) {
         RequestId requestId = new RequestId(UUID.randomUUID().toString());
-        packet.payment.create(param -> {
+        packet.paymentOperation.create(param -> {
             param.setRequestId(requestId.getId());
             param.setTimeStamp(payment.getTimeStamp());
             param.setOrgGuid(payment.getOrgGuid());
@@ -144,8 +144,8 @@ public class PaymentPacketCommandAdder {
      * @param objectId идентификатор записи в базе данных
      */
     public static void addUpdateCommandToPacket(Packet packet, PaymentOperation payment, String objectId) {
-        PaymentRef ref = PaymentRef.of(objectId);
-        packet.payment.update(ref, param -> {
+        PaymentOperationRef ref = PaymentOperationRef.of(objectId);
+        packet.paymentOperation.update(ref, param -> {
             param.setTimeOfOccurrence(payment.getTimeOfOccurrence());
             param.setOrgGuid(payment.getOrgGuid());
             param.setTimeStamp(payment.getTimeStamp());
