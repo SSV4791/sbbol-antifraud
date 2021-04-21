@@ -1,0 +1,40 @@
+Deployer:
+  releasers: "16693193,18396199,sbt-sbbol"
+  needBuildImage: "true"
+  needChangeImageUrl: "true"
+
+commons:
+  ci:
+    credentials: DS_sbbol-nexus
+  openshift:
+    credentials: DS_sbbol-nexus
+    url: api.dev-gen2.sigma.sbrf.ru:6443
+  nexus:
+    credentials: DS_sbbol-nexus
+    url: sbtatlas.sigma.sbrf.ru/nexus
+    snapshotRepository: corp-snapshots
+    releaseRepository: corp-releases
+  registry:
+    credentials: DS_sbbol-nexus
+    url: registry.sigma.sbrf.ru
+    snapshotProject: pprb-dev/ci02473994/ci03045533_sbbol-antifraud_dev
+    releaseProject: pprb/ci02473994/ci03045533_sbbol-antifraud
+  git:
+    credentials: dataspace-bot-ssh
+  sonar:
+    url: https://sbt-sonarqube.sigma.sbrf.ru/
+    token: 976133daa7af549dbee82d4eede80cd10cd1083f
+    projectKey: ru.sberbank.pprb.sbbol.antifraud:sbbol-antifraud
+  maven:
+    pathSettings: ./config/sigma/settings.xml
+
+QualityGates:
+  sbrf:
+    url: https://sbrf-nexus.sigma.sbrf.ru/nexus
+    groupId: Nexus_PROD.CI03045533_sbbol-antifraud
+    credentials: DS_sbbol-nexus
+    repositoryId: release
+  sast:
+    credentials: DS_SAST_CRED
+    configPath: config/devsecops-config.yml
+  mode: scanAndFlags
