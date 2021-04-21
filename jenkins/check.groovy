@@ -25,6 +25,8 @@ pipeline {
         GIT_REPOSITORY = 'sbbol-antifraud'
         PR_CHECK_LABEL = 'pr_check'
         pullRequest = null
+        SONAR_PROJECT = 'ru.sberbank.pprb.sbbol.antifraud:sbbol-antifraud'
+        SONAR_TOKEN = credentials('sonar-token')
     }
     stages {
         stage('Init') {
@@ -64,8 +66,8 @@ pipeline {
                                     '-e "MVNW_VERBOSE=true" ' +
                                     "-e \"REPO_USER=${USERNAME}\" " +
                                     "-e \"REPO_PASSWORD=${PASSWORD}\" " +
-                                    'registry.sigma.sbrf.ru/ci00149046/ci00405008_sbbolufs/openjdk:11 ' +
-                                    './mvnw clean install -X -s /build/jenkins/settings.xml'
+                                    'registry.sigma.sbrf.ru/ci00149046/ci00405008_sbbolufs/openjdk:11-with-certs ' +
+                                    "./mvnw clean verify sonar:sonar -P sonar -e -Dsonar.host.url=https://sbt-sonarqube.sigma.sbrf.ru/ -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectKey=${SONAR_PROJECT} -Dsonar.pullrequest.key=${params.pullRequestId} -Dsonar.pullrequest.branch=${pullRequest.fromRef.displayId} -Dsonar.pullrequest.base=${pullRequest.toRef.displayId} -s /build/jenkins/settings.xml"
                         }
                     }
                 }
