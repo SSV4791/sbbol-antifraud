@@ -33,7 +33,7 @@ pipeline {
         DATASPACE_ARCHIVE_NAME = 'dataspace-distrib.zip'
         VERSION = ''
         VERSION_PATTERN = /\d+\.\d+\.\d+(\-build\.\d+)?/
-        DATASPACE_CONFIGS = './config/default.yml,./config/sigma/devgen2_eip.yml'
+        DATASPACE_CONFIGS = './config/default.yml'
         NEXUSSBRF_RELEASE_REPOSITORY = 'https://sbrf-nexus.sigma.sbrf.ru/nexus/service/local/artifact/maven/content'
         DEV_REPOSITORY = 'https://nexus.sigma.sbrf.ru/nexus/service/local/artifact/maven/content'
         PROJECT_URL = "https://sbtatlas.sigma.sbrf.ru/stashdbo/projects/${GIT_PROJECT}/repos/${GIT_REPOSITORY}/"
