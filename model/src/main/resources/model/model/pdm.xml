@@ -1,0 +1,303 @@
+<PdmModel>
+  <model model-name="antifraud" component-code="НЕ ЗАДАНО" version="0.1.0-build.1" versioned-entities="false">
+    <class name="PaymentOperation" extends="BaseEntity" label="Модель платежного поручения" tableName="T_PAYMENTOPERATION" pk-index-name="PK_T_PAYMENTOPERATION" description="" affinity="objectId" class-access="UPDATE" lockable="false">
+      <id type="String" category="SNOWFLAKE"/>
+      <property name="requestId" type="String" length="36" label="Идентификатор запроса во ФродМониторинг" column-name="REQUESTID" description="" column-type="VARCHAR(36)"/>
+      <property name="timeStamp" type="LocalDateTime" length="3" label="Дата и время формирования события" column-name="TIMESTAMP_" description="" column-type="TIMESTAMP(3)"/>
+      <property name="orgGuid" type="String" length="38" label="Уникальный идентификатор клиента" column-name="ORGGUID" description="" column-type="VARCHAR(38)"/>
+      <property name="userGuid" type="String" length="38" label="Уникальный идентификатор пользователя" column-name="USERGUID" description="" column-type="VARCHAR(38)"/>
+      <property name="tbCode" type="String" length="50" label="Код территориального банка, в котором обслуживается организация" column-name="TBCODE" description="" column-type="VARCHAR(50)"/>
+      <property name="httpAccept" type="String" length="3000" label="Значение заголовка Accept HTTP-запроса" column-name="HTTPACCEPT" description="" column-type="VARCHAR(3000)"/>
+      <property name="httpReferer" type="String" length="256" label="Значение заголовка Referer HTTP-запроса" column-name="HTTPREFERER" description="" column-type="VARCHAR(256)"/>
+      <property name="httpAcceptChars" type="String" length="256" label="Значение заголовка Accept-Charset HTTP-запроса" column-name="HTTPACCEPTCHARS" description="" column-type="VARCHAR(256)"/>
+      <property name="httpAcceptEncoding" type="String" length="256" label="Значение заголовка Accept-Encoding HTTP-запроса" column-name="HTTPACCEPTENCODING" description="" column-type="VARCHAR(256)"/>
+      <property name="httpAcceptLanguage" type="String" length="256" label="Значение заголовка Accept-Language HTTP-запроса" column-name="HTTPACCEPTLANGUAGE" description="" column-type="VARCHAR(256)"/>
+      <property name="ipAddress" type="String" length="15" label="IP адрес" column-name="IPADDRESS" description="" column-type="VARCHAR(15)"/>
+      <property name="userAgent" type="String" length="1024" label="Значение заголовка User-Agent HTTP-запроса" column-name="USERAGENT" description="" column-type="VARCHAR(1024)"/>
+      <property name="devicePrint" type="String" length="4000" label="Слепок устройства" column-name="DEVICEPRINT" description="" column-type="VARCHAR(4000)"/>
+      <property name="mobSdkData" type="String" length="4000" label="Информация о мобильном устройстве в формате json" column-name="MOBSDKDATA" description="" column-type="VARCHAR(4000)"/>
+      <property name="channelIndicator" type="String" length="15" label="Тип канала связи, через который осуществляется связь клиента с банком" column-name="CHANNELINDICATOR" description="" column-type="VARCHAR(15)"/>
+      <property name="timeOfOccurrence" type="LocalDateTime" length="3" label="Время создания запроса" column-name="TIMEOFOCCURRENCE" description="" column-type="TIMESTAMP(3)"/>
+      <property name="docId" type="String" length="36" label="ID документа" column-name="DOCID" description="" column-type="VARCHAR(36)"/>
+      <property name="docNumber" type="Integer" label="Номер документа" column-name="DOCNUMBER" description="" column-type="${type_int}"/>
+      <property name="docDate" type="LocalDate" label="Дата документа" column-name="DOCDATE" description="" column-type="DATE"/>
+      <property name="amount" type="Long" label="Сумма перевода" column-name="AMOUNT" description="" column-type="${type_long}"/>
+      <property name="currency" type="String" length="3" label="Валюта перевода, буквенный код валюты перевода в соответствии со стандартом ISO" column-name="CURRENCY" description="" column-type="VARCHAR(3)"/>
+      <property name="executionSpeed" type="String" length="30" label="Скорость обработки документа" column-name="EXECUTIONSPEED" description="" column-type="VARCHAR(30)"/>
+      <property name="otherAccBankType" type="String" length="20" label="Вид платежа в ЭД" column-name="OTHERACCBANKTYPE" description="" column-type="VARCHAR(20)"/>
+      <property name="accountNumber" type="String" length="20" label="Номер счета отправителя (плательщика)" column-name="ACCOUNTNUMBER" description="" column-type="VARCHAR(20)"/>
+      <property name="otherAccName" type="String" length="200" label="Наименование получателя" column-name="OTHERACCNAME" description="" column-type="VARCHAR(200)"/>
+      <property name="balAccNumber" type="String" length="20" label="Бал.счет получателя" column-name="BALACCNUMBER" description="" column-type="VARCHAR(20)"/>
+      <property name="otherBicCode" type="String" length="11" label="БИК SWIFT получателя" column-name="OTHERBICCODE" description="" column-type="VARCHAR(11)"/>
+      <property name="otherAccOwnershipType" type="String" length="15" label="Направление передачи средств" column-name="OTHERACCOWNERSHIPTYPE" description="" column-type="VARCHAR(15)"/>
+      <property name="otherAccType" type="String" length="20" label="Тип счета получателя платежа" column-name="OTHERACCTYPE" description="" column-type="VARCHAR(20)"/>
+      <property name="transferMediumType" type="String" length="30" label="Метод перевода средств между пользователем и получателем" column-name="TRANSFERMEDIUMTYPE" description="" column-type="VARCHAR(30)"/>
+      <property name="receiverInn" type="String" length="12" label="ИНН получателя" column-name="RECEIVERINN" description="" column-type="VARCHAR(12)"/>
+      <property name="destination" type="String" length="255" label="Назначение платежа" column-name="DESTINATION" description="" column-type="VARCHAR(255)"/>
+      <property name="receiverAccount" type="String" length="5" label="Бал.счет получателя" column-name="RECEIVERACCOUNT" description="" column-type="VARCHAR(5)"/>
+      <property name="receiverBicAccount" type="String" length="32" label="БИК и Счет получателя" column-name="RECEIVERBICACCOUNT" description="" column-type="VARCHAR(32)"/>
+      <property name="payerInn" type="String" length="12" label="ИНН отправителя" column-name="PAYERINN" description="" column-type="VARCHAR(12)"/>
+      <property name="firstSignTime" type="LocalDateTime" length="3" label="1-я подпись Время подписи" column-name="FIRSTSIGNTIME" description="" column-type="TIMESTAMP(3)"/>
+      <property name="firstSignIp" type="String" length="15" label="1-я подпись IP адрес" column-name="FIRSTSIGNIP" description="" column-type="VARCHAR(15)"/>
+      <property name="firstSignLogin" type="String" length="254" label="1-я подпись Логин" column-name="FIRSTSIGNLOGIN" description="" column-type="VARCHAR(254)"/>
+      <property name="firstSignCryptoprofile" type="String" length="254" label="1-я подпись Наименование криптопрофиля" column-name="FIRSTSIGNCRYPTOPROFILE" description="" column-type="VARCHAR(254)"/>
+      <property name="firstSignCryptoprofileType" type="String" length="254" label="1-я подпись Тип криптопрофиля" column-name="FIRSTSIGNCRYPTOPROFILETYPE" description="" column-type="VARCHAR(254)"/>
+      <property name="firstSignChannel" type="String" length="254" label="1-я подпись Канал подписи" column-name="FIRSTSIGNCHANNEL" description="" column-type="VARCHAR(254)"/>
+      <property name="firstSignToken" type="String" length="254" label="1-я подпись Данные Токена" column-name="FIRSTSIGNTOKEN" description="" column-type="VARCHAR(254)"/>
+      <property name="firstSignType" type="String" length="254" label="1-я подпись Тип подписи" column-name="FIRSTSIGNTYPE" description="" column-type="VARCHAR(254)"/>
+      <property name="firstSignImsi" type="String" length="128" label="1-я подпись IMSI" column-name="FIRSTSIGNIMSI" description="" column-type="VARCHAR(128)"/>
+      <property name="firstSignCertId" type="String" length="254" label="1-я подпись Идентификатор личного сертификата" column-name="FIRSTSIGNCERTID" description="" column-type="VARCHAR(254)"/>
+      <property name="firstSignPhone" type="String" length="13" label="1-я подпись Номер телефона" column-name="FIRSTSIGNPHONE" description="" column-type="VARCHAR(13)"/>
+      <property name="firstSignEmail" type="String" length="320" label="1-я подпись Адрес электронной почты" column-name="FIRSTSIGNEMAIL" description="" column-type="VARCHAR(320)"/>
+      <property name="firstSignSource" type="String" length="100" label="1-я подпись Канал" column-name="FIRSTSIGNSOURCE" description="" column-type="VARCHAR(100)"/>
+      <property name="privateIpAddress" type="String" length="15" label="Локальный IP адрес" column-name="PRIVATEIPADDRESS" description="" column-type="VARCHAR(15)"/>
+      <property name="senderSignTime" type="LocalDateTime" length="3" label="Отправивший Время подписи" column-name="SENDERSIGNTIME" description="" column-type="TIMESTAMP(3)"/>
+      <property name="senderIp" type="String" length="15" label="Отправивший IP адрес" column-name="SENDERIP" description="" column-type="VARCHAR(15)"/>
+      <property name="senderLogin" type="String" length="254" label="Отправивший Логин" column-name="SENDERLOGIN" description="" column-type="VARCHAR(254)"/>
+      <property name="senderCryptoprofile" type="String" length="254" label="Отправивший Наименование криптопрофиля" column-name="SENDERCRYPTOPROFILE" description="" column-type="VARCHAR(254)"/>
+      <property name="senderCryptoprofileType" type="String" length="254" label="Отправивший Тип криптопрофиля" column-name="SENDERCRYPTOPROFILETYPE" description="" column-type="VARCHAR(254)"/>
+      <property name="senderSignChannel" type="String" length="254" label="Отправивший Канал подписи" column-name="SENDERSIGNCHANNEL" description="" column-type="VARCHAR(254)"/>
+      <property name="senderToken" type="String" length="254" label="Отправивший Данные Токена" column-name="SENDERTOKEN" description="" column-type="VARCHAR(254)"/>
+      <property name="senderSignType" type="String" length="254" label="Отправивший Тип подписи" column-name="SENDERSIGNTYPE" description="" column-type="VARCHAR(254)"/>
+      <property name="senderSignImsi" type="String" length="128" label="Отправивший IMSI" column-name="SENDERSIGNIMSI" description="" column-type="VARCHAR(128)"/>
+      <property name="senderCertId" type="String" length="254" label="Отправивший Идентификатор сертификата" column-name="SENDERCERTID" description="" column-type="VARCHAR(254)"/>
+      <property name="senderPhone" type="String" length="13" label="Отправивший Номер телефона" column-name="SENDERPHONE" description="" column-type="VARCHAR(13)"/>
+      <property name="senderEmail" type="String" length="320" label="Отправивший Адрес электронной почты" column-name="SENDEREMAIL" description="" column-type="VARCHAR(320)"/>
+      <property name="senderSource" type="String" length="100" label="Отправивший Канал" column-name="SENDERSOURCE" description="" column-type="VARCHAR(100)"/>
+      <property name="secondSignTime" type="LocalDateTime" length="3" label="2-я подпись Время подписи" column-name="SECONDSIGNTIME" description="" column-type="TIMESTAMP(3)"/>
+      <property name="secondSignIp" type="String" length="15" label="2-я подпись IP адрес" column-name="SECONDSIGNIP" description="" column-type="VARCHAR(15)"/>
+      <property name="secondSignLogin" type="String" length="254" label="2-я подпись Логин" column-name="SECONDSIGNLOGIN" description="" column-type="VARCHAR(254)"/>
+      <property name="secondSignCryptoprofile" type="String" length="254" label="2-я подпись Наименование криптопрофиля" column-name="SECONDSIGNCRYPTOPROFILE" description="" column-type="VARCHAR(254)"/>
+      <property name="secondSignCryptoprofileType" type="String" length="254" label="2-я подпись Тип криптопрофиля" column-name="SECONDSIGNCRYPTOPROFILETYPE" description="" column-type="VARCHAR(254)"/>
+      <property name="secondSignChannel" type="String" length="254" label="2-я подпись Канал подписи" column-name="SECONDSIGNCHANNEL" description="" column-type="VARCHAR(254)"/>
+      <property name="secondSignToken" type="String" length="254" label="2-я подпись Данные Токена" column-name="SECONDSIGNTOKEN" description="" column-type="VARCHAR(254)"/>
+      <property name="secondSignType" type="String" length="254" label="2-я подпись Тип подписи" column-name="SECONDSIGNTYPE" description="" column-type="VARCHAR(254)"/>
+      <property name="secondSignImsi" type="String" length="128" label="2-я подпись IMSI" column-name="SECONDSIGNIMSI" description="" column-type="VARCHAR(128)"/>
+      <property name="secondSignCertId" type="String" length="254" label="2-я подпись Идентификатор сертификата" column-name="SECONDSIGNCERTID" description="" column-type="VARCHAR(254)"/>
+      <property name="secondSignPhone" type="String" length="13" label="2-я подпись Номер телефона" column-name="SECONDSIGNPHONE" description="" column-type="VARCHAR(13)"/>
+      <property name="secondSignEmail" type="String" length="320" label="2-я подпись Адрес электронной почты" column-name="SECONDSIGNEMAIL" description="" column-type="VARCHAR(320)"/>
+      <property name="secondSignSource" type="String" length="100" label="2-я подпись Канал" column-name="SECONDSIGNSOURCE" description="" column-type="VARCHAR(100)"/>
+      <property name="thirdSignTime" type="LocalDateTime" length="3" label="3-я подпись Время подписи" column-name="THIRDSIGNTIME" description="" column-type="TIMESTAMP(3)"/>
+      <property name="thirdSignIp" type="String" length="15" label="3-я подпись IP адрес" column-name="THIRDSIGNIP" description="" column-type="VARCHAR(15)"/>
+      <property name="thirdSignLogin" type="String" length="254" label="3-я подпись Логин" column-name="THIRDSIGNLOGIN" description="" column-type="VARCHAR(254)"/>
+      <property name="thirdSignCryptoprofile" type="String" length="254" label="3-я подпись Наименование криптопрофиля" column-name="THIRDSIGNCRYPTOPROFILE" description="" column-type="VARCHAR(254)"/>
+      <property name="thirdSignCryptoprofileType" type="String" length="254" label="3-я подпись Тип криптопрофиля" column-name="THIRDSIGNCRYPTOPROFILETYPE" description="" column-type="VARCHAR(254)"/>
+      <property name="thirdSignChannel" type="String" length="254" label="3-я подпись Канал подписи" column-name="THIRDSIGNCHANNEL" description="" column-type="VARCHAR(254)"/>
+      <property name="thirdSignToken" type="String" length="254" label="3-я подпись Данные Токена" column-name="THIRDSIGNTOKEN" description="" column-type="VARCHAR(254)"/>
+      <property name="thirdSignType" type="String" length="254" label="3-я подпись Тип подписи" column-name="THIRDSIGNTYPE" description="" column-type="VARCHAR(254)"/>
+      <property name="thirdSignImsi" type="String" length="128" label="3-я подпись IMSI" column-name="THIRDSIGNIMSI" description="" column-type="VARCHAR(128)"/>
+      <property name="thirdSignCertId" type="String" length="254" label="3-я подпись Идентификатор сертификата" column-name="THIRDSIGNCERTID" description="" column-type="VARCHAR(254)"/>
+      <property name="thirdSignPhone" type="String" length="13" label="3-я подпись Номер телефона" column-name="THIRDSIGNPHONE" description="" column-type="VARCHAR(13)"/>
+      <property name="thirdSignEmail" type="String" length="320" label="3-я подпись Адрес электронной почты" column-name="THIRDSIGNEMAIL" description="" column-type="VARCHAR(320)"/>
+      <property name="thirdSignSource" type="String" length="100" label="3-я подпись Канал" column-name="THIRDSIGNSOURCE" description="" column-type="VARCHAR(100)"/>
+      <property name="apiCalls" type="PaymentOperationApiCall" length="254" collection="SET" label="Коллекция с результатами идемпотентных вызовов" column-type="VARCHAR(254)" system-field="true" changeable="SYSTEM" mappedBy="parentObject" object-link="O2M"/>
+      <property name="objectId" type="String" length="254" label="Прикладной ID объекта" mandatory="true" column-name="OBJECT_ID" column-type="VARCHAR(254)" id="true" changeable="READ_ONLY"/>
+      <property name="type" type="String" length="254" label="Дискриминатор классов" mandatory="true" index="true" column-name="TYPE" description="Дискриминатор" column-type="VARCHAR(254)" changeable="READ_ONLY"/>
+      <index unique="true" index-name="I_PAYMENTOPERATION_DOCID">
+        <property name="docId"/>
+      </index>
+      <index index-name="I_PAYMENTOPERATION_OBJECT_ID" primary-key="true">
+        <property name="objectId"/>
+      </index>
+      <index index-name="I_PAYMENTOPERATION_TYPE">
+        <property name="type"/>
+      </index>
+    </class>
+    <class name="PaymentOperationApiCall" extends="BaseEntity" label="Результат обработки пакета Unit of Work для PaymentOperation" tableName="T_PAYMENTOPERATIONAPICALL" pk-index-name="PK_T_PAYMENTOPERATIONAPICALL" affinity="parentObject" class-access="SYSTEM" final-class="true">
+      <id type="String" category="SNOWFLAKE"/>
+      <property name="apiCallId" type="String" length="254" label="Идентификатор пакета" unique="true" column-name="APICALLID" column-type="VARCHAR(254)" system-field="true" changeable="SYSTEM"/>
+      <property name="firstCallDate" type="Date" length="3" label="Дата первого успешного вызова пакета" column-name="FIRSTCALLDATE" column-type="TIMESTAMP(3)" system-field="true" changeable="SYSTEM"/>
+      <property name="data" type="String" length="4000" label="Результат обработки пакета" column-name="DATA" column-type="VARCHAR(4000)" system-field="true" changeable="SYSTEM"/>
+      <property name="bigData" type="String" length="4001" label="Результат обработки пакета, используется если результат не помещается в поле data" column-name="BIGDATA" column-type="CLOB" system-field="true" changeable="SYSTEM"/>
+      <property name="parentObject" type="PaymentOperation" length="254" label="Ссылка на родительский объект" mandatory="true" index="true" column-name="PARENTOBJECT_ID" column-type="VARCHAR(254)" changeable="CREATE" parent="true" object-link="M2O"/>
+      <property name="objectId" type="String" length="254" label="Прикладной ID объекта" mandatory="true" column-name="OBJECT_ID" column-type="VARCHAR(254)" id="true" changeable="READ_ONLY"/>
+      <property name="aggregateRoot" type="PaymentOperation" length="254" label="ссылка на корень агрегата" index="true" column-name="AGGREGATEROOT_ID" column-type="VARCHAR(254)" changeable="READ_ONLY" object-link="M2O"/>
+      <index index-name="I_PAYMENTOPERATIONAPICALL_OBJECT_ID" primary-key="true">
+        <property name="objectId"/>
+      </index>
+      <index unique="true" index-name="I_PAYMENTOPERATIONAPICALL_APICALLID">
+        <property name="apiCallId"/>
+      </index>
+      <index index-name="I_PAYMENTOPERATIONAPICALL_PARENTOBJECT_ID">
+        <property name="parentObject"/>
+      </index>
+      <index index-name="I_PAYMENTOPERATIONAPICALL_AGGREGATEROOT_ID">
+        <property name="aggregateRoot"/>
+      </index>
+    </class>
+    <class name="CREpkEvent" extends="BaseEntity" label="Таблица событий ЕПК" tableName="T_REPL_CR_CREPKEVENT" pk-index-name="PK_T_REPL_CR_CREPKEVENT" class-access="SYSTEM" final-class="true" generate-jpa="false">
+      <id type="String" category="MANUAL"/>
+      <property name="status" type="String" length="254" label="Статус обработки события" column-name="STATUS" column-type="VARCHAR(254)"/>
+      <property name="epkId" type="String" length="254" label="Идентификатор EPK" unique="true" index="true" column-name="EPKID" column-type="VARCHAR(254)"/>
+      <property name="fromClient" type="String" length="254" label="Старый клиент" column-name="FROMCLIENT" column-type="VARCHAR(254)"/>
+      <property name="fromClientVersion" type="Long" label="Версия старого клиента" column-name="FROMCLIENTVERSION" column-type="${type_long}"/>
+      <property name="toClient" type="String" length="254" label="Новый клиент" column-name="TOCLIENT" column-type="VARCHAR(254)"/>
+      <property name="toClientVersion" type="Long" label="Версия нового клиента" column-name="TOCLIENTVERSION" column-type="${type_long}"/>
+      <property name="originalToClient" type="String" length="254" label="Новый клиент. То же, что и toClient, но это поле остаётся неизменным после схлопывания" column-name="ORIGINALTOCLIENT" column-type="VARCHAR(254)"/>
+      <property name="newClient" type="String" length="254" label="ЕПК-ID клиента, который был создан вместо ошибочно слитого" column-name="NEWCLIENT" column-type="VARCHAR(254)"/>
+      <property name="currentSpace" type="String" length="254" label="Текущее пространство обслуживания" column-name="CURRENTSPACE" column-type="VARCHAR(254)"/>
+      <property name="timeCreated" type="Date" length="3" label="Время создания события" column-name="TIMECREATED" column-type="TIMESTAMP(3)"/>
+      <property name="objectId" type="String" length="254" label="Прикладной ID объекта" mandatory="true" column-name="OBJECT_ID" column-type="VARCHAR(254)" id="true" changeable="READ_ONLY"/>
+      <index unique="true" index-name="I_CREPKEVENT_EPKID">
+        <property name="epkId"/>
+      </index>
+      <index index-name="I_CREPKEVENT_OBJECT_ID" primary-key="true">
+        <property name="objectId"/>
+      </index>
+    </class>
+    <class name="CREpkEventBuffer" extends="BaseEntity" label="Буферная таблица событий ЕПК" tableName="T_REPL_CR_CREPKEVENTBUFFER" pk-index-name="PK_T_REPL_CR_CREPKEVENTBUFFER" class-access="SYSTEM" final-class="true" generate-jpa="false">
+      <id type="String" category="MANUAL"/>
+      <property name="status" type="String" length="254" label="Статус обработки события" unique="false" index="true" column-name="STATUS" column-type="VARCHAR(254)"/>
+      <property name="epkId" type="String" length="254" label="Идентификатор EPK" unique="true" index="true" column-name="EPKID" column-type="VARCHAR(254)"/>
+      <property name="fromClient" type="String" length="254" label="Старый клиент" column-name="FROMCLIENT" column-type="VARCHAR(254)"/>
+      <property name="fromClientVersion" type="Long" label="Версия старого клиента" column-name="FROMCLIENTVERSION" column-type="${type_long}"/>
+      <property name="toClient" type="String" length="254" label="Новый клиент" column-name="TOCLIENT" column-type="VARCHAR(254)"/>
+      <property name="toClientVersion" type="Long" label="Версия нового клиента" column-name="TOCLIENTVERSION" column-type="${type_long}"/>
+      <property name="timeCreated" type="Date" length="3" label="Время создания события" unique="false" index="true" column-name="TIMECREATED" column-type="TIMESTAMP(3)"/>
+      <property name="objectId" type="String" length="254" label="Прикладной ID объекта" mandatory="true" column-name="OBJECT_ID" column-type="VARCHAR(254)" id="true" changeable="READ_ONLY"/>
+      <index unique="true" index-name="I_CREPKEVENTBUFFER_EPKID">
+        <property name="epkId"/>
+      </index>
+      <index index-name="I_CREPKEVENTBUFFER_STATUS">
+        <property name="status"/>
+      </index>
+      <index index-name="I_CREPKEVENTBUFFER_TIMECREATED">
+        <property name="timeCreated"/>
+      </index>
+      <index index-name="I_CREPKEVENTBUFFER_OBJECT_ID" primary-key="true">
+        <property name="objectId"/>
+      </index>
+    </class>
+    <class name="CRRequestEvent" extends="BaseEntity" label="Таблица событий запросов" tableName="T_REPL_CR_CRREQUESTEVENT" pk-index-name="PK_T_REPL_CR_CRREQUESTEVENT" class-access="SYSTEM" final-class="true" generate-jpa="false">
+      <id type="String" category="MANUAL"/>
+      <property name="status" type="String" length="254" label="Статус обработки события" column-name="STATUS" column-type="VARCHAR(254)"/>
+      <property name="fromSpace" type="String" length="254" label="Из какого пространства (SPACE/ZONE)" column-name="FROMSPACE" column-type="VARCHAR(254)"/>
+      <property name="toSpace" type="String" length="254" label="В какое пространство (SPACE/ZONE)" column-name="TOSPACE" column-type="VARCHAR(254)"/>
+      <property name="fromClient" type="String" length="254" label="Старый клиент" column-name="FROMCLIENT" column-type="VARCHAR(254)"/>
+      <property name="toClient" type="String" length="254" label="Новый клиент" column-name="TOCLIENT" column-type="VARCHAR(254)"/>
+      <property name="timeCreated" type="Date" length="3" label="Время создания события" column-name="TIMECREATED" column-type="TIMESTAMP(3)"/>
+      <property name="objectId" type="String" length="254" label="Прикладной ID объекта" mandatory="true" column-name="OBJECT_ID" column-type="VARCHAR(254)" id="true" changeable="READ_ONLY"/>
+      <index index-name="I_CRREQUESTEVENT_OBJECT_ID" primary-key="true">
+        <property name="objectId"/>
+      </index>
+    </class>
+    <class name="CRRequestEventDupByAggregate" extends="BaseEntity" label="Таблица событий запросов" tableName="T_REPL_CR_CRREQUESTEVENT_DUP_BY_AGGREGATE" pk-index-name="PK_T_REPL_CR_CRREQUESTEVENT_DUP_BY_AGGREGATE" class-access="SYSTEM" final-class="true" generate-jpa="false">
+      <id type="String" category="MANUAL"/>
+      <property name="status" type="String" length="254" label="Статус обработки события" column-name="STATUS" column-type="VARCHAR(254)"/>
+      <property name="fromClient" type="String" length="254" label="Старый клиент" column-name="FROMCLIENT" column-type="VARCHAR(254)"/>
+      <property name="toClient" type="String" length="254" label="Новый клиент" column-name="TOCLIENT" column-type="VARCHAR(254)"/>
+      <property name="timeCreated" type="Date" length="3" label="Время создания события" column-name="TIMECREATED" column-type="TIMESTAMP(3)"/>
+      <property name="aggregateRootId" type="String" length="254" label="ID корня агрегата" column-name="AGGREGATEROOTID" column-type="VARCHAR(254)"/>
+      <property name="aggregateRootClass" type="String" length="254" label="Тип корня агрегата" column-name="AGGREGATEROOTCLASS" column-type="VARCHAR(254)"/>
+      <property name="objectId" type="String" length="254" label="Прикладной ID объекта" mandatory="true" column-name="OBJECT_ID" column-type="VARCHAR(254)" id="true" changeable="READ_ONLY"/>
+      <index index-name="I_CRREQUESTEVENTDUPBYAGGREGATE_OBJECT_ID" primary-key="true">
+        <property name="objectId"/>
+      </index>
+    </class>
+    <class name="CRBatch" extends="BaseEntity" label="Таблица событий ЕПК" tableName="T_REPL_CR_CRBATCH" pk-index-name="PK_T_REPL_CR_CRBATCH" class-access="SYSTEM" final-class="true" generate-jpa="false">
+      <id type="String" category="MANUAL"/>
+      <property name="fieldName" type="String" length="254" label="Наименования поля" column-name="FIELDNAME" column-type="VARCHAR(254)"/>
+      <property name="eventId" type="String" length="254" label="Сквозной идентификатор события EventId" column-name="EVENTID" column-type="VARCHAR(254)"/>
+      <property name="entityName" type="String" length="254" label="Наименования таблицы" column-name="ENTITYNAME" column-type="VARCHAR(254)"/>
+      <property name="identifiers" type="String" length="254" collection="SET" label="Идентфикаторы обработанных сущностей" column-name="IDENTIFIERS" collection-table-name="LC_REPL_CR_CRBATCH_IDENTIFIERS" key-column-name="CRBATCH_ID" column-type="VARCHAR(254)"/>
+      <property name="objectId" type="String" length="254" label="Прикладной ID объекта" mandatory="true" column-name="OBJECT_ID" column-type="VARCHAR(254)" id="true" changeable="READ_ONLY"/>
+      <index index-name="I_CRBATCH_OBJECT_ID" primary-key="true">
+        <property name="objectId"/>
+      </index>
+    </class>
+    <class name="CRTask" extends="BaseEntity" label="Таблица с задачами" tableName="T_REPL_CR_CRTASK" pk-index-name="PK_T_REPL_CR_CRTASK" class-access="SYSTEM" final-class="true" generate-jpa="false">
+      <id type="String" category="MANUAL"/>
+      <property name="status" type="String" length="254" label="Статус выполнения задачи" unique="false" index="true" column-name="STATUS" column-type="VARCHAR(254)"/>
+      <property name="retryCount" type="Integer" label="Колличество перезапусков задачи" column-name="RETRYCOUNT" column-type="${type_int}"/>
+      <property name="referenceType" type="String" length="254" label="Тип обрабатываемой ссылки [Client, Individual, etc]" column-name="REFERENCETYPE" column-type="VARCHAR(254)"/>
+      <property name="fromSpace" type="String" length="254" label="Из какого пространства (SPACE/ZONE)" column-name="FROMSPACE" column-type="VARCHAR(254)"/>
+      <property name="toSpace" type="String" length="254" label="В какое пространство (SPACE/ZONE)" column-name="TOSPACE" column-type="VARCHAR(254)"/>
+      <property name="fromClient" type="String" length="254" label="Старый клиент" column-name="FROMCLIENT" column-type="VARCHAR(254)"/>
+      <property name="toClient" type="String" length="254" label="Новый клиент" column-name="TOCLIENT" column-type="VARCHAR(254)"/>
+      <property name="timeCreated" type="Date" length="3" label="Время создания события" column-name="TIMECREATED" column-type="TIMESTAMP(3)"/>
+      <property name="operationType" type="String" length="254" label="TYPE [RELOCATION, DUPLICATION]" column-name="OPERATIONTYPE" column-type="VARCHAR(254)"/>
+      <property name="heartbeat" type="Date" length="3" label="Время когда последний раз был установлен Heartbeat" column-name="HEARTBEAT" column-type="TIMESTAMP(3)"/>
+      <property name="retryAfter" type="Date" length="3" label="Время после которого можно перезапустить задачу" column-name="RETRYAFTER" column-type="TIMESTAMP(3)"/>
+      <property name="objectId" type="String" length="254" label="Прикладной ID объекта" mandatory="true" column-name="OBJECT_ID" column-type="VARCHAR(254)" id="true" changeable="READ_ONLY"/>
+      <index index-name="I_CRTASK_STATUS">
+        <property name="status"/>
+      </index>
+      <index index-name="I_CRTASK_OBJECT_ID" primary-key="true">
+        <property name="objectId"/>
+      </index>
+    </class>
+    <class name="CRProcess" extends="BaseEntity" label="Таблица с попыткой запуска задачи" tableName="T_REPL_CR_CRPROCESS" pk-index-name="PK_T_REPL_CR_CRPROCESS" class-access="SYSTEM" final-class="true" generate-jpa="false">
+      <id type="String" category="MANUAL"/>
+      <property name="startTime" type="Date" length="3" label="Время начала обработки" column-name="STARTTIME" column-type="TIMESTAMP(3)"/>
+      <property name="status" type="String" length="254" label="Статус выполнения процесса" column-name="STATUS" column-type="VARCHAR(254)"/>
+      <property name="eventId" type="String" length="254" label="Сквозной идентификатор события EventId" column-name="EVENTID" column-type="VARCHAR(254)"/>
+      <property name="finishTime" type="Date" length="3" label="Время окончания обработки" column-name="FINISHTIME" column-type="TIMESTAMP(3)"/>
+      <property name="notice" type="String" length="4000" label="Результат выполнения" column-name="NOTICE" column-type="VARCHAR(4000)"/>
+      <property name="reconciliationCount" type="Integer" label="Колличество выполненых проверок реконсиляции" column-name="RECONCILIATIONCOUNT" column-type="${type_int}"/>
+      <property name="node" type="String" length="254" label="Node на которой выполнялась обработка процесса" column-name="NODE" column-type="VARCHAR(254)"/>
+      <property name="objectId" type="String" length="254" label="Прикладной ID объекта" mandatory="true" column-name="OBJECT_ID" column-type="VARCHAR(254)" id="true" changeable="READ_ONLY"/>
+      <index index-name="I_CRPROCESS_OBJECT_ID" primary-key="true">
+        <property name="objectId"/>
+      </index>
+    </class>
+    <class name="CRLock" extends="BaseEntity" label="Таблица с задачами" tableName="T_REPL_CR_CRLOCK" pk-index-name="PK_T_REPL_CR_CRLOCK" affinity="objectId" class-access="SYSTEM" final-class="true" generate-jpa="false">
+      <id type="String" category="MANUAL"/>
+      <property name="token" type="String" length="254" label="TOKEN" column-name="TOKEN" column-type="VARCHAR(254)"/>
+      <property name="migrationStatus" type="Long" label="Миграционная блокировка по клиенту" column-name="MIGRATIONSTATUS" column-type="${type_long}"/>
+      <property name="duplicationTo" type="Long" label="Блокировка по to клиенту" column-name="DUPLICATIONTO" column-type="${type_long}"/>
+      <property name="clientType" type="String" length="254" label="Тип клиента [Client, Individual, Organization, etc]" column-name="CLIENTTYPE" column-type="VARCHAR(254)"/>
+      <property name="duplicationFrom" type="Long" label="Блокировка по from клиенту" column-name="DUPLICATIONFROM" column-type="${type_long}"/>
+      <property name="objectId" type="String" length="254" label="Прикладной ID объекта" mandatory="true" column-name="OBJECT_ID" column-type="VARCHAR(254)" id="true" changeable="READ_ONLY"/>
+      <index index-name="I_CRLOCK_OBJECT_ID" primary-key="true">
+        <property name="objectId"/>
+      </index>
+    </class>
+    <class name="CRAggregateTask" extends="BaseEntity" label="Таблица с задачами обработки конкретного агрегата" tableName="T_REPL_CR_CRAGGREGATETASK" pk-index-name="PK_T_REPL_CR_CRAGGREGATETASK" class-access="SYSTEM" final-class="true" generate-jpa="false">
+      <id type="String" category="MANUAL"/>
+      <property name="status" type="String" length="254" label="Статус выполнения задачи" unique="false" index="true" column-name="STATUS" column-type="VARCHAR(254)"/>
+      <property name="aggregateRootId" type="String" length="254" label="ID корня агрегата" unique="false" index="true" column-name="AGGREGATEROOTID" column-type="VARCHAR(254)"/>
+      <property name="aggregateRootClass" type="String" length="254" label="Тип корня агрегата" column-name="AGGREGATEROOTCLASS" column-type="VARCHAR(254)"/>
+      <property name="eventId" type="String" length="254" label="Сквозной идентификатор события EventId" column-name="EVENTID" column-type="VARCHAR(254)"/>
+      <property name="objectId" type="String" length="254" label="Прикладной ID объекта" mandatory="true" column-name="OBJECT_ID" column-type="VARCHAR(254)" id="true" changeable="READ_ONLY"/>
+      <index index-name="I_CRAGGREGATETASK_STATUS">
+        <property name="status"/>
+      </index>
+      <index index-name="I_CRAGGREGATETASK_AGGREGATEROOTID">
+        <property name="aggregateRootId"/>
+      </index>
+      <index index-name="I_CRAGGREGATETASK_OBJECT_ID" primary-key="true">
+        <property name="objectId"/>
+      </index>
+    </class>
+    <class name="BaseEntity" label="Базовый класс модели" is-abstract="true" class-access="SYSTEM">
+      <id type="String" category="NO_ID"/>
+      <property name="lastChangeDate" type="Date" length="3" label="System attribute: date of the last modification" column-name="SYS_LASTCHANGEDATE" column-type="TIMESTAMP(3)" changeable="READ_ONLY"/>
+      <property name="isDeleted" type="Boolean" label="System attribute: Deleted flag" mandatory="true" column-name="SYS_ISDELETED" default-value="false" column-type="${type_boolean}" system-field="true" changeable="SYSTEM"/>
+      <property name="partitionId" type="Integer" label="System attribute: partitioning id" column-name="SYS_PARTITIONID" default-value="0" column-type="${type_int}" system-field="true" changeable="SYSTEM"/>
+      <property name="ownerId" type="String" length="254" label="System attribute: record owner module id" column-name="SYS_OWNERID" column-type="VARCHAR(254)" system-field="true" changeable="SYSTEM"/>
+      <property name="recModelVersion" type="String" length="254" label="System attribute: Record model version" column-name="SYS_RECMODELVERSION" column-type="VARCHAR(254)" system-field="true" changeable="SYSTEM"/>
+      <property name="chgCnt" type="Long" label="Счетчик изменений (технический)" column-name="CHGCNT" column-type="${type_long}" changeable="READ_ONLY"/>
+      <property name="offFlag" type="Byte" label="Признак деактивации записи" column-name="OFFFLAG" column-type="${type_byte}" system-field="true" changeable="SYSTEM"/>
+    </class>
+    <import type="SysLockModelGenerator" file=""/>
+    <import type="HISTORY_CHANGES" file=""/>
+    <import type="IdempotenceModelGenerator" file=""/>
+    <import type="AggregateModelGenerator" file=""/>
+    <import type="APP_LOCKS" file=""/>
+    <import type="DICTIONARY_GENERATOR" file="dictionary/"/>
+    <import type="REFERENCE" file=""/>
+    <import type="CciModelGenerator" file=""/>
+    <import type="CLOUD-RELOCATION" file=""/>
+    <import type="BASE_ENTITY" file=""/>
+    <import type="COMPUTED-FIELD"/>
+  </model>
+  <status/>
+  <meta-information>
+    <plugin-version>4.2.0-build.221</plugin-version>
+  </meta-information>
+  <system-locks>
+    <system-locks-classes class="PaymentOperation" table-name="T_REPL_AGGLOCK_PAYMENTOPERATION"/>
+    <system-locks-classes class="CRLock" table-name="T_REPL_AGGLOCK_CRLOCK"/>
+    <system-lockevent-table>T_REPL_AGGLOCKEVENT</system-lockevent-table>
+  </system-locks>
+</PdmModel>
