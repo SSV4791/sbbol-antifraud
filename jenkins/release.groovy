@@ -25,7 +25,7 @@ pipeline {
         GIT_PROJECT = 'CIBPPRB'
         GIT_REPOSITORY = 'sbbol-antifraud'
         GIT_LINK = 'ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git'
-        NEXUS_GROUP_ID = 'Nexus_PROD.CI03045533_sbbol-antifraud'
+        GROUP_ID = 'Nexus_PROD.CI03045533_sbbol-antifraud'
         CUSTOMER_ARTIFACT_ID = 'antifraud'
         DATASPACE_ARTIFACT_ID = 'dataspace-apps-antifraud'
         ARTIFACT_NAME_OS = ''
