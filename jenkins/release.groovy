@@ -20,8 +20,6 @@ pipeline {
         string(name: 'dataspaceDistrib', defaultValue: '', description: 'Ссылка на дистрибутив dataspace (если не проставлен флаг fullBuild)')
         string(name: 'customerDistrib', defaultValue: '', description: 'Ссылка на дистрибутив фабрики (если не проставлен флаг fullBuild)')
         booleanParam(name: 'release', defaultValue: false, description: 'Выпуск релизной сборки')
-        booleanParam(name: 'dynamicVersion', defaultValue: false, description: 'Добавлять номер сборки к версии (0.0.0_0022)')
-        booleanParam(name: 'needQG', defaultValue: true, description: 'Прохождение QG')
     }
     environment {
         GIT_PROJECT = 'CIBPPRB'
@@ -35,7 +33,7 @@ pipeline {
         DATASPACE_ARCHIVE_NAME = 'dataspace-distrib.zip'
         VERSION = ''
         VERSION_PATTERN = /\d+\.\d+\.\d+(\-build\.\d+)?/
-        DATASPACE_CONFIGS = './config/default.yml,./config/sigma/commons.yml,./config/sigma/devgen.yml'
+        DATASPACE_CONFIGS = './config/default.yml,./config/sigma/devgen2_eip.yml'
         NEXUSSBRF_RELEASE_REPOSITORY = 'https://sbrf-nexus.sigma.sbrf.ru/nexus/service/local/artifact/maven/content'
         DEV_REPOSITORY = 'https://nexus.sigma.sbrf.ru/nexus/service/local/artifact/maven/content'
         PROJECT_URL = "https://sbtatlas.sigma.sbrf.ru/stashdbo/projects/${GIT_PROJECT}/repos/${GIT_REPOSITORY}/"
@@ -72,21 +70,6 @@ pipeline {
             }
         }
 
-        stage('Detect build version') {
-            steps {
-                script {
-                    sh 'mkdir distrib'
-                    if (params.dynamicVersion) {
-                        def subversion = (env.BUILD_NUMBER).toString().padLeft(4, '0')
-                        VERSION = "${params.forceVersion}_${subversion}"
-                    } else {
-                        VERSION = params.forceVersion
-                    }
-                    log.info('Build version: ' + VERSION)
-                }
-            }
-        }
-
         stage('Trigger CustomerBuilder') {
             when {
                 expression { params.fullBuild }
@@ -96,7 +79,7 @@ pipeline {
                     def deployerParams = "";
                     if (params.release) {
                         if (params.forceVersion) {
-                            deployerParams += "-Dversion.forceVersion=${VERSION}"
+                            deployerParams += "-Dversion.forceVersion=${params.forceVersion}"
                         } else if (params.versionIncrement) {
                             deployerParams += "-Dversion.incrementType=${params.versionIncrement}"
                         }
@@ -116,7 +99,7 @@ pipeline {
                             "isIncludeDuplication" : false,
                             "buildClient" : true,
                             "needInstallToOS" : false,
-                            "needQG" : params.needQG,
+                            "needQG" : true, // обязательное требование
                             "clientDeployerOptions" : deployerParams
                     ]
                     def paramString = new StringBuilder()
@@ -205,6 +188,17 @@ pipeline {
                         CUSTOMER_DISTRIB_URL = params.customerDistrib
                         DATASPACE_DISTRIB_URL = params.dataspaceDistrib
                     }
+                    if (params.forceVersion) {
+                        VERSION = params.forceVersion
+                    } else {
+                        def regex = /.*v=([^&]*).*/
+                        def result = (DATASPACE_DISTRIB_URL =~ regex)[0][1]
+                        VERSION = result
+                    }
+                    log.info('Build version: ' + VERSION)
+                    if (!VERSION) {
+                        error("Can not determine build version")
+                    }
                 }
             }
         }
@@ -262,7 +256,7 @@ pipeline {
                                 credentialId: "sbbol-nexus",
                                 repository: "corp-releases",
                                 groupId: "ru.sberbank.pprb.sbbol.antifraud",
-                                artifactId: "antifraud",
+                                artifactId: CUSTOMER_ARTIFACT_ID,
                                 version: "D-${VERSION}",
                                 extension: 'zip',
                                 packaging: 'zip',
@@ -274,14 +268,14 @@ pipeline {
                         if (params.release) {
                             log.info("Uploading CustomerBuilder distribs to sbrf-nexus")
 
-                            nexus.publishZip(NEXUS_GROUP_ID, DATASPACE_ARTIFACT_ID, "distrib", "../${DATASPACE_ARCHIVE_NAME}", VERSION)
-                            log.info("Successfully published to ${getSbrfNexusLink(DATASPACE_ARTIFACT_ID, VERSION, NEXUS_GROUP_ID)}")
-                            nexus.publishZip(NEXUS_GROUP_ID, CUSTOMER_ARTIFACT_ID, "distrib", "../${CUSTOMER_ARCHIVE_NAME}", VERSION)
-                            log.info("Successfully published to ${getSbrfNexusLink(CUSTOMER_ARTIFACT_ID, VERSION, NEXUS_GROUP_ID)}")
+                            nexus.publishZip(GROUP_ID, DATASPACE_ARTIFACT_ID, "distrib", "../${DATASPACE_ARCHIVE_NAME}", VERSION)
+                            log.info("Successfully published to ${getSbrfNexusLink(DATASPACE_ARTIFACT_ID, "D-${VERSION}")}")
+                            nexus.publishZip(GROUP_ID, CUSTOMER_ARTIFACT_ID, "distrib", "../${CUSTOMER_ARCHIVE_NAME}", VERSION)
+                            log.info("Successfully published to ${getSbrfNexusLink(CUSTOMER_ARTIFACT_ID, "D-${VERSION}")}")
 
                             log.info("Publishing artifact to ${NEXUSSBRF_RELEASE_REPOSITORY}")
-                            nexus.publishZip(NEXUS_GROUP_ID, CUSTOMER_ARTIFACT_ID, "distrib", ARTIFACT_NAME_OS, "${VERSION}-eip")
-                            log.info("Successfully published to ${getSbrfNexusLink(CUSTOMER_ARTIFACT_ID, "D-${VERSION}-eip", NEXUS_GROUP_ID)}")
+                            nexus.publishZip(GROUP_ID, CUSTOMER_ARTIFACT_ID, "distrib", ARTIFACT_NAME_OS, "${VERSION}-eip")
+                            log.info("Successfully published to ${getSbrfNexusLink(CUSTOMER_ARTIFACT_ID, "D-${VERSION}-eip")}")
                         }
                         archiveArtifacts artifacts: "*.zip"
                     }
@@ -291,7 +285,7 @@ pipeline {
 
         stage('Push technical flags') {
             when {
-                expression { params.needQG }
+                expression { params.release }
             }
             steps {
                 script {
@@ -299,7 +293,7 @@ pipeline {
                     for (String artifactId in [DATASPACE_ARTIFACT_ID, CUSTOMER_ARTIFACT_ID]) {
                         def response = qgm.getFlagMap(
                                 repositoryId: 'Nexus_PROD',
-                                groupId: NEXUS_GROUP_ID.replaceAll('\\.', '/'),
+                                groupId: "Nexus_PROD/CI03045533_sbbol-antifraud",
                                 artifactId: DATASPACE_ARTIFACT_ID,
                                 version: VERSION
                         )
@@ -320,7 +314,7 @@ pipeline {
                     }
                     log.info("QG result: ${qgPassed}")
                     if (qgPassed) {
-                        dpm.publishFlags(VERSION, CUSTOMER_ARTIFACT_ID, NEXUS_GROUP_ID, ["ci", "sast", "oss", "meta"])
+                        dpm.publishFlags("${VERSION}-eip", CUSTOMER_ARTIFACT_ID, GROUP_ID, ["ci", "sast", "oss", "meta"])
                     }
                 }
             }
@@ -342,10 +336,10 @@ pipeline {
                                     "${lastVersion ? lastVersion + '..HEAD' : ''}"
                     )
                     dir('distrib') {
-                        def sbrfNexusCustomerLink = getSbrfNexusLink(CUSTOMER_ARTIFACT_ID, VERSION, NEXUS_GROUP_ID)
-                        def sbrfNexusDataspaceLink = getSbrfNexusLink(DATASPACE_ARTIFACT_ID, VERSION, NEXUS_GROUP_ID)
+                        def sbrfNexusCustomerLink = getSbrfNexusLink(CUSTOMER_ARTIFACT_ID, VERSION)
+                        def sbrfNexusDataspaceLink = getSbrfNexusLink(DATASPACE_ARTIFACT_ID, VERSION)
                         createReleaseNotesWithDescription(projectLog, latestCommitHash, PROJECT_URL, sbrfNexusCustomerLink, sbrfNexusDataspaceLink)
-                        nexus.publishReleaseNotes(NEXUS_GROUP_ID, CUSTOMER_ARTIFACT_ID, VERSION)
+                        nexus.publishReleaseNotes(GROUP_ID, CUSTOMER_ARTIFACT_ID, "${VERSION}-eip")
                         archiveArtifacts artifacts: "release-notes"
                     }
                 }
@@ -370,8 +364,8 @@ pipeline {
     }
 }
 
-static String getSbrfNexusLink(String artifactId, String version, String groupId) {
-    return "https://sbrf-nexus.sigma.sbrf.ru/nexus/content/repositories/Nexus_PROD/${groupId.replaceAll('\\.', '/')}/${artifactId}/${version}/${artifactId}-${version}-distrib.zip"
+static String getSbrfNexusLink(String artifactId, String version) {
+    return "https://sbrf-nexus.sigma.sbrf.ru/nexus/content/repositories/Nexus_PROD/Nexus_PROD/CI03045533_sbbol-antifraud/${artifactId}/${version}/${artifactId}-${version}-distrib.zip"
 }
 
 /**

@@ -1,0 +1,6 @@
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: dataspace-core
+imagePullSecrets:
+  - name: image-pull-secret

@@ -258,7 +258,7 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
     private final String endPoint;
 
     public PaymentProcessor(DataspaceCorePacketClient packetClient, DataspaceCoreSearchClient searchClient, RestTemplate restTemplate,
-                            HttpHeaders httpHeaders, ObjectMapper objectMapper, @Value("${pprb_op.endpoint}") String endPoint) {
+                            HttpHeaders httpHeaders, ObjectMapper objectMapper, @Value("${fpis.endpoint}") String endPoint) {
         this.packetClient = packetClient;
         this.searchClient = searchClient;
         this.restTemplate = restTemplate;

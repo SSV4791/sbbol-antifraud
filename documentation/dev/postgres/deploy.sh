@@ -1,0 +1,1 @@
+oc process -f template.yml | oc create -f -

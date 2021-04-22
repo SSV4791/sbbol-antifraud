@@ -1,0 +1,137 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: postgres-template
+  annotations:
+    description: "Postgres DB"
+    iconClass: "icon-postgresql"
+    tags: "database"
+objects:
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: postgres-db
+      labels:
+        app: postgres-db
+        deleteLabel: postgres-db
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: postgres-db
+          name: postgres-db
+      template:
+        metadata:
+          creationTimestamp: null
+          labels:
+            app: postgres-db
+            name: postgres-db
+          annotations:
+            sidecar.istio.io/inject: 'true'
+            sidecar.istio.io/proxyLimitsCPU: 250m
+            sidecar.istio.io/proxyLimitsMemory: 256Mi
+            sidecar.istio.io/proxyRequestsCPU: 250m
+            sidecar.istio.io/proxyRequestsMemory: 256Mi
+        spec:
+          volumes:
+            - name: postgres-db-data
+              emptyDir: { }
+          containers:
+            - resources:
+                limits:
+                  cpu: 250m
+                  memory: 256Mi
+                requests:
+                  cpu: 250m
+                  memory: 256Mi
+              readinessProbe:
+                exec:
+                  command:
+                    - /usr/libexec/check-container
+                timeoutSeconds: 1
+                periodSeconds: 10
+                successThreshold: 1
+                failureThreshold: 3
+              terminationMessagePath: /dev/termination-log
+              name: postgres-db
+              livenessProbe:
+                exec:
+                  command:
+                    - /usr/libexec/check-container - '--live'
+                timeoutSeconds: 1
+                periodSeconds: 10
+                successThreshold: 1
+                failureThreshold: 3
+              env:
+                - name: POSTGRESQL_USER
+                  value: dataspace
+                - name: POSTGRESQL_PASSWORD
+                  value: dataspace
+                - name: POSTGRESQL_DATABASE
+                  value: dataspace
+                - name: POSTGRESQL_ADMIN_PASSWORD
+                  value: postgres
+              ports:
+                - name: pgdb-port
+                  containerPort: 5432
+                  protocol: TCP
+              imagePullPolicy: Always
+              volumeMounts:
+                - name: postgres-db-data
+                  mountPath: /var/lib/pgsql/data
+              terminationMessagePolicy: File
+              image: 'registry.sigma.sbrf.ru/base/rhscl/postgresql-10-rhel7:latest'
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+          dnsPolicy: ClusterFirst
+          securityContext: { }
+          schedulerName: default-scheduler
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxUnavailable: 0
+          maxSurge: 25%
+      revisionHistoryLimit: 2
+      progressDeadlineSeconds: 600
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: postgres-db
+      labels:
+        app: postgres-db
+        deleteLabel: postgres-db
+    spec:
+      ports:
+        - name: postgresql
+          protocol: TCP
+          port: 5432
+          targetPort: 5432
+      selector:
+        name: postgres-db
+      type: ClusterIP
+      sessionAffinity: None
+  - apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      annotations:
+        nginx.router.openshift.io/port: '33315'
+        nginx.router.openshift.io/protocol: tcp
+        nginx.router.openshift.io/proxy_timeout: '600'
+      name: postgres-db-route
+      labels:
+        app: postgres-db
+        deleteLabel: postgres-db
+        router: np
+        template: postgres-router-template
+        template_version: v1
+        type: application
+    spec:
+      host: 33315-tcp.np.dev-gen2.sigma.sbrf.ru
+      to:
+        kind: Service
+        name: postgres-db
+        weight: 100
+      port:
+        targetPort: '5432'
+      wildcardPolicy: None
+
