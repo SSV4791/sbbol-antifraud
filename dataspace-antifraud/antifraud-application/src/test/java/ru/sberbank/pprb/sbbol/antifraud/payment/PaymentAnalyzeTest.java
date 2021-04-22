@@ -35,7 +35,7 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
     @Autowired
     private AntiFraudAnalyzeService analyzeService;
 
-    @Value("${pprb_op.endpoint}")
+    @Value("${fpis.endpoint}")
     private String endPoint;
 
     private MockRestServiceServer mockServer;
