@@ -12,12 +12,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.payment.PaymentAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.rpc.AntiFraudAnalyzeService;
-import ru.sberbank.pprb.sbbol.antifraud.send.payment.PaymentSendRequest;
-import ru.sberbank.pprb.sbbol.antifraud.send.payment.response.IdentificationData;
-import ru.sberbank.pprb.sbbol.antifraud.send.payment.response.PaymentAnalyzeResponse;
-import ru.sberbank.pprb.sbbol.antifraud.send.payment.response.RiskResult;
-import ru.sberbank.pprb.sbbol.antifraud.send.payment.response.TriggeredRule;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.payment.PaymentSendRequest;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.common.response.IdentificationData;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.common.response.FullAnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.common.response.RiskResult;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.common.response.TriggeredRule;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
@@ -47,7 +48,7 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
 
     @Test
     void sendRequest() throws JsonProcessingException {
-        PaymentAnalyzeResponse expected = createAnalyzeResponse();
+        FullAnalyzeResponse expected = createAnalyzeResponse();
         mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
                 .andExpect(method(HttpMethod.POST))
                 .andRespond(withStatus(HttpStatus.OK)
@@ -56,27 +57,24 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
         PaymentSendRequest request = new PaymentSendRequest(DOC_ID);
         PaymentAnalyzeResponse actual = (PaymentAnalyzeResponse) analyzeService.analyzeOperation(request);
         mockServer.verify();
-        assertEquals(expected.getIdentificationData().getTransactionId(), actual.getIdentificationData().getTransactionId());
-        assertEquals(expected.getIdentificationData().getClientTransactionId(), actual.getIdentificationData().getClientTransactionId());
-        assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode() , actual.getRiskResult().getTriggeredRule().getActionCode() );
-        assertEquals(expected.getRiskResult().getTriggeredRule().getRuleId() , actual.getRiskResult().getTriggeredRule().getRuleId() );
-        assertEquals(expected.getRiskResult().getTriggeredRule().getComment() , actual.getRiskResult().getTriggeredRule().getComment() );
-        assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment() , actual.getRiskResult().getTriggeredRule().getDetailledComment() );
-        assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime() , actual.getRiskResult().getTriggeredRule().getWaitingTime() );
+        assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId());
+        assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode() , actual.getActionCode() );
+        assertEquals(expected.getRiskResult().getTriggeredRule().getComment() , actual.getComment() );
+        assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment() , actual.getDetailledComment() );
+        assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime() , actual.getWaitingTime() );
     }
 
-    private PaymentAnalyzeResponse createAnalyzeResponse() {
-        PaymentAnalyzeResponse response = new PaymentAnalyzeResponse();
+    private FullAnalyzeResponse createAnalyzeResponse() {
+        FullAnalyzeResponse response = new FullAnalyzeResponse();
         response.setIdentificationData(new IdentificationData());
         response.getIdentificationData().setTransactionId("45465787hjgfd6457gfd");
-        response.getIdentificationData().setClientTransactionId(DOC_ID);
         response.setRiskResult(new RiskResult());
         response.getRiskResult().setTriggeredRule(new TriggeredRule());
         response.getRiskResult().getTriggeredRule().setActionCode("REVIEW");
-        response.getRiskResult().getTriggeredRule().setRuleId("45467");
         response.getRiskResult().getTriggeredRule().setComment("Требуется проверка");
         response.getRiskResult().getTriggeredRule().setDetailledComment("Проверка будет производиться экспертом отделения");
         response.getRiskResult().getTriggeredRule().setWaitingTime(1);
         return response;
     }
+
 }

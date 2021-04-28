@@ -1,4 +1,4 @@
-package ru.sberbank.pprb.sbbol.antifraud.send;
+package ru.sberbank.pprb.sbbol.antifraud.analyze;
 
 import java.io.Serializable;
 

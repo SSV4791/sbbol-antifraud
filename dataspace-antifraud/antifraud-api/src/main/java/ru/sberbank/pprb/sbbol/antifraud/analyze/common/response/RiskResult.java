@@ -1,4 +1,4 @@
-package ru.sberbank.pprb.sbbol.antifraud.send.payment.response;
+package ru.sberbank.pprb.sbbol.antifraud.analyze.common.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -13,9 +13,22 @@ public class RiskResult implements Serializable {
     private static final long serialVersionUID = 6211395449462607607L;
 
     /**
+     * Оценка риска
+     */
+    private Integer riskScore;
+
+    /**
      * Сработавшее правило
      */
     private TriggeredRule triggeredRule;
+
+    public Integer getRiskScore() {
+        return riskScore;
+    }
+
+    public void setRiskScore(Integer riskScore) {
+        this.riskScore = riskScore;
+    }
 
     public TriggeredRule getTriggeredRule() {
         return triggeredRule;

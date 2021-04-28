@@ -1,6 +1,7 @@
-package ru.sberbank.pprb.sbbol.antifraud.send.payment.analyze;
+package ru.sberbank.pprb.sbbol.antifraud.analyze.payment.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 /**
  * Сообщение заголовка
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MessageHeader implements Serializable {
 
     private static final long serialVersionUID = 6107290128389917848L;

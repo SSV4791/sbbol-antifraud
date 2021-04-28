@@ -2,9 +2,9 @@ package ru.sberbank.pprb.sbbol.antifraud.processor;
 
 import org.springframework.validation.annotation.Validated;
 import ru.sberbank.pprb.sbbol.antifraud.DboOperation;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.data.RequestId;
-import ru.sberbank.pprb.sbbol.antifraud.send.SendRequest;
-import ru.sberbank.pprb.sbbol.antifraud.send.payment.response.PaymentAnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.SendRequest;
 import ru.sberbank.pprb.sbbol.antifraud.data.Operation;
 import sbp.com.sbt.dataspace.support.watch.EyeOn;
 import sbp.sbt.sdk.exception.SdkJsonRpcClientException;
@@ -37,7 +37,7 @@ public interface Processor<T extends Operation, R extends SendRequest> {
      * @return результат анализа данных
      */
     @EyeOn(category = "ru.sberbank.pprb.sbbol.antifraud")
-    PaymentAnalyzeResponse send(@Valid R request) throws SdkJsonRpcClientException;
+    AnalyzeResponse send(@Valid R request) throws SdkJsonRpcClientException;
 
     /**
      * Получение типа операции

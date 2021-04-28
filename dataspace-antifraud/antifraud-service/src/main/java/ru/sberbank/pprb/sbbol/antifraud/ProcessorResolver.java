@@ -3,7 +3,7 @@ package ru.sberbank.pprb.sbbol.antifraud;
 import org.springframework.stereotype.Service;
 import ru.sberbank.pprb.sbbol.antifraud.data.Operation;
 import ru.sberbank.pprb.sbbol.antifraud.processor.Processor;
-import ru.sberbank.pprb.sbbol.antifraud.send.SendRequest;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.SendRequest;
 
 import java.util.EnumMap;
 import java.util.List;

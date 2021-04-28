@@ -1,10 +1,13 @@
-package ru.sberbank.pprb.sbbol.antifraud.send.payment.analyze;
+package ru.sberbank.pprb.sbbol.antifraud.analyze.payment.request;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.io.Serializable;
 
 /**
  * Данные счета получателя
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ReceiverAccount implements Serializable {
 
     private static final long serialVersionUID = 1315489781267296499L;

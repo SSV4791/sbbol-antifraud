@@ -1,4 +1,4 @@
-package ru.sberbank.pprb.sbbol.antifraud.send.payment.analyze;
+package ru.sberbank.pprb.sbbol.antifraud.analyze.payment.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

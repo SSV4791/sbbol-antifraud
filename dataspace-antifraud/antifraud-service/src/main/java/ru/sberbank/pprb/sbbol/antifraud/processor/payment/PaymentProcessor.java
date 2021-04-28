@@ -11,23 +11,24 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.sberbank.pprb.sbbol.antifraud.DboOperation;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.payment.PaymentAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.graph.get.PaymentOperationGet;
 import ru.sberbank.pprb.sbbol.antifraud.processor.SignMapper;
-import ru.sberbank.pprb.sbbol.antifraud.send.payment.analyze.Amount;
-import ru.sberbank.pprb.sbbol.antifraud.send.payment.analyze.Attribute;
-import ru.sberbank.pprb.sbbol.antifraud.send.payment.analyze.DeviceRequest;
-import ru.sberbank.pprb.sbbol.antifraud.send.payment.analyze.EventData;
-import ru.sberbank.pprb.sbbol.antifraud.send.payment.analyze.EventDataHeader;
-import ru.sberbank.pprb.sbbol.antifraud.send.payment.analyze.IdentificationData;
-import ru.sberbank.pprb.sbbol.antifraud.send.payment.analyze.MessageHeader;
-import ru.sberbank.pprb.sbbol.antifraud.send.payment.analyze.PayerAccount;
-import ru.sberbank.pprb.sbbol.antifraud.send.payment.analyze.PaymentAnalyzeRequest;
-import ru.sberbank.pprb.sbbol.antifraud.send.payment.analyze.ReceiverAccount;
-import ru.sberbank.pprb.sbbol.antifraud.send.payment.analyze.TransactionData;
-import ru.sberbank.pprb.sbbol.antifraud.send.payment.response.PaymentAnalyzeResponse;
-import ru.sberbank.pprb.sbbol.antifraud.send.payment.PaymentSendRequest;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.payment.request.Amount;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.payment.request.Attribute;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.payment.request.DeviceRequest;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.payment.request.EventData;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.payment.request.EventDataHeader;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.payment.request.IdentificationData;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.payment.request.MessageHeader;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.payment.request.PayerAccount;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.payment.request.PaymentAnalyzeRequest;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.payment.request.ReceiverAccount;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.payment.request.TransactionData;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.common.response.FullAnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.payment.PaymentSendRequest;
 import ru.sberbank.pprb.sbbol.antifraud.data.payment.PaymentOperation;
 import ru.sberbank.pprb.sbbol.antifraud.grasp.DataspaceCoreSearchClient;
 import ru.sberbank.pprb.sbbol.antifraud.packet.packet.Packet;
@@ -305,7 +306,8 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
             throw new ApplicationException("Anti fraud aggregator internal error: error parsing PaymentAnalyzeRequest");
         }
         HttpEntity<String> httpEntityRequest = new HttpEntity<>(jsonRequest, httpHeaders);
-        return restTemplate.postForObject(endPoint, httpEntityRequest, PaymentAnalyzeResponse.class);
+        FullAnalyzeResponse fullAnalyzeResponse = restTemplate.postForObject(endPoint, httpEntityRequest, FullAnalyzeResponse.class);
+        return fullAnalyzeResponse != null ? convertToPaymentAnalyzeResponse(fullAnalyzeResponse) : null;
     }
 
     private PaymentAnalyzeRequest createPaymentAnalyzeRequest(String docId) throws SdkJsonRpcClientException {
@@ -459,6 +461,16 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
             }
         }
         return clientDefinedAttributeList;
+    }
+
+    private PaymentAnalyzeResponse convertToPaymentAnalyzeResponse(FullAnalyzeResponse fullAnalyzeResponse) {
+        PaymentAnalyzeResponse paymentAnalyzeResponse = new PaymentAnalyzeResponse();
+        paymentAnalyzeResponse.setTransactionId(fullAnalyzeResponse.getIdentificationData().getTransactionId());
+        paymentAnalyzeResponse.setActionCode(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getActionCode());
+        paymentAnalyzeResponse.setComment(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getComment());
+        paymentAnalyzeResponse.setDetailledComment(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getDetailledComment());
+        paymentAnalyzeResponse.setWaitingTime(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getWaitingTime());
+        return paymentAnalyzeResponse;
     }
 
     @Override

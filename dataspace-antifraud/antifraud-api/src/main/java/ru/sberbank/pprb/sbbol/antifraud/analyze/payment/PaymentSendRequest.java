@@ -1,9 +1,9 @@
-package ru.sberbank.pprb.sbbol.antifraud.send.payment;
+package ru.sberbank.pprb.sbbol.antifraud.analyze.payment;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ru.sberbank.pprb.sbbol.antifraud.DboOperation;
-import ru.sberbank.pprb.sbbol.antifraud.send.SendRequest;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.SendRequest;
 
 import javax.validation.constraints.NotBlank;
 

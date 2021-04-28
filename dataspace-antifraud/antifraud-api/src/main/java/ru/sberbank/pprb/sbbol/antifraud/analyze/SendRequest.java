@@ -1,8 +1,8 @@
-package ru.sberbank.pprb.sbbol.antifraud.send;
+package ru.sberbank.pprb.sbbol.antifraud.analyze;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import ru.sberbank.pprb.sbbol.antifraud.Typed;
-import ru.sberbank.pprb.sbbol.antifraud.send.payment.PaymentSendRequest;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.payment.PaymentSendRequest;
 
 /**
  * Общий интерфейс моделей запросов отправки данный в ФП ИС
