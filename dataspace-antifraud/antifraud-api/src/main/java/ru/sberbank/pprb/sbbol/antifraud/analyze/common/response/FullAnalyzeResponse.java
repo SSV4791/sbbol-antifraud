@@ -1,13 +1,13 @@
-package ru.sberbank.pprb.sbbol.antifraud.send.payment.response;
+package ru.sberbank.pprb.sbbol.antifraud.analyze.common.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import ru.sberbank.pprb.sbbol.antifraud.send.AnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.AnalyzeResponse;
 
 /**
- * Ответ от ФП ИС, с результатами анализа
+ * Ответ от ФП ИС с результатами анализа операции
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PaymentAnalyzeResponse implements AnalyzeResponse {
+public class FullAnalyzeResponse implements AnalyzeResponse {
 
     private static final long serialVersionUID = -1531854116701758604L;
 
@@ -15,6 +15,8 @@ public class PaymentAnalyzeResponse implements AnalyzeResponse {
      * Идентификационные данные транзакции
      */
     private IdentificationData identificationData;
+
+    private StatusHeader statusHeader;
 
     /**
      * Результат анализа на риски
@@ -27,6 +29,14 @@ public class PaymentAnalyzeResponse implements AnalyzeResponse {
 
     public void setIdentificationData(IdentificationData identificationData) {
         this.identificationData = identificationData;
+    }
+
+    public StatusHeader getStatusHeader() {
+        return statusHeader;
+    }
+
+    public void setStatusHeader(StatusHeader statusHeader) {
+        this.statusHeader = statusHeader;
     }
 
     public RiskResult getRiskResult() {

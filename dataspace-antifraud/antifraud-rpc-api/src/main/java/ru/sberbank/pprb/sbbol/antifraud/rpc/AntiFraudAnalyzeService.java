@@ -8,8 +8,8 @@ import com.googlecode.jsonrpc4j.JsonRpcParam;
 import com.googlecode.jsonrpc4j.JsonRpcService;
 import ru.sberbank.pprb.sbbol.antifraud.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.exception.ModelArgumentException;
-import ru.sberbank.pprb.sbbol.antifraud.send.AnalyzeResponse;
-import ru.sberbank.pprb.sbbol.antifraud.send.SendRequest;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.AnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.SendRequest;
 
 /**
  * Сервис отправки данных в ФП ИС для последующего анализа

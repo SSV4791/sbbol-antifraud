@@ -1,4 +1,4 @@
-package ru.sberbank.pprb.sbbol.antifraud.send.payment.response;
+package ru.sberbank.pprb.sbbol.antifraud.analyze.common.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -21,9 +21,24 @@ public class TriggeredRule implements Serializable {
     private String actionCode;
 
     /**
+     * Наименование действия
+     */
+    private String actionName;
+
+    /**
+     * Тип действия
+     */
+    private String actionType;
+
+    /**
      * Идентификатор правила
      */
     private String ruleId;
+
+    /**
+     * Наименование правила
+     */
+    private String ruleName;
 
     /**
      * Короткий комментарий по сработавшему правилу, передаваемый в СББОЛ
@@ -48,12 +63,36 @@ public class TriggeredRule implements Serializable {
         this.actionCode = actionCode;
     }
 
+    public String getActionName() {
+        return actionName;
+    }
+
+    public void setActionName(String actionName) {
+        this.actionName = actionName;
+    }
+
+    public String getActionType() {
+        return actionType;
+    }
+
+    public void setActionType(String actionType) {
+        this.actionType = actionType;
+    }
+
     public String getRuleId() {
         return ruleId;
     }
 
     public void setRuleId(String ruleId) {
         this.ruleId = ruleId;
+    }
+
+    public String getRuleName() {
+        return ruleName;
+    }
+
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName;
     }
 
     public String getComment() {

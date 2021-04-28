@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.sberbank.pprb.sbbol.antifraud.ProcessorResolver;
 import ru.sberbank.pprb.sbbol.antifraud.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.exception.ModelArgumentException;
-import ru.sberbank.pprb.sbbol.antifraud.send.AnalyzeResponse;
-import ru.sberbank.pprb.sbbol.antifraud.send.SendRequest;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.AnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.SendRequest;
 import sbp.sbt.sdk.exception.SdkJsonRpcClientException;
 
 import javax.validation.ConstraintViolationException;

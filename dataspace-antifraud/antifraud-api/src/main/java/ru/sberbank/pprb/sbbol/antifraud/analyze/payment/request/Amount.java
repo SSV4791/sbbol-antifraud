@@ -1,6 +1,7 @@
-package ru.sberbank.pprb.sbbol.antifraud.send.payment.analyze;
+package ru.sberbank.pprb.sbbol.antifraud.analyze.payment.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.io.Serializable;
 /**
  * Данные суммы перевода
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Amount implements Serializable {
 
     private static final long serialVersionUID = -3419691832729524298L;

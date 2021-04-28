@@ -1,6 +1,7 @@
-package ru.sberbank.pprb.sbbol.antifraud.send.payment.analyze;
+package ru.sberbank.pprb.sbbol.antifraud.analyze.payment.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.io.Serializable;
 /**
  * Данные счета плательщика
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PayerAccount implements Serializable {
 
     private static final long serialVersionUID = 6226857364319956155L;

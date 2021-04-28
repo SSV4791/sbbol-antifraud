@@ -8,11 +8,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import ru.sberbank.pprb.sbbol.antifraud.AntiFraudRunner;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.data.Operation;
 import ru.sberbank.pprb.sbbol.antifraud.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.grasp.DataspaceCoreSearchClient;
-import ru.sberbank.pprb.sbbol.antifraud.send.SendRequest;
-import ru.sberbank.pprb.sbbol.antifraud.send.payment.response.PaymentAnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.SendRequest;
 import sbp.com.sbt.dataspace.core.local.runner.junit5.JUnit5DataSpaceCoreLocalRunnerExtension;
 
 import java.net.MalformedURLException;
@@ -49,11 +49,11 @@ public abstract class DataSpaceIntegrationTest {
         );
     }
 
-    protected static PaymentAnalyzeResponse sendData(SendRequest request) throws Throwable {
+    protected static AnalyzeResponse sendData(SendRequest request) throws Throwable {
         return searchRpcClient.invoke(
                 "analyzeOperation",
                 Collections.singletonMap("analyzeparams", request),
-                PaymentAnalyzeResponse.class
+                AnalyzeResponse.class
         );
     }
 
