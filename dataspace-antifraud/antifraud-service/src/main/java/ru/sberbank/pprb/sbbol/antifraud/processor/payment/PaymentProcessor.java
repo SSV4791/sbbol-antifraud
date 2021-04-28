@@ -271,8 +271,8 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
     @Override
     public RequestId saveOrUpdate(@Valid PaymentOperation record) throws SdkJsonRpcClientException {
         logger.info("Processing payment operation request. PaymentOperation docId: {}", record.getDocument().getId());
-        PaymentModelValidator.validate(record);
         record.setMappedSigns(SignMapper.convertSigns(record.getSigns()));
+        PaymentModelValidator.validate(record);
 
         GraphCollection<PaymentOperationGet> collection = searchClient.searchPaymentOperation(payment ->
                 payment
