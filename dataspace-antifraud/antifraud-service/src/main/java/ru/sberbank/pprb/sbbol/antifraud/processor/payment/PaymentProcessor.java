@@ -42,6 +42,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 /**
@@ -277,7 +278,7 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
         GraphCollection<PaymentOperationGet> collection = searchClient.searchPaymentOperation(payment ->
                 payment
                         .withRequestId()
-                        .setWhere(where -> where.docIdEq(record.getDocument().getId()))
+                        .setWhere(where -> where.docIdEq(record.getDocument().getId().toString()))
                         .setLimit(1));
         Packet packet = Packet.createPacket();
 
@@ -285,7 +286,7 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
         if (collection.isEmpty()) {
             requestId = PaymentPacketCommandAdder.addCreateCommandToPaket(packet, record);
         } else {
-            requestId = new RequestId(collection.get(0).getRequestId());
+            requestId = new RequestId(UUID.fromString(collection.get(0).getRequestId()));
             PaymentPacketCommandAdder.addUpdateCommandToPacket(packet, record, collection.get(0).getObjectId());
         }
 
@@ -310,7 +311,7 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
         return fullAnalyzeResponse != null ? convertToPaymentAnalyzeResponse(fullAnalyzeResponse) : null;
     }
 
-    private PaymentAnalyzeRequest createPaymentAnalyzeRequest(String docId) throws SdkJsonRpcClientException {
+    private PaymentAnalyzeRequest createPaymentAnalyzeRequest(UUID docId) throws SdkJsonRpcClientException {
         GraphCollection<PaymentOperationGet> collection = searchClient.searchPaymentOperation(payment ->
                 payment
                         .withRequestId()
@@ -401,7 +402,7 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
                         .withThirdSignPhone()
                         .withThirdSignEmail()
                         .withThirdSignSource()
-                        .setWhere(where -> where.docIdEq(docId))
+                        .setWhere(where -> where.docIdEq(docId.toString()))
                         .setLimit(1));
         if (collection.isEmpty()) {
             throw new ApplicationException("PaymentOperation with docId=" + docId + " not found");
@@ -417,7 +418,7 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
         request.getIdentificationData().setOrgName(paymentGet.getTbCode());
         request.getIdentificationData().setUserName(paymentGet.getOrgGuid());
         request.getIdentificationData().setDboOperation(supportedDboOperation());
-        request.getIdentificationData().setRequestId(paymentGet.getRequestId());
+        request.getIdentificationData().setRequestId(UUID.fromString(paymentGet.getRequestId()));
         request.setDeviceRequest(new DeviceRequest());
         request.getDeviceRequest().setDevicePrint(paymentGet.getDevicePrint());
         request.getDeviceRequest().setMobSdkData(paymentGet.getMobSdkData());

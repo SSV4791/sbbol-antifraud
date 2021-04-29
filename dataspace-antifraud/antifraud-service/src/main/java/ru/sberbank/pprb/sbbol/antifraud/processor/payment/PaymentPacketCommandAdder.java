@@ -24,14 +24,14 @@ public class PaymentPacketCommandAdder {
      * @return идентификатор запроса (UUID)
      */
     public static RequestId addCreateCommandToPaket(Packet packet, PaymentOperation payment) {
-        RequestId requestId = new RequestId(UUID.randomUUID().toString());
+        RequestId requestId = new RequestId(UUID.randomUUID());
         packet.paymentOperation.create(param -> {
-            param.setRequestId(requestId.getId());
+            param.setRequestId(requestId.getId().toString());
             param.setTimeStamp(payment.getTimeStamp());
             param.setOrgGuid(payment.getOrgGuid());
             param.setTimeOfOccurrence(payment.getTimeOfOccurrence());
 
-            param.setDocId(payment.getDocument().getId());
+            param.setDocId(payment.getDocument().getId().toString());
             param.setDocNumber(payment.getDocument().getNumber());
             param.setDocDate(payment.getDocument().getDate());
             param.setAmount(payment.getDocument().getAmount());
@@ -69,7 +69,8 @@ public class PaymentPacketCommandAdder {
                 param.setDevicePrint(payment.getMappedSigns().get(0).getDevicePrint());
                 param.setMobSdkData(payment.getMappedSigns().get(0).getMobSdkData());
                 param.setChannelIndicator(payment.getMappedSigns().get(0).getChannelIndicator());
-                param.setUserGuid(payment.getMappedSigns().get(0).getUserGuid());
+                param.setUserGuid(payment.getMappedSigns().get(0).getUserGuid() != null ?
+                        payment.getMappedSigns().get(0).getUserGuid().toString() : null);
                 param.setTbCode(payment.getMappedSigns().get(0).getTbCode());
 
                 param.setFirstSignTime(payment.getMappedSigns().get(0).getSignTime());
@@ -159,7 +160,7 @@ public class PaymentPacketCommandAdder {
             param.setAmount(payment.getDocument().getAmount());
             param.setDocDate(payment.getDocument().getDate());
             param.setDocNumber(payment.getDocument().getNumber());
-            param.setDocId(payment.getDocument().getId());
+            param.setDocId(payment.getDocument().getId().toString());
 
             if (payment.getDocument().getPayer() != null) {
                 param.setPayerInn(payment.getDocument().getPayer().getInn());
@@ -179,7 +180,8 @@ public class PaymentPacketCommandAdder {
 
             if (!payment.getMappedSigns().isEmpty()) {
                 param.setTbCode(payment.getMappedSigns().get(0).getTbCode());
-                param.setUserGuid(payment.getMappedSigns().get(0).getUserGuid());
+                param.setUserGuid(payment.getMappedSigns().get(0).getUserGuid() != null ?
+                        payment.getMappedSigns().get(0).getUserGuid().toString() : null);
                 param.setChannelIndicator(payment.getMappedSigns().get(0).getChannelIndicator());
                 param.setMobSdkData(payment.getMappedSigns().get(0).getMobSdkData());
                 param.setDevicePrint(payment.getMappedSigns().get(0).getDevicePrint());

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import ru.sberbank.pprb.sbbol.antifraud.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.analyze.SendRequest;
 
-import javax.validation.constraints.NotBlank;
+import java.util.UUID;
 
 /**
  * Запрос на отправку данных в ФП ИС
@@ -17,19 +17,18 @@ public class PaymentSendRequest implements SendRequest {
     /**
      * Уникальный идентификатор документа
      */
-    @NotBlank(message = "The docId attribute must be filled")
-    private String docId;
+    private UUID docId;
 
     @JsonCreator
-    public PaymentSendRequest(@JsonProperty("docId") String docId) {
+    public PaymentSendRequest(@JsonProperty("docId") UUID docId) {
         this.docId = docId;
     }
 
-    public String getDocId() {
+    public UUID getDocId() {
         return docId;
     }
 
-    public void setDocId(String docId) {
+    public void setDocId(UUID docId) {
         this.docId = docId;
     }
 

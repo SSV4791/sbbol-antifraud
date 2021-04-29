@@ -17,6 +17,7 @@ public class PaymentModelValidator {
 
     private static final Logger logger = LoggerFactory.getLogger(PaymentModelValidator.class);
     private static final String MESSAGE = "The attribute must be filled: {}";
+    private static final String SIGN_MESSAGE = MESSAGE + "{}";
 
     private PaymentModelValidator() {
 
@@ -115,66 +116,50 @@ public class PaymentModelValidator {
     }
 
     private static void validateSigns(List<Sign> signs) {
-        String signName;
         for (int i = 0; i < signs.size(); i++) {
-            signName = signNameSwitcher(i, signs.size());
-            logSign(signs.get(i), signName);
+            logSign(signs.get(i), signNameSwitcher(i, signs.size()));
         }
     }
 
     private static void logSign(Sign sign, String signName) {
-        String arg;
         if (sign.getSignTime() == null) {
-            arg = signName + "Time";
-            logger.error(MESSAGE, arg);
+            logger.error(SIGN_MESSAGE, signName, "Time");
         }
         if (sign.getIpAddress() == null) {
-            arg = signName + "IpAddress";
-            logger.error(MESSAGE, arg);
+            logger.error(SIGN_MESSAGE, signName, "IpAddress");
         }
         if (sign.getSignLogin() == null) {
-            arg = signName + "Login";
-            logger.error(MESSAGE, arg);
+            logger.error(SIGN_MESSAGE, signName, "Login");
         }
         if (sign.getSignCryptoprofile() == null) {
-            arg = signName + "Cryptoprofile";
-            logger.error(MESSAGE, arg);
+            logger.error(SIGN_MESSAGE, signName, "Cryptoprofile");
         }
         if (sign.getSignCryptoprofileType() == null) {
-            arg = signName + "CryptoprofileType";
-            logger.error(MESSAGE, arg);
+            logger.error(SIGN_MESSAGE, signName, "CryptoprofileType");
         }
         if (sign.getChannelIndicator() == null) {
-            arg = signName + "ChannelIndicator";
-            logger.error(MESSAGE, arg);
+            logger.error(SIGN_MESSAGE, signName, "ChannelIndicator");
         }
         if (sign.getSignToken() == null) {
-            arg = signName + "Token";
-            logger.error(MESSAGE, arg);
+            logger.error(SIGN_MESSAGE, signName, "Token");
         }
         if (sign.getSignType() == null) {
-            arg = signName + "Type";
-            logger.error(MESSAGE, arg);
+            logger.error(SIGN_MESSAGE, signName, "Type");
         }
         if (sign.getSignImsi() == null) {
-            arg = signName + "Imsi";
-            logger.error(MESSAGE, arg);
+            logger.error(SIGN_MESSAGE, signName, "Imsi");
         }
         if (sign.getSignCertId() == null) {
-            arg = signName + "CertId";
-            logger.error(MESSAGE, arg);
+            logger.error(SIGN_MESSAGE, signName, "CertId");
         }
         if (sign.getSignPhone() == null) {
-            arg = signName + "Phone";
-            logger.error(MESSAGE, arg);
+            logger.error(SIGN_MESSAGE, signName, "Phone");
         }
         if (sign.getSignEmail() == null) {
-            arg = signName + "Email";
-            logger.error(MESSAGE, arg);
+            logger.error(SIGN_MESSAGE, signName, "Email");
         }
         if (sign.getSignSource() == null) {
-            arg = signName + "Source";
-            logger.error(MESSAGE, arg);
+            logger.error(SIGN_MESSAGE, signName, "Source");
         }
     }
 

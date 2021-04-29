@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Идентификатор запроса платежного поручения
@@ -12,14 +13,14 @@ public class RequestId implements Serializable {
 
     private static final long serialVersionUID = -4980229796687406386L;
 
-    private final String id;
+    private final UUID id;
 
     @JsonCreator
-    public RequestId(@JsonProperty("requestId") String id) {
+    public RequestId(@JsonProperty("requestId") UUID id) {
         this.id = id;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
