@@ -25,7 +25,7 @@ pipeline {
         GIT_PROJECT = 'CIBPPRB'
         GIT_REPOSITORY = 'sbbol-antifraud'
         GIT_LINK = 'ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git'
-        GROUP_ID = 'Nexus_PROD.CI03045533_sbbol-antifraud'
+        GROUP_ID = 'Nexus_PROD.CI03045533_sbbol_antifraud'
         CUSTOMER_ARTIFACT_ID = 'antifraud'
         DATASPACE_ARTIFACT_ID = 'dataspace-apps-antifraud'
         ARTIFACT_NAME_OS = ''
@@ -33,7 +33,7 @@ pipeline {
         DATASPACE_ARCHIVE_NAME = 'dataspace-distrib.zip'
         VERSION = ''
         VERSION_PATTERN = /\d+\.\d+\.\d+(\-build\.\d+)?/
-        DATASPACE_CONFIGS = './config/default.yml'
+        DATASPACE_CONFIGS = './config/default.yml,./config/sigma/devgen2_eip.yml'
         NEXUSSBRF_RELEASE_REPOSITORY = 'https://sbrf-nexus.sigma.sbrf.ru/nexus/service/local/artifact/maven/content'
         DEV_REPOSITORY = 'https://nexus.sigma.sbrf.ru/nexus/service/local/artifact/maven/content'
         PROJECT_URL = "https://sbtatlas.sigma.sbrf.ru/stashdbo/projects/${GIT_PROJECT}/repos/${GIT_REPOSITORY}/"
@@ -293,7 +293,7 @@ pipeline {
                     for (String artifactId in [DATASPACE_ARTIFACT_ID, CUSTOMER_ARTIFACT_ID]) {
                         def response = qgm.getFlagMap(
                                 repositoryId: 'Nexus_PROD',
-                                groupId: "Nexus_PROD/CI03045533_sbbol-antifraud",
+                                groupId: "Nexus_PROD/CI03045533_sbbol_antifraud",
                                 artifactId: DATASPACE_ARTIFACT_ID,
                                 version: VERSION
                         )
@@ -365,7 +365,7 @@ pipeline {
 }
 
 static String getSbrfNexusLink(String artifactId, String version) {
-    return "https://sbrf-nexus.sigma.sbrf.ru/nexus/content/repositories/Nexus_PROD/Nexus_PROD/CI03045533_sbbol-antifraud/${artifactId}/${version}/${artifactId}-${version}-distrib.zip"
+    return "https://sbrf-nexus.sigma.sbrf.ru/nexus/content/repositories/Nexus_PROD/Nexus_PROD/CI03045533_sbbol_antifraud/${artifactId}/${version}/${artifactId}-${version}-distrib.zip"
 }
 
 /**

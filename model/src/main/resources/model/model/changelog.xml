@@ -1,0 +1,858 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd"
+                   logicalFilePath="./antifraud/changelog.xml">
+    <changeSet author="antifraud" id="0.1.0-build.1-before">
+        <tagDatabase tag="antifraud-0.1.0-build.1-before"/>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540418">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="T_PAYMENTOPERATION"/>
+            </not>
+        </preConditions>
+        <createTable
+                tablespace="${tablespace_t}"
+                tableName="T_PAYMENTOPERATION"
+                remarks="Code: PaymentOperation&#10;Name: Модель платежного поручения">
+
+            <column name="REQUESTID" type="VARCHAR(36)" remarks="Code: requestId&#10;Name: Идентификатор запроса во ФродМониторинг"  > </column>
+            <column name="TIMESTAMP_" type="TIMESTAMP(3)" remarks="Code: timeStamp&#10;Name: Дата и время формирования события"  > </column>
+            <column name="ORGGUID" type="VARCHAR(38)" remarks="Code: orgGuid&#10;Name: Уникальный идентификатор клиента"  > </column>
+            <column name="USERGUID" type="VARCHAR(38)" remarks="Code: userGuid&#10;Name: Уникальный идентификатор пользователя"  > </column>
+            <column name="TBCODE" type="VARCHAR(50)" remarks="Code: tbCode&#10;Name: Код территориального банка, в котором обслуживается организация"  > </column>
+            <column name="HTTPACCEPT" type="VARCHAR(3000)" remarks="Code: httpAccept&#10;Name: Значение заголовка Accept HTTP-запроса"  > </column>
+            <column name="HTTPREFERER" type="VARCHAR(256)" remarks="Code: httpReferer&#10;Name: Значение заголовка Referer HTTP-запроса"  > </column>
+            <column name="HTTPACCEPTCHARS" type="VARCHAR(256)" remarks="Code: httpAcceptChars&#10;Name: Значение заголовка Accept-Charset HTTP-запроса"  > </column>
+            <column name="HTTPACCEPTENCODING" type="VARCHAR(256)" remarks="Code: httpAcceptEncoding&#10;Name: Значение заголовка Accept-Encoding HTTP-запроса"  > </column>
+            <column name="HTTPACCEPTLANGUAGE" type="VARCHAR(256)" remarks="Code: httpAcceptLanguage&#10;Name: Значение заголовка Accept-Language HTTP-запроса"  > </column>
+            <column name="IPADDRESS" type="VARCHAR(15)" remarks="Code: ipAddress&#10;Name: IP адрес"  > </column>
+            <column name="USERAGENT" type="VARCHAR(1024)" remarks="Code: userAgent&#10;Name: Значение заголовка User-Agent HTTP-запроса"  > </column>
+            <column name="DEVICEPRINT" type="VARCHAR(4000)" remarks="Code: devicePrint&#10;Name: Слепок устройства"  > </column>
+            <column name="MOBSDKDATA" type="VARCHAR(4000)" remarks="Code: mobSdkData&#10;Name: Информация о мобильном устройстве в формате json"  > </column>
+            <column name="CHANNELINDICATOR" type="VARCHAR(15)" remarks="Code: channelIndicator&#10;Name: Тип канала связи, через который осуществляется связь клиента с банком"  > </column>
+            <column name="TIMEOFOCCURRENCE" type="TIMESTAMP(3)" remarks="Code: timeOfOccurrence&#10;Name: Время создания запроса"  > </column>
+            <column name="DOCID" type="VARCHAR(36)" remarks="Code: docId&#10;Name: ID документа"  > </column>
+            <column name="DOCNUMBER" type="${type_int}" remarks="Code: docNumber&#10;Name: Номер документа"  > </column>
+            <column name="DOCDATE" type="DATE" remarks="Code: docDate&#10;Name: Дата документа"  > </column>
+            <column name="AMOUNT" type="${type_long}" remarks="Code: amount&#10;Name: Сумма перевода"  > </column>
+            <column name="CURRENCY" type="VARCHAR(3)" remarks="Code: currency&#10;Name: Валюта перевода, буквенный код валюты перевода в соответствии со стандартом ISO"  > </column>
+            <column name="EXECUTIONSPEED" type="VARCHAR(30)" remarks="Code: executionSpeed&#10;Name: Скорость обработки документа"  > </column>
+            <column name="OTHERACCBANKTYPE" type="VARCHAR(20)" remarks="Code: otherAccBankType&#10;Name: Вид платежа в ЭД"  > </column>
+            <column name="ACCOUNTNUMBER" type="VARCHAR(20)" remarks="Code: accountNumber&#10;Name: Номер счета отправителя (плательщика)"  > </column>
+            <column name="OTHERACCNAME" type="VARCHAR(200)" remarks="Code: otherAccName&#10;Name: Наименование получателя"  > </column>
+            <column name="BALACCNUMBER" type="VARCHAR(20)" remarks="Code: balAccNumber&#10;Name: Бал.счет получателя"  > </column>
+            <column name="OTHERBICCODE" type="VARCHAR(11)" remarks="Code: otherBicCode&#10;Name: БИК SWIFT получателя"  > </column>
+            <column name="OTHERACCOWNERSHIPTYPE" type="VARCHAR(15)" remarks="Code: otherAccOwnershipType&#10;Name: Направление передачи средств"  > </column>
+            <column name="OTHERACCTYPE" type="VARCHAR(20)" remarks="Code: otherAccType&#10;Name: Тип счета получателя платежа"  > </column>
+            <column name="TRANSFERMEDIUMTYPE" type="VARCHAR(30)" remarks="Code: transferMediumType&#10;Name: Метод перевода средств между пользователем и получателем"  > </column>
+            <column name="RECEIVERINN" type="VARCHAR(12)" remarks="Code: receiverInn&#10;Name: ИНН получателя"  > </column>
+            <column name="DESTINATION" type="VARCHAR(255)" remarks="Code: destination&#10;Name: Назначение платежа"  > </column>
+            <column name="RECEIVERACCOUNT" type="VARCHAR(5)" remarks="Code: receiverAccount&#10;Name: Бал.счет получателя"  > </column>
+            <column name="RECEIVERBICACCOUNT" type="VARCHAR(32)" remarks="Code: receiverBicAccount&#10;Name: БИК и Счет получателя"  > </column>
+            <column name="PAYERINN" type="VARCHAR(12)" remarks="Code: payerInn&#10;Name: ИНН отправителя"  > </column>
+            <column name="FIRSTSIGNTIME" type="TIMESTAMP(3)" remarks="Code: firstSignTime&#10;Name: 1-я подпись Время подписи"  > </column>
+            <column name="FIRSTSIGNIP" type="VARCHAR(15)" remarks="Code: firstSignIp&#10;Name: 1-я подпись IP адрес"  > </column>
+            <column name="FIRSTSIGNLOGIN" type="VARCHAR(254)" remarks="Code: firstSignLogin&#10;Name: 1-я подпись Логин"  > </column>
+            <column name="FIRSTSIGNCRYPTOPROFILE" type="VARCHAR(254)" remarks="Code: firstSignCryptoprofile&#10;Name: 1-я подпись Наименование криптопрофиля"  > </column>
+            <column name="FIRSTSIGNCRYPTOPROFILETYPE" type="VARCHAR(254)" remarks="Code: firstSignCryptoprofileType&#10;Name: 1-я подпись Тип криптопрофиля"  > </column>
+            <column name="FIRSTSIGNCHANNEL" type="VARCHAR(254)" remarks="Code: firstSignChannel&#10;Name: 1-я подпись Канал подписи"  > </column>
+            <column name="FIRSTSIGNTOKEN" type="VARCHAR(254)" remarks="Code: firstSignToken&#10;Name: 1-я подпись Данные Токена"  > </column>
+            <column name="FIRSTSIGNTYPE" type="VARCHAR(254)" remarks="Code: firstSignType&#10;Name: 1-я подпись Тип подписи"  > </column>
+            <column name="FIRSTSIGNIMSI" type="VARCHAR(128)" remarks="Code: firstSignImsi&#10;Name: 1-я подпись IMSI"  > </column>
+            <column name="FIRSTSIGNCERTID" type="VARCHAR(254)" remarks="Code: firstSignCertId&#10;Name: 1-я подпись Идентификатор личного сертификата"  > </column>
+            <column name="FIRSTSIGNPHONE" type="VARCHAR(13)" remarks="Code: firstSignPhone&#10;Name: 1-я подпись Номер телефона"  > </column>
+            <column name="FIRSTSIGNEMAIL" type="VARCHAR(320)" remarks="Code: firstSignEmail&#10;Name: 1-я подпись Адрес электронной почты"  > </column>
+            <column name="FIRSTSIGNSOURCE" type="VARCHAR(100)" remarks="Code: firstSignSource&#10;Name: 1-я подпись Канал"  > </column>
+            <column name="PRIVATEIPADDRESS" type="VARCHAR(15)" remarks="Code: privateIpAddress&#10;Name: Локальный IP адрес"  > </column>
+            <column name="SENDERSIGNTIME" type="TIMESTAMP(3)" remarks="Code: senderSignTime&#10;Name: Отправивший Время подписи"  > </column>
+            <column name="SENDERIP" type="VARCHAR(15)" remarks="Code: senderIp&#10;Name: Отправивший IP адрес"  > </column>
+            <column name="SENDERLOGIN" type="VARCHAR(254)" remarks="Code: senderLogin&#10;Name: Отправивший Логин"  > </column>
+            <column name="SENDERCRYPTOPROFILE" type="VARCHAR(254)" remarks="Code: senderCryptoprofile&#10;Name: Отправивший Наименование криптопрофиля"  > </column>
+            <column name="SENDERCRYPTOPROFILETYPE" type="VARCHAR(254)" remarks="Code: senderCryptoprofileType&#10;Name: Отправивший Тип криптопрофиля"  > </column>
+            <column name="SENDERSIGNCHANNEL" type="VARCHAR(254)" remarks="Code: senderSignChannel&#10;Name: Отправивший Канал подписи"  > </column>
+            <column name="SENDERTOKEN" type="VARCHAR(254)" remarks="Code: senderToken&#10;Name: Отправивший Данные Токена"  > </column>
+            <column name="SENDERSIGNTYPE" type="VARCHAR(254)" remarks="Code: senderSignType&#10;Name: Отправивший Тип подписи"  > </column>
+            <column name="SENDERSIGNIMSI" type="VARCHAR(128)" remarks="Code: senderSignImsi&#10;Name: Отправивший IMSI"  > </column>
+            <column name="SENDERCERTID" type="VARCHAR(254)" remarks="Code: senderCertId&#10;Name: Отправивший Идентификатор сертификата"  > </column>
+            <column name="SENDERPHONE" type="VARCHAR(13)" remarks="Code: senderPhone&#10;Name: Отправивший Номер телефона"  > </column>
+            <column name="SENDEREMAIL" type="VARCHAR(320)" remarks="Code: senderEmail&#10;Name: Отправивший Адрес электронной почты"  > </column>
+            <column name="SENDERSOURCE" type="VARCHAR(100)" remarks="Code: senderSource&#10;Name: Отправивший Канал"  > </column>
+            <column name="SECONDSIGNTIME" type="TIMESTAMP(3)" remarks="Code: secondSignTime&#10;Name: 2-я подпись Время подписи"  > </column>
+            <column name="SECONDSIGNIP" type="VARCHAR(15)" remarks="Code: secondSignIp&#10;Name: 2-я подпись IP адрес"  > </column>
+            <column name="SECONDSIGNLOGIN" type="VARCHAR(254)" remarks="Code: secondSignLogin&#10;Name: 2-я подпись Логин"  > </column>
+            <column name="SECONDSIGNCRYPTOPROFILE" type="VARCHAR(254)" remarks="Code: secondSignCryptoprofile&#10;Name: 2-я подпись Наименование криптопрофиля"  > </column>
+            <column name="SECONDSIGNCRYPTOPROFILETYPE" type="VARCHAR(254)" remarks="Code: secondSignCryptoprofileType&#10;Name: 2-я подпись Тип криптопрофиля"  > </column>
+            <column name="SECONDSIGNCHANNEL" type="VARCHAR(254)" remarks="Code: secondSignChannel&#10;Name: 2-я подпись Канал подписи"  > </column>
+            <column name="SECONDSIGNTOKEN" type="VARCHAR(254)" remarks="Code: secondSignToken&#10;Name: 2-я подпись Данные Токена"  > </column>
+            <column name="SECONDSIGNTYPE" type="VARCHAR(254)" remarks="Code: secondSignType&#10;Name: 2-я подпись Тип подписи"  > </column>
+            <column name="SECONDSIGNIMSI" type="VARCHAR(128)" remarks="Code: secondSignImsi&#10;Name: 2-я подпись IMSI"  > </column>
+            <column name="SECONDSIGNCERTID" type="VARCHAR(254)" remarks="Code: secondSignCertId&#10;Name: 2-я подпись Идентификатор сертификата"  > </column>
+            <column name="SECONDSIGNPHONE" type="VARCHAR(13)" remarks="Code: secondSignPhone&#10;Name: 2-я подпись Номер телефона"  > </column>
+            <column name="SECONDSIGNEMAIL" type="VARCHAR(320)" remarks="Code: secondSignEmail&#10;Name: 2-я подпись Адрес электронной почты"  > </column>
+            <column name="SECONDSIGNSOURCE" type="VARCHAR(100)" remarks="Code: secondSignSource&#10;Name: 2-я подпись Канал"  > </column>
+            <column name="THIRDSIGNTIME" type="TIMESTAMP(3)" remarks="Code: thirdSignTime&#10;Name: 3-я подпись Время подписи"  > </column>
+            <column name="THIRDSIGNIP" type="VARCHAR(15)" remarks="Code: thirdSignIp&#10;Name: 3-я подпись IP адрес"  > </column>
+            <column name="THIRDSIGNLOGIN" type="VARCHAR(254)" remarks="Code: thirdSignLogin&#10;Name: 3-я подпись Логин"  > </column>
+            <column name="THIRDSIGNCRYPTOPROFILE" type="VARCHAR(254)" remarks="Code: thirdSignCryptoprofile&#10;Name: 3-я подпись Наименование криптопрофиля"  > </column>
+            <column name="THIRDSIGNCRYPTOPROFILETYPE" type="VARCHAR(254)" remarks="Code: thirdSignCryptoprofileType&#10;Name: 3-я подпись Тип криптопрофиля"  > </column>
+            <column name="THIRDSIGNCHANNEL" type="VARCHAR(254)" remarks="Code: thirdSignChannel&#10;Name: 3-я подпись Канал подписи"  > </column>
+            <column name="THIRDSIGNTOKEN" type="VARCHAR(254)" remarks="Code: thirdSignToken&#10;Name: 3-я подпись Данные Токена"  > </column>
+            <column name="THIRDSIGNTYPE" type="VARCHAR(254)" remarks="Code: thirdSignType&#10;Name: 3-я подпись Тип подписи"  > </column>
+            <column name="THIRDSIGNIMSI" type="VARCHAR(128)" remarks="Code: thirdSignImsi&#10;Name: 3-я подпись IMSI"  > </column>
+            <column name="THIRDSIGNCERTID" type="VARCHAR(254)" remarks="Code: thirdSignCertId&#10;Name: 3-я подпись Идентификатор сертификата"  > </column>
+            <column name="THIRDSIGNPHONE" type="VARCHAR(13)" remarks="Code: thirdSignPhone&#10;Name: 3-я подпись Номер телефона"  > </column>
+            <column name="THIRDSIGNEMAIL" type="VARCHAR(320)" remarks="Code: thirdSignEmail&#10;Name: 3-я подпись Адрес электронной почты"  > </column>
+            <column name="THIRDSIGNSOURCE" type="VARCHAR(100)" remarks="Code: thirdSignSource&#10;Name: 3-я подпись Канал"  > </column>
+            <column name="OBJECT_ID" type="VARCHAR(254)" remarks="Code: objectId&#10;Name: Прикладной ID объекта"  ><constraints nullable="false"/> </column>
+            <column name="TYPE" type="VARCHAR(254)" remarks="Code: type&#10;Name: Дискриминатор классов"  ><constraints nullable="false"/> </column>
+            <column name="SYS_LASTCHANGEDATE" type="TIMESTAMP(3)" remarks="Code: lastChangeDate&#10;Name: System attribute: date of the last modification"  > </column>
+            <column name="SYS_ISDELETED" type="${type_boolean}" remarks="Code: isDeleted&#10;Name: System attribute: Deleted flag" defaultValueNumeric="0" ><constraints nullable="false"/> </column>
+            <column name="SYS_PARTITIONID" type="${type_int}" remarks="Code: partitionId&#10;Name: System attribute: partitioning id" defaultValueNumeric="0" > </column>
+            <column name="SYS_OWNERID" type="VARCHAR(254)" remarks="Code: ownerId&#10;Name: System attribute: record owner module id"  > </column>
+            <column name="SYS_RECMODELVERSION" type="VARCHAR(254)" remarks="Code: recModelVersion&#10;Name: System attribute: Record model version"  > </column>
+            <column name="CHGCNT" type="${type_long}" remarks="Code: chgCnt&#10;Name: Счетчик изменений (технический)"  > </column>
+            <column name="OFFFLAG" type="${type_byte}" remarks="Code: offFlag&#10;Name: Признак деактивации записи"  > </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540418-pk">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = 'T_PAYMENTOPERATION'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE table_schema='${defaultSchemaName}' and CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = lower('T_PAYMENTOPERATION')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) FROM sys.user_constraints where CONSTRAINT_TYPE = 'P' and TABLE_NAME = 'T_PAYMENTOPERATION'</sqlCheck></and>
+            </or>
+        </preConditions>
+        <addPrimaryKey tablespace="${tablespace_i}" tableName="T_PAYMENTOPERATION" columnNames="OBJECT_ID" constraintName="PK_T_PAYMENTOPERATION"/>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540418-index-1">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.INDEXES WHERE TABLE_NAME='T_PAYMENTOPERATION' AND INDEX_NAME='I_PAYMENTOPERATION_DOCID'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) from pg_indexes where schemaname='${defaultSchemaName}' and tablename=lower('T_PAYMENTOPERATION') and indexname=lower('I_PAYMENTOPERATION_DOCID')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) from user_indexes where table_name=upper('T_PAYMENTOPERATION') and index_name=upper('I_PAYMENTOPERATION_DOCID')</sqlCheck></and>
+            </or>
+        </preConditions>
+        <createIndex
+            tablespace="${tablespace_i}"
+            tableName="T_PAYMENTOPERATION"
+            unique="true"
+            indexName="I_PAYMENTOPERATION_DOCID">
+            <column name="DOCID"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540418-index-2">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.INDEXES WHERE TABLE_NAME='T_PAYMENTOPERATION' AND INDEX_NAME='I_PAYMENTOPERATION_TYPE'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) from pg_indexes where schemaname='${defaultSchemaName}' and tablename=lower('T_PAYMENTOPERATION') and indexname=lower('I_PAYMENTOPERATION_TYPE')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) from user_indexes where table_name=upper('T_PAYMENTOPERATION') and index_name=upper('I_PAYMENTOPERATION_TYPE')</sqlCheck></and>
+            </or>
+        </preConditions>
+        <createIndex
+            tablespace="${tablespace_i}"
+            tableName="T_PAYMENTOPERATION"
+            unique="false"
+            indexName="I_PAYMENTOPERATION_TYPE">
+            <column name="TYPE"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540419">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="T_PAYMENTOPERATIONAPICALL"/>
+            </not>
+        </preConditions>
+        <createTable
+                tablespace="${tablespace_t}"
+                tableName="T_PAYMENTOPERATIONAPICALL"
+                remarks="Code: PaymentOperationApiCall&#10;Name: Результат обработки пакета Unit of Work для PaymentOperation">
+
+            <column name="APICALLID" type="VARCHAR(254)" remarks="Code: apiCallId&#10;Name: Идентификатор пакета"  > </column>
+            <column name="FIRSTCALLDATE" type="TIMESTAMP(3)" remarks="Code: firstCallDate&#10;Name: Дата первого успешного вызова пакета"  > </column>
+            <column name="DATA" type="VARCHAR(4000)" remarks="Code: data&#10;Name: Результат обработки пакета"  > </column>
+            <column name="BIGDATA" type="CLOB" remarks="Code: bigData&#10;Name: Результат обработки пакета, используется если результат не помещается в поле data"  > </column>
+            <column name="PARENTOBJECT_ID" type="VARCHAR(254)" remarks="Code: parentObject&#10;Name: Ссылка на родительский объект"  ><constraints nullable="false"/> </column>
+            <column name="OBJECT_ID" type="VARCHAR(254)" remarks="Code: objectId&#10;Name: Прикладной ID объекта"  ><constraints nullable="false"/> </column>
+            <column name="AGGREGATEROOT_ID" type="VARCHAR(254)" remarks="Code: aggregateRoot&#10;Name: ссылка на корень агрегата"  > </column>
+            <column name="SYS_LASTCHANGEDATE" type="TIMESTAMP(3)" remarks="Code: lastChangeDate&#10;Name: System attribute: date of the last modification"  > </column>
+            <column name="SYS_ISDELETED" type="${type_boolean}" remarks="Code: isDeleted&#10;Name: System attribute: Deleted flag" defaultValueNumeric="0" ><constraints nullable="false"/> </column>
+            <column name="SYS_PARTITIONID" type="${type_int}" remarks="Code: partitionId&#10;Name: System attribute: partitioning id" defaultValueNumeric="0" > </column>
+            <column name="SYS_OWNERID" type="VARCHAR(254)" remarks="Code: ownerId&#10;Name: System attribute: record owner module id"  > </column>
+            <column name="SYS_RECMODELVERSION" type="VARCHAR(254)" remarks="Code: recModelVersion&#10;Name: System attribute: Record model version"  > </column>
+            <column name="CHGCNT" type="${type_long}" remarks="Code: chgCnt&#10;Name: Счетчик изменений (технический)"  > </column>
+            <column name="OFFFLAG" type="${type_byte}" remarks="Code: offFlag&#10;Name: Признак деактивации записи"  > </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540419-lob-4" dbms="oracle">
+        <preConditions onFail="MARK_RAN" onError="CONTINUE">
+            <sqlCheck expectedResult="0">select count (*) from T_PAYMENTOPERATIONAPICALL</sqlCheck>
+            <sqlCheck expectedResult="1">select count (*) from sys.all_lobs where owner=USER and table_name=${namecase}('T_PAYMENTOPERATIONAPICALL') and column_name=${namecase}('BIGDATA') and tablespace_name&lt;&gt;${namecase}('${tablespace_l}')</sqlCheck>
+        </preConditions>
+        <sql>alter table T_PAYMENTOPERATIONAPICALL move lob (BIGDATA) store as (tablespace ${tablespace_l})</sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540419-pk">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = 'T_PAYMENTOPERATIONAPICALL'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE table_schema='${defaultSchemaName}' and CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = lower('T_PAYMENTOPERATIONAPICALL')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) FROM sys.user_constraints where CONSTRAINT_TYPE = 'P' and TABLE_NAME = 'T_PAYMENTOPERATIONAPICALL'</sqlCheck></and>
+            </or>
+        </preConditions>
+        <addPrimaryKey tablespace="${tablespace_i}" tableName="T_PAYMENTOPERATIONAPICALL" columnNames="OBJECT_ID" constraintName="PK_T_PAYMENTOPERATIONAPICALL"/>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540419-index-1">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.INDEXES WHERE TABLE_NAME='T_PAYMENTOPERATIONAPICALL' AND INDEX_NAME='I_PAYMENTOPERATIONAPICALL_APICALLID'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) from pg_indexes where schemaname='${defaultSchemaName}' and tablename=lower('T_PAYMENTOPERATIONAPICALL') and indexname=lower('I_PAYMENTOPERATIONAPICALL_APICALLID')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) from user_indexes where table_name=upper('T_PAYMENTOPERATIONAPICALL') and index_name=upper('I_PAYMENTOPERATIONAPICALL_APICALLID')</sqlCheck></and>
+            </or>
+        </preConditions>
+        <createIndex
+            tablespace="${tablespace_i}"
+            tableName="T_PAYMENTOPERATIONAPICALL"
+            unique="true"
+            indexName="I_PAYMENTOPERATIONAPICALL_APICALLID">
+            <column name="APICALLID"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540419-index-2">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.INDEXES WHERE TABLE_NAME='T_PAYMENTOPERATIONAPICALL' AND INDEX_NAME='I_PAYMENTOPERATIONAPICALL_PARENTOBJECT_ID'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) from pg_indexes where schemaname='${defaultSchemaName}' and tablename=lower('T_PAYMENTOPERATIONAPICALL') and indexname=lower('I_PAYMENTOPERATIONAPICALL_PARENTOBJECT_ID')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) from user_indexes where table_name=upper('T_PAYMENTOPERATIONAPICALL') and index_name=upper('I_PAYMENTOPERATIONAPICALL_PARENTOBJECT_ID')</sqlCheck></and>
+            </or>
+        </preConditions>
+        <createIndex
+            tablespace="${tablespace_i}"
+            tableName="T_PAYMENTOPERATIONAPICALL"
+            unique="false"
+            indexName="I_PAYMENTOPERATIONAPICALL_PARENTOBJECT_ID">
+            <column name="PARENTOBJECT_ID"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540419-index-3">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.INDEXES WHERE TABLE_NAME='T_PAYMENTOPERATIONAPICALL' AND INDEX_NAME='I_PAYMENTOPERATIONAPICALL_AGGREGATEROOT_ID'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) from pg_indexes where schemaname='${defaultSchemaName}' and tablename=lower('T_PAYMENTOPERATIONAPICALL') and indexname=lower('I_PAYMENTOPERATIONAPICALL_AGGREGATEROOT_ID')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) from user_indexes where table_name=upper('T_PAYMENTOPERATIONAPICALL') and index_name=upper('I_PAYMENTOPERATIONAPICALL_AGGREGATEROOT_ID')</sqlCheck></and>
+            </or>
+        </preConditions>
+        <createIndex
+            tablespace="${tablespace_i}"
+            tableName="T_PAYMENTOPERATIONAPICALL"
+            unique="false"
+            indexName="I_PAYMENTOPERATIONAPICALL_AGGREGATEROOT_ID">
+            <column name="AGGREGATEROOT_ID"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540420">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="T_REPL_CR_CREPKEVENT"/>
+            </not>
+        </preConditions>
+        <createTable
+                tablespace="${tablespace_t}"
+                tableName="T_REPL_CR_CREPKEVENT"
+                remarks="Code: CREpkEvent&#10;Name: Таблица событий ЕПК">
+
+            <column name="STATUS" type="VARCHAR(254)" remarks="Code: status&#10;Name: Статус обработки события"  > </column>
+            <column name="EPKID" type="VARCHAR(254)" remarks="Code: epkId&#10;Name: Идентификатор EPK"  > </column>
+            <column name="FROMCLIENT" type="VARCHAR(254)" remarks="Code: fromClient&#10;Name: Старый клиент"  > </column>
+            <column name="FROMCLIENTVERSION" type="${type_long}" remarks="Code: fromClientVersion&#10;Name: Версия старого клиента"  > </column>
+            <column name="TOCLIENT" type="VARCHAR(254)" remarks="Code: toClient&#10;Name: Новый клиент"  > </column>
+            <column name="TOCLIENTVERSION" type="${type_long}" remarks="Code: toClientVersion&#10;Name: Версия нового клиента"  > </column>
+            <column name="ORIGINALTOCLIENT" type="VARCHAR(254)" remarks="Code: originalToClient&#10;Name: Новый клиент. То же, что и toClient, но это поле остаётся неизменным после схлопывания"  > </column>
+            <column name="NEWCLIENT" type="VARCHAR(254)" remarks="Code: newClient&#10;Name: ЕПК-ID клиента, который был создан вместо ошибочно слитого"  > </column>
+            <column name="CURRENTSPACE" type="VARCHAR(254)" remarks="Code: currentSpace&#10;Name: Текущее пространство обслуживания"  > </column>
+            <column name="TIMECREATED" type="TIMESTAMP(3)" remarks="Code: timeCreated&#10;Name: Время создания события"  > </column>
+            <column name="OBJECT_ID" type="VARCHAR(254)" remarks="Code: objectId&#10;Name: Прикладной ID объекта"  ><constraints nullable="false"/> </column>
+            <column name="SYS_LASTCHANGEDATE" type="TIMESTAMP(3)" remarks="Code: lastChangeDate&#10;Name: System attribute: date of the last modification"  > </column>
+            <column name="SYS_ISDELETED" type="${type_boolean}" remarks="Code: isDeleted&#10;Name: System attribute: Deleted flag" defaultValueNumeric="0" ><constraints nullable="false"/> </column>
+            <column name="SYS_PARTITIONID" type="${type_int}" remarks="Code: partitionId&#10;Name: System attribute: partitioning id" defaultValueNumeric="0" > </column>
+            <column name="SYS_OWNERID" type="VARCHAR(254)" remarks="Code: ownerId&#10;Name: System attribute: record owner module id"  > </column>
+            <column name="SYS_RECMODELVERSION" type="VARCHAR(254)" remarks="Code: recModelVersion&#10;Name: System attribute: Record model version"  > </column>
+            <column name="CHGCNT" type="${type_long}" remarks="Code: chgCnt&#10;Name: Счетчик изменений (технический)"  > </column>
+            <column name="OFFFLAG" type="${type_byte}" remarks="Code: offFlag&#10;Name: Признак деактивации записи"  > </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540420-pk">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = 'T_REPL_CR_CREPKEVENT'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE table_schema='${defaultSchemaName}' and CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = lower('T_REPL_CR_CREPKEVENT')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) FROM sys.user_constraints where CONSTRAINT_TYPE = 'P' and TABLE_NAME = 'T_REPL_CR_CREPKEVENT'</sqlCheck></and>
+            </or>
+        </preConditions>
+        <addPrimaryKey tablespace="${tablespace_i}" tableName="T_REPL_CR_CREPKEVENT" columnNames="OBJECT_ID" constraintName="PK_T_REPL_CR_CREPKEVENT"/>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540420-index-1">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.INDEXES WHERE TABLE_NAME='T_REPL_CR_CREPKEVENT' AND INDEX_NAME='I_CREPKEVENT_EPKID'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) from pg_indexes where schemaname='${defaultSchemaName}' and tablename=lower('T_REPL_CR_CREPKEVENT') and indexname=lower('I_CREPKEVENT_EPKID')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) from user_indexes where table_name=upper('T_REPL_CR_CREPKEVENT') and index_name=upper('I_CREPKEVENT_EPKID')</sqlCheck></and>
+            </or>
+        </preConditions>
+        <createIndex
+            tablespace="${tablespace_i}"
+            tableName="T_REPL_CR_CREPKEVENT"
+            unique="true"
+            indexName="I_CREPKEVENT_EPKID">
+            <column name="EPKID"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540421">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="T_REPL_CR_CREPKEVENTBUFFER"/>
+            </not>
+        </preConditions>
+        <createTable
+                tablespace="${tablespace_t}"
+                tableName="T_REPL_CR_CREPKEVENTBUFFER"
+                remarks="Code: CREpkEventBuffer&#10;Name: Буферная таблица событий ЕПК">
+
+            <column name="STATUS" type="VARCHAR(254)" remarks="Code: status&#10;Name: Статус обработки события"  > </column>
+            <column name="EPKID" type="VARCHAR(254)" remarks="Code: epkId&#10;Name: Идентификатор EPK"  > </column>
+            <column name="FROMCLIENT" type="VARCHAR(254)" remarks="Code: fromClient&#10;Name: Старый клиент"  > </column>
+            <column name="FROMCLIENTVERSION" type="${type_long}" remarks="Code: fromClientVersion&#10;Name: Версия старого клиента"  > </column>
+            <column name="TOCLIENT" type="VARCHAR(254)" remarks="Code: toClient&#10;Name: Новый клиент"  > </column>
+            <column name="TOCLIENTVERSION" type="${type_long}" remarks="Code: toClientVersion&#10;Name: Версия нового клиента"  > </column>
+            <column name="TIMECREATED" type="TIMESTAMP(3)" remarks="Code: timeCreated&#10;Name: Время создания события"  > </column>
+            <column name="OBJECT_ID" type="VARCHAR(254)" remarks="Code: objectId&#10;Name: Прикладной ID объекта"  ><constraints nullable="false"/> </column>
+            <column name="SYS_LASTCHANGEDATE" type="TIMESTAMP(3)" remarks="Code: lastChangeDate&#10;Name: System attribute: date of the last modification"  > </column>
+            <column name="SYS_ISDELETED" type="${type_boolean}" remarks="Code: isDeleted&#10;Name: System attribute: Deleted flag" defaultValueNumeric="0" ><constraints nullable="false"/> </column>
+            <column name="SYS_PARTITIONID" type="${type_int}" remarks="Code: partitionId&#10;Name: System attribute: partitioning id" defaultValueNumeric="0" > </column>
+            <column name="SYS_OWNERID" type="VARCHAR(254)" remarks="Code: ownerId&#10;Name: System attribute: record owner module id"  > </column>
+            <column name="SYS_RECMODELVERSION" type="VARCHAR(254)" remarks="Code: recModelVersion&#10;Name: System attribute: Record model version"  > </column>
+            <column name="CHGCNT" type="${type_long}" remarks="Code: chgCnt&#10;Name: Счетчик изменений (технический)"  > </column>
+            <column name="OFFFLAG" type="${type_byte}" remarks="Code: offFlag&#10;Name: Признак деактивации записи"  > </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540421-pk">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = 'T_REPL_CR_CREPKEVENTBUFFER'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE table_schema='${defaultSchemaName}' and CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = lower('T_REPL_CR_CREPKEVENTBUFFER')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) FROM sys.user_constraints where CONSTRAINT_TYPE = 'P' and TABLE_NAME = 'T_REPL_CR_CREPKEVENTBUFFER'</sqlCheck></and>
+            </or>
+        </preConditions>
+        <addPrimaryKey tablespace="${tablespace_i}" tableName="T_REPL_CR_CREPKEVENTBUFFER" columnNames="OBJECT_ID" constraintName="PK_T_REPL_CR_CREPKEVENTBUFFER"/>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540421-index-1">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.INDEXES WHERE TABLE_NAME='T_REPL_CR_CREPKEVENTBUFFER' AND INDEX_NAME='I_CREPKEVENTBUFFER_EPKID'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) from pg_indexes where schemaname='${defaultSchemaName}' and tablename=lower('T_REPL_CR_CREPKEVENTBUFFER') and indexname=lower('I_CREPKEVENTBUFFER_EPKID')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) from user_indexes where table_name=upper('T_REPL_CR_CREPKEVENTBUFFER') and index_name=upper('I_CREPKEVENTBUFFER_EPKID')</sqlCheck></and>
+            </or>
+        </preConditions>
+        <createIndex
+            tablespace="${tablespace_i}"
+            tableName="T_REPL_CR_CREPKEVENTBUFFER"
+            unique="true"
+            indexName="I_CREPKEVENTBUFFER_EPKID">
+            <column name="EPKID"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540421-index-2">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.INDEXES WHERE TABLE_NAME='T_REPL_CR_CREPKEVENTBUFFER' AND INDEX_NAME='I_CREPKEVENTBUFFER_STATUS'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) from pg_indexes where schemaname='${defaultSchemaName}' and tablename=lower('T_REPL_CR_CREPKEVENTBUFFER') and indexname=lower('I_CREPKEVENTBUFFER_STATUS')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) from user_indexes where table_name=upper('T_REPL_CR_CREPKEVENTBUFFER') and index_name=upper('I_CREPKEVENTBUFFER_STATUS')</sqlCheck></and>
+            </or>
+        </preConditions>
+        <createIndex
+            tablespace="${tablespace_i}"
+            tableName="T_REPL_CR_CREPKEVENTBUFFER"
+            unique="false"
+            indexName="I_CREPKEVENTBUFFER_STATUS">
+            <column name="STATUS"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540421-index-3">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.INDEXES WHERE TABLE_NAME='T_REPL_CR_CREPKEVENTBUFFER' AND INDEX_NAME='I_CREPKEVENTBUFFER_TIMECREATED'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) from pg_indexes where schemaname='${defaultSchemaName}' and tablename=lower('T_REPL_CR_CREPKEVENTBUFFER') and indexname=lower('I_CREPKEVENTBUFFER_TIMECREATED')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) from user_indexes where table_name=upper('T_REPL_CR_CREPKEVENTBUFFER') and index_name=upper('I_CREPKEVENTBUFFER_TIMECREATED')</sqlCheck></and>
+            </or>
+        </preConditions>
+        <createIndex
+            tablespace="${tablespace_i}"
+            tableName="T_REPL_CR_CREPKEVENTBUFFER"
+            unique="false"
+            indexName="I_CREPKEVENTBUFFER_TIMECREATED">
+            <column name="TIMECREATED"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540422">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="T_REPL_CR_CRREQUESTEVENT"/>
+            </not>
+        </preConditions>
+        <createTable
+                tablespace="${tablespace_t}"
+                tableName="T_REPL_CR_CRREQUESTEVENT"
+                remarks="Code: CRRequestEvent&#10;Name: Таблица событий запросов">
+
+            <column name="STATUS" type="VARCHAR(254)" remarks="Code: status&#10;Name: Статус обработки события"  > </column>
+            <column name="FROMSPACE" type="VARCHAR(254)" remarks="Code: fromSpace&#10;Name: Из какого пространства (SPACE/ZONE)"  > </column>
+            <column name="TOSPACE" type="VARCHAR(254)" remarks="Code: toSpace&#10;Name: В какое пространство (SPACE/ZONE)"  > </column>
+            <column name="FROMCLIENT" type="VARCHAR(254)" remarks="Code: fromClient&#10;Name: Старый клиент"  > </column>
+            <column name="TOCLIENT" type="VARCHAR(254)" remarks="Code: toClient&#10;Name: Новый клиент"  > </column>
+            <column name="TIMECREATED" type="TIMESTAMP(3)" remarks="Code: timeCreated&#10;Name: Время создания события"  > </column>
+            <column name="OBJECT_ID" type="VARCHAR(254)" remarks="Code: objectId&#10;Name: Прикладной ID объекта"  ><constraints nullable="false"/> </column>
+            <column name="SYS_LASTCHANGEDATE" type="TIMESTAMP(3)" remarks="Code: lastChangeDate&#10;Name: System attribute: date of the last modification"  > </column>
+            <column name="SYS_ISDELETED" type="${type_boolean}" remarks="Code: isDeleted&#10;Name: System attribute: Deleted flag" defaultValueNumeric="0" ><constraints nullable="false"/> </column>
+            <column name="SYS_PARTITIONID" type="${type_int}" remarks="Code: partitionId&#10;Name: System attribute: partitioning id" defaultValueNumeric="0" > </column>
+            <column name="SYS_OWNERID" type="VARCHAR(254)" remarks="Code: ownerId&#10;Name: System attribute: record owner module id"  > </column>
+            <column name="SYS_RECMODELVERSION" type="VARCHAR(254)" remarks="Code: recModelVersion&#10;Name: System attribute: Record model version"  > </column>
+            <column name="CHGCNT" type="${type_long}" remarks="Code: chgCnt&#10;Name: Счетчик изменений (технический)"  > </column>
+            <column name="OFFFLAG" type="${type_byte}" remarks="Code: offFlag&#10;Name: Признак деактивации записи"  > </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540422-pk">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = 'T_REPL_CR_CRREQUESTEVENT'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE table_schema='${defaultSchemaName}' and CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = lower('T_REPL_CR_CRREQUESTEVENT')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) FROM sys.user_constraints where CONSTRAINT_TYPE = 'P' and TABLE_NAME = 'T_REPL_CR_CRREQUESTEVENT'</sqlCheck></and>
+            </or>
+        </preConditions>
+        <addPrimaryKey tablespace="${tablespace_i}" tableName="T_REPL_CR_CRREQUESTEVENT" columnNames="OBJECT_ID" constraintName="PK_T_REPL_CR_CRREQUESTEVENT"/>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540423">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="T_REPL_CR_CRREQUESTEVENT_DUP_BY_AGGREGATE"/>
+            </not>
+        </preConditions>
+        <createTable
+                tablespace="${tablespace_t}"
+                tableName="T_REPL_CR_CRREQUESTEVENT_DUP_BY_AGGREGATE"
+                remarks="Code: CRRequestEventDupByAggregate&#10;Name: Таблица событий запросов">
+
+            <column name="STATUS" type="VARCHAR(254)" remarks="Code: status&#10;Name: Статус обработки события"  > </column>
+            <column name="FROMCLIENT" type="VARCHAR(254)" remarks="Code: fromClient&#10;Name: Старый клиент"  > </column>
+            <column name="TOCLIENT" type="VARCHAR(254)" remarks="Code: toClient&#10;Name: Новый клиент"  > </column>
+            <column name="TIMECREATED" type="TIMESTAMP(3)" remarks="Code: timeCreated&#10;Name: Время создания события"  > </column>
+            <column name="AGGREGATEROOTID" type="VARCHAR(254)" remarks="Code: aggregateRootId&#10;Name: ID корня агрегата"  > </column>
+            <column name="AGGREGATEROOTCLASS" type="VARCHAR(254)" remarks="Code: aggregateRootClass&#10;Name: Тип корня агрегата"  > </column>
+            <column name="OBJECT_ID" type="VARCHAR(254)" remarks="Code: objectId&#10;Name: Прикладной ID объекта"  ><constraints nullable="false"/> </column>
+            <column name="SYS_LASTCHANGEDATE" type="TIMESTAMP(3)" remarks="Code: lastChangeDate&#10;Name: System attribute: date of the last modification"  > </column>
+            <column name="SYS_ISDELETED" type="${type_boolean}" remarks="Code: isDeleted&#10;Name: System attribute: Deleted flag" defaultValueNumeric="0" ><constraints nullable="false"/> </column>
+            <column name="SYS_PARTITIONID" type="${type_int}" remarks="Code: partitionId&#10;Name: System attribute: partitioning id" defaultValueNumeric="0" > </column>
+            <column name="SYS_OWNERID" type="VARCHAR(254)" remarks="Code: ownerId&#10;Name: System attribute: record owner module id"  > </column>
+            <column name="SYS_RECMODELVERSION" type="VARCHAR(254)" remarks="Code: recModelVersion&#10;Name: System attribute: Record model version"  > </column>
+            <column name="CHGCNT" type="${type_long}" remarks="Code: chgCnt&#10;Name: Счетчик изменений (технический)"  > </column>
+            <column name="OFFFLAG" type="${type_byte}" remarks="Code: offFlag&#10;Name: Признак деактивации записи"  > </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540423-pk">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = 'T_REPL_CR_CRREQUESTEVENT_DUP_BY_AGGREGATE'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE table_schema='${defaultSchemaName}' and CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = lower('T_REPL_CR_CRREQUESTEVENT_DUP_BY_AGGREGATE')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) FROM sys.user_constraints where CONSTRAINT_TYPE = 'P' and TABLE_NAME = 'T_REPL_CR_CRREQUESTEVENT_DUP_BY_AGGREGATE'</sqlCheck></and>
+            </or>
+        </preConditions>
+        <addPrimaryKey tablespace="${tablespace_i}" tableName="T_REPL_CR_CRREQUESTEVENT_DUP_BY_AGGREGATE" columnNames="OBJECT_ID" constraintName="PK_T_REPL_CR_CRREQUESTEVENT_DUP_BY_AGGREGATE"/>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540424-col-1">
+        <preConditions onFail="MARK_RAN"><not><tableExists tableName="LC_REPL_CR_CRBATCH_IDENTIFIERS"/></not></preConditions>
+        <createTable tablespace="${tablespace_t}" tableName="LC_REPL_CR_CRBATCH_IDENTIFIERS" remarks="LinkTable=&quot;Collection table CRBatch to String for identifiers&quot;">
+            <column name="CRBATCH_ID" type="VARCHAR(254)" remarks="Link to CRBatch"><constraints nullable="false"/></column>
+            <column name="IDENTIFIERS" type="VARCHAR(254)" remarks="Link to String"><constraints nullable="false"/></column>
+        </createTable>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540424-col-1-pk">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = 'LC_REPL_CR_CRBATCH_IDENTIFIERS'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = lower('LC_REPL_CR_CRBATCH_IDENTIFIERS')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) FROM sys.user_constraints where CONSTRAINT_TYPE = 'P' and TABLE_NAME = 'LC_REPL_CR_CRBATCH_IDENTIFIERS'</sqlCheck></and>
+            </or>
+        </preConditions>
+        <addPrimaryKey tablespace="${tablespace_i}" tableName="LC_REPL_CR_CRBATCH_IDENTIFIERS" columnNames="CRBATCH_ID, IDENTIFIERS" constraintName="PK_LC_REPL_CR_CRBATCH_IDENTIFIERS"/>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540424">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="T_REPL_CR_CRBATCH"/>
+            </not>
+        </preConditions>
+        <createTable
+                tablespace="${tablespace_t}"
+                tableName="T_REPL_CR_CRBATCH"
+                remarks="Code: CRBatch&#10;Name: Таблица событий ЕПК">
+
+            <column name="FIELDNAME" type="VARCHAR(254)" remarks="Code: fieldName&#10;Name: Наименования поля"  > </column>
+            <column name="EVENTID" type="VARCHAR(254)" remarks="Code: eventId&#10;Name: Сквозной идентификатор события EventId"  > </column>
+            <column name="ENTITYNAME" type="VARCHAR(254)" remarks="Code: entityName&#10;Name: Наименования таблицы"  > </column>
+            <column name="OBJECT_ID" type="VARCHAR(254)" remarks="Code: objectId&#10;Name: Прикладной ID объекта"  ><constraints nullable="false"/> </column>
+            <column name="SYS_LASTCHANGEDATE" type="TIMESTAMP(3)" remarks="Code: lastChangeDate&#10;Name: System attribute: date of the last modification"  > </column>
+            <column name="SYS_ISDELETED" type="${type_boolean}" remarks="Code: isDeleted&#10;Name: System attribute: Deleted flag" defaultValueNumeric="0" ><constraints nullable="false"/> </column>
+            <column name="SYS_PARTITIONID" type="${type_int}" remarks="Code: partitionId&#10;Name: System attribute: partitioning id" defaultValueNumeric="0" > </column>
+            <column name="SYS_OWNERID" type="VARCHAR(254)" remarks="Code: ownerId&#10;Name: System attribute: record owner module id"  > </column>
+            <column name="SYS_RECMODELVERSION" type="VARCHAR(254)" remarks="Code: recModelVersion&#10;Name: System attribute: Record model version"  > </column>
+            <column name="CHGCNT" type="${type_long}" remarks="Code: chgCnt&#10;Name: Счетчик изменений (технический)"  > </column>
+            <column name="OFFFLAG" type="${type_byte}" remarks="Code: offFlag&#10;Name: Признак деактивации записи"  > </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540424-pk">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = 'T_REPL_CR_CRBATCH'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE table_schema='${defaultSchemaName}' and CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = lower('T_REPL_CR_CRBATCH')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) FROM sys.user_constraints where CONSTRAINT_TYPE = 'P' and TABLE_NAME = 'T_REPL_CR_CRBATCH'</sqlCheck></and>
+            </or>
+        </preConditions>
+        <addPrimaryKey tablespace="${tablespace_i}" tableName="T_REPL_CR_CRBATCH" columnNames="OBJECT_ID" constraintName="PK_T_REPL_CR_CRBATCH"/>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540425">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="T_REPL_CR_CRTASK"/>
+            </not>
+        </preConditions>
+        <createTable
+                tablespace="${tablespace_t}"
+                tableName="T_REPL_CR_CRTASK"
+                remarks="Code: CRTask&#10;Name: Таблица с задачами">
+
+            <column name="STATUS" type="VARCHAR(254)" remarks="Code: status&#10;Name: Статус выполнения задачи"  > </column>
+            <column name="RETRYCOUNT" type="${type_int}" remarks="Code: retryCount&#10;Name: Колличество перезапусков задачи"  > </column>
+            <column name="REFERENCETYPE" type="VARCHAR(254)" remarks="Code: referenceType&#10;Name: Тип обрабатываемой ссылки [Client, Individual, etc]"  > </column>
+            <column name="FROMSPACE" type="VARCHAR(254)" remarks="Code: fromSpace&#10;Name: Из какого пространства (SPACE/ZONE)"  > </column>
+            <column name="TOSPACE" type="VARCHAR(254)" remarks="Code: toSpace&#10;Name: В какое пространство (SPACE/ZONE)"  > </column>
+            <column name="FROMCLIENT" type="VARCHAR(254)" remarks="Code: fromClient&#10;Name: Старый клиент"  > </column>
+            <column name="TOCLIENT" type="VARCHAR(254)" remarks="Code: toClient&#10;Name: Новый клиент"  > </column>
+            <column name="TIMECREATED" type="TIMESTAMP(3)" remarks="Code: timeCreated&#10;Name: Время создания события"  > </column>
+            <column name="OPERATIONTYPE" type="VARCHAR(254)" remarks="Code: operationType&#10;Name: TYPE [RELOCATION, DUPLICATION]"  > </column>
+            <column name="HEARTBEAT" type="TIMESTAMP(3)" remarks="Code: heartbeat&#10;Name: Время когда последний раз был установлен Heartbeat"  > </column>
+            <column name="RETRYAFTER" type="TIMESTAMP(3)" remarks="Code: retryAfter&#10;Name: Время после которого можно перезапустить задачу"  > </column>
+            <column name="OBJECT_ID" type="VARCHAR(254)" remarks="Code: objectId&#10;Name: Прикладной ID объекта"  ><constraints nullable="false"/> </column>
+            <column name="SYS_LASTCHANGEDATE" type="TIMESTAMP(3)" remarks="Code: lastChangeDate&#10;Name: System attribute: date of the last modification"  > </column>
+            <column name="SYS_ISDELETED" type="${type_boolean}" remarks="Code: isDeleted&#10;Name: System attribute: Deleted flag" defaultValueNumeric="0" ><constraints nullable="false"/> </column>
+            <column name="SYS_PARTITIONID" type="${type_int}" remarks="Code: partitionId&#10;Name: System attribute: partitioning id" defaultValueNumeric="0" > </column>
+            <column name="SYS_OWNERID" type="VARCHAR(254)" remarks="Code: ownerId&#10;Name: System attribute: record owner module id"  > </column>
+            <column name="SYS_RECMODELVERSION" type="VARCHAR(254)" remarks="Code: recModelVersion&#10;Name: System attribute: Record model version"  > </column>
+            <column name="CHGCNT" type="${type_long}" remarks="Code: chgCnt&#10;Name: Счетчик изменений (технический)"  > </column>
+            <column name="OFFFLAG" type="${type_byte}" remarks="Code: offFlag&#10;Name: Признак деактивации записи"  > </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540425-pk">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = 'T_REPL_CR_CRTASK'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE table_schema='${defaultSchemaName}' and CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = lower('T_REPL_CR_CRTASK')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) FROM sys.user_constraints where CONSTRAINT_TYPE = 'P' and TABLE_NAME = 'T_REPL_CR_CRTASK'</sqlCheck></and>
+            </or>
+        </preConditions>
+        <addPrimaryKey tablespace="${tablespace_i}" tableName="T_REPL_CR_CRTASK" columnNames="OBJECT_ID" constraintName="PK_T_REPL_CR_CRTASK"/>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540425-index-1">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.INDEXES WHERE TABLE_NAME='T_REPL_CR_CRTASK' AND INDEX_NAME='I_CRTASK_STATUS'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) from pg_indexes where schemaname='${defaultSchemaName}' and tablename=lower('T_REPL_CR_CRTASK') and indexname=lower('I_CRTASK_STATUS')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) from user_indexes where table_name=upper('T_REPL_CR_CRTASK') and index_name=upper('I_CRTASK_STATUS')</sqlCheck></and>
+            </or>
+        </preConditions>
+        <createIndex
+            tablespace="${tablespace_i}"
+            tableName="T_REPL_CR_CRTASK"
+            unique="false"
+            indexName="I_CRTASK_STATUS">
+            <column name="STATUS"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540426">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="T_REPL_CR_CRPROCESS"/>
+            </not>
+        </preConditions>
+        <createTable
+                tablespace="${tablespace_t}"
+                tableName="T_REPL_CR_CRPROCESS"
+                remarks="Code: CRProcess&#10;Name: Таблица с попыткой запуска задачи">
+
+            <column name="STARTTIME" type="TIMESTAMP(3)" remarks="Code: startTime&#10;Name: Время начала обработки"  > </column>
+            <column name="STATUS" type="VARCHAR(254)" remarks="Code: status&#10;Name: Статус выполнения процесса"  > </column>
+            <column name="EVENTID" type="VARCHAR(254)" remarks="Code: eventId&#10;Name: Сквозной идентификатор события EventId"  > </column>
+            <column name="FINISHTIME" type="TIMESTAMP(3)" remarks="Code: finishTime&#10;Name: Время окончания обработки"  > </column>
+            <column name="NOTICE" type="VARCHAR(4000)" remarks="Code: notice&#10;Name: Результат выполнения"  > </column>
+            <column name="RECONCILIATIONCOUNT" type="${type_int}" remarks="Code: reconciliationCount&#10;Name: Колличество выполненых проверок реконсиляции"  > </column>
+            <column name="NODE" type="VARCHAR(254)" remarks="Code: node&#10;Name: Node на которой выполнялась обработка процесса"  > </column>
+            <column name="OBJECT_ID" type="VARCHAR(254)" remarks="Code: objectId&#10;Name: Прикладной ID объекта"  ><constraints nullable="false"/> </column>
+            <column name="SYS_LASTCHANGEDATE" type="TIMESTAMP(3)" remarks="Code: lastChangeDate&#10;Name: System attribute: date of the last modification"  > </column>
+            <column name="SYS_ISDELETED" type="${type_boolean}" remarks="Code: isDeleted&#10;Name: System attribute: Deleted flag" defaultValueNumeric="0" ><constraints nullable="false"/> </column>
+            <column name="SYS_PARTITIONID" type="${type_int}" remarks="Code: partitionId&#10;Name: System attribute: partitioning id" defaultValueNumeric="0" > </column>
+            <column name="SYS_OWNERID" type="VARCHAR(254)" remarks="Code: ownerId&#10;Name: System attribute: record owner module id"  > </column>
+            <column name="SYS_RECMODELVERSION" type="VARCHAR(254)" remarks="Code: recModelVersion&#10;Name: System attribute: Record model version"  > </column>
+            <column name="CHGCNT" type="${type_long}" remarks="Code: chgCnt&#10;Name: Счетчик изменений (технический)"  > </column>
+            <column name="OFFFLAG" type="${type_byte}" remarks="Code: offFlag&#10;Name: Признак деактивации записи"  > </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540426-pk">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = 'T_REPL_CR_CRPROCESS'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE table_schema='${defaultSchemaName}' and CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = lower('T_REPL_CR_CRPROCESS')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) FROM sys.user_constraints where CONSTRAINT_TYPE = 'P' and TABLE_NAME = 'T_REPL_CR_CRPROCESS'</sqlCheck></and>
+            </or>
+        </preConditions>
+        <addPrimaryKey tablespace="${tablespace_i}" tableName="T_REPL_CR_CRPROCESS" columnNames="OBJECT_ID" constraintName="PK_T_REPL_CR_CRPROCESS"/>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540427">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="T_REPL_CR_CRLOCK"/>
+            </not>
+        </preConditions>
+        <createTable
+                tablespace="${tablespace_t}"
+                tableName="T_REPL_CR_CRLOCK"
+                remarks="Code: CRLock&#10;Name: Таблица с задачами">
+
+            <column name="TOKEN" type="VARCHAR(254)" remarks="Code: token&#10;Name: TOKEN"  > </column>
+            <column name="MIGRATIONSTATUS" type="${type_long}" remarks="Code: migrationStatus&#10;Name: Миграционная блокировка по клиенту"  > </column>
+            <column name="DUPLICATIONTO" type="${type_long}" remarks="Code: duplicationTo&#10;Name: Блокировка по to клиенту"  > </column>
+            <column name="CLIENTTYPE" type="VARCHAR(254)" remarks="Code: clientType&#10;Name: Тип клиента [Client, Individual, Organization, etc]"  > </column>
+            <column name="DUPLICATIONFROM" type="${type_long}" remarks="Code: duplicationFrom&#10;Name: Блокировка по from клиенту"  > </column>
+            <column name="OBJECT_ID" type="VARCHAR(254)" remarks="Code: objectId&#10;Name: Прикладной ID объекта"  ><constraints nullable="false"/> </column>
+            <column name="SYS_LASTCHANGEDATE" type="TIMESTAMP(3)" remarks="Code: lastChangeDate&#10;Name: System attribute: date of the last modification"  > </column>
+            <column name="SYS_ISDELETED" type="${type_boolean}" remarks="Code: isDeleted&#10;Name: System attribute: Deleted flag" defaultValueNumeric="0" ><constraints nullable="false"/> </column>
+            <column name="SYS_PARTITIONID" type="${type_int}" remarks="Code: partitionId&#10;Name: System attribute: partitioning id" defaultValueNumeric="0" > </column>
+            <column name="SYS_OWNERID" type="VARCHAR(254)" remarks="Code: ownerId&#10;Name: System attribute: record owner module id"  > </column>
+            <column name="SYS_RECMODELVERSION" type="VARCHAR(254)" remarks="Code: recModelVersion&#10;Name: System attribute: Record model version"  > </column>
+            <column name="CHGCNT" type="${type_long}" remarks="Code: chgCnt&#10;Name: Счетчик изменений (технический)"  > </column>
+            <column name="OFFFLAG" type="${type_byte}" remarks="Code: offFlag&#10;Name: Признак деактивации записи"  > </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540427-pk">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = 'T_REPL_CR_CRLOCK'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE table_schema='${defaultSchemaName}' and CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = lower('T_REPL_CR_CRLOCK')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) FROM sys.user_constraints where CONSTRAINT_TYPE = 'P' and TABLE_NAME = 'T_REPL_CR_CRLOCK'</sqlCheck></and>
+            </or>
+        </preConditions>
+        <addPrimaryKey tablespace="${tablespace_i}" tableName="T_REPL_CR_CRLOCK" columnNames="OBJECT_ID" constraintName="PK_T_REPL_CR_CRLOCK"/>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540428">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="T_REPL_CR_CRAGGREGATETASK"/>
+            </not>
+        </preConditions>
+        <createTable
+                tablespace="${tablespace_t}"
+                tableName="T_REPL_CR_CRAGGREGATETASK"
+                remarks="Code: CRAggregateTask&#10;Name: Таблица с задачами обработки конкретного агрегата">
+
+            <column name="STATUS" type="VARCHAR(254)" remarks="Code: status&#10;Name: Статус выполнения задачи"  > </column>
+            <column name="AGGREGATEROOTID" type="VARCHAR(254)" remarks="Code: aggregateRootId&#10;Name: ID корня агрегата"  > </column>
+            <column name="AGGREGATEROOTCLASS" type="VARCHAR(254)" remarks="Code: aggregateRootClass&#10;Name: Тип корня агрегата"  > </column>
+            <column name="EVENTID" type="VARCHAR(254)" remarks="Code: eventId&#10;Name: Сквозной идентификатор события EventId"  > </column>
+            <column name="OBJECT_ID" type="VARCHAR(254)" remarks="Code: objectId&#10;Name: Прикладной ID объекта"  ><constraints nullable="false"/> </column>
+            <column name="SYS_LASTCHANGEDATE" type="TIMESTAMP(3)" remarks="Code: lastChangeDate&#10;Name: System attribute: date of the last modification"  > </column>
+            <column name="SYS_ISDELETED" type="${type_boolean}" remarks="Code: isDeleted&#10;Name: System attribute: Deleted flag" defaultValueNumeric="0" ><constraints nullable="false"/> </column>
+            <column name="SYS_PARTITIONID" type="${type_int}" remarks="Code: partitionId&#10;Name: System attribute: partitioning id" defaultValueNumeric="0" > </column>
+            <column name="SYS_OWNERID" type="VARCHAR(254)" remarks="Code: ownerId&#10;Name: System attribute: record owner module id"  > </column>
+            <column name="SYS_RECMODELVERSION" type="VARCHAR(254)" remarks="Code: recModelVersion&#10;Name: System attribute: Record model version"  > </column>
+            <column name="CHGCNT" type="${type_long}" remarks="Code: chgCnt&#10;Name: Счетчик изменений (технический)"  > </column>
+            <column name="OFFFLAG" type="${type_byte}" remarks="Code: offFlag&#10;Name: Признак деактивации записи"  > </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540428-pk">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = 'T_REPL_CR_CRAGGREGATETASK'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE table_schema='${defaultSchemaName}' and CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = lower('T_REPL_CR_CRAGGREGATETASK')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) FROM sys.user_constraints where CONSTRAINT_TYPE = 'P' and TABLE_NAME = 'T_REPL_CR_CRAGGREGATETASK'</sqlCheck></and>
+            </or>
+        </preConditions>
+        <addPrimaryKey tablespace="${tablespace_i}" tableName="T_REPL_CR_CRAGGREGATETASK" columnNames="OBJECT_ID" constraintName="PK_T_REPL_CR_CRAGGREGATETASK"/>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540428-index-1">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.INDEXES WHERE TABLE_NAME='T_REPL_CR_CRAGGREGATETASK' AND INDEX_NAME='I_CRAGGREGATETASK_STATUS'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) from pg_indexes where schemaname='${defaultSchemaName}' and tablename=lower('T_REPL_CR_CRAGGREGATETASK') and indexname=lower('I_CRAGGREGATETASK_STATUS')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) from user_indexes where table_name=upper('T_REPL_CR_CRAGGREGATETASK') and index_name=upper('I_CRAGGREGATETASK_STATUS')</sqlCheck></and>
+            </or>
+        </preConditions>
+        <createIndex
+            tablespace="${tablespace_i}"
+            tableName="T_REPL_CR_CRAGGREGATETASK"
+            unique="false"
+            indexName="I_CRAGGREGATETASK_STATUS">
+            <column name="STATUS"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-6953940684772540428-index-2">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.INDEXES WHERE TABLE_NAME='T_REPL_CR_CRAGGREGATETASK' AND INDEX_NAME='I_CRAGGREGATETASK_AGGREGATEROOTID'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) from pg_indexes where schemaname='${defaultSchemaName}' and tablename=lower('T_REPL_CR_CRAGGREGATETASK') and indexname=lower('I_CRAGGREGATETASK_AGGREGATEROOTID')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) from user_indexes where table_name=upper('T_REPL_CR_CRAGGREGATETASK') and index_name=upper('I_CRAGGREGATETASK_AGGREGATEROOTID')</sqlCheck></and>
+            </or>
+        </preConditions>
+        <createIndex
+            tablespace="${tablespace_i}"
+            tableName="T_REPL_CR_CRAGGREGATETASK"
+            unique="false"
+            indexName="I_CRAGGREGATETASK_AGGREGATEROOTID">
+            <column name="AGGREGATEROOTID"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="antifraud" id="DICTIONARY-H2-DECODER-BASE64" dbms="h2">
+        <sql>CREATE ALIAS IF NOT EXISTS BASE64_DECODE AS 'byte[] encode(String source) {return java.util.Base64.getDecoder().decode(source);}'</sql>
+        <rollback/>
+    </changeSet>
+   <changeSet author="antifraud" id="0.1.0-build.1-AGGLOCK-20200713-PAYMENTOPERATION">
+       <preConditions onFail="MARK_RAN">
+           <not> <tableExists tableName="T_REPL_AGGLOCK_PAYMENTOPERATION"/> </not>
+       </preConditions>
+       <createTable tableName="T_REPL_AGGLOCK_PAYMENTOPERATION">
+           <column name="rootid" type="VARCHAR(255)"> <constraints nullable="false" primaryKey="true" primaryKeyName="PK_T_REPL_AGGLOCK_ROOT_ID_PAYMENTOPERATION"/> </column>
+           <column name="silock" type="${type_long}" defaultValueNumeric="0"> <constraints nullable="false"/> </column>
+           <column name="token" type="VARCHAR(255)"/>
+           <column name="migrationstatus" type="${type_boolean}" defaultValueNumeric="0"> <constraints nullable="false"/> </column>
+           <column name="chgcnt" type="${type_long}"/>
+           <column name="sys_lastchangedate" type="datetime(3)"/>
+           <column name="version" type="${type_long}"/>
+           <column name="guid" type="VARCHAR(255)"/>
+       </createTable>
+   </changeSet>
+   <changeSet author="antifraud" id="0.1.0-build.1-AGGLOCK-20200713-CRLOCK">
+       <preConditions onFail="MARK_RAN">
+           <not> <tableExists tableName="T_REPL_AGGLOCK_CRLOCK"/> </not>
+       </preConditions>
+       <createTable tableName="T_REPL_AGGLOCK_CRLOCK">
+           <column name="rootid" type="VARCHAR(255)"> <constraints nullable="false" primaryKey="true" primaryKeyName="PK_T_REPL_AGGLOCK_ROOT_ID_CRLOCK"/> </column>
+           <column name="silock" type="${type_long}" defaultValueNumeric="0"> <constraints nullable="false"/> </column>
+           <column name="token" type="VARCHAR(255)"/>
+           <column name="migrationstatus" type="${type_boolean}" defaultValueNumeric="0"> <constraints nullable="false"/> </column>
+           <column name="chgcnt" type="${type_long}"/>
+           <column name="sys_lastchangedate" type="datetime(3)"/>
+           <column name="version" type="${type_long}"/>
+           <column name="guid" type="VARCHAR(255)"/>
+       </createTable>
+   </changeSet>
+   <changeSet author="antifraud" id="0.1.0-build.1-AGGLOCKEVENT-20200805">
+       <preConditions onFail="MARK_RAN">
+           <not> <tableExists tableName="T_REPL_AGGLOCKEVENT"/> </not>
+       </preConditions>
+       <createTable tableName="T_REPL_AGGLOCKEVENT">
+           <column name="event_id" type="VARCHAR(128)"> <constraints nullable="false" primaryKey="true" primaryKeyName="PK_T_REPL_AGGLOCKEVENT"/> </column>
+           <column name="rootclass" type="VARCHAR(255)"> <constraints nullable="false"/> </column>
+           <column name="rootid" type="VARCHAR(255)"> <constraints nullable="false"/> </column>
+           <column name="sys_lastchangedate" type="datetime(3)"> <constraints nullable="false"/> </column>
+           <column name="info" type="VARCHAR(255)"/>
+           <column name="gotdata" type="${type_boolean}" defaultValueNumeric="0"> <constraints nullable="false"/> </column>
+           <column name="gotulck" type="${type_boolean}" defaultValueNumeric="0"> <constraints nullable="false"/> </column>
+           <column name="gotlck" type="${type_boolean}" defaultValueNumeric="0"> <constraints nullable="false"/> </column>
+           <column name="idempotence_key" type="VARCHAR(255)"/>
+           <column name="version" type="${type_long}"/>
+       </createTable>
+   </changeSet>
+   <changeSet author="antifraud" id="0.1.0-build.1-AGGLOCKEVENT-20200806">
+       <preConditions onFail="MARK_RAN">
+           <not> <indexExists indexName="T_REPL_AGGLOCKEVENT_IDEMPOTENCE_KEY_INDEX" tableName="T_REPL_AGGLOCKEVENT"/> </not>
+       </preConditions>
+       <createIndex indexName="T_REPL_AGGLOCKEVENT_IDEMPOTENCE_KEY_INDEX" tableName="T_REPL_AGGLOCKEVENT">
+           <column name="idempotence_key"/>
+       </createIndex>
+   </changeSet>
+   <changeSet author="antifraud" id="0.1.0-build.1-AGGLOCKEVENT-20200807">
+       <preConditions onFail="MARK_RAN">
+           <not> <indexExists indexName="T_REPL_AGGLOCKEVENT_ROOTCLASS_ROOTID_EVENT_ID_INDEX" tableName="T_REPL_AGGLOCKEVENT"/> </not>
+       </preConditions>
+       <createIndex indexName="T_REPL_AGGLOCKEVENT_ROOTCLASS_ROOTID_EVENT_ID_INDEX" tableName="T_REPL_AGGLOCKEVENT">
+           <column name="rootclass"/>
+           <column name="rootid"/>
+           <column name="event_id"/>
+       </createIndex>
+   </changeSet>
+   <changeSet author="antifraud" id="0.1.0-build.1-AGGLOCKEVENT-20201026">
+       <preConditions onFail="MARK_RAN">
+           <not> <columnExists columnName="timestamp_" tableName="T_REPL_AGGLOCKEVENT"/> </not>
+       </preConditions>
+       <addColumn tableName="T_REPL_AGGLOCKEVENT"> <column name="timestamp_" type="datetime(3)"/> </addColumn>
+   </changeSet>   <changeSet author="antifraud" id="0.1.0-build.1-AGGLOCKEVENT-20210127">
+       <preConditions onFail="MARK_RAN">
+           <not> <columnExists columnName="gotrej" tableName="T_REPL_AGGLOCKEVENT"/> </not>
+       </preConditions>
+       <addColumn tableName="T_REPL_AGGLOCKEVENT">
+           <column name="gotrej" type="${type_boolean}" defaultValueNumeric="0">
+               <constraints nullable="false"/>
+           </column>
+       </addColumn>
+   </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.1-applied">
+        <tagDatabase tag="antifraud-0.1.0-build.1-applied"/>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.2-before">
+        <tagDatabase tag="antifraud-0.1.0-build.2-before"/>
+    </changeSet>
+
+    <changeSet author="antifraud" id="0.1.0-build.2-applied">
+        <tagDatabase tag="antifraud-0.1.0-build.2-applied"/>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.3-before">
+        <tagDatabase tag="antifraud-0.1.0-build.3-before"/>
+    </changeSet>
+
+    <changeSet author="antifraud" id="0.1.0-build.3-applied">
+        <tagDatabase tag="antifraud-0.1.0-build.3-applied"/>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.4-before">
+        <tagDatabase tag="antifraud-0.1.0-build.4-before"/>
+    </changeSet>
+
+    <changeSet author="antifraud" id="0.1.0-build.4-applied">
+        <tagDatabase tag="antifraud-0.1.0-build.4-applied"/>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.5-before">
+        <tagDatabase tag="antifraud-0.1.0-build.5-before"/>
+    </changeSet>
+
+    <changeSet author="antifraud" id="0.1.0-build.5-applied">
+        <tagDatabase tag="antifraud-0.1.0-build.5-applied"/>
+    </changeSet>
+</databaseChangeLog>
