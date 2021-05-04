@@ -178,12 +178,12 @@
                                 <artifactItem>
                                     <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                                     <artifactId>antifraud-model-jpa</artifactId>
-                                    <version>DEV-SNAPSHOT</version>
+                                    <version>${project.version}</version>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                                     <artifactId>antifraud-model-sdk</artifactId>
-                                    <version>DEV-SNAPSHOT</version>
+                                    <version>${project.version}</version>
                                 </artifactItem>
                             </artifactItems>
                             <outputDirectory>${project.build.directory}/local-core/resources</outputDirectory>

@@ -164,9 +164,9 @@ public class PaymentModelValidator {
     }
 
     private static String signNameSwitcher(int i, int size) {
-        i = i == size - 1 ? 3 : i;
+        int checkNum = i == size - 1 ? 3 : i;
         String signName;
-        switch (i) {
+        switch (checkNum) {
             case (0):
                 signName = "firstSign";
                 break;
