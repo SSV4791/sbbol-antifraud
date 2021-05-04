@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import ru.sberbank.pprb.sbbol.antifraud.DboOperation;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Идентификационные данные
@@ -36,7 +37,7 @@ public class IdentificationData implements Serializable {
     /**
      * Идентификатор запроса во ФродМониторинг
      */
-    private String requestId;
+    private UUID requestId;
 
     public String getClientTransactionId() {
         return clientTransactionId;
@@ -70,11 +71,11 @@ public class IdentificationData implements Serializable {
         this.dboOperation = dboOperation;
     }
 
-    public String getRequestId() {
+    public UUID getRequestId() {
         return requestId;
     }
 
-    public void setRequestId(String requestId) {
+    public void setRequestId(UUID requestId) {
         this.requestId = requestId;
     }
 }

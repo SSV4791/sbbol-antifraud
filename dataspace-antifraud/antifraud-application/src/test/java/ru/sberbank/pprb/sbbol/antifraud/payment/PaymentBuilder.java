@@ -19,7 +19,7 @@ public class PaymentBuilder {
     private String orgGuid;
     private LocalDateTime timeOfOccurrence;
 
-    private String docId;
+    private UUID docId;
     private Integer docNumber;
     private LocalDate docDate;
     private Long amount;
@@ -54,7 +54,7 @@ public class PaymentBuilder {
         payment.setTimeOfOccurrence(timeOfOccurrence != null ? timeOfOccurrence : LocalDateTime.now());
 
         payment.setDocument(new Document());
-        payment.getDocument().setId(docId != null ? docId : UUID.randomUUID().toString());
+        payment.getDocument().setId(docId != null ? docId : UUID.randomUUID());
         payment.getDocument().setNumber(docNumber != null ? docNumber : Math.abs(RandomUtils.nextInt()));
         payment.getDocument().setDate(docDate != null ? docDate : LocalDate.now());
         payment.getDocument().setAmount(amount != null ? amount : Math.abs(RandomUtils.nextLong()));
@@ -95,7 +95,7 @@ public class PaymentBuilder {
                 "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
                 "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
                 "\"channelIndicator\": \"WEB\", " +
-                "\"userGuid\": \"{7c7bd0c1-2504-468e-8410-b4d00522014f}\", " +
+                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
                 "\"signTime\": \"2020-03-23T15:01:15\", " +
                 "\"signLogin\": \"novikova01\", " +
                 "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
@@ -120,7 +120,7 @@ public class PaymentBuilder {
                 "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
                 "\"mobSdkData\": \"version%20nt%206%2E1%3B%20win64%3B%20x64%3B%20trident%2F4%2E0%3B%20%2Enet\", " +
                 "\"channelIndicator\": \"WEB\", " +
-                "\"userGuid\": \"{7c7bd0c1-2504-468e-8410-b4d00522014f}\", " +
+                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
                 "\"signTime\": \"2020-03-23T15:28:25\", " +
                 "\"signLogin\": \"ivanov05\", " +
                 "\"signCryptoprofile\": \"Иванов Иван Иванович\", " +
@@ -145,7 +145,7 @@ public class PaymentBuilder {
                 "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
                 "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
                 "\"channelIndicator\": \"WEB\", " +
-                "\"userGuid\": \"{7c7bd0c1-2504-468e-8410-b4d00522014f}\", " +
+                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
                 "\"signTime\": \"2020-03-23T16:00:05\", " +
                 "\"signLogin\": \"petrov11\", " +
                 "\"signCryptoprofile\": \"Петров Петр Петрович\", " +
@@ -180,7 +180,7 @@ public class PaymentBuilder {
         return this;
     }
 
-    public PaymentBuilder withDocId(String docId) {
+    public PaymentBuilder withDocId(UUID docId) {
         this.docId = docId;
         return this;
     }

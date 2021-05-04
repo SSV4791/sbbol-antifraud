@@ -5,9 +5,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.UUID;
 
 /**
  * Данные документа
@@ -19,8 +20,8 @@ public class Document implements Serializable {
     /**
      * ID документа
      */
-    @NotBlank(message = "The document.id attribute must be filled")
-    private String id;
+    @NotNull(message = "The document.id attribute must be filled")
+    private UUID id;
 
     /**
      * Номер документа
@@ -79,11 +80,11 @@ public class Document implements Serializable {
      */
     private Receiver receiver;
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

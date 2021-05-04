@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * Данные подписи
@@ -80,7 +81,7 @@ public class Sign implements Serializable {
     /**
      * Уникальный идентификатор пользователя
      */
-    private String userGuid;
+    private UUID userGuid;
 
     /**
      * Время подписи
@@ -227,11 +228,11 @@ public class Sign implements Serializable {
         this.channelIndicator = channelIndicator;
     }
 
-    public String getUserGuid() {
+    public UUID getUserGuid() {
         return userGuid;
     }
 
-    public void setUserGuid(String userGuid) {
+    public void setUserGuid(UUID userGuid) {
         this.userGuid = userGuid;
     }
 

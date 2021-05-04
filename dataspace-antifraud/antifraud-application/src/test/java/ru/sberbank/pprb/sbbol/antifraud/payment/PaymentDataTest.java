@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import ru.sberbank.pprb.sbbol.antifraud.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.graph.get.PaymentOperationGet;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -12,13 +14,13 @@ class PaymentDataTest extends PaymentIntegrationTest {
 
     @Test
     void createData() throws Throwable {
-        String docId = "123e4567-e89b-12d3-a456-426614174001";
+        UUID docId = UUID.fromString("123e4567-e89b-12d3-a456-426614174001");
         Integer docNumber = 15;
         RequestId actual = generatePayment(docId, docNumber);
         assertNotNull(actual);
 
         PaymentOperationGet paymentGet = searchPayment(docId);
-        assertEquals(paymentGet.getRequestId(), actual.getId());
+        assertEquals(paymentGet.getRequestId(), actual.getId().toString());
         assertNotNull(paymentGet.getTimeStamp());
         assertNotNull(paymentGet.getOrgGuid());
         assertNotNull(paymentGet.getUserGuid());
@@ -41,8 +43,8 @@ class PaymentDataTest extends PaymentIntegrationTest {
         assertThirdSign(paymentGet);
     }
 
-    private void assertDoc(PaymentOperationGet paymentGet, String docId, Integer docNumber) {
-        assertEquals(docId, paymentGet.getDocId());
+    private void assertDoc(PaymentOperationGet paymentGet, UUID docId, Integer docNumber) {
+        assertEquals(docId.toString(), paymentGet.getDocId());
         assertEquals(docNumber, paymentGet.getDocNumber());
         assertNotNull(paymentGet.getDocDate());
         assertNotNull(paymentGet.getAmount());
@@ -120,7 +122,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
         assertEquals(requestId, actual.getId());
 
         PaymentOperationGet paymentGet = searchPayment(DOC_ID);
-        assertEquals(requestId, paymentGet.getRequestId());
+        assertEquals(requestId.toString(), paymentGet.getRequestId());
         assertEquals(1, paymentGet.getDocNumber());
     }
 

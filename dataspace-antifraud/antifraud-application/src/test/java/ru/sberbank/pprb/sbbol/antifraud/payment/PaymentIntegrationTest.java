@@ -8,12 +8,14 @@ import ru.sberbank.pprb.sbbol.antifraud.data.payment.PaymentOperation;
 import ru.sberbank.pprb.sbbol.antifraud.graph.get.PaymentOperationGet;
 import sbp.sbt.sdk.exception.SdkJsonRpcClientException;
 
+import java.util.UUID;
+
 public abstract class PaymentIntegrationTest extends DataSpaceIntegrationTest {
 
-    protected static final String DOC_ID = "123e4567-e89b-12d3-a456-426614174000";
+    protected static final UUID DOC_ID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
     protected static final Integer DOC_NUMBER = 888;
 
-    protected static String requestId;
+    protected static UUID requestId;
 
     @BeforeEach
     private void fillDatabase() throws Throwable {
@@ -21,7 +23,7 @@ public abstract class PaymentIntegrationTest extends DataSpaceIntegrationTest {
         generatePayment(null, null);
     }
 
-    protected RequestId generatePayment(String docId, Integer docNumber) throws Throwable {
+    protected RequestId generatePayment(UUID docId, Integer docNumber) throws Throwable {
         PaymentOperation payment = PaymentBuilder.getInstance()
                 .withDocId(docId)
                 .withDocNumber(docNumber)
@@ -29,7 +31,7 @@ public abstract class PaymentIntegrationTest extends DataSpaceIntegrationTest {
         return saveOrUpdateData(payment);
     }
 
-    protected PaymentOperationGet searchPayment(String docId) throws SdkJsonRpcClientException {
+    protected PaymentOperationGet searchPayment(UUID docId) throws SdkJsonRpcClientException {
         GraphCollection<PaymentOperationGet> collection = searchClient.searchPaymentOperation(pWith -> pWith
                 .withRequestId()
                 .withTimeStamp()
@@ -119,7 +121,7 @@ public abstract class PaymentIntegrationTest extends DataSpaceIntegrationTest {
                 .withThirdSignPhone()
                 .withThirdSignEmail()
                 .withThirdSignSource()
-                .setWhere(where -> where.docIdEq(docId))
+                .setWhere(where -> where.docIdEq(docId.toString()))
                 .setLimit(1));
         return collection.isEmpty() ? null : collection.get(0);
     }
