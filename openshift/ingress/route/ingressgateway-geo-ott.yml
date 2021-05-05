@@ -2,8 +2,8 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   labels:
-    app: ingress-${NAMESPACE}-geo-ott
-    istio: ingress-${NAMESPACE}-geo-ott
+    app: ingress-${NAMESPACE}-geoott
+    istio: ingress-${NAMESPACE}-geoott
     router: geo
   name: ingressgateway-geo-ott
 spec:
