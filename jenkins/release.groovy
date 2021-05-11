@@ -365,7 +365,7 @@ pipeline {
 }
 
 static String getSbrfNexusLink(String artifactId, String version) {
-    return "https://sbrf-nexus.sigma.sbrf.ru/nexus/content/repositories/Nexus_PROD/Nexus_PROD/CI03045533_sbbol_antifraud/${artifactId}/${version}/${artifactId}-${version}-distrib.zip"
+    return "https://sbrf-nexus.sigma.sbrf.ru/nexus/content/repositories/Nexus_PROD/Nexus_PROD/CI03045533_sbbol-antifraud/${artifactId}/${version}/${artifactId}-${version}-distrib.zip"
 }
 
 /**
