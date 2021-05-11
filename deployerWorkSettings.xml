@@ -6,56 +6,56 @@
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>dataspace-antifraud</artifactId>
             </artifact>
-            <version>0.1.0-build.7</version>
+            <version>0.1.0-build.8</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-api</artifactId>
             </artifact>
-            <version>0.1.0-build.7</version>
+            <version>0.1.0-build.8</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-application</artifactId>
             </artifact>
-            <version>0.1.0-build.7</version>
+            <version>0.1.0-build.8</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-rpc-api</artifactId>
             </artifact>
-            <version>0.1.0-build.7</version>
+            <version>0.1.0-build.8</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud</artifactId>
             </artifact>
-            <version>0.1.0-build.7</version>
+            <version>0.1.0-build.8</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-model-sdk</artifactId>
             </artifact>
-            <version>0.1.0-build.7</version>
+            <version>0.1.0-build.8</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-model-jpa</artifactId>
             </artifact>
-            <version>0.1.0-build.7</version>
+            <version>0.1.0-build.8</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-service</artifactId>
             </artifact>
-            <version>0.1.0-build.7</version>
+            <version>0.1.0-build.8</version>
         </artifactVersion>
     </artifactVersions>
     <lastProjectDependencyTree>
@@ -572,5 +572,5 @@
             </dependencies>
         </artifactDependencyTree>
     </lastProjectDependencyTree>
-    <lastCommitRevisionNumber>7b8f253c49086f7d7fa1d7b4dabcc24b7afbaee2</lastCommitRevisionNumber>
+    <lastCommitRevisionNumber>3d71b3b82ba4c7049359c871e0e77e785713ded1</lastCommitRevisionNumber>
 </workSettings>
