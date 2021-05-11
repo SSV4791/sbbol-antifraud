@@ -31,7 +31,7 @@ commons:
 QualityGates:
   sbrf:
     url: https://sbrf-nexus.sigma.sbrf.ru/nexus
-    groupId: Nexus_PROD.CI03045533_sbbol_antifraud
+    groupId: Nexus_PROD.CI03045533_sbbol-antifraud
     credentials: DS_sbbol-nexus
     repositoryId: release
   sast:

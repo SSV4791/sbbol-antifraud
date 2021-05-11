@@ -25,7 +25,7 @@ pipeline {
         GIT_PROJECT = 'CIBPPRB'
         GIT_REPOSITORY = 'sbbol-antifraud'
         GIT_LINK = 'ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git'
-        GROUP_ID = 'Nexus_PROD.CI03045533_sbbol_antifraud'
+        GROUP_ID = 'Nexus_PROD.CI03045533_sbbol-antifraud'
         CUSTOMER_ARTIFACT_ID = 'antifraud'
         DATASPACE_ARTIFACT_ID = 'dataspace-apps-antifraud'
         ARTIFACT_NAME_OS = ''
@@ -293,7 +293,7 @@ pipeline {
                     for (String artifactId in [DATASPACE_ARTIFACT_ID, CUSTOMER_ARTIFACT_ID]) {
                         def response = qgm.getFlagMap(
                                 repositoryId: 'Nexus_PROD',
-                                groupId: "Nexus_PROD/CI03045533_sbbol_antifraud",
+                                groupId: "Nexus_PROD/CI03045533_sbbol-antifraud",
                                 artifactId: DATASPACE_ARTIFACT_ID,
                                 version: VERSION
                         )
