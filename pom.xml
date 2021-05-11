@@ -12,7 +12,7 @@
     <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
     <artifactId>antifraud</artifactId>
     <packaging>pom</packaging>
-    <version>DEV-SNAPSHOT</version>
+    <version>0.1.0-build.7</version>
 
     <name>antifraud</name>
     <description>Агрегация данных, необходимых для проверки со стороны Фрод-мониторинга ЮЛ и отправка их по событию во Фрод-мониторинг</description>
