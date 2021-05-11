@@ -848,4 +848,11 @@
     <changeSet author="antifraud" id="0.1.0-build.9-applied">
         <tagDatabase tag="antifraud-0.1.0-build.9-applied"/>
     </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.10-before">
+        <tagDatabase tag="antifraud-0.1.0-build.10-before"/>
+    </changeSet>
+
+    <changeSet author="antifraud" id="0.1.0-build.10-applied">
+        <tagDatabase tag="antifraud-0.1.0-build.10-applied"/>
+    </changeSet>
 </databaseChangeLog>
