@@ -1,5 +1,5 @@
 <PdmModel>
-  <model model-name="antifraud" component-code="НЕ ЗАДАНО" version="0.1.0-build.8" versioned-entities="false">
+  <model model-name="antifraud" component-code="НЕ ЗАДАНО" version="0.1.0-build.9" versioned-entities="false">
     <class name="PaymentOperation" extends="BaseEntity" label="Модель платежного поручения" tableName="T_PAYMENTOPERATION" pk-index-name="PK_T_PAYMENTOPERATION" description="" affinity="objectId" class-access="UPDATE" lockable="false">
       <id type="String" category="SNOWFLAKE"/>
       <property name="requestId" type="String" length="36" label="Идентификатор запроса во ФродМониторинг" column-name="REQUESTID" description="" column-type="VARCHAR(36)"/>
