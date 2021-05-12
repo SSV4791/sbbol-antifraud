@@ -8,14 +8,13 @@ spec:
   servers:
     #HTTPS
     - hosts:
-        - ${SBBOL_SYNAPSE_ADAPTER_HOST}
+        - ${FRAUD_ADAPTER_HOST}
       port:
         name: http-${EGRESS_HTTPS_PORT}
         number: ${EGRESS_HTTPS_PORT}
         protocol: HTTP
     #OTT
     - hosts:
-        - ${SBBOL_SYNAPSE_ADAPTER_HOST_OTT}
         - ${FLUENT_BIT_HTTPS_HOST}
         - ${AUDIT_HOST}
         - ${APPMON_HOST}

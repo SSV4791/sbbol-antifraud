@@ -6,13 +6,13 @@ spec:
   exportTo:
     - .
   hosts:
-    - ${SBBOL_SYNAPSE_ADAPTER_HOST}
+    - ${FRAUD_ADAPTER_HOST}
   location: MESH_EXTERNAL
   ports:
     - name: http-80
       number: 80
       protocol: HTTP
-    - name: https-${SBBOL_SYNAPSE_ADAPTER_PORT}
-      number: ${SBBOL_SYNAPSE_ADAPTER_PORT}
+    - name: https-${FRAUD_ADAPTER_PORT}
+      number: ${FRAUD_ADAPTER_PORT}
       protocol: TLS
   resolution: DNS

@@ -5,6 +5,7 @@ metadata:
 data:
   application.properties: |-
     server.port=8080
+    fpis.endpoint=http://${FRAUD_ADAPTER_HOST}
 
     spring.main.banner-mode=off
     spring.application.name=antifraud
@@ -41,18 +42,18 @@ data:
     core.url=${DATASPACE_URL}
 
     dataspace.watch.metrics.enable=true
-    dataspace.watch.metrics.category.ru.sberbank.pprb.sbbol.notifications.core=true
+    dataspace.watch.metrics.category.ru.sberbank.pprb.sbbol.antifraud=true
     dataspace.watch.log.enable=true
     dataspace.watch.log.level=error
     dataspace.watch.log.category.service.category=all
     dataspace.monitoring.enabled=true
     dataspace.monitoring.watch-metrics.enable=true
-    dataspace.monitoring.watch-metrics.category.ru.sberbank.pprb.sbbol.notifications=true
+    dataspace.monitoring.watch-metrics.category.ru.sberbank.pprb.sbbol.antifraud=true
     dataspace.monitoring.jvm.enable=true
     dataspace.monitoring.jvm.update.fixedRate.in.milliseconds = 10000
     dataspace.monitoring.watch-log.enable=true
     dataspace.monitoring.watch-log.level=info
-    dataspace.monitoring.watch-log.category.ru.sberbank.pprb.sbbol.notifications=all
+    dataspace.monitoring.watch-log.category.ru.sberbank.pprb.sbbol.antifraud=all
 
     spring.sleuth.enabled=false
     dataspace.monitoring.datasource.sleuth.enabled=false
