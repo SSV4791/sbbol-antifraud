@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: ServiceEntry
 metadata:
-  name: se-egress-sbbol-https
+  name: se-egress-fraud-https
 spec:
   exportTo:
     - .
