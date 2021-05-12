@@ -1,20 +1,20 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
-  name: dr-egress-sbbol-ott
+  name: dr-egress-sbbol-https
 spec:
   exportTo:
     - .
-  host: ${SBBOL_SYNAPSE_ADAPTER_HOST_OTT}
+  host: ${FRAUD_ADAPTER_HOST}
   trafficPolicy:
     loadBalancer:
       simple: ROUND_ROBIN
     portLevelSettings:
       - port:
-          number: ${SBBOL_SYNAPSE_ADAPTER_PORT_OTT}
+          number: ${FRAUD_ADAPTER_PORT}
         tls:
           caCertificates: /etc/istio/egressgateway-ca-certs/${CA_CERT_CHAIN_PEM}
           clientCertificate: /etc/istio/egressgateway-certs/tls.crt
           mode: MUTUAL
           privateKey: /etc/istio/egressgateway-certs/tls.key
-          sni: ${SBBOL_SYNAPSE_ADAPTER_HOST_OTT}
+          sni: ${FRAUD_ADAPTER_HOST}

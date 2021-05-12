@@ -9,14 +9,14 @@ spec:
     - mesh
     - gw-egressgateway
   hosts:
-    - ${SBBOL_SYNAPSE_ADAPTER_HOST}
+    - ${FRAUD_ADAPTER_HOST}
   http:
     - match:
         - gateways:
             - mesh
           port: 80
       rewrite:
-        authority: ${SBBOL_SYNAPSE_ADAPTER_HOST}
+        authority: ${FRAUD_ADAPTER_HOST}
       route:
         - destination:
             host: svc-egressgateway
@@ -29,7 +29,7 @@ spec:
           port: ${EGRESS_HTTPS_PORT}
       route:
         - destination:
-            host: ${SBBOL_SYNAPSE_ADAPTER_HOST}
+            host: ${FRAUD_ADAPTER_HOST}
             port:
-              number: ${SBBOL_SYNAPSE_ADAPTER_PORT}
+              number: ${FRAUD_ADAPTER_PORT}
           weight: 100
