@@ -261,7 +261,164 @@ public class SbpPaymentProcessor implements Processor<SbpPaymentOperation, SbpPa
 
     @Override
     public AnalyzeResponse send(@Valid SbpPaymentSendRequest request) throws SdkJsonRpcClientException {
-        return null;
+        logger.info("Sending SBP payment operation to analyze. PaymentOperation docId: {}", request.getDocId());
+        PaymentAnalyzeRequest paymentAnalyzeRequest = createSbpPaymentAnalyzeRequest(request.getDocId());
+        String jsonRequest;
+        try {
+            jsonRequest = objectMapper.writeValueAsString(paymentAnalyzeRequest);
+            logger.trace("SbpPaymentAnalyzeRequest: {}", jsonRequest);
+        } catch (JsonProcessingException e) {
+            logger.error("Error parsing SbpPaymentAnalyzeRequest", e);
+            throw new ApplicationException("Anti fraud aggregator internal error: error parsing SbpPaymentAnalyzeRequest");
+        }
+        HttpEntity<String> httpEntityRequest = new HttpEntity<>(jsonRequest, httpHeaders);
+        FullAnalyzeResponse fullAnalyzeResponse = restTemplate.postForObject(endPoint, httpEntityRequest, FullAnalyzeResponse.class);
+        return fullAnalyzeResponse != null ? convertToPaymentAnalyzeResponse(fullAnalyzeResponse) : null;
+    }
+
+    private PaymentAnalyzeRequest createSbpPaymentAnalyzeRequest(UUID docId) throws SdkJsonRpcClientException {
+        GraphCollection<SbpPaymentOperationGet> collection = searchClient.searchSbpPaymentOperation(operation ->
+            operation
+                    .withRequestId()
+                    .withTimeStamp()
+                    .withOrgGuid()
+                    .withUserGuid()
+                    .withTbCode()
+                    .withHttpAccept()
+                    .withHttpReferer()
+                    .withHttpAcceptChars()
+                    .withHttpAcceptEncoding()
+                    .withHttpAcceptLanguage()
+                    .withIpAddress()
+                    .withUserAgent()
+                    .withDevicePrint()
+                    .withMobSdkData()
+                    .withChannelIndicator()
+                    .withTimeOfOccurrence()
+                    .withDocId()
+                    .withDocNumber()
+                    .withDocDate()
+                    .withAmount()
+                    .withCurrency()
+                    .withIdOperationOPKC()
+                    .withAccountNumber()
+                    .withOtherAccName()
+                    .withOtherBicCode()
+                    .withReceiverInn()
+                    .withReceiverBankName()
+                    .withReceiverBankCountryCode()
+                    .withReceiverBankCorrAcc()
+                    .withReceiverBankId()
+                    .withReceiverPhoneNumber()
+                    .withReceiverDocument()
+                    .withReceiverDocumentType()
+                    .withDestination()
+                    .withReceiverAccount()
+                    .withPayerFinancialName()
+                    .withPayerOsbNum()
+                    .withPayerVspNum()
+                    .withPayerAccBalance()
+                    .withPayerAccCreateDate()
+                    .withPayerBic()
+                    .withPayerDocumentNumber()
+                    .withPayerDocumentType()
+                    .withPayerSegment()
+                    .withPayerInn()
+                    .withFirstSignTime()
+                    .withFirstSignIp()
+                    .withFirstSignLogin()
+                    .withFirstSignCryptoprofile()
+                    .withFirstSignCryptoprofileType()
+                    .withFirstSignChannel()
+                    .withFirstSignToken()
+                    .withFirstSignType()
+                    .withFirstSignImsi()
+                    .withFirstSignCertId()
+                    .withFirstSignPhone()
+                    .withFirstSignEmail()
+                    .withFirstSignSource()
+                    .withPrivateIpAddress()
+                    .withSenderSignTime()
+                    .withSenderIp()
+                    .withSenderLogin()
+                    .withSenderCryptoprofile()
+                    .withSenderCryptoprofileType()
+                    .withSenderSignChannel()
+                    .withSenderToken()
+                    .withSenderSignType()
+                    .withSenderSignImsi()
+                    .withSenderCertId()
+                    .withSenderPhone()
+                    .withSenderEmail()
+                    .withSenderSource()
+                    .setWhere(where -> where.docIdEq(docId.toString()))
+                    .setLimit(1)
+        );
+        if (collection.isEmpty()) {
+            throw new ApplicationException("SbpPaymentOperation with docId=" + docId + " not found");
+        }
+        return convertToSbpPaymentAnalyzeRequest(collection.get(0));
+    }
+
+    private PaymentAnalyzeRequest convertToSbpPaymentAnalyzeRequest(SbpPaymentOperationGet paymentGet) {
+        PaymentAnalyzeRequest request = new PaymentAnalyzeRequest();
+        request.setEventDataList(new EventData());
+        request.getEventDataList().setTransactionData(new TransactionData());
+        request.getEventDataList().setClientDefinedAttributeList(createClientDefinedAttributeList(paymentGet));
+        request.getEventDataList().getTransactionData().setOtherAccountData(new ReceiverAccount());
+        request.getEventDataList().getTransactionData().getOtherAccountData().setRoutingCode(paymentGet.getOtherBicCode());
+        request.getEventDataList().getTransactionData().getOtherAccountData().setAccountNumber(paymentGet.getReceiverAccount());
+        request.getEventDataList().getTransactionData().getOtherAccountData().setAccountName(paymentGet.getOtherAccName());
+        request.getEventDataList().getTransactionData().setMyAccountData(new PayerAccount(paymentGet.getAccountNumber()));
+        request.getEventDataList().getTransactionData().setAmount(new Amount(paymentGet.getAmount(), paymentGet.getCurrency()));
+        EventDataHeader eventData = new EventDataHeader(supportedDboOperation().getEventType(), supportedDboOperation().getEventDescription(),
+                supportedDboOperation().getClientDefinedEventType(), paymentGet.getTimeOfOccurrence());
+        request.getEventDataList().setEventDataHeader(eventData);
+        request.setChannelIndicator(paymentGet.getChannelIndicator());
+        request.setDeviceRequest(new DeviceRequest());
+        request.getDeviceRequest().setUserAgent(paymentGet.getUserAgent());
+        request.getDeviceRequest().setIpAddress(paymentGet.getIpAddress());
+        request.getDeviceRequest().setHttpReferer(paymentGet.getHttpReferer());
+        request.getDeviceRequest().setHttpAcceptLanguage(paymentGet.getHttpAcceptLanguage());
+        request.getDeviceRequest().setHttpAcceptEncoding(paymentGet.getHttpAcceptEncoding());
+        request.getDeviceRequest().setHttpAcceptChars(paymentGet.getHttpAcceptChars());
+        request.getDeviceRequest().setHttpAccept(paymentGet.getHttpAccept());
+        request.getDeviceRequest().setMobSdkData(paymentGet.getMobSdkData());
+        request.getDeviceRequest().setDevicePrint(paymentGet.getDevicePrint());
+        request.setIdentificationData(new IdentificationData());
+        request.getIdentificationData().setRequestId(UUID.fromString(paymentGet.getRequestId()));
+        request.getIdentificationData().setDboOperation(supportedDboOperation());
+        request.getIdentificationData().setUserName(paymentGet.getOrgGuid());
+        request.getIdentificationData().setOrgName(paymentGet.getTbCode());
+        request.getIdentificationData().setClientTransactionId(paymentGet.getDocId());
+        request.setMessageHeader(new MessageHeader(paymentGet.getTimeStamp()));
+        return request;
+    }
+
+    private List<Attribute> createClientDefinedAttributeList(SbpPaymentOperationGet paymentGet) {
+        List<Attribute> clientDefinedAttributeList = new ArrayList<>();
+        for (Map.Entry<String, Function<SbpPaymentOperationGet, Object>> entry : CRITERIA_MAP.entrySet()) {
+            String value = entry.getValue().apply(paymentGet).toString();
+            if (value != null) {
+                Attribute attribute = new Attribute();
+                attribute.setName(DESCRIPTION_MAP.get(entry.getKey()));
+                attribute.setValue(value);
+                attribute.setDataType("STRING");
+                clientDefinedAttributeList.add(attribute);
+            }
+        }
+        return clientDefinedAttributeList;
+    }
+
+    private PaymentAnalyzeResponse convertToPaymentAnalyzeResponse(FullAnalyzeResponse fullAnalyzeResponse) {
+        PaymentAnalyzeResponse paymentAnalyzeResponse = new PaymentAnalyzeResponse();
+        paymentAnalyzeResponse.setWaitingTime(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getWaitingTime());
+        paymentAnalyzeResponse.setDetailledComment(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getDetailledComment());
+        paymentAnalyzeResponse.setComment(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getComment());
+        paymentAnalyzeResponse.setActionCode(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getActionCode());
+        paymentAnalyzeResponse.setTransactionId(fullAnalyzeResponse.getIdentificationData().getTransactionId());
+
+        return paymentAnalyzeResponse;
     }
 
     @Override

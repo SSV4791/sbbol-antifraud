@@ -20,6 +20,16 @@ public class EventDataHeader implements Serializable {
     private static final long serialVersionUID = -2382654393702414950L;
 
     /**
+     * Тип события
+     */
+    private String eventType;
+
+    /**
+     * Описание события
+     */
+    private String eventDescription;
+
+    /**
      * Тип устройства, через которое работает пользователь
      */
     private String clientDefinedEventType;
@@ -32,10 +42,28 @@ public class EventDataHeader implements Serializable {
     private LocalDateTime timeOfOccurrence;
 
     @JsonCreator
-    public EventDataHeader(@JsonProperty("clientDefinedEventType") String clientDefinedEventType,
+    public EventDataHeader(@JsonProperty("eventType") String eventType,
+                           @JsonProperty("eventDescription") String eventDescription,
+                           @JsonProperty("clientDefinedEventType") String clientDefinedEventType,
                            @JsonProperty("timeOfOccurrence") LocalDateTime timeOfOccurrence) {
         this.clientDefinedEventType = clientDefinedEventType;
         this.timeOfOccurrence = timeOfOccurrence;
+    }
+
+    public String getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
+    }
+
+    public String getEventDescription() {
+        return eventDescription;
+    }
+
+    public void setEventDescription(String eventDescription) {
+        this.eventDescription = eventDescription;
     }
 
     public String getClientDefinedEventType() {

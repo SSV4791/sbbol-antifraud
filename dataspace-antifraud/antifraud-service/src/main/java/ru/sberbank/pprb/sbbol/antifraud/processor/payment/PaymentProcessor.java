@@ -296,7 +296,183 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
 
     @Override
     public PaymentAnalyzeResponse send(@Valid PaymentSendRequest request) throws SdkJsonRpcClientException {
-        return null;
+        logger.info("Sending payment operation to analyze. PaymentOperation docId: {}", request.getDocId());
+        PaymentAnalyzeRequest paymentAnalyzeRequest = createPaymentAnalyzeRequest(request.getDocId());
+        String jsonRequest;
+        try {
+            jsonRequest = objectMapper.writeValueAsString(paymentAnalyzeRequest);
+            logger.trace("PaymentAnalyzeRequest: {}", jsonRequest);
+        } catch (JsonProcessingException e) {
+            logger.error("Error parsing PaymentAnalyzeRequest", e);
+            throw new ApplicationException("Anti fraud aggregator internal error: error parsing PaymentAnalyzeRequest");
+        }
+        HttpEntity<String> httpEntityRequest = new HttpEntity<>(jsonRequest, httpHeaders);
+        FullAnalyzeResponse fullAnalyzeResponse = restTemplate.postForObject(endPoint, httpEntityRequest, FullAnalyzeResponse.class);
+        return fullAnalyzeResponse != null ? convertToPaymentAnalyzeResponse(fullAnalyzeResponse) : null;
+    }
+
+    private PaymentAnalyzeRequest createPaymentAnalyzeRequest(UUID docId) throws SdkJsonRpcClientException {
+        GraphCollection<PaymentOperationGet> collection = searchClient.searchPaymentOperation(payment ->
+                payment
+                        .withRequestId()
+                        .withTimeStamp()
+                        .withOrgGuid()
+                        .withUserGuid()
+                        .withTbCode()
+                        .withHttpAccept()
+                        .withHttpReferer()
+                        .withHttpAcceptChars()
+                        .withHttpAcceptEncoding()
+                        .withHttpAcceptLanguage()
+                        .withIpAddress()
+                        .withUserAgent()
+                        .withDevicePrint()
+                        .withMobSdkData()
+                        .withChannelIndicator()
+                        .withTimeOfOccurrence()
+                        .withDocId()
+                        .withDocNumber()
+                        .withDocDate()
+                        .withAmount()
+                        .withCurrency()
+                        .withExecutionSpeed()
+                        .withOtherAccBankType()
+                        .withAccountNumber()
+                        .withOtherAccName()
+                        .withBalAccNumber()
+                        .withOtherBicCode()
+                        .withOtherAccOwnershipType()
+                        .withOtherAccType()
+                        .withTransferMediumType()
+                        .withReceiverInn()
+                        .withDestination()
+                        .withReceiverAccount()
+                        .withReceiverBicAccount()
+                        .withPayerInn()
+                        .withFirstSignTime()
+                        .withFirstSignIp()
+                        .withFirstSignLogin()
+                        .withFirstSignCryptoprofile()
+                        .withFirstSignCryptoprofileType()
+                        .withFirstSignChannel()
+                        .withFirstSignToken()
+                        .withFirstSignType()
+                        .withFirstSignImsi()
+                        .withFirstSignCertId()
+                        .withFirstSignPhone()
+                        .withFirstSignEmail()
+                        .withFirstSignSource()
+                        .withPrivateIpAddress()
+                        .withSenderSignTime()
+                        .withSenderIp()
+                        .withSenderLogin()
+                        .withSenderCryptoprofile()
+                        .withSenderCryptoprofileType()
+                        .withSenderSignChannel()
+                        .withSenderToken()
+                        .withSenderSignType()
+                        .withSenderSignImsi()
+                        .withSenderCertId()
+                        .withSenderPhone()
+                        .withSenderEmail()
+                        .withSenderSource()
+                        .withSecondSignTime()
+                        .withSecondSignIp()
+                        .withSecondSignLogin()
+                        .withSecondSignCryptoprofile()
+                        .withSecondSignCryptoprofileType()
+                        .withSecondSignChannel()
+                        .withSecondSignToken()
+                        .withSecondSignType()
+                        .withSecondSignImsi()
+                        .withSecondSignCertId()
+                        .withSecondSignPhone()
+                        .withSecondSignEmail()
+                        .withSecondSignSource()
+                        .withThirdSignTime()
+                        .withThirdSignIp()
+                        .withThirdSignLogin()
+                        .withThirdSignCryptoprofile()
+                        .withThirdSignCryptoprofileType()
+                        .withThirdSignChannel()
+                        .withThirdSignToken()
+                        .withThirdSignType()
+                        .withThirdSignImsi()
+                        .withThirdSignCertId()
+                        .withThirdSignPhone()
+                        .withThirdSignEmail()
+                        .withThirdSignSource()
+                        .setWhere(where -> where.docIdEq(docId.toString()))
+                        .setLimit(1));
+        if (collection.isEmpty()) {
+            throw new ApplicationException("PaymentOperation with docId=" + docId + " not found");
+        }
+        return convertToPaymentAnalyzeRequest(collection.get(0));
+    }
+
+    private PaymentAnalyzeRequest convertToPaymentAnalyzeRequest(PaymentOperationGet paymentGet) {
+        PaymentAnalyzeRequest request = new PaymentAnalyzeRequest();
+        request.setMessageHeader(new MessageHeader(paymentGet.getTimeStamp()));
+        request.setIdentificationData(new IdentificationData());
+        request.getIdentificationData().setClientTransactionId(paymentGet.getDocId());
+        request.getIdentificationData().setOrgName(paymentGet.getTbCode());
+        request.getIdentificationData().setUserName(paymentGet.getOrgGuid());
+        request.getIdentificationData().setDboOperation(supportedDboOperation());
+        request.getIdentificationData().setRequestId(UUID.fromString(paymentGet.getRequestId()));
+        request.setDeviceRequest(new DeviceRequest());
+        request.getDeviceRequest().setDevicePrint(paymentGet.getDevicePrint());
+        request.getDeviceRequest().setMobSdkData(paymentGet.getMobSdkData());
+        request.getDeviceRequest().setHttpAccept(paymentGet.getHttpAccept());
+        request.getDeviceRequest().setHttpAcceptChars(paymentGet.getHttpAcceptChars());
+        request.getDeviceRequest().setHttpAcceptEncoding(paymentGet.getHttpAcceptEncoding());
+        request.getDeviceRequest().setHttpAcceptLanguage(paymentGet.getHttpAcceptLanguage());
+        request.getDeviceRequest().setHttpReferer(paymentGet.getHttpReferer());
+        request.getDeviceRequest().setIpAddress(paymentGet.getIpAddress());
+        request.getDeviceRequest().setUserAgent(paymentGet.getUserAgent());
+        request.setChannelIndicator(paymentGet.getChannelIndicator());
+        request.setEventDataList(new EventData());
+        EventDataHeader eventData = new EventDataHeader(supportedDboOperation().getEventType(), supportedDboOperation().getEventDescription(),
+                supportedDboOperation().getClientDefinedEventType(), paymentGet.getTimeOfOccurrence());
+        request.getEventDataList().setEventDataHeader(eventData);
+        request.getEventDataList().setTransactionData(new TransactionData());
+        request.getEventDataList().getTransactionData().setAmount(new Amount(paymentGet.getAmount(), paymentGet.getCurrency()));
+        request.getEventDataList().getTransactionData().setExecutionSpeed(paymentGet.getExecutionSpeed());
+        request.getEventDataList().getTransactionData().setOtherAccountBankType(paymentGet.getOtherAccBankType());
+        request.getEventDataList().getTransactionData().setMyAccountData(new PayerAccount(paymentGet.getAccountNumber()));
+        request.getEventDataList().getTransactionData().setOtherAccountData(new ReceiverAccount());
+        request.getEventDataList().getTransactionData().getOtherAccountData().setAccountName(paymentGet.getOtherAccName());
+        request.getEventDataList().getTransactionData().getOtherAccountData().setAccountNumber(paymentGet.getReceiverAccount());
+        request.getEventDataList().getTransactionData().getOtherAccountData().setRoutingCode(paymentGet.getOtherBicCode());
+        request.getEventDataList().getTransactionData().getOtherAccountData().setOtherAccountOwnershipType(paymentGet.getOtherAccOwnershipType());
+        request.getEventDataList().getTransactionData().getOtherAccountData().setOtherAccountType(paymentGet.getOtherAccType());
+        request.getEventDataList().getTransactionData().getOtherAccountData().setTransferMediumType(paymentGet.getTransferMediumType());
+        request.getEventDataList().setClientDefinedAttributeList(createClientDefinedAttributeList(paymentGet));
+        return request;
+    }
+
+    private List<Attribute> createClientDefinedAttributeList(PaymentOperationGet paymentGet) {
+        List<Attribute> clientDefinedAttributeList = new ArrayList<>();
+        for (Map.Entry<String, String > entry : DESCRIPTION_MAP.entrySet()) {
+            String value = CRITERIA_MAP.get(entry.getKey()).apply(paymentGet).toString();
+            if (value != null) {
+                Attribute attribute = new Attribute();
+                attribute.setName(entry.getValue());
+                attribute.setValue(value);
+                attribute.setDataType("STRING");
+                clientDefinedAttributeList.add(attribute);
+            }
+        }
+        return clientDefinedAttributeList;
+    }
+
+    private PaymentAnalyzeResponse convertToPaymentAnalyzeResponse(FullAnalyzeResponse fullAnalyzeResponse) {
+        PaymentAnalyzeResponse paymentAnalyzeResponse = new PaymentAnalyzeResponse();
+        paymentAnalyzeResponse.setTransactionId(fullAnalyzeResponse.getIdentificationData().getTransactionId());
+        paymentAnalyzeResponse.setActionCode(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getActionCode());
+        paymentAnalyzeResponse.setComment(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getComment());
+        paymentAnalyzeResponse.setDetailledComment(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getDetailledComment());
+        paymentAnalyzeResponse.setWaitingTime(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getWaitingTime());
+        return paymentAnalyzeResponse;
     }
 
     @Override
