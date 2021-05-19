@@ -862,4 +862,259 @@
     <changeSet author="antifraud" id="0.1.0-build.11-applied">
         <tagDatabase tag="antifraud-0.1.0-build.11-applied"/>
     </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.12-before">
+        <tagDatabase tag="antifraud-0.1.0-build.12-before"/>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.12-6964023290318880781">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="T_SBPPAYMENTOPERATION"/>
+            </not>
+        </preConditions>
+        <createTable
+                tablespace="${tablespace_t}"
+                tableName="T_SBPPAYMENTOPERATION"
+                remarks="Code: SbpPaymentOperation&#10;Name: Модель платежного поручения СБП">
+
+            <column name="REQUESTID" type="VARCHAR(36)" remarks="Code: requestId&#10;Name: Идентификатор запроса во ФродМониторинг"  > </column>
+            <column name="TIMESTAMP_" type="TIMESTAMP(3)" remarks="Code: timeStamp&#10;Name: Дата и время формирования события"  > </column>
+            <column name="ORGGUID" type="VARCHAR(36)" remarks="Code: orgGuid&#10;Name: Уникальный идентификатор клиента"  > </column>
+            <column name="USERGUID" type="VARCHAR(36)" remarks="Code: userGuid&#10;Name: Уникальный идентификатор пользователя"  > </column>
+            <column name="TBCODE" type="VARCHAR(50)" remarks="Code: tbCode&#10;Name: Код территориального банка, в котором обслуживается организация"  > </column>
+            <column name="HTTPACCEPT" type="VARCHAR(3000)" remarks="Code: httpAccept&#10;Name: Значение заголовка Accept HTTP-запроса"  > </column>
+            <column name="HTTPREFERER" type="VARCHAR(256)" remarks="Code: httpReferer&#10;Name: Значение заголовка Referer HTTP-запроса"  > </column>
+            <column name="HTTPACCEPTCHARS" type="VARCHAR(256)" remarks="Code: httpAcceptChars&#10;Name: Значение заголовка Accept-Charset HTTP-запроса"  > </column>
+            <column name="HTTPACCEPTENCODING" type="VARCHAR(256)" remarks="Code: httpAcceptEncoding&#10;Name: Значение заголовка Accept-Encoding HTTP-запроса"  > </column>
+            <column name="HTTPACCEPTLANGUAGE" type="VARCHAR(256)" remarks="Code: httpAcceptLanguage&#10;Name: Значение заголовка Accept-Language HTTP-запроса"  > </column>
+            <column name="IPADDRESS" type="VARCHAR(15)" remarks="Code: ipAddress&#10;Name: IP адрес"  > </column>
+            <column name="USERAGENT" type="VARCHAR(1024)" remarks="Code: userAgent&#10;Name: Значение заголовка User-Agent HTTP-запроса"  > </column>
+            <column name="DEVICEPRINT" type="VARCHAR(4000)" remarks="Code: devicePrint&#10;Name: Слепок устройства"  > </column>
+            <column name="MOBSDKDATA" type="VARCHAR(4000)" remarks="Code: mobSdkData&#10;Name: Информация о мобильном устройстве в формате json"  > </column>
+            <column name="CHANNELINDICATOR" type="VARCHAR(15)" remarks="Code: channelIndicator&#10;Name: Тип канала связи, через который осуществляется связь клиента с банком"  > </column>
+            <column name="TIMEOFOCCURRENCE" type="TIMESTAMP(3)" remarks="Code: timeOfOccurrence&#10;Name: Время создания запроса"  > </column>
+            <column name="DOCID" type="VARCHAR(36)" remarks="Code: docId&#10;Name: ID документа"  > </column>
+            <column name="DOCNUMBER" type="${type_int}" remarks="Code: docNumber&#10;Name: Номер документа"  > </column>
+            <column name="DOCDATE" type="DATE" remarks="Code: docDate&#10;Name: Дата документа"  > </column>
+            <column name="AMOUNT" type="${type_long}" remarks="Code: amount&#10;Name: Сумма перевода"  > </column>
+            <column name="CURRENCY" type="VARCHAR(3)" remarks="Code: currency&#10;Name: Валюта перевода, буквенный код валюты перевода в соответствии со стандартом ISO"  > </column>
+            <column name="ACCOUNTNUMBER" type="VARCHAR(20)" remarks="Code: accountNumber&#10;Name: Номер счета отправителя (плательщика)"  > </column>
+            <column name="OTHERACCNAME" type="VARCHAR(200)" remarks="Code: otherAccName&#10;Name: Наименование получателя"  > </column>
+            <column name="OTHERBICCODE" type="VARCHAR(11)" remarks="Code: otherBicCode&#10;Name: БИК SWIFT получателя"  > </column>
+            <column name="RECEIVERINN" type="VARCHAR(12)" remarks="Code: receiverInn&#10;Name: ИНН получателя"  > </column>
+            <column name="RECEIVERBANKNAME" type="VARCHAR(254)" remarks="Code: receiverBankName&#10;Name: Наименование Банка получателя"  > </column>
+            <column name="RECEIVERBANKCOUNTRYCODE" type="VARCHAR(4)" remarks="Code: receiverBankCountryCode&#10;Name: Код страны банка получателя"  > </column>
+            <column name="RECEIVERBANKCORRACC" type="VARCHAR(254)" remarks="Code: receiverBankCorrAcc&#10;Name: Корсчет Банка получателя"  > </column>
+            <column name="RECEIVERBANKID" type="VARCHAR(254)" remarks="Code: receiverBankId&#10;Name: Идентификатор Банка Получателя"  > </column>
+            <column name="RECEIVERPHONENUMBER" type="VARCHAR(13)" remarks="Code: receiverPhoneNumber&#10;Name: Номер телефона получателя"  > </column>
+            <column name="IDOPERATIONOPKC" type="VARCHAR(254)" remarks="Code: idOperationOPKC&#10;Name: Идентификатор Операции ОПКЦ СБП"  > </column>
+            <column name="RECEIVERDOCUMENT" type="VARCHAR(254)" remarks="Code: receiverDocument&#10;Name: Документ Получателя"  > </column>
+            <column name="RECEIVERDOCUMENTTYPE" type="VARCHAR(254)" remarks="Code: receiverDocumentType&#10;Name: Тип документа получателя"  > </column>
+            <column name="DESTINATION" type="VARCHAR(254)" remarks="Code: destination&#10;Name: Сообщение получателю"  > </column>
+            <column name="RECEIVERACCOUNT" type="VARCHAR(5)" remarks="Code: receiverAccount&#10;Name: Счет получателя"  > </column>
+            <column name="PAYERFINANCIALNAME" type="VARCHAR(254)" remarks="Code: payerFinancialName&#10;Name: Полное наименование организации"  > </column>
+            <column name="PAYEROSBNUM" type="VARCHAR(254)" remarks="Code: payerOsbNum&#10;Name: Номер ОСБ"  > </column>
+            <column name="PAYERVSPNUM" type="VARCHAR(254)" remarks="Code: payerVspNum&#10;Name: Номер ВСП"  > </column>
+            <column name="PAYERACCBALANCE" type="VARCHAR(254)" remarks="Code: payerAccBalance&#10;Name: Остаток на счете плательщика"  > </column>
+            <column name="PAYERACCCREATEDATE" type="DATE" remarks="Code: payerAccCreateDate&#10;Name: Дата открытия счета плательщика"  > </column>
+            <column name="PAYERBIC" type="VARCHAR(254)" remarks="Code: payerBic&#10;Name: БИК SWIFT плательщика"  > </column>
+            <column name="PAYERDOCUMENTNUMBER" type="VARCHAR(254)" remarks="Code: payerDocumentNumber&#10;Name: Номер ДУЛ"  > </column>
+            <column name="PAYERDOCUMENTTYPE" type="VARCHAR(254)" remarks="Code: payerDocumentType&#10;Name: Тип ДУЛ"  > </column>
+            <column name="PAYERSEGMENT" type="VARCHAR(254)" remarks="Code: payerSegment&#10;Name: Сегмент клиента ЮЛ"  > </column>
+            <column name="PAYERINN" type="VARCHAR(12)" remarks="Code: payerInn&#10;Name: ИНН организации"  > </column>
+            <column name="FIRSTSIGNTIME" type="TIMESTAMP(3)" remarks="Code: firstSignTime&#10;Name: 1-я подпись Время подписи"  > </column>
+            <column name="FIRSTSIGNIP" type="VARCHAR(15)" remarks="Code: firstSignIp&#10;Name: 1-я подпись IP адрес"  > </column>
+            <column name="FIRSTSIGNLOGIN" type="VARCHAR(254)" remarks="Code: firstSignLogin&#10;Name: 1-я подпись Логин"  > </column>
+            <column name="FIRSTSIGNCRYPTOPROFILE" type="VARCHAR(254)" remarks="Code: firstSignCryptoprofile&#10;Name: 1-я подпись Наименование криптопрофиля"  > </column>
+            <column name="FIRSTSIGNCRYPTOPROFILETYPE" type="VARCHAR(254)" remarks="Code: firstSignCryptoprofileType&#10;Name: 1-я подпись Тип криптопрофиля"  > </column>
+            <column name="FIRSTSIGNCHANNEL" type="VARCHAR(254)" remarks="Code: firstSignChannel&#10;Name: 1-я подпись Канал подписи"  > </column>
+            <column name="FIRSTSIGNTOKEN" type="VARCHAR(254)" remarks="Code: firstSignToken&#10;Name: 1-я подпись Данные Токена"  > </column>
+            <column name="FIRSTSIGNTYPE" type="VARCHAR(254)" remarks="Code: firstSignType&#10;Name: 1-я подпись Тип подписи"  > </column>
+            <column name="FIRSTSIGNIMSI" type="VARCHAR(128)" remarks="Code: firstSignImsi&#10;Name: 1-я подпись IMSI"  > </column>
+            <column name="FIRSTSIGNCERTID" type="VARCHAR(254)" remarks="Code: firstSignCertId&#10;Name: 1-я подпись Идентификатор личного сертификата"  > </column>
+            <column name="FIRSTSIGNPHONE" type="VARCHAR(13)" remarks="Code: firstSignPhone&#10;Name: 1-я подпись Номер телефона"  > </column>
+            <column name="FIRSTSIGNEMAIL" type="VARCHAR(320)" remarks="Code: firstSignEmail&#10;Name: 1-я подпись Адрес электронной почты"  > </column>
+            <column name="FIRSTSIGNSOURCE" type="VARCHAR(100)" remarks="Code: firstSignSource&#10;Name: 1-я подпись Канал"  > </column>
+            <column name="PRIVATEIPADDRESS" type="VARCHAR(15)" remarks="Code: privateIpAddress&#10;Name: Локальный IP адрес"  > </column>
+            <column name="SENDERSIGNTIME" type="TIMESTAMP(3)" remarks="Code: senderSignTime&#10;Name: Отправивший Время подписи"  > </column>
+            <column name="SENDERIP" type="VARCHAR(15)" remarks="Code: senderIp&#10;Name: Отправивший IP адрес"  > </column>
+            <column name="SENDERLOGIN" type="VARCHAR(254)" remarks="Code: senderLogin&#10;Name: Отправивший Логин"  > </column>
+            <column name="SENDERCRYPTOPROFILE" type="VARCHAR(254)" remarks="Code: senderCryptoprofile&#10;Name: Отправивший Наименование криптопрофиля"  > </column>
+            <column name="SENDERCRYPTOPROFILETYPE" type="VARCHAR(254)" remarks="Code: senderCryptoprofileType&#10;Name: Отправивший Тип криптопрофиля"  > </column>
+            <column name="SENDERSIGNCHANNEL" type="VARCHAR(254)" remarks="Code: senderSignChannel&#10;Name: Отправивший Канал подписи"  > </column>
+            <column name="SENDERTOKEN" type="VARCHAR(254)" remarks="Code: senderToken&#10;Name: Отправивший Данные Токена"  > </column>
+            <column name="SENDERSIGNTYPE" type="VARCHAR(254)" remarks="Code: senderSignType&#10;Name: Отправивший Тип подписи"  > </column>
+            <column name="SENDERSIGNIMSI" type="VARCHAR(128)" remarks="Code: senderSignImsi&#10;Name: Отправивший IMSI"  > </column>
+            <column name="SENDERCERTID" type="VARCHAR(254)" remarks="Code: senderCertId&#10;Name: Отправивший Идентификатор сертификата"  > </column>
+            <column name="SENDERPHONE" type="VARCHAR(13)" remarks="Code: senderPhone&#10;Name: Отправивший Номер телефона"  > </column>
+            <column name="SENDEREMAIL" type="VARCHAR(320)" remarks="Code: senderEmail&#10;Name: Отправивший Адрес электронной почты"  > </column>
+            <column name="SENDERSOURCE" type="VARCHAR(100)" remarks="Code: senderSource&#10;Name: Отправивший Канал"  > </column>
+            <column name="OBJECT_ID" type="VARCHAR(254)" remarks="Code: objectId&#10;Name: Прикладной ID объекта"  ><constraints nullable="false"/> </column>
+            <column name="TYPE" type="VARCHAR(254)" remarks="Code: type&#10;Name: Дискриминатор классов"  ><constraints nullable="false"/> </column>
+            <column name="SYS_LASTCHANGEDATE" type="TIMESTAMP(3)" remarks="Code: lastChangeDate&#10;Name: System attribute: date of the last modification"  > </column>
+            <column name="SYS_ISDELETED" type="${type_boolean}" remarks="Code: isDeleted&#10;Name: System attribute: Deleted flag" defaultValueNumeric="0" ><constraints nullable="false"/> </column>
+            <column name="SYS_PARTITIONID" type="${type_int}" remarks="Code: partitionId&#10;Name: System attribute: partitioning id" defaultValueNumeric="0" > </column>
+            <column name="SYS_OWNERID" type="VARCHAR(254)" remarks="Code: ownerId&#10;Name: System attribute: record owner module id"  > </column>
+            <column name="SYS_RECMODELVERSION" type="VARCHAR(254)" remarks="Code: recModelVersion&#10;Name: System attribute: Record model version"  > </column>
+            <column name="CHGCNT" type="${type_long}" remarks="Code: chgCnt&#10;Name: Счетчик изменений (технический)"  > </column>
+            <column name="OFFFLAG" type="${type_byte}" remarks="Code: offFlag&#10;Name: Признак деактивации записи"  > </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet author="antifraud" id="0.1.0-build.12-6964023290318880781-pk">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = 'T_SBPPAYMENTOPERATION'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE table_schema='${defaultSchemaName}' and CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = lower('T_SBPPAYMENTOPERATION')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) FROM sys.user_constraints where CONSTRAINT_TYPE = 'P' and TABLE_NAME = 'T_SBPPAYMENTOPERATION'</sqlCheck></and>
+            </or>
+        </preConditions>
+        <addPrimaryKey tablespace="${tablespace_i}" tableName="T_SBPPAYMENTOPERATION" columnNames="OBJECT_ID" constraintName="PK_T_SBPPAYMENTOPERATION"/>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.12-6964023290318880781-index-1">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.INDEXES WHERE TABLE_NAME='T_SBPPAYMENTOPERATION' AND INDEX_NAME='I_SBPPAYMENTOPERATION_DOCID'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) from pg_indexes where schemaname='${defaultSchemaName}' and tablename=lower('T_SBPPAYMENTOPERATION') and indexname=lower('I_SBPPAYMENTOPERATION_DOCID')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) from user_indexes where table_name=upper('T_SBPPAYMENTOPERATION') and index_name=upper('I_SBPPAYMENTOPERATION_DOCID')</sqlCheck></and>
+            </or>
+        </preConditions>
+        <createIndex
+            tablespace="${tablespace_i}"
+            tableName="T_SBPPAYMENTOPERATION"
+            unique="true"
+            indexName="I_SBPPAYMENTOPERATION_DOCID">
+            <column name="DOCID"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.12-6964023290318880781-index-2">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.INDEXES WHERE TABLE_NAME='T_SBPPAYMENTOPERATION' AND INDEX_NAME='I_SBPPAYMENTOPERATION_TYPE'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) from pg_indexes where schemaname='${defaultSchemaName}' and tablename=lower('T_SBPPAYMENTOPERATION') and indexname=lower('I_SBPPAYMENTOPERATION_TYPE')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) from user_indexes where table_name=upper('T_SBPPAYMENTOPERATION') and index_name=upper('I_SBPPAYMENTOPERATION_TYPE')</sqlCheck></and>
+            </or>
+        </preConditions>
+        <createIndex
+            tablespace="${tablespace_i}"
+            tableName="T_SBPPAYMENTOPERATION"
+            unique="false"
+            indexName="I_SBPPAYMENTOPERATION_TYPE">
+            <column name="TYPE"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.12-6964023290318880782">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="T_SBPPAYMENTOPERATIONAPICALL"/>
+            </not>
+        </preConditions>
+        <createTable
+                tablespace="${tablespace_t}"
+                tableName="T_SBPPAYMENTOPERATIONAPICALL"
+                remarks="Code: SbpPaymentOperationApiCall&#10;Name: Результат обработки пакета Unit of Work для SbpPaymentOperation">
+
+            <column name="APICALLID" type="VARCHAR(254)" remarks="Code: apiCallId&#10;Name: Идентификатор пакета"  > </column>
+            <column name="FIRSTCALLDATE" type="TIMESTAMP(3)" remarks="Code: firstCallDate&#10;Name: Дата первого успешного вызова пакета"  > </column>
+            <column name="DATA" type="VARCHAR(4000)" remarks="Code: data&#10;Name: Результат обработки пакета"  > </column>
+            <column name="BIGDATA" type="CLOB" remarks="Code: bigData&#10;Name: Результат обработки пакета, используется если результат не помещается в поле data"  > </column>
+            <column name="PARENTOBJECT_ID" type="VARCHAR(254)" remarks="Code: parentObject&#10;Name: Ссылка на родительский объект"  ><constraints nullable="false"/> </column>
+            <column name="OBJECT_ID" type="VARCHAR(254)" remarks="Code: objectId&#10;Name: Прикладной ID объекта"  ><constraints nullable="false"/> </column>
+            <column name="AGGREGATEROOT_ID" type="VARCHAR(254)" remarks="Code: aggregateRoot&#10;Name: ссылка на корень агрегата"  > </column>
+            <column name="SYS_LASTCHANGEDATE" type="TIMESTAMP(3)" remarks="Code: lastChangeDate&#10;Name: System attribute: date of the last modification"  > </column>
+            <column name="SYS_ISDELETED" type="${type_boolean}" remarks="Code: isDeleted&#10;Name: System attribute: Deleted flag" defaultValueNumeric="0" ><constraints nullable="false"/> </column>
+            <column name="SYS_PARTITIONID" type="${type_int}" remarks="Code: partitionId&#10;Name: System attribute: partitioning id" defaultValueNumeric="0" > </column>
+            <column name="SYS_OWNERID" type="VARCHAR(254)" remarks="Code: ownerId&#10;Name: System attribute: record owner module id"  > </column>
+            <column name="SYS_RECMODELVERSION" type="VARCHAR(254)" remarks="Code: recModelVersion&#10;Name: System attribute: Record model version"  > </column>
+            <column name="CHGCNT" type="${type_long}" remarks="Code: chgCnt&#10;Name: Счетчик изменений (технический)"  > </column>
+            <column name="OFFFLAG" type="${type_byte}" remarks="Code: offFlag&#10;Name: Признак деактивации записи"  > </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="antifraud" id="0.1.0-build.12-6964023290318880782-lob-4" dbms="oracle">
+        <preConditions onFail="MARK_RAN" onError="CONTINUE">
+            <sqlCheck expectedResult="0">select count (*) from T_SBPPAYMENTOPERATIONAPICALL</sqlCheck>
+            <sqlCheck expectedResult="1">select count (*) from sys.all_lobs where owner=USER and table_name=${namecase}('T_SBPPAYMENTOPERATIONAPICALL') and column_name=${namecase}('BIGDATA') and tablespace_name&lt;&gt;${namecase}('${tablespace_l}')</sqlCheck>
+        </preConditions>
+        <sql>alter table T_SBPPAYMENTOPERATIONAPICALL move lob (BIGDATA) store as (tablespace ${tablespace_l})</sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet author="antifraud" id="0.1.0-build.12-6964023290318880782-pk">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = 'T_SBPPAYMENTOPERATIONAPICALL'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE table_schema='${defaultSchemaName}' and CONSTRAINT_TYPE = 'PRIMARY KEY' and TABLE_NAME = lower('T_SBPPAYMENTOPERATIONAPICALL')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) FROM sys.user_constraints where CONSTRAINT_TYPE = 'P' and TABLE_NAME = 'T_SBPPAYMENTOPERATIONAPICALL'</sqlCheck></and>
+            </or>
+        </preConditions>
+        <addPrimaryKey tablespace="${tablespace_i}" tableName="T_SBPPAYMENTOPERATIONAPICALL" columnNames="OBJECT_ID" constraintName="PK_T_SBPPAYMENTOPERATIONAPICALL"/>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.12-6964023290318880782-index-1">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.INDEXES WHERE TABLE_NAME='T_SBPPAYMENTOPERATIONAPICALL' AND INDEX_NAME='I_SBPPAYMENTOPERATIONAPICALL_APICALLID'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) from pg_indexes where schemaname='${defaultSchemaName}' and tablename=lower('T_SBPPAYMENTOPERATIONAPICALL') and indexname=lower('I_SBPPAYMENTOPERATIONAPICALL_APICALLID')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) from user_indexes where table_name=upper('T_SBPPAYMENTOPERATIONAPICALL') and index_name=upper('I_SBPPAYMENTOPERATIONAPICALL_APICALLID')</sqlCheck></and>
+            </or>
+        </preConditions>
+        <createIndex
+            tablespace="${tablespace_i}"
+            tableName="T_SBPPAYMENTOPERATIONAPICALL"
+            unique="true"
+            indexName="I_SBPPAYMENTOPERATIONAPICALL_APICALLID">
+            <column name="APICALLID"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.12-6964023290318880782-index-2">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.INDEXES WHERE TABLE_NAME='T_SBPPAYMENTOPERATIONAPICALL' AND INDEX_NAME='I_SBPPAYMENTOPERATIONAPICALL_PARENTOBJECT_ID'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) from pg_indexes where schemaname='${defaultSchemaName}' and tablename=lower('T_SBPPAYMENTOPERATIONAPICALL') and indexname=lower('I_SBPPAYMENTOPERATIONAPICALL_PARENTOBJECT_ID')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) from user_indexes where table_name=upper('T_SBPPAYMENTOPERATIONAPICALL') and index_name=upper('I_SBPPAYMENTOPERATIONAPICALL_PARENTOBJECT_ID')</sqlCheck></and>
+            </or>
+        </preConditions>
+        <createIndex
+            tablespace="${tablespace_i}"
+            tableName="T_SBPPAYMENTOPERATIONAPICALL"
+            unique="false"
+            indexName="I_SBPPAYMENTOPERATIONAPICALL_PARENTOBJECT_ID">
+            <column name="PARENTOBJECT_ID"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.12-6964023290318880782-index-3">
+        <preConditions onFail="MARK_RAN">
+            <or>
+                <and><dbms type="h2"/><sqlCheck expectedResult="0">SELECT count(*) FROM INFORMATION_SCHEMA.INDEXES WHERE TABLE_NAME='T_SBPPAYMENTOPERATIONAPICALL' AND INDEX_NAME='I_SBPPAYMENTOPERATIONAPICALL_AGGREGATEROOT_ID'</sqlCheck></and>
+                <and><dbms type="postgresql"/><sqlCheck expectedResult="0">SELECT count(*) from pg_indexes where schemaname='${defaultSchemaName}' and tablename=lower('T_SBPPAYMENTOPERATIONAPICALL') and indexname=lower('I_SBPPAYMENTOPERATIONAPICALL_AGGREGATEROOT_ID')</sqlCheck></and>
+                <and><dbms type="oracle"/><sqlCheck expectedResult="0">SELECT count(*) from user_indexes where table_name=upper('T_SBPPAYMENTOPERATIONAPICALL') and index_name=upper('I_SBPPAYMENTOPERATIONAPICALL_AGGREGATEROOT_ID')</sqlCheck></and>
+            </or>
+        </preConditions>
+        <createIndex
+            tablespace="${tablespace_i}"
+            tableName="T_SBPPAYMENTOPERATIONAPICALL"
+            unique="false"
+            indexName="I_SBPPAYMENTOPERATIONAPICALL_AGGREGATEROOT_ID">
+            <column name="AGGREGATEROOT_ID"/>
+        </createIndex>
+    </changeSet>
+   <changeSet author="antifraud" id="0.1.0-build.12-AGGLOCK-20200713-SBPPAYMENTOPERATION">
+       <preConditions onFail="MARK_RAN">
+           <not> <tableExists tableName="T_REPL_AGGLOCK_SBPPAYMENTOPERATION"/> </not>
+       </preConditions>
+       <createTable tableName="T_REPL_AGGLOCK_SBPPAYMENTOPERATION">
+           <column name="rootid" type="VARCHAR(255)"> <constraints nullable="false" primaryKey="true" primaryKeyName="PK_T_REPL_AGGLOCK_ROOT_ID_SBPPAYMENTOPERATION"/> </column>
+           <column name="silock" type="${type_long}" defaultValueNumeric="0"> <constraints nullable="false"/> </column>
+           <column name="token" type="VARCHAR(255)"/>
+           <column name="migrationstatus" type="${type_boolean}" defaultValueNumeric="0"> <constraints nullable="false"/> </column>
+           <column name="chgcnt" type="${type_long}"/>
+           <column name="sys_lastchangedate" type="datetime(3)"/>
+           <column name="version" type="${type_long}"/>
+           <column name="guid" type="VARCHAR(255)"/>
+       </createTable>
+   </changeSet>
+
+    <changeSet author="antifraud" id="0.1.0-build.12-applied">
+        <tagDatabase tag="antifraud-0.1.0-build.12-applied"/>
+    </changeSet>
 </databaseChangeLog>
