@@ -7,8 +7,6 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class StatusHeader implements Serializable {
 
-    private static final long serialVersionUID = -3728363032350991235L;
-
     private Integer reasonCode;
 
     private String reasonDescription;

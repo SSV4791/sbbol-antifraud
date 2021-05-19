@@ -8,8 +8,6 @@ import java.io.Serializable;
  */
 public class Payer implements Serializable {
 
-    private static final long serialVersionUID = -4304349793419926210L;
-
     /**
      * Номер счета отправителя (плательщика)
      */

@@ -9,8 +9,6 @@ import javax.validation.constraints.NotBlank;
  */
 public class SbpReceiver extends Receiver {
 
-    private static final long serialVersionUID = -1553977369783207921L;
-
     /**
      * Наименование Банка получателя
      */

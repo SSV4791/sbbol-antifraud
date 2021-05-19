@@ -12,8 +12,6 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EventData implements Serializable {
 
-    private static final long serialVersionUID = 8229331445016487625L;
-
     /**
      * Заголовок события
      */

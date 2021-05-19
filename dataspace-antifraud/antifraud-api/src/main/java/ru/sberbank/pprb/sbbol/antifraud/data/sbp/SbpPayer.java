@@ -14,8 +14,6 @@ import java.time.LocalDate;
  */
 public class SbpPayer extends Payer {
 
-    private static final long serialVersionUID = 9144786905520340925L;
-
     /**
      * Полное наименование организации
      */

@@ -12,8 +12,6 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PayerAccount implements Serializable {
 
-    private static final long serialVersionUID = 6226857364319956155L;
-
     /**
      * Номер счета отправителя (плательщика)
      */

@@ -11,8 +11,6 @@ import javax.validation.constraints.NotNull;
  */
 public class PaymentDocument extends Document {
 
-    private static final long serialVersionUID = 660897013572742322L;
-
     /**
      * Скорость обработки документа
      */

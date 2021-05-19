@@ -23,7 +23,6 @@ public class SbpPaymentModelValidator extends ModelValidator {
         logError(payment.getTimeStamp(), "timeStamp");
         logError(payment.getTimeOfOccurrence(), "timeOfOccurrence");
         validateDocument(payment.getDocument());
-        validateSigns(payment.getMappedSigns());
     }
 
     private static void validateDocument(SbpDocument document) {

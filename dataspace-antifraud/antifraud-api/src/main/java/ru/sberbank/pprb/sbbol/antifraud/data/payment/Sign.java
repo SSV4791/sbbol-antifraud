@@ -18,8 +18,6 @@ import java.util.UUID;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Sign implements Serializable {
 
-    private static final long serialVersionUID = 8083091467103448147L;
-
     /**
      * Значение заголовка Accept HTTP-запроса. Список допустимых форматов ресурса
      */

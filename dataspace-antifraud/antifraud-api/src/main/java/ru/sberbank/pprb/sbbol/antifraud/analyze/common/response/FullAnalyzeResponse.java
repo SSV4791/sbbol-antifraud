@@ -9,8 +9,6 @@ import ru.sberbank.pprb.sbbol.antifraud.analyze.AnalyzeResponse;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FullAnalyzeResponse implements AnalyzeResponse {
 
-    private static final long serialVersionUID = -1531854116701758604L;
-
     /**
      * Идентификационные данные транзакции
      */

@@ -261,7 +261,7 @@ public class SbpPaymentProcessor implements Processor<SbpPaymentOperation, SbpPa
 
     @Override
     public AnalyzeResponse send(@Valid SbpPaymentSendRequest request) throws SdkJsonRpcClientException {
-        logger.info("Sending SBP payment operation to analyze. PaymentOperation docId: {}", request.getDocId());
+        logger.info("Sending SBP payment operation to analyze. SbpPaymentOperation docId: {}", request.getDocId());
         PaymentAnalyzeRequest paymentAnalyzeRequest = createSbpPaymentAnalyzeRequest(request.getDocId());
         String jsonRequest;
         try {
@@ -417,7 +417,6 @@ public class SbpPaymentProcessor implements Processor<SbpPaymentOperation, SbpPa
         paymentAnalyzeResponse.setComment(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getComment());
         paymentAnalyzeResponse.setActionCode(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getActionCode());
         paymentAnalyzeResponse.setTransactionId(fullAnalyzeResponse.getIdentificationData().getTransactionId());
-
         return paymentAnalyzeResponse;
     }
 

@@ -13,8 +13,6 @@ import java.util.UUID;
  */
 public class PaymentSendRequest implements SendRequest {
 
-    private static final long serialVersionUID = -6620500573664082694L;
-
     /**
      * Уникальный идентификатор документа
      */

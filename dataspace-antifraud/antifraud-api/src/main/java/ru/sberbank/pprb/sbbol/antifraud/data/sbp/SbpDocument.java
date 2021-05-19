@@ -10,8 +10,6 @@ import javax.validation.constraints.NotNull;
  */
 public class SbpDocument extends Document {
 
-    private static final long serialVersionUID = -2197727921092666147L;
-
     /**
      * Идентификатор Операции ОПКЦ СБП
      */

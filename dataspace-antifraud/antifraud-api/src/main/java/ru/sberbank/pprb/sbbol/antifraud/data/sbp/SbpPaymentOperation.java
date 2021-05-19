@@ -11,8 +11,6 @@ import javax.validation.constraints.NotNull;
  */
 public class SbpPaymentOperation extends Payment {
 
-    private static final long serialVersionUID = -1706572487266539789L;
-
     /**
      * Данные документа
      */

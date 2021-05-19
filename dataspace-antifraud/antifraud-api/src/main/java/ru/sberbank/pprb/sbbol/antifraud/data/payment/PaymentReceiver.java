@@ -9,8 +9,6 @@ import javax.validation.constraints.NotBlank;
  */
 public class PaymentReceiver extends Receiver {
 
-    private static final long serialVersionUID = 4849728801881302169L;
-
     /**
      * Тип счета получателя платежа
      */

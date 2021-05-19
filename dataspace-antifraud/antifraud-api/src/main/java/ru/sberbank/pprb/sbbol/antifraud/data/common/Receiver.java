@@ -8,8 +8,6 @@ import java.io.Serializable;
  */
 public class Receiver implements Serializable {
 
-    private static final long serialVersionUID = 689007238427383896L;
-
     /**
      * Наименование получателя платежа
      */

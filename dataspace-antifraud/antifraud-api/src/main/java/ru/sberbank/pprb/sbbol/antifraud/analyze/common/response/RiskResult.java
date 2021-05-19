@@ -10,8 +10,6 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RiskResult implements Serializable {
 
-    private static final long serialVersionUID = 6211395449462607607L;
-
     /**
      * Оценка риска
      */

@@ -16,8 +16,6 @@ import java.util.UUID;
  */
 public class Document implements Serializable {
 
-    private static final long serialVersionUID = 8306467276941602834L;
-
     /**
      * ID документа
      */
