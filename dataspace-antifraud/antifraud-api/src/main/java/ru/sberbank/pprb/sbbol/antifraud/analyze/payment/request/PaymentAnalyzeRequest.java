@@ -10,8 +10,6 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PaymentAnalyzeRequest implements Serializable {
 
-    private static final long serialVersionUID = 8604246245183542973L;
-
     /**
      * Сообщение заголовка
      */

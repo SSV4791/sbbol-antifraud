@@ -10,8 +10,6 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Attribute implements Serializable {
 
-    private static final long serialVersionUID = -9215775019723130821L;
-
     /**
      * Описание поля
      */

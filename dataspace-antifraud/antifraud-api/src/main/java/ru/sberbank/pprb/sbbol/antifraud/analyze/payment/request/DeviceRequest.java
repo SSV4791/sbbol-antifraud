@@ -10,8 +10,6 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DeviceRequest implements Serializable {
 
-    private static final long serialVersionUID = -6145617159307123491L;
-
     /**
      * Слепок устройства
      */

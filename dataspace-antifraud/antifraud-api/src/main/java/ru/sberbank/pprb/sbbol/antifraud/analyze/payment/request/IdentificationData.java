@@ -12,8 +12,6 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class IdentificationData implements Serializable {
 
-    private static final long serialVersionUID = 707735670708582748L;
-
     /**
      * ID документа (docId)
      */

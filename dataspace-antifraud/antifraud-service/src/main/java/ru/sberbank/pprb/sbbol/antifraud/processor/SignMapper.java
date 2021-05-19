@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.sberbank.pprb.sbbol.antifraud.data.payment.Sign;
 import ru.sberbank.pprb.sbbol.antifraud.exception.ModelArgumentException;
+import ru.sberbank.pprb.sbbol.antifraud.processor.payment.PaymentModelValidator;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -46,9 +47,11 @@ public class SignMapper {
         if (signList.isEmpty()) {
             throw new ModelArgumentException("Signs parsing error. No element has been converted to a sign model");
         }
+        ModelValidator.validateSigns(signList);
         if (signList.size() > 1) {
             signList.sort(Comparator.comparing(Sign::getSignTime));
         }
+        ModelValidator.validateFirstSignUserData(signList.get(0));
         return signList;
     }
 

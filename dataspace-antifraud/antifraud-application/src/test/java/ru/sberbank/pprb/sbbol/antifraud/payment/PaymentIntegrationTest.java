@@ -31,6 +31,11 @@ public abstract class PaymentIntegrationTest extends DataSpaceIntegrationTest {
         return saveOrUpdateData(payment);
     }
 
+    protected PaymentOperation createRandomPayment() {
+        return PaymentBuilder.getInstance()
+                .build();
+    }
+
     protected PaymentOperationGet searchPayment(UUID docId) throws SdkJsonRpcClientException {
         GraphCollection<PaymentOperationGet> collection = searchClient.searchPaymentOperation(pWith -> pWith
                 .withRequestId()

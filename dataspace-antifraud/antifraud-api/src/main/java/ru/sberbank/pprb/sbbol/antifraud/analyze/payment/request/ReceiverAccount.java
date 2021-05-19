@@ -10,8 +10,6 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ReceiverAccount implements Serializable {
 
-    private static final long serialVersionUID = 1315489781267296499L;
-
     /**
      * Наименование получателя (otherAccName)
      */

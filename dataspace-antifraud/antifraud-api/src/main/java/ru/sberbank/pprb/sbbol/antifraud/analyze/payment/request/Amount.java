@@ -12,8 +12,6 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Amount implements Serializable {
 
-    private static final long serialVersionUID = -3419691832729524298L;
-
     /**
      * Сумма перевода (amount)
      */

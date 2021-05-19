@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -15,8 +17,6 @@ import java.util.UUID;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Sign implements Serializable {
-
-    private static final long serialVersionUID = 8083091467103448147L;
 
     /**
      * Значение заголовка Accept HTTP-запроса. Список допустимых форматов ресурса
@@ -46,6 +46,7 @@ public class Sign implements Serializable {
     /**
      * IP адрес
      */
+    @NotBlank(message = "The ipAddress attribute must be filled")
     private String ipAddress;
 
     /**
@@ -56,6 +57,7 @@ public class Sign implements Serializable {
     /**
      * Код территориального банка, в котором обслуживается организация
      */
+    @NotBlank(message = "The tbCode attribute must be filled")
     private String tbCode;
 
     /**
@@ -66,6 +68,7 @@ public class Sign implements Serializable {
     /**
      * Слепок устройства
      */
+    @NotBlank(message = "The devicePrint attribute must be filled")
     private String devicePrint;
 
     /**
@@ -76,11 +79,13 @@ public class Sign implements Serializable {
     /**
      * Тип канала связи, через который осуществляется связь клиента с банком
      */
+    @NotBlank(message = "The channelIndicator attribute must be filled")
     private String channelIndicator;
 
     /**
      * Уникальный идентификатор пользователя
      */
+    @NotNull(message = "The userGuid attribute must be filled")
     private UUID userGuid;
 
     /**
@@ -88,22 +93,37 @@ public class Sign implements Serializable {
      */
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @NotNull(message = "The signTime attribute must be filled")
     private LocalDateTime signTime;
+
+    /**
+     * IP адресс подписавшего
+     */
+    @NotBlank(message = "The signIp attribute must be filled")
+    private String signIp;
 
     /**
      * Логин
      */
+    @NotBlank(message = "The signLogin attribute must be filled")
     private String signLogin;
 
     /**
      * Наименование криптопрофиля
      */
+    @NotBlank(message = "The signCryptoprofile attribute must be filled")
     private String signCryptoprofile;
 
     /**
      * Тип криптопрофиля
      */
     private String signCryptoprofileType;
+
+    /**
+     * Канал подписи
+     */
+    @NotBlank(message = "The signChannel attribute must be filled")
+    private String signChannel;
 
     /**
      * Данные токена
@@ -118,6 +138,7 @@ public class Sign implements Serializable {
     /**
      * IMSI
      */
+    @NotBlank(message = "The signImsi attribute must be filled")
     private String signImsi;
 
     /**
@@ -128,11 +149,13 @@ public class Sign implements Serializable {
     /**
      * Номер телефона
      */
+    @NotBlank(message = "The signPhone attribute must be filled")
     private String signPhone;
 
     /**
      * Адрес электронной почты
      */
+    @NotBlank(message = "The signEmail attribute must be filled")
     private String signEmail;
 
     /**
@@ -252,6 +275,14 @@ public class Sign implements Serializable {
         this.signTime = signTime;
     }
 
+    public String getSignIp() {
+        return signIp;
+    }
+
+    public void setSignIp(String signIp) {
+        this.signIp = signIp;
+    }
+
     public String getSignLogin() {
         return signLogin;
     }
@@ -274,6 +305,14 @@ public class Sign implements Serializable {
 
     public void setSignCryptoprofileType(String signCryptoprofileType) {
         this.signCryptoprofileType = signCryptoprofileType;
+    }
+
+    public String getSignChannel() {
+        return signChannel;
+    }
+
+    public void setSignChannel(String signChannel) {
+        this.signChannel = signChannel;
     }
 
     public String getSignToken() {

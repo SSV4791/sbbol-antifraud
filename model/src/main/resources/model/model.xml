@@ -95,4 +95,83 @@
         </index>
     </class>
 
+    <class name="SbpPaymentOperation" label="Модель платежного поручения СБП">
+        <property name="requestId" type="String" length="36" label="Идентификатор запроса во ФродМониторинг"/>
+        <property name="timeStamp" type="LocalDateTime" label="Дата и время формирования события"/>
+        <property name="orgGuid" type="String" length="36" label="Уникальный идентификатор клиента"/>
+        <property name="userGuid" type="String" length="36" label="Уникальный идентификатор пользователя"/>
+        <property name="tbCode" type="String" length="50" label="Код территориального банка, в котором обслуживается организация"/>
+        <property name="httpAccept" type="String" length="3000" label="Значение заголовка Accept HTTP-запроса"/>
+        <property name="httpReferer" type="String" length="256" label="Значение заголовка Referer HTTP-запроса"/>
+        <property name="httpAcceptChars" type="String" length="256" label="Значение заголовка Accept-Charset HTTP-запроса"/>
+        <property name="httpAcceptEncoding" type="String" length="256" label="Значение заголовка Accept-Encoding HTTP-запроса"/>
+        <property name="httpAcceptLanguage" type="String" length="256" label="Значение заголовка Accept-Language HTTP-запроса"/>
+        <property name="ipAddress" type="String" length="15" label="IP адрес"/>
+        <property name="userAgent" type="String" length="1024" label="Значение заголовка User-Agent HTTP-запроса"/>
+        <property name="devicePrint" type="String" length="4000" label="Слепок устройства"/>
+        <property name="mobSdkData" type="String" length="4000" label="Информация о мобильном устройстве в формате json"/>
+        <property name="channelIndicator" type="String" length="15" label="Тип канала связи, через который осуществляется связь клиента с банком"/>
+        <property name="timeOfOccurrence" type="LocalDateTime" label="Время создания запроса"/>
+        <property name="docId" type="String" length="36" label="ID документа"/>
+        <property name="docNumber" type="Integer" label="Номер документа"/>
+        <property name="docDate" type="LocalDate" label="Дата документа"/>
+        <property name="amount" type="Long" label="Сумма перевода"/>
+        <property name="currency" type="String" length="3" label="Валюта перевода, буквенный код валюты перевода в соответствии со стандартом ISO"/>
+        <property name="accountNumber" type="String" length="20" label="Номер счета отправителя (плательщика)"/>
+        <property name="otherAccName" type="String" length="200" label="Наименование получателя"/>
+        <property name="otherBicCode" type="String" length="11" label="БИК SWIFT получателя"/>
+        <property name="receiverInn" type="String" length="12" label="ИНН получателя"/>
+        <property name="receiverBankName" type="String" label="Наименование Банка получателя"/>
+        <property name="receiverBankCountryCode" type="String" length="4" label="Код страны банка получателя"/>
+        <property name="receiverBankCorrAcc" type="String" label="Корсчет Банка получателя"/>
+        <property name="receiverBankId" type="String" label="Идентификатор Банка Получателя"/>
+        <property name="receiverPhoneNumber" type="String" length="13" label="Номер телефона получателя"/>
+        <property name="idOperationOPKC" type="String" label="Идентификатор Операции ОПКЦ СБП"/>
+        <property name="receiverDocument" type="String" label="Документ Получателя"/>
+        <property name="receiverDocumentType" type="String" label="Тип документа получателя"/>
+        <property name="destination" type="String" label="Сообщение получателю"/>
+        <property name="receiverAccount" type="String" length="5" label="Счет получателя"/>
+        <property name="payerFinancialName" type="String" label="Полное наименование организации"/>
+        <property name="payerOsbNum" type="String" label="Номер ОСБ"/>
+        <property name="payerVspNum" type="String" label="Номер ВСП"/>
+        <property name="payerAccBalance" type="String" label="Остаток на счете плательщика"/>
+        <property name="payerAccCreateDate" type="LocalDate" label="Дата открытия счета плательщика"/>
+        <property name="payerBic" type="String" label="БИК SWIFT плательщика"/>
+        <property name="payerDocumentNumber" type="String" label="Номер ДУЛ"/>
+        <property name="payerDocumentType" type="String" label="Тип ДУЛ"/>
+        <property name="payerSegment" type="String" label="Сегмент клиента ЮЛ"/>
+        <property name="payerInn" type="String" length="12" label="ИНН организации"/>
+        <property name="firstSignTime" type="LocalDateTime" label="1-я подпись Время подписи"/>
+        <property name="firstSignIp" type="String" length="15" label="1-я подпись IP адрес"/>
+        <property name="firstSignLogin" type="String" label="1-я подпись Логин"/>
+        <property name="firstSignCryptoprofile" type="String" label="1-я подпись Наименование криптопрофиля"/>
+        <property name="firstSignCryptoprofileType" type="String" label="1-я подпись Тип криптопрофиля"/>
+        <property name="firstSignChannel" type="String" label="1-я подпись Канал подписи"/>
+        <property name="firstSignToken" type="String" label="1-я подпись Данные Токена"/>
+        <property name="firstSignType" type="String" label="1-я подпись Тип подписи"/>
+        <property name="firstSignImsi" type="String" length="128" label="1-я подпись IMSI"/>
+        <property name="firstSignCertId" type="String" label="1-я подпись Идентификатор личного сертификата"/>
+        <property name="firstSignPhone" type="String" length="13" label="1-я подпись Номер телефона"/>
+        <property name="firstSignEmail" type="String" length="320" label="1-я подпись Адрес электронной почты"/>
+        <property name="firstSignSource" type="String" length="100" label="1-я подпись Канал"/>
+        <property name="privateIpAddress" type="String" length="15" label="Локальный IP адрес"/>
+        <property name="senderSignTime" type="LocalDateTime" label="Отправивший Время подписи"/>
+        <property name="senderIp" type="String" length="15" label="Отправивший IP адрес"/>
+        <property name="senderLogin" type="String" label="Отправивший Логин"/>
+        <property name="senderCryptoprofile" type="String" label="Отправивший Наименование криптопрофиля"/>
+        <property name="senderCryptoprofileType" type="String" label="Отправивший Тип криптопрофиля"/>
+        <property name="senderSignChannel" type="String" label="Отправивший Канал подписи"/>
+        <property name="senderToken" type="String" label="Отправивший Данные Токена"/>
+        <property name="senderSignType" type="String" label="Отправивший Тип подписи"/>
+        <property name="senderSignImsi" type="String" length="128" label="Отправивший IMSI"/>
+        <property name="senderCertId" type="String" label="Отправивший Идентификатор сертификата"/>
+        <property name="senderPhone" type="String" length="13" label="Отправивший Номер телефона"/>
+        <property name="senderEmail" type="String" length="320" label="Отправивший Адрес электронной почты"/>
+        <property name="senderSource" type="String" length="100" label="Отправивший Канал"/>
+
+        <index unique="true">
+            <property name="docId"/>
+        </index>
+    </class>
+
 </model>

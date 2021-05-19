@@ -10,8 +10,6 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TriggeredRule implements Serializable {
 
-    private static final long serialVersionUID = 5774342399478303318L;
-
     /**
      * Рекомендуемое действие в соответствии со сработавшим правилом:
      * • ALLOW – разрешить;

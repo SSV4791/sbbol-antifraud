@@ -1,4 +1,4 @@
-package ru.sberbank.pprb.sbbol.antifraud.payment;
+package ru.sberbank.pprb.sbbol.antifraud.sbp;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,14 +13,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
-import ru.sberbank.pprb.sbbol.antifraud.analyze.payment.PaymentAnalyzeResponse;
-import ru.sberbank.pprb.sbbol.antifraud.exception.ModelArgumentException;
-import ru.sberbank.pprb.sbbol.antifraud.rpc.AntiFraudAnalyzeService;
-import ru.sberbank.pprb.sbbol.antifraud.analyze.payment.PaymentSendRequest;
-import ru.sberbank.pprb.sbbol.antifraud.analyze.common.response.IdentificationData;
 import ru.sberbank.pprb.sbbol.antifraud.analyze.common.response.FullAnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.common.response.IdentificationData;
 import ru.sberbank.pprb.sbbol.antifraud.analyze.common.response.RiskResult;
 import ru.sberbank.pprb.sbbol.antifraud.analyze.common.response.TriggeredRule;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.payment.PaymentAnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.analyze.payment.sbp.SbpPaymentSendRequest;
+import ru.sberbank.pprb.sbbol.antifraud.exception.ModelArgumentException;
+import ru.sberbank.pprb.sbbol.antifraud.rpc.AntiFraudAnalyzeService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 
-class PaymentAnalyzeTest extends PaymentIntegrationTest {
+class SbpPaymentAnalyzeTest extends SbpPaymentIntegrationTest{
 
     @Autowired
     private RestTemplate restTemplate;
@@ -57,7 +57,7 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
                 .andRespond(withStatus(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(objectMapper.writeValueAsString(expected)));
-        PaymentSendRequest request = new PaymentSendRequest(DOC_ID);
+        SbpPaymentSendRequest request = new SbpPaymentSendRequest(DOC_ID);
         PaymentAnalyzeResponse actual = (PaymentAnalyzeResponse) analyzeService.analyzeOperation(request);
         mockServer.verify();
         assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId());
@@ -69,7 +69,7 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
 
     @Test
     void validateModelRequiredParamDocId() {
-        PaymentSendRequest request = new PaymentSendRequest(null);
+        SbpPaymentSendRequest request = new SbpPaymentSendRequest(null);
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> sendData(request));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("docId"), "Should contain docId in message. Message: " + exceptionMessage);
@@ -87,5 +87,4 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
         response.getRiskResult().getTriggeredRule().setWaitingTime(1);
         return response;
     }
-
 }

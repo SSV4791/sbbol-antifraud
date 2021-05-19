@@ -46,7 +46,7 @@ import java.util.UUID;
 import java.util.function.Function;
 
 /**
- * Обработчик платежных поручений. Добавляет запись в таблицу Payment.
+ * Обработчик платежных поручений. Добавляет запись в таблицу PaymentOperation.
  * Осуществляет отправку данных в ФП ИС.
  */
 @Service
@@ -431,8 +431,9 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
         request.getDeviceRequest().setUserAgent(paymentGet.getUserAgent());
         request.setChannelIndicator(paymentGet.getChannelIndicator());
         request.setEventDataList(new EventData());
-        request.getEventDataList().setEventDataHeader(
-                new EventDataHeader(supportedDboOperation().getClientDefinedEventType(), paymentGet.getTimeOfOccurrence()));
+        EventDataHeader eventData = new EventDataHeader(supportedDboOperation().getEventType(), supportedDboOperation().getEventDescription(),
+                supportedDboOperation().getClientDefinedEventType(), paymentGet.getTimeOfOccurrence());
+        request.getEventDataList().setEventDataHeader(eventData);
         request.getEventDataList().setTransactionData(new TransactionData());
         request.getEventDataList().getTransactionData().setAmount(new Amount(paymentGet.getAmount(), paymentGet.getCurrency()));
         request.getEventDataList().getTransactionData().setExecutionSpeed(paymentGet.getExecutionSpeed());

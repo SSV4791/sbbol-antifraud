@@ -10,8 +10,6 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TransactionData implements Serializable {
 
-    private static final long serialVersionUID = -1236820769114406838L;
-
     /**
      * Данные суммы перевода
      */

@@ -1,4 +1,4 @@
-package ru.sberbank.pprb.sbbol.antifraud.data.payment;
+package ru.sberbank.pprb.sbbol.antifraud.data.sbp;
 
 import ru.sberbank.pprb.sbbol.antifraud.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.data.common.Payment;
@@ -7,27 +7,27 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 /**
- * Модель платежного поручения
+ * Модель платежного поручения СБП
  */
-public class PaymentOperation extends Payment {
+public class SbpPaymentOperation extends Payment {
 
     /**
      * Данные документа
      */
     @Valid
     @NotNull(message = "Document attribute cannot be null")
-    private PaymentDocument document;
+    private SbpDocument document;
 
     @Override
     public DboOperation getDboOperation() {
-        return DboOperation.PAYMENT_DT_0401060;
+        return DboOperation.SBP_B2C;
     }
 
-    public PaymentDocument getDocument() {
+    public SbpDocument getDocument() {
         return document;
     }
 
-    public void setDocument(PaymentDocument document) {
+    public void setDocument(SbpDocument document) {
         this.document = document;
     }
 }

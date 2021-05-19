@@ -17,8 +17,6 @@ import java.time.LocalDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MessageHeader implements Serializable {
 
-    private static final long serialVersionUID = 6107290128389917848L;
-
     /**
      * Дата и время формирования события
      */

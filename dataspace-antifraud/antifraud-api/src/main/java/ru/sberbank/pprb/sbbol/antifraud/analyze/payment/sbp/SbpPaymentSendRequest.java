@@ -1,4 +1,4 @@
-package ru.sberbank.pprb.sbbol.antifraud.analyze.payment;
+package ru.sberbank.pprb.sbbol.antifraud.analyze.payment.sbp;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,10 +8,7 @@ import ru.sberbank.pprb.sbbol.antifraud.analyze.SendRequest;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
-/**
- * Запрос на отправку данных в ФП ИС
- */
-public class PaymentSendRequest implements SendRequest {
+public class SbpPaymentSendRequest implements SendRequest {
 
     /**
      * Уникальный идентификатор документа
@@ -20,7 +17,7 @@ public class PaymentSendRequest implements SendRequest {
     private UUID docId;
 
     @JsonCreator
-    public PaymentSendRequest(@JsonProperty("docId") UUID docId) {
+    public SbpPaymentSendRequest(@JsonProperty("docId") UUID docId) {
         this.docId = docId;
     }
 
@@ -34,6 +31,6 @@ public class PaymentSendRequest implements SendRequest {
 
     @Override
     public DboOperation getDboOperation() {
-        return DboOperation.PAYMENT_DT_0401060;
+        return DboOperation.SBP_B2C;
     }
 }

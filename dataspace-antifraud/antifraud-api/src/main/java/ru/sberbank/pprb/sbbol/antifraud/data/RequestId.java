@@ -11,8 +11,6 @@ import java.util.UUID;
  */
 public class RequestId implements Serializable {
 
-    private static final long serialVersionUID = -4980229796687406386L;
-
     private final UUID id;
 
     @JsonCreator

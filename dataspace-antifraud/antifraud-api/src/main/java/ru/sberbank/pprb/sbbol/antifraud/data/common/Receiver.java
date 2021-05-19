@@ -1,5 +1,6 @@
-package ru.sberbank.pprb.sbbol.antifraud.data.payment;
+package ru.sberbank.pprb.sbbol.antifraud.data.common;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -7,42 +8,29 @@ import java.io.Serializable;
  */
 public class Receiver implements Serializable {
 
-    private static final long serialVersionUID = 4849728801881302169L;
-
     /**
      * Наименование получателя платежа
      */
+    @NotBlank(message = "The document.receiver.otherAccName attribute must be filled")
     private String otherAccName;
-
-    /**
-     * Номер балансового счета получателя платежа
-     */
-    private String balAccNumber;
 
     /**
      * БИК банка получателя
      */
+    @NotBlank(message = "The document.receiver.otherBicCode attribute must be filled")
     private String otherBicCode;
-
-    /**
-     * Тип счета получателя платежа
-     */
-    private String otherAccType;
 
     /**
      * ИНН получателя
      */
+    @NotBlank(message = "The document.receiver.inn attribute must be filled")
     private String inn;
 
     /**
      * Счет получателя
      */
+    @NotBlank(message = "The document.receiver.account attribute must be filled")
     private String account;
-
-    /**
-     * БИК и счет получателя
-     */
-    private String bicAccount;
 
     public String getOtherAccName() {
         return otherAccName;
@@ -52,28 +40,12 @@ public class Receiver implements Serializable {
         this.otherAccName = otherAccName;
     }
 
-    public String getBalAccNumber() {
-        return balAccNumber;
-    }
-
-    public void setBalAccNumber(String balAccNumber) {
-        this.balAccNumber = balAccNumber;
-    }
-
     public String getOtherBicCode() {
         return otherBicCode;
     }
 
     public void setOtherBicCode(String otherBicCode) {
         this.otherBicCode = otherBicCode;
-    }
-
-    public String getOtherAccType() {
-        return otherAccType;
-    }
-
-    public void setOtherAccType(String otherAccType) {
-        this.otherAccType = otherAccType;
     }
 
     public String getInn() {
@@ -90,13 +62,5 @@ public class Receiver implements Serializable {
 
     public void setAccount(String account) {
         this.account = account;
-    }
-
-    public String getBicAccount() {
-        return bicAccount;
-    }
-
-    public void setBicAccount(String bicAccount) {
-        this.bicAccount = bicAccount;
     }
 }

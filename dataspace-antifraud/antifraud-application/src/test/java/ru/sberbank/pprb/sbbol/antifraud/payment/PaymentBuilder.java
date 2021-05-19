@@ -2,10 +2,10 @@ package ru.sberbank.pprb.sbbol.antifraud.payment;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
-import ru.sberbank.pprb.sbbol.antifraud.data.payment.Document;
-import ru.sberbank.pprb.sbbol.antifraud.data.payment.Payer;
+import ru.sberbank.pprb.sbbol.antifraud.data.payment.PaymentDocument;
+import ru.sberbank.pprb.sbbol.antifraud.data.common.Payer;
 import ru.sberbank.pprb.sbbol.antifraud.data.payment.PaymentOperation;
-import ru.sberbank.pprb.sbbol.antifraud.data.payment.Receiver;
+import ru.sberbank.pprb.sbbol.antifraud.data.payment.PaymentReceiver;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -53,7 +53,7 @@ public class PaymentBuilder {
         payment.setOrgGuid(orgGuid != null ? orgGuid : UUID.randomUUID().toString());
         payment.setTimeOfOccurrence(timeOfOccurrence != null ? timeOfOccurrence : LocalDateTime.now());
 
-        payment.setDocument(new Document());
+        payment.setDocument(new PaymentDocument());
         payment.getDocument().setId(docId != null ? docId : UUID.randomUUID());
         payment.getDocument().setNumber(docNumber != null ? docNumber : Math.abs(RandomUtils.nextInt()));
         payment.getDocument().setDate(docDate != null ? docDate : LocalDate.now());
@@ -69,7 +69,7 @@ public class PaymentBuilder {
         payment.getDocument().getPayer().setAccountNumber(accountNumber != null ? accountNumber : RandomStringUtils.randomNumeric(20));
         payment.getDocument().getPayer().setInn(payerInn != null ? payerInn : RandomStringUtils.randomNumeric(12));
 
-        payment.getDocument().setReceiver(new Receiver());
+        payment.getDocument().setReceiver(new PaymentReceiver());
         payment.getDocument().getReceiver().setOtherAccName(otherAccName != null ? otherAccName : RandomStringUtils.randomAlphabetic(25));
         payment.getDocument().getReceiver().setBalAccNumber(balAccNumber != null ? balAccNumber : RandomStringUtils.randomNumeric(20));
         payment.getDocument().getReceiver().setOtherBicCode(otherBicCode != null ? otherBicCode : RandomStringUtils.randomNumeric(11));
@@ -97,9 +97,11 @@ public class PaymentBuilder {
                 "\"channelIndicator\": \"WEB\", " +
                 "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
                 "\"signTime\": \"2020-03-23T15:01:15\", " +
+                "\"signIp\": \"78.245.9.87\", " +
                 "\"signLogin\": \"novikova01\", " +
                 "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
                 "\"signCryptoprofileType\": \"OneTimePassword\", " +
+                "\"signChannel\": \"WEB\", " +
                 "\"signToken\": \"signToken\", " +
                 "\"signType\": \"Единственная подпись\", " +
                 "\"signImsi\": \"6176CB3B83F33108E0CBD9F411CAF608\", " +
@@ -109,22 +111,12 @@ public class PaymentBuilder {
                 "\"signSource\": \"SMS\"" +
                 "}";
         String sign2 = "{" +
-                "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
-                "\"httpReferer\": \"http://localhost:8000/reference_application/Login.do\", " +
-                "\"httpAcceptChars\": \"ISO-8859-1,utf-8;q=0.7,*;q=0.7\", " +
-                "\"httpAcceptEncoding\": \"gzip, deflate\", " +
-                "\"httpAcceptLanguage\": \"en,en-us;q=0.5\", " +
-                "\"ipAddress\": \"91.225.10.97\", " +
-                "\"privateIpAddress\": \"192.11.0.0\", " +
-                "\"tbCode\": \"546738\", " +
-                "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
-                "\"mobSdkData\": \"version%20nt%206%2E1%3B%20win64%3B%20x64%3B%20trident%2F4%2E0%3B%20%2Enet\", " +
-                "\"channelIndicator\": \"WEB\", " +
-                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
                 "\"signTime\": \"2020-03-23T15:28:25\", " +
+                "\"signIp\": \"78.245.9.80\", " +
                 "\"signLogin\": \"ivanov05\", " +
                 "\"signCryptoprofile\": \"Иванов Иван Иванович\", " +
                 "\"signCryptoprofileType\": \"OneTimePassword\", " +
+                "\"signChannel\": \"WEB\", " +
                 "\"signToken\": \"signToken\", " +
                 "\"signType\": \"Единственная подпись\", " +
                 "\"signImsi\": \"6176CB3B83F33108E0CBD9F411CAF608\", " +
@@ -134,22 +126,12 @@ public class PaymentBuilder {
                 "\"signSource\": \"SMS\"" +
                 "}";
         String sign3 = "{" +
-                "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
-                "\"httpReferrer\": \"http://localhost:8000/reference_application/Login.do\", " +
-                "\"httpAcceptChars\": \"ISO-8859-1,utf-8;q=0.7,*;q=0.7\", " +
-                "\"httpAcceptEncoding\": \"gzip, deflate\", " +
-                "\"httpAcceptLanguage\": \"en,en-us;q=0.5\", " +
-                "\"ipAddress\": \"75.241.3.77\", " +
-                "\"privateIpAddress\": \"168.12.0.0\", " +
-                "\"tbCode\": \"546738\", " +
-                "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
-                "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
-                "\"channelIndicator\": \"WEB\", " +
-                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
                 "\"signTime\": \"2020-03-23T16:00:05\", " +
+                "\"signIp\": \"78.245.9.71\", " +
                 "\"signLogin\": \"petrov11\", " +
                 "\"signCryptoprofile\": \"Петров Петр Петрович\", " +
                 "\"signCryptoprofileType\": \"OneTimePassword\", " +
+                "\"signChannel\": \"WEB\", " +
                 "\"signToken\": \"signToken\", " +
                 "\"signType\": \"Единственная подпись\", " +
                 "\"signImsi\": \"6176CB3B83F33108E0CBD9F411CAF608\", " +
