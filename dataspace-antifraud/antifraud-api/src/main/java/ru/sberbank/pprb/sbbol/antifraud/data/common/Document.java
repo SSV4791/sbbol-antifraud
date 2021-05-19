@@ -1,10 +1,11 @@
-package ru.sberbank.pprb.sbbol.antifraud.data.payment;
+package ru.sberbank.pprb.sbbol.antifraud.data.common;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -15,7 +16,7 @@ import java.util.UUID;
  */
 public class Document implements Serializable {
 
-    private static final long serialVersionUID = 660897013572742322L;
+    private static final long serialVersionUID = 8306467276941602834L;
 
     /**
      * ID документа
@@ -33,52 +34,26 @@ public class Document implements Serializable {
      */
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
+    @NotNull(message = "The document.date attribute must be filled")
     private LocalDate date;
 
     /**
      * Сумма перевода
      */
+    @NotNull(message = "The document.amount attribute must be filled")
     private Long amount;
 
     /**
      * Буквенный код валюты перевода в соответствии со стандартом ISO
      */
+    @NotBlank(message = "The document.currency attribute must be filled")
     private String currency;
-
-    /**
-     * Скорость обработки документа
-     */
-    private String executionSpeed;
-
-    /**
-     * Вид платежа в ЭД
-     */
-    private String otherAccBankType;
-
-    /**
-     * Направление передачи средств
-     */
-    private String otherAccOwnershipType;
-
-    /**
-     * Метод перевода средств между пользователем и получателем
-     */
-    private String transferMediumType;
 
     /**
      * Назначение платежа
      */
+    @NotBlank(message = "The document.destination attribute must be filled")
     private String destination;
-
-    /**
-     * Данные плательщика
-     */
-    private Payer payer;
-
-    /**
-     * Данные получателя
-     */
-    private Receiver receiver;
 
     public UUID getId() {
         return id;
@@ -120,59 +95,11 @@ public class Document implements Serializable {
         this.currency = currency;
     }
 
-    public String getExecutionSpeed() {
-        return executionSpeed;
-    }
-
-    public void setExecutionSpeed(String executionSpeed) {
-        this.executionSpeed = executionSpeed;
-    }
-
-    public String getOtherAccBankType() {
-        return otherAccBankType;
-    }
-
-    public void setOtherAccBankType(String otherAccBankType) {
-        this.otherAccBankType = otherAccBankType;
-    }
-
-    public String getOtherAccOwnershipType() {
-        return otherAccOwnershipType;
-    }
-
-    public void setOtherAccOwnershipType(String otherAccOwnershipType) {
-        this.otherAccOwnershipType = otherAccOwnershipType;
-    }
-
-    public String getTransferMediumType() {
-        return transferMediumType;
-    }
-
-    public void setTransferMediumType(String transferMediumType) {
-        this.transferMediumType = transferMediumType;
-    }
-
     public String getDestination() {
         return destination;
     }
 
     public void setDestination(String destination) {
         this.destination = destination;
-    }
-
-    public Payer getPayer() {
-        return payer;
-    }
-
-    public void setPayer(Payer payer) {
-        this.payer = payer;
-    }
-
-    public Receiver getReceiver() {
-        return receiver;
-    }
-
-    public void setReceiver(Receiver receiver) {
-        this.receiver = receiver;
     }
 }
