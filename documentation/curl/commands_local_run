@@ -1,2 +1,2 @@
 curl -d "@saveorupdate_payment.json" -H "Content-Type: application/json" -X POST http://127.0.0.1:8081/savedata
-curl -d "@send_payment.json" -H "Content-Type: application/json" -X POST http://127.0.0.1:8081/senddata
+curl -d "@send_payment.json" -H "Content-Type: application/json" -X POST http://127.0.0.1:8081/analyzeoperation

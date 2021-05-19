@@ -4,7 +4,7 @@
   "id": 1,
   "params": {
     "dataparams": {
-      "dboOperation": "PAYMENT_DT_0401060",
+      "dboOperation": "SBP_B2C",
       "timeStamp": "2020-03-23T12:34:33",
       "orgGuid": "5899acd3-dba7-41d4-83e4-ea17525d0d39",
       "timeOfOccurrence": "2020-03-23T15:10:05",
@@ -14,23 +14,33 @@
         "date": "2020-03-23",
         "amount": 332484,
         "currency": "RUB",
-        "executionSpeed": "FEW_HOURS",
-        "otherAccBankType": "OTHER_BANK",
-        "otherAccOwnershipType": "ME_TO_YOU",
-        "transferMediumType": "WIRE",
+        "idOperationOPKC": "idOperationOPKC",
         "destination": "Возврат денежных средств по заказу 123412-93",
         "payer": {
           "accountNumber": "40702810500112958634",
+          "financialName": "financialName",
+          "osbNum": "osbNum",
+          "vspNum": "vspNum",
+          "accBalance": "12400",
+          "accCreateDate": "2020-03-23",
+          "bic": "34567876",
+          "documentNumber": "2736",
+          "documentType": "documentType",
+          "segment": "segment",
           "inn": "7704681547"
         },
         "receiver": {
           "otherAccName": "ООО Рога и копыта",
-          "balAccNumber": "40817840238001017400",
           "otherBicCode": "040012002",
-          "otherAccType": "BILLER",
           "inn": "5038956712",
-          "account": "408178",
-          "bicAccount": "046015602 40817840238001017400"
+          "bankName": "ПАО СБЕРБАНК",
+          "bankCountryCode": "1000",
+          "bankCorrAcc": "689805038956712",
+          "bankId": "1347898",
+          "document": "document",
+          "documentType": "documentType",
+          "account": "40817",
+          "phoneNumber": "792345468775"
         }
       },
       "signs": [
