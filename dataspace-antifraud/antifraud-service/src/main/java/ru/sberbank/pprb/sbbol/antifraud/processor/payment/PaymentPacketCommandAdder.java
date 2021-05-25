@@ -74,11 +74,11 @@ public class PaymentPacketCommandAdder {
                 param.setTbCode(payment.getMappedSigns().get(0).getTbCode());
 
                 param.setFirstSignTime(payment.getMappedSigns().get(0).getSignTime());
-                param.setFirstSignIp(payment.getMappedSigns().get(0).getSignIp());
+                param.setFirstSignIp(payment.getMappedSigns().get(0).getIpAddress());
                 param.setFirstSignLogin(payment.getMappedSigns().get(0).getSignLogin());
                 param.setFirstSignCryptoprofile(payment.getMappedSigns().get(0).getSignCryptoprofile());
                 param.setFirstSignCryptoprofileType(payment.getMappedSigns().get(0).getSignCryptoprofileType());
-                param.setFirstSignChannel(payment.getMappedSigns().get(0).getSignChannel());
+                param.setFirstSignChannel(payment.getMappedSigns().get(0).getChannelIndicator());
                 param.setFirstSignToken(payment.getMappedSigns().get(0).getSignToken());
                 param.setFirstSignType(payment.getMappedSigns().get(0).getSignType());
                 param.setFirstSignImsi(payment.getMappedSigns().get(0).getSignImsi());
@@ -88,11 +88,11 @@ public class PaymentPacketCommandAdder {
                 param.setFirstSignSource(payment.getMappedSigns().get(0).getSignSource());
 
                 param.setSenderSignTime(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getSignTime());
-                param.setSenderIp(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getSignIp());
+                param.setSenderIp(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getIpAddress());
                 param.setSenderLogin(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getSignLogin());
                 param.setSenderCryptoprofile(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getSignCryptoprofile());
                 param.setSenderCryptoprofileType(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getSignCryptoprofileType());
-                param.setSenderSignChannel(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getSignChannel());
+                param.setSenderSignChannel(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getChannelIndicator());
                 param.setSenderToken(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getSignToken());
                 param.setSenderSignType(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getSignType());
                 param.setSenderSignImsi(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getSignImsi());
@@ -104,11 +104,11 @@ public class PaymentPacketCommandAdder {
 
             if (payment.getMappedSigns().size() > 1) {
                 param.setSecondSignTime(payment.getMappedSigns().get(1).getSignTime());
-                param.setSecondSignIp(payment.getMappedSigns().get(1).getSignIp());
+                param.setSecondSignIp(payment.getMappedSigns().get(1).getIpAddress());
                 param.setSecondSignLogin(payment.getMappedSigns().get(1).getSignLogin());
                 param.setSecondSignCryptoprofile(payment.getMappedSigns().get(1).getSignCryptoprofile());
                 param.setSecondSignCryptoprofileType(payment.getMappedSigns().get(1).getSignCryptoprofileType());
-                param.setSecondSignChannel(payment.getMappedSigns().get(1).getSignChannel());
+                param.setSecondSignChannel(payment.getMappedSigns().get(1).getChannelIndicator());
                 param.setSecondSignToken(payment.getMappedSigns().get(1).getSignToken());
                 param.setSecondSignType(payment.getMappedSigns().get(1).getSignType());
                 param.setSecondSignImsi(payment.getMappedSigns().get(1).getSignImsi());
@@ -120,11 +120,11 @@ public class PaymentPacketCommandAdder {
 
             if (payment.getMappedSigns().size() > 2) {
                 param.setThirdSignTime(payment.getMappedSigns().get(2).getSignTime());
-                param.setThirdSignIp(payment.getMappedSigns().get(2).getSignIp());
+                param.setThirdSignIp(payment.getMappedSigns().get(2).getIpAddress());
                 param.setThirdSignLogin(payment.getMappedSigns().get(2).getSignLogin());
                 param.setThirdSignCryptoprofile(payment.getMappedSigns().get(2).getSignCryptoprofile());
                 param.setThirdSignCryptoprofileType(payment.getMappedSigns().get(2).getSignCryptoprofileType());
-                param.setThirdSignChannel(payment.getMappedSigns().get(2).getSignChannel());
+                param.setThirdSignChannel(payment.getMappedSigns().get(2).getChannelIndicator());
                 param.setThirdSignToken(payment.getMappedSigns().get(2).getSignToken());
                 param.setThirdSignType(payment.getMappedSigns().get(2).getSignType());
                 param.setThirdSignImsi(payment.getMappedSigns().get(2).getSignImsi());
@@ -201,11 +201,11 @@ public class PaymentPacketCommandAdder {
                 param.setFirstSignImsi(payment.getMappedSigns().get(0).getSignImsi());
                 param.setFirstSignType(payment.getMappedSigns().get(0).getSignType());
                 param.setFirstSignToken(payment.getMappedSigns().get(0).getSignToken());
-                param.setFirstSignChannel(payment.getMappedSigns().get(0).getSignChannel());
+                param.setFirstSignChannel(payment.getMappedSigns().get(0).getChannelIndicator());
                 param.setFirstSignCryptoprofileType(payment.getMappedSigns().get(0).getSignCryptoprofileType());
                 param.setFirstSignCryptoprofile(payment.getMappedSigns().get(0).getSignCryptoprofile());
                 param.setFirstSignLogin(payment.getMappedSigns().get(0).getSignLogin());
-                param.setFirstSignIp(payment.getMappedSigns().get(0).getSignIp());
+                param.setFirstSignIp(payment.getMappedSigns().get(0).getIpAddress());
                 param.setFirstSignTime(payment.getMappedSigns().get(0).getSignTime());
 
                 param.setSenderSource(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getSignSource());
@@ -215,11 +215,11 @@ public class PaymentPacketCommandAdder {
                 param.setSenderSignImsi(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getSignImsi());
                 param.setSenderSignType(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getSignType());
                 param.setSenderToken(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getSignToken());
-                param.setSenderSignChannel(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getSignChannel());
+                param.setSenderSignChannel(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getChannelIndicator());
                 param.setSenderCryptoprofileType(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getSignCryptoprofileType());
                 param.setSenderCryptoprofile(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getSignCryptoprofile());
                 param.setSenderLogin(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getSignLogin());
-                param.setSenderIp(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getSignIp());
+                param.setSenderIp(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getIpAddress());
                 param.setSenderSignTime(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getSignTime());
             }
 
@@ -231,11 +231,11 @@ public class PaymentPacketCommandAdder {
                 param.setSecondSignImsi(payment.getMappedSigns().get(1).getSignImsi());
                 param.setSecondSignType(payment.getMappedSigns().get(1).getSignType());
                 param.setSecondSignToken(payment.getMappedSigns().get(1).getSignToken());
-                param.setSecondSignChannel(payment.getMappedSigns().get(1).getSignChannel());
+                param.setSecondSignChannel(payment.getMappedSigns().get(1).getChannelIndicator());
                 param.setSecondSignCryptoprofileType(payment.getMappedSigns().get(1).getSignCryptoprofileType());
                 param.setSecondSignCryptoprofile(payment.getMappedSigns().get(1).getSignCryptoprofile());
                 param.setSecondSignLogin(payment.getMappedSigns().get(1).getSignLogin());
-                param.setSecondSignIp(payment.getMappedSigns().get(1).getSignIp());
+                param.setSecondSignIp(payment.getMappedSigns().get(1).getIpAddress());
                 param.setSecondSignTime(payment.getMappedSigns().get(1).getSignTime());
             }
 
@@ -247,11 +247,11 @@ public class PaymentPacketCommandAdder {
                 param.setThirdSignImsi(payment.getMappedSigns().get(2).getSignImsi());
                 param.setThirdSignType(payment.getMappedSigns().get(2).getSignType());
                 param.setThirdSignToken(payment.getMappedSigns().get(2).getSignToken());
-                param.setThirdSignChannel(payment.getMappedSigns().get(2).getSignChannel());
+                param.setThirdSignChannel(payment.getMappedSigns().get(2).getChannelIndicator());
                 param.setThirdSignCryptoprofileType(payment.getMappedSigns().get(2).getSignCryptoprofileType());
                 param.setThirdSignCryptoprofile(payment.getMappedSigns().get(2).getSignCryptoprofile());
                 param.setThirdSignLogin(payment.getMappedSigns().get(2).getSignLogin());
-                param.setThirdSignIp(payment.getMappedSigns().get(2).getSignIp());
+                param.setThirdSignIp(payment.getMappedSigns().get(2).getIpAddress());
                 param.setThirdSignTime(payment.getMappedSigns().get(2).getSignTime());
             }
         });

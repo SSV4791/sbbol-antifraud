@@ -59,11 +59,9 @@ public abstract class ModelValidator {
 
     private static void validateSign(Sign sign, String signName) {
         validateRequiredParam(sign.getSignTime(), signName + "Time");
-        validateRequiredParam(sign.getSignIp(), signName + "Ip");
         validateRequiredParam(sign.getSignLogin(), signName + "Login");
         validateRequiredParam(sign.getSignCryptoprofile(), signName + "Cryptoprofile");
         logErrorSign(sign.getSignCryptoprofileType(), signName, "CryptoprofileType");
-        validateRequiredParam(sign.getSignChannel(), signName + "Channel");
         logErrorSign(sign.getSignToken(), signName, "Token");
         logErrorSign(sign.getSignType(), signName, "Type");
         validateRequiredParam(sign.getSignImsi(), signName + "Imsi");

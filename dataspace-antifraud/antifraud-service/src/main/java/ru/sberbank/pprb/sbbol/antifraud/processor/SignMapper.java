@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.sberbank.pprb.sbbol.antifraud.data.payment.Sign;
 import ru.sberbank.pprb.sbbol.antifraud.exception.ModelArgumentException;
-import ru.sberbank.pprb.sbbol.antifraud.processor.payment.PaymentModelValidator;
 
 import java.util.ArrayList;
 import java.util.Comparator;

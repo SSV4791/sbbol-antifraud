@@ -26,11 +26,11 @@ public class SbpPaymentPacketCommandAdder {
         RequestId requestId = new RequestId(UUID.randomUUID());
         packet.sbpPaymentOperation.create(param -> {
             if (!operation.getMappedSigns().isEmpty()) {
-                param.setSenderIp(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignIp());
+                param.setSenderIp(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getIpAddress());
                 param.setSenderSignTime(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignTime());
                 param.setSenderCryptoprofile(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignCryptoprofile());
                 param.setSenderLogin(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignLogin());
-                param.setSenderSignChannel(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignChannel());
+                param.setSenderSignChannel(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getChannelIndicator());
                 param.setSenderCryptoprofileType(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignCryptoprofileType());
                 param.setSenderSignType(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignType());
                 param.setSenderToken(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignToken());
@@ -40,11 +40,11 @@ public class SbpPaymentPacketCommandAdder {
                 param.setSenderPhone(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignPhone());
                 param.setSenderSource(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignSource());
 
-                param.setFirstSignIp(operation.getMappedSigns().get(0).getSignIp());
+                param.setFirstSignIp(operation.getMappedSigns().get(0).getIpAddress());
                 param.setFirstSignTime(operation.getMappedSigns().get(0).getSignTime());
                 param.setFirstSignCryptoprofile(operation.getMappedSigns().get(0).getSignCryptoprofile());
                 param.setFirstSignLogin(operation.getMappedSigns().get(0).getSignLogin());
-                param.setFirstSignChannel(operation.getMappedSigns().get(0).getSignChannel());
+                param.setFirstSignChannel(operation.getMappedSigns().get(0).getChannelIndicator());
                 param.setFirstSignCryptoprofileType(operation.getMappedSigns().get(0).getSignCryptoprofileType());
                 param.setFirstSignType(operation.getMappedSigns().get(0).getSignType());
                 param.setFirstSignToken(operation.getMappedSigns().get(0).getSignToken());
@@ -133,11 +133,11 @@ public class SbpPaymentPacketCommandAdder {
                 param.setSenderToken(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignToken());
                 param.setSenderSignType(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignType());
                 param.setSenderCryptoprofileType(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignCryptoprofileType());
-                param.setSenderSignChannel(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignChannel());
+                param.setSenderSignChannel(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getChannelIndicator());
                 param.setSenderLogin(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignLogin());
                 param.setSenderCryptoprofile(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignCryptoprofile());
                 param.setSenderSignTime(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignTime());
-                param.setSenderIp(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignIp());
+                param.setSenderIp(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getIpAddress());
 
                 param.setFirstSignSource(operation.getMappedSigns().get(0).getSignSource());
                 param.setFirstSignPhone(operation.getMappedSigns().get(0).getSignPhone());
@@ -147,11 +147,11 @@ public class SbpPaymentPacketCommandAdder {
                 param.setFirstSignToken(operation.getMappedSigns().get(0).getSignToken());
                 param.setFirstSignType(operation.getMappedSigns().get(0).getSignType());
                 param.setFirstSignCryptoprofileType(operation.getMappedSigns().get(0).getSignCryptoprofileType());
-                param.setFirstSignChannel(operation.getMappedSigns().get(0).getSignChannel());
+                param.setFirstSignChannel(operation.getMappedSigns().get(0).getChannelIndicator());
                 param.setFirstSignLogin(operation.getMappedSigns().get(0).getSignLogin());
                 param.setFirstSignCryptoprofile(operation.getMappedSigns().get(0).getSignCryptoprofile());
                 param.setFirstSignTime(operation.getMappedSigns().get(0).getSignTime());
-                param.setFirstSignIp(operation.getMappedSigns().get(0).getSignIp());
+                param.setFirstSignIp(operation.getMappedSigns().get(0).getIpAddress());
 
                 param.setUserGuid(operation.getMappedSigns().get(0).getUserGuid() != null ?
                         operation.getMappedSigns().get(0).getUserGuid().toString() : null);

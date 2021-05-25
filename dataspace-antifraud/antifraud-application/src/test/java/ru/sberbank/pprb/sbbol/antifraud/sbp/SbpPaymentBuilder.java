@@ -117,11 +117,9 @@ public class SbpPaymentBuilder {
                 "\"channelIndicator\": \"WEB\", " +
                 "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
                 "\"signTime\": \"2020-03-23T15:01:15\", " +
-                "\"signIp\": \"78.245.9.87\", " +
                 "\"signLogin\": \"novikova01\", " +
                 "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
                 "\"signCryptoprofileType\": \"OneTimePassword\", " +
-                "\"signChannel\": \"WEB\", " +
                 "\"signToken\": \"signToken\", " +
                 "\"signType\": \"Единственная подпись\", " +
                 "\"signImsi\": \"6176CB3B83F33108E0CBD9F411CAF608\", " +
@@ -131,12 +129,22 @@ public class SbpPaymentBuilder {
                 "\"signSource\": \"SMS\"" +
                 "}";
         String sign2 = "{" +
+                "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
+                "\"httpReferer\": \"http://localhost:8000/reference_application/Login.do\", " +
+                "\"httpAcceptChars\": \"ISO-8859-1,utf-8;q=0.7,*;q=0.7\", " +
+                "\"httpAcceptEncoding\": \"gzip, deflate\", " +
+                "\"httpAcceptLanguage\": \"en,en-us;q=0.5\", " +
+                "\"ipAddress\": \"78.245.9.88\", " +
+                "\"privateIpAddress\": \"172.16.0.0\", " +
+                "\"tbCode\": \"546738\", " +
+                "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
+                "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
+                "\"channelIndicator\": \"WEB\", " +
+                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
                 "\"signTime\": \"2020-03-23T15:28:25\", " +
-                "\"signIp\": \"78.245.9.80\", " +
                 "\"signLogin\": \"ivanov05\", " +
                 "\"signCryptoprofile\": \"Иванов Иван Иванович\", " +
                 "\"signCryptoprofileType\": \"OneTimePassword\", " +
-                "\"signChannel\": \"WEB\", " +
                 "\"signToken\": \"signToken\", " +
                 "\"signType\": \"Единственная подпись\", " +
                 "\"signImsi\": \"6176CB3B83F33108E0CBD9F411CAF608\", " +

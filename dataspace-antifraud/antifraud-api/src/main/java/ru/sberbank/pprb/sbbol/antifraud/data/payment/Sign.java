@@ -44,7 +44,7 @@ public class Sign implements Serializable {
     private String httpAcceptLanguage;
 
     /**
-     * IP адрес
+     * IP адрес подписавшего
      */
     @NotBlank(message = "The ipAddress attribute must be filled")
     private String ipAddress;
@@ -97,12 +97,6 @@ public class Sign implements Serializable {
     private LocalDateTime signTime;
 
     /**
-     * IP адресс подписавшего
-     */
-    @NotBlank(message = "The signIp attribute must be filled")
-    private String signIp;
-
-    /**
      * Логин
      */
     @NotBlank(message = "The signLogin attribute must be filled")
@@ -118,12 +112,6 @@ public class Sign implements Serializable {
      * Тип криптопрофиля
      */
     private String signCryptoprofileType;
-
-    /**
-     * Канал подписи
-     */
-    @NotBlank(message = "The signChannel attribute must be filled")
-    private String signChannel;
 
     /**
      * Данные токена
@@ -275,14 +263,6 @@ public class Sign implements Serializable {
         this.signTime = signTime;
     }
 
-    public String getSignIp() {
-        return signIp;
-    }
-
-    public void setSignIp(String signIp) {
-        this.signIp = signIp;
-    }
-
     public String getSignLogin() {
         return signLogin;
     }
@@ -305,14 +285,6 @@ public class Sign implements Serializable {
 
     public void setSignCryptoprofileType(String signCryptoprofileType) {
         this.signCryptoprofileType = signCryptoprofileType;
-    }
-
-    public String getSignChannel() {
-        return signChannel;
-    }
-
-    public void setSignChannel(String signChannel) {
-        this.signChannel = signChannel;
     }
 
     public String getSignToken() {
