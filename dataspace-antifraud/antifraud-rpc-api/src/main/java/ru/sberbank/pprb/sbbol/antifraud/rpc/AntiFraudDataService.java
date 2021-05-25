@@ -6,10 +6,10 @@ import com.googlecode.jsonrpc4j.JsonRpcError;
 import com.googlecode.jsonrpc4j.JsonRpcErrors;
 import com.googlecode.jsonrpc4j.JsonRpcParam;
 import com.googlecode.jsonrpc4j.JsonRpcService;
-import ru.sberbank.pprb.sbbol.antifraud.data.RequestId;
-import ru.sberbank.pprb.sbbol.antifraud.data.Operation;
-import ru.sberbank.pprb.sbbol.antifraud.exception.ApplicationException;
-import ru.sberbank.pprb.sbbol.antifraud.exception.ModelArgumentException;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.Operation;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
+import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
+import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 
 /**
  * Сервис сохранения или обновления данных

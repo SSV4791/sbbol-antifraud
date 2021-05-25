@@ -3,7 +3,8 @@
     <class name="PaymentOperation" label="Модель платежного поручения">
         <property name="requestId" type="String" length="36" label="Идентификатор запроса во ФродМониторинг"/>
         <property name="timeStamp" type="LocalDateTime" label="Дата и время формирования события"/>
-        <property name="orgGuid" type="String" length="36" label="Уникальный идентификатор клиента"/>
+        <property name="epkId" type="String" length="64" label="ЕПК.Id"/>
+        <property name="digitalId" type="String" length="64" label="Личный кабинет"/>
         <property name="userGuid" type="String" length="36" label="Уникальный идентификатор пользователя"/>
         <property name="tbCode" type="String" length="50" label="Код территориального банка, в котором обслуживается организация"/>
         <property name="httpAccept" type="String" length="3000" label="Значение заголовка Accept HTTP-запроса"/>
@@ -33,8 +34,6 @@
         <property name="transferMediumType" type="String" length="30" label="Метод перевода средств между пользователем и получателем"/>
         <property name="receiverInn" type="String" length="12" label="ИНН получателя"/>
         <property name="destination" type="String" length="255" label="Назначение платежа"/>
-        <property name="receiverAccount" type="String" length="5" label="Бал.счет получателя"/>
-        <property name="receiverBicAccount" type="String" length="32" label="БИК и Счет получателя"/>
         <property name="payerInn" type="String" length="12" label="ИНН отправителя"/>
         <property name="firstSignTime" type="LocalDateTime" label="1-я подпись Время подписи"/>
         <property name="firstSignIp" type="String" length="15" label="1-я подпись IP адрес"/>
@@ -45,7 +44,7 @@
         <property name="firstSignToken" type="String" label="1-я подпись Данные Токена"/>
         <property name="firstSignType" type="String" label="1-я подпись Тип подписи"/>
         <property name="firstSignImsi" type="String" length="128" label="1-я подпись IMSI"/>
-        <property name="firstSignCertId" type="String" label="1-я подпись Идентификатор личного сертификата"/>
+        <property name="firstSignCertId" type="String" label="1-я подпись Идентификатор сертификата"/>
         <property name="firstSignPhone" type="String" length="13" label="1-я подпись Номер телефона"/>
         <property name="firstSignEmail" type="String" length="320" label="1-я подпись Адрес электронной почты"/>
         <property name="firstSignSource" type="String" length="100" label="1-я подпись Канал"/>
@@ -89,6 +88,7 @@
         <property name="thirdSignPhone" type="String" length="13" label="3-я подпись Номер телефона"/>
         <property name="thirdSignEmail" type="String" length="320" label="3-я подпись Адрес электронной почты"/>
         <property name="thirdSignSource" type="String" length="100" label="3-я подпись Канал"/>
+        <property name="clientDefinedChannelIndicator" type="String" length="15" label="Дополнительная информация об используемом канале передачи данных"/>
 
         <index unique="true">
             <property name="docId"/>
@@ -98,7 +98,8 @@
     <class name="SbpPaymentOperation" label="Модель платежного поручения СБП">
         <property name="requestId" type="String" length="36" label="Идентификатор запроса во ФродМониторинг"/>
         <property name="timeStamp" type="LocalDateTime" label="Дата и время формирования события"/>
-        <property name="orgGuid" type="String" length="36" label="Уникальный идентификатор клиента"/>
+        <property name="epkId" type="String" length="64" label="ЕПК.Id"/>
+        <property name="digitalId" type="String" length="64" label="Личный кабинет"/>
         <property name="userGuid" type="String" length="36" label="Уникальный идентификатор пользователя"/>
         <property name="tbCode" type="String" length="50" label="Код территориального банка, в котором обслуживается организация"/>
         <property name="httpAccept" type="String" length="3000" label="Значение заголовка Accept HTTP-запроса"/>
@@ -130,7 +131,7 @@
         <property name="receiverDocument" type="String" label="Документ Получателя"/>
         <property name="receiverDocumentType" type="String" label="Тип документа получателя"/>
         <property name="destination" type="String" label="Сообщение получателю"/>
-        <property name="receiverAccount" type="String" length="5" label="Счет получателя"/>
+        <property name="receiverAccount" type="String" length="20" label="Бал.счет получателя"/>
         <property name="payerFinancialName" type="String" label="Полное наименование организации"/>
         <property name="payerOsbNum" type="String" label="Номер ОСБ"/>
         <property name="payerVspNum" type="String" label="Номер ВСП"/>
@@ -150,7 +151,7 @@
         <property name="firstSignToken" type="String" label="1-я подпись Данные Токена"/>
         <property name="firstSignType" type="String" label="1-я подпись Тип подписи"/>
         <property name="firstSignImsi" type="String" length="128" label="1-я подпись IMSI"/>
-        <property name="firstSignCertId" type="String" label="1-я подпись Идентификатор личного сертификата"/>
+        <property name="firstSignCertId" type="String" label="1-я подпись Идентификатор сертификата"/>
         <property name="firstSignPhone" type="String" length="13" label="1-я подпись Номер телефона"/>
         <property name="firstSignEmail" type="String" length="320" label="1-я подпись Адрес электронной почты"/>
         <property name="firstSignSource" type="String" length="100" label="1-я подпись Канал"/>
@@ -168,6 +169,7 @@
         <property name="senderPhone" type="String" length="13" label="Отправивший Номер телефона"/>
         <property name="senderEmail" type="String" length="320" label="Отправивший Адрес электронной почты"/>
         <property name="senderSource" type="String" length="100" label="Отправивший Канал"/>
+        <property name="clientDefinedChannelIndicator" type="String" length="15" label="Дополнительная информация об используемом канале передачи данных"/>
 
         <index unique="true">
             <property name="docId"/>

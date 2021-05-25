@@ -2,10 +2,10 @@ package ru.sberbank.pprb.sbbol.antifraud.sbp;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
-import ru.sberbank.pprb.sbbol.antifraud.data.sbp.SbpDocument;
-import ru.sberbank.pprb.sbbol.antifraud.data.sbp.SbpPayer;
-import ru.sberbank.pprb.sbbol.antifraud.data.sbp.SbpPaymentOperation;
-import ru.sberbank.pprb.sbbol.antifraud.data.sbp.SbpReceiver;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.sbp.SbpPayer;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.sbp.SbpReceiver;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.sbp.SbpDocument;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.sbp.SbpPaymentOperation;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,6 +17,7 @@ public class SbpPaymentBuilder {
 
     private LocalDateTime timeStamp;
     private String orgGuid;
+    private String digitalId;
     private LocalDateTime timeOfOccurrence;
 
     private UUID docId;
@@ -61,6 +62,7 @@ public class SbpPaymentBuilder {
         SbpPaymentOperation operation = new SbpPaymentOperation();
         operation.setTimeStamp(timeStamp != null ? timeStamp : LocalDateTime.now());
         operation.setOrgGuid(orgGuid != null ? orgGuid : UUID.randomUUID().toString());
+        operation.setDigitalId(digitalId != null ? digitalId : RandomStringUtils.randomNumeric(5));
         operation.setTimeOfOccurrence(timeOfOccurrence != null ? timeOfOccurrence : LocalDateTime.now());
 
         operation.setDocument(new SbpDocument());
@@ -96,7 +98,7 @@ public class SbpPaymentBuilder {
         operation.getDocument().getReceiver().setDocument(receiverDocument != null ? receiverDocument : RandomStringUtils.randomAlphabetic(10));
         operation.getDocument().getReceiver().setDocumentType(receiverDocumentType != null ? receiverDocumentType : RandomStringUtils.randomAlphabetic(10));
         operation.getDocument().getReceiver().setPhoneNumber(receiverPhoneNumber != null ? receiverPhoneNumber : RandomStringUtils.randomNumeric(13));
-        operation.getDocument().getReceiver().setAccount(receiverAccount != null ? receiverAccount : RandomStringUtils.randomNumeric(5));
+        operation.getDocument().getReceiver().setAccount(receiverAccount != null ? receiverAccount : RandomStringUtils.randomNumeric(20));
 
         operation.setSigns(signs != null ? signs : createSings());
         return operation;
@@ -114,6 +116,7 @@ public class SbpPaymentBuilder {
                 "\"tbCode\": \"546738\", " +
                 "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
                 "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
+                "\"mobSdkData\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3D\", " +
                 "\"channelIndicator\": \"WEB\", " +
                 "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
                 "\"signTime\": \"2020-03-23T15:01:15\", " +
@@ -126,7 +129,8 @@ public class SbpPaymentBuilder {
                 "\"signCertId\": \"signCertId\", " +
                 "\"signPhone\": \"915 168-67-32\", " +
                 "\"signEmail\": \"no@glavbaza36.ru\", " +
-                "\"signSource\": \"SMS\"" +
+                "\"signSource\": \"SMS\", " +
+                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
                 "}";
         String sign2 = "{" +
                 "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
@@ -139,6 +143,7 @@ public class SbpPaymentBuilder {
                 "\"tbCode\": \"546738\", " +
                 "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
                 "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
+                "\"mobSdkData\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3D\", " +
                 "\"channelIndicator\": \"WEB\", " +
                 "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
                 "\"signTime\": \"2020-03-23T15:28:25\", " +
@@ -151,7 +156,8 @@ public class SbpPaymentBuilder {
                 "\"signCertId\": \"signCertId\", " +
                 "\"signPhone\": \"903 158-55-12\", " +
                 "\"signEmail\": \"iv@glavbaza36.ru\", " +
-                "\"signSource\": \"SMS\"" +
+                "\"signSource\": \"SMS\", " +
+                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
                 "}";
         List<String> signs = new ArrayList<>(2);
         signs.add(sign2);
@@ -166,6 +172,11 @@ public class SbpPaymentBuilder {
 
     public SbpPaymentBuilder withOrgGuid(String orgGuid) {
         this.orgGuid = orgGuid;
+        return this;
+    }
+
+    public SbpPaymentBuilder withDigitalId(String digitalId) {
+        this.digitalId = digitalId;
         return this;
     }
 

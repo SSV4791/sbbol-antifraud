@@ -2,10 +2,10 @@ package ru.sberbank.pprb.sbbol.antifraud.payment;
 
 import com.sbt.pprb.ac.graph.collection.GraphCollection;
 import org.junit.jupiter.api.BeforeEach;
-import ru.sberbank.pprb.sbbol.antifraud.common.DataSpaceIntegrationTest;
-import ru.sberbank.pprb.sbbol.antifraud.data.RequestId;
-import ru.sberbank.pprb.sbbol.antifraud.data.payment.PaymentOperation;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
 import ru.sberbank.pprb.sbbol.antifraud.graph.get.PaymentOperationGet;
+import ru.sberbank.pprb.sbbol.antifraud.common.DataSpaceIntegrationTest;
 import sbp.sbt.sdk.exception.SdkJsonRpcClientException;
 
 import java.util.UUID;
@@ -40,7 +40,8 @@ public abstract class PaymentIntegrationTest extends DataSpaceIntegrationTest {
         GraphCollection<PaymentOperationGet> collection = searchClient.searchPaymentOperation(pWith -> pWith
                 .withRequestId()
                 .withTimeStamp()
-                .withOrgGuid()
+                .withEpkId()
+                .withDigitalId()
                 .withUserGuid()
                 .withTbCode()
                 .withHttpAccept()
@@ -70,8 +71,6 @@ public abstract class PaymentIntegrationTest extends DataSpaceIntegrationTest {
                 .withTransferMediumType()
                 .withReceiverInn()
                 .withDestination()
-                .withReceiverAccount()
-                .withReceiverBicAccount()
                 .withPayerInn()
                 .withFirstSignTime()
                 .withFirstSignIp()
@@ -126,6 +125,7 @@ public abstract class PaymentIntegrationTest extends DataSpaceIntegrationTest {
                 .withThirdSignPhone()
                 .withThirdSignEmail()
                 .withThirdSignSource()
+                .withClientDefinedChannelIndicator()
                 .setWhere(where -> where.docIdEq(docId.toString()))
                 .setLimit(1));
         return collection.isEmpty() ? null : collection.get(0);

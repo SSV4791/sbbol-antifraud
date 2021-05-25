@@ -2,10 +2,10 @@ package ru.sberbank.pprb.sbbol.antifraud.payment;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
-import ru.sberbank.pprb.sbbol.antifraud.data.payment.PaymentDocument;
-import ru.sberbank.pprb.sbbol.antifraud.data.common.Payer;
-import ru.sberbank.pprb.sbbol.antifraud.data.payment.PaymentOperation;
-import ru.sberbank.pprb.sbbol.antifraud.data.payment.PaymentReceiver;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.common.Payer;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentDocument;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentReceiver;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,6 +17,7 @@ public class PaymentBuilder {
 
     private LocalDateTime timeStamp;
     private String orgGuid;
+    private String digitalId;
     private LocalDateTime timeOfOccurrence;
 
     private UUID docId;
@@ -33,13 +34,11 @@ public class PaymentBuilder {
     private String accountNumber;
     private String payerInn;
 
-    private String otherAccName;
     private String balAccNumber;
+    private String otherAccName;
     private String otherBicCode;
     private String otherAccType;
     private String receiverInn;
-    private String receiverAccount;
-    private String receiverBicAccount;
 
     private List<String> signs;
 
@@ -51,6 +50,7 @@ public class PaymentBuilder {
         PaymentOperation payment = new PaymentOperation();
         payment.setTimeStamp(timeStamp != null ? timeStamp : LocalDateTime.now());
         payment.setOrgGuid(orgGuid != null ? orgGuid : UUID.randomUUID().toString());
+        payment.setDigitalId(digitalId != null ? digitalId : RandomStringUtils.randomNumeric(5));
         payment.setTimeOfOccurrence(timeOfOccurrence != null ? timeOfOccurrence : LocalDateTime.now());
 
         payment.setDocument(new PaymentDocument());
@@ -70,13 +70,11 @@ public class PaymentBuilder {
         payment.getDocument().getPayer().setInn(payerInn != null ? payerInn : RandomStringUtils.randomNumeric(12));
 
         payment.getDocument().setReceiver(new PaymentReceiver());
-        payment.getDocument().getReceiver().setOtherAccName(otherAccName != null ? otherAccName : RandomStringUtils.randomAlphabetic(25));
         payment.getDocument().getReceiver().setBalAccNumber(balAccNumber != null ? balAccNumber : RandomStringUtils.randomNumeric(20));
+        payment.getDocument().getReceiver().setOtherAccName(otherAccName != null ? otherAccName : RandomStringUtils.randomAlphabetic(25));
         payment.getDocument().getReceiver().setOtherBicCode(otherBicCode != null ? otherBicCode : RandomStringUtils.randomNumeric(11));
         payment.getDocument().getReceiver().setOtherAccType(otherAccType != null ? otherAccType : RandomStringUtils.randomAlphabetic(20));
         payment.getDocument().getReceiver().setInn(receiverInn != null ? receiverInn : RandomStringUtils.randomNumeric(12));
-        payment.getDocument().getReceiver().setAccount(receiverAccount != null ? receiverAccount : RandomStringUtils.randomNumeric(5));
-        payment.getDocument().getReceiver().setBicAccount(receiverBicAccount != null ? receiverBicAccount : RandomStringUtils.randomNumeric(32));
 
         payment.setSigns(signs != null ? signs : createSings());
         return payment;
@@ -94,6 +92,7 @@ public class PaymentBuilder {
                 "\"tbCode\": \"546738\", " +
                 "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
                 "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
+                "\"mobSdkData\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3D\", " +
                 "\"channelIndicator\": \"WEB\", " +
                 "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
                 "\"signTime\": \"2020-03-23T15:01:15\", " +
@@ -106,7 +105,8 @@ public class PaymentBuilder {
                 "\"signCertId\": \"signCertId\", " +
                 "\"signPhone\": \"915 168-67-32\", " +
                 "\"signEmail\": \"no@glavbaza36.ru\", " +
-                "\"signSource\": \"SMS\"" +
+                "\"signSource\": \"SMS\", " +
+                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
                 "}";
         String sign2 = "{" +
                 "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
@@ -119,6 +119,7 @@ public class PaymentBuilder {
                 "\"tbCode\": \"546738\", " +
                 "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
                 "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
+                "\"mobSdkData\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3D\", " +
                 "\"channelIndicator\": \"WEB\", " +
                 "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522015f\", " +
                 "\"signTime\": \"2020-03-23T15:28:25\", " +
@@ -131,7 +132,8 @@ public class PaymentBuilder {
                 "\"signCertId\": \"signCertId\", " +
                 "\"signPhone\": \"903 158-55-12\", " +
                 "\"signEmail\": \"iv@glavbaza36.ru\", " +
-                "\"signSource\": \"SMS\"" +
+                "\"signSource\": \"SMS\", " +
+                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
                 "}";
         String sign3 = "{" +
                 "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
@@ -144,6 +146,7 @@ public class PaymentBuilder {
                 "\"tbCode\": \"546738\", " +
                 "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
                 "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
+                "\"mobSdkData\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3D\", " +
                 "\"channelIndicator\": \"WEB\", " +
                 "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522016f\", " +
                 "\"signTime\": \"2020-03-23T16:00:05\", " +
@@ -156,7 +159,8 @@ public class PaymentBuilder {
                 "\"signCertId\": \"signCertId\", " +
                 "\"signPhone\": \"916 243-67-34\", " +
                 "\"signEmail\": \"pe@glavbaza36.ru\", " +
-                "\"signSource\": \"SMS\"" +
+                "\"signSource\": \"SMS\", " +
+                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
                 "}";
         List<String> signs = new ArrayList<>(3);
         signs.add(sign3);
@@ -174,6 +178,12 @@ public class PaymentBuilder {
         this.orgGuid = orgGuid;
         return this;
     }
+
+    public PaymentBuilder withDigitalId(String digitalId) {
+        this.digitalId = digitalId;
+        return this;
+    }
+
 
     public PaymentBuilder withTimeOfOccurrence(LocalDateTime timeOfOccurrence) {
         this.timeOfOccurrence = timeOfOccurrence;
@@ -220,13 +230,13 @@ public class PaymentBuilder {
         return this;
     }
 
-    public PaymentBuilder withOtherAccName(String otherAccName) {
-        this.otherAccName = otherAccName;
+    public PaymentBuilder withBalAccNumber(String balAccNumber) {
+        this.balAccNumber = balAccNumber;
         return this;
     }
 
-    public PaymentBuilder withBalAccNumber(String balAccNumber) {
-        this.balAccNumber = balAccNumber;
+    public PaymentBuilder withOtherAccName(String otherAccName) {
+        this.otherAccName = otherAccName;
         return this;
     }
 
@@ -257,16 +267,6 @@ public class PaymentBuilder {
 
     public PaymentBuilder withDestination(String destination) {
         this.destination = destination;
-        return this;
-    }
-
-    public PaymentBuilder withReceiverAccount(String receiverAccount) {
-        this.receiverAccount = receiverAccount;
-        return this;
-    }
-
-    public PaymentBuilder withReceiverBicAccount(String receiverBicAccount) {
-        this.receiverBicAccount = receiverBicAccount;
         return this;
     }
 
