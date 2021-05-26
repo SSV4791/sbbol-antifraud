@@ -5,7 +5,7 @@
     <parent>
         <groupId>sbp.com.sbt.dataspace</groupId>
         <artifactId>dataspace-bom</artifactId>
-        <version>4.2.76</version>
+        <version>4.2.104</version>
         <relativePath/>
     </parent>
 
@@ -65,11 +65,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <model>${project.parent.basedir}/model/src/main/resources/model</model>
         <modelPackage>${project.groupId}</modelPackage>
-        <sonar.coverage.jacoco.xmlReportPaths>
-            ${maven.multiModuleProjectDirectory}/dataspace-antifraud/antifraud-application/target/site/jacoco-aggregate/jacoco.xml
-        </sonar.coverage.jacoco.xmlReportPaths>
-
-        <support-bom.version>4.5.0-build.16</support-bom.version>
+        <support-bom.version>4.5.0-build.17</support-bom.version>
     </properties>
 
     <dependencyManagement>
@@ -107,6 +103,9 @@
                 <sonar.coverage.jacoco.xmlReportPaths>
                     ${maven.multiModuleProjectDirectory}/dataspace-antifraud/antifraud-application/target/site/jacoco-aggregate/jacoco.xml
                 </sonar.coverage.jacoco.xmlReportPaths>
+                <sonar.coverage.exclusions>
+                    **/ru/sberbank/pprb/sbbol/antifraud/api/**/*
+                </sonar.coverage.exclusions>
             </properties>
             <build>
                 <plugins>

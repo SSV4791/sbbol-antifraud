@@ -3,9 +3,9 @@ package ru.sberbank.pprb.sbbol.antifraud.sbp;
 import com.sbt.pprb.ac.graph.collection.GraphCollection;
 import org.junit.jupiter.api.BeforeEach;
 import ru.sberbank.pprb.sbbol.antifraud.common.DataSpaceIntegrationTest;
-import ru.sberbank.pprb.sbbol.antifraud.data.RequestId;
-import ru.sberbank.pprb.sbbol.antifraud.data.sbp.SbpPaymentOperation;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.graph.get.SbpPaymentOperationGet;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.sbp.SbpPaymentOperation;
 import sbp.sbt.sdk.exception.SdkJsonRpcClientException;
 
 import java.util.UUID;
@@ -41,7 +41,8 @@ public abstract class SbpPaymentIntegrationTest extends DataSpaceIntegrationTest
             sbpWith
                     .withRequestId()
                     .withTimeStamp()
-                    .withOrgGuid()
+                    .withEpkId()
+                    .withDigitalId()
                     .withUserGuid()
                     .withTbCode()
                     .withHttpAccept()
@@ -69,11 +70,11 @@ public abstract class SbpPaymentIntegrationTest extends DataSpaceIntegrationTest
                     .withReceiverBankCorrAcc()
                     .withReceiverBankId()
                     .withReceiverPhoneNumber()
+                    .withReceiverAccount()
                     .withIdOperationOPKC()
                     .withReceiverDocument()
                     .withReceiverDocumentType()
                     .withDestination()
-                    .withReceiverAccount()
                     .withPayerFinancialName()
                     .withPayerOsbNum()
                     .withPayerVspNum()
@@ -111,6 +112,7 @@ public abstract class SbpPaymentIntegrationTest extends DataSpaceIntegrationTest
                     .withSenderPhone()
                     .withSenderEmail()
                     .withSenderSource()
+                    .withClientDefinedChannelIndicator()
                     .setWhere(where -> where.docIdEq(docId.toString()))
                     .setLimit(1)
         );

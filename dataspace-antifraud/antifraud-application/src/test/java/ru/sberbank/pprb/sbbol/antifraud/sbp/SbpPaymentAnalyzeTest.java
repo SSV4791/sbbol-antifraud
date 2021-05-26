@@ -13,13 +13,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
-import ru.sberbank.pprb.sbbol.antifraud.analyze.common.response.FullAnalyzeResponse;
-import ru.sberbank.pprb.sbbol.antifraud.analyze.common.response.IdentificationData;
-import ru.sberbank.pprb.sbbol.antifraud.analyze.common.response.RiskResult;
-import ru.sberbank.pprb.sbbol.antifraud.analyze.common.response.TriggeredRule;
-import ru.sberbank.pprb.sbbol.antifraud.analyze.payment.PaymentAnalyzeResponse;
-import ru.sberbank.pprb.sbbol.antifraud.analyze.payment.sbp.SbpPaymentSendRequest;
-import ru.sberbank.pprb.sbbol.antifraud.exception.ModelArgumentException;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response.FullAnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response.IdentificationData;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response.RiskResult;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response.TriggeredRule;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.PaymentAnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.sbp.SbpPaymentSendRequest;
+import ru.sberbank.pprb.sbbol.antifraud.common.DataSpaceIntegrationTest;
+import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.rpc.AntiFraudAnalyzeService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -70,7 +71,7 @@ class SbpPaymentAnalyzeTest extends SbpPaymentIntegrationTest{
     @Test
     void validateModelRequiredParamDocId() {
         SbpPaymentSendRequest request = new SbpPaymentSendRequest(null);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> sendData(request));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> DataSpaceIntegrationTest.sendData(request));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("docId"), "Should contain docId in message. Message: " + exceptionMessage);
     }

@@ -2,10 +2,11 @@ package ru.sberbank.pprb.sbbol.antifraud.sbp;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ru.sberbank.pprb.sbbol.antifraud.data.RequestId;
-import ru.sberbank.pprb.sbbol.antifraud.data.sbp.SbpPaymentOperation;
-import ru.sberbank.pprb.sbbol.antifraud.exception.ModelArgumentException;
+import ru.sberbank.pprb.sbbol.antifraud.common.DataSpaceIntegrationTest;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
+import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.graph.get.SbpPaymentOperationGet;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.sbp.SbpPaymentOperation;
 
 import java.util.UUID;
 
@@ -26,7 +27,8 @@ class SbpPaymentDataTest extends SbpPaymentIntegrationTest {
         SbpPaymentOperationGet operationGet = searchSbpPayment(docId);
         assertEquals(operationGet.getRequestId(), actual.getId().toString());
         assertNotNull(operationGet.getTimeStamp());
-        assertNotNull(operationGet.getOrgGuid());
+        assertNotNull(operationGet.getEpkId());
+        assertNotNull(operationGet.getDigitalId());
         assertNotNull(operationGet.getUserGuid());
         assertNotNull(operationGet.getTbCode());
         assertNotNull(operationGet.getHttpAccept());
@@ -37,10 +39,11 @@ class SbpPaymentDataTest extends SbpPaymentIntegrationTest {
         assertNotNull(operationGet.getIpAddress());
         assertNotNull(operationGet.getUserAgent());
         assertNotNull(operationGet.getDevicePrint());
-        assertNull(operationGet.getMobSdkData());
+        assertNotNull(operationGet.getMobSdkData());
         assertNotNull(operationGet.getChannelIndicator());
         assertNotNull(operationGet.getTimeOfOccurrence());
         assertNotNull(operationGet.getPrivateIpAddress());
+        assertNotNull(operationGet.getClientDefinedChannelIndicator());
         assertDoc(operationGet, docId, docNumber);
         assertFirstSign(operationGet);
         assertSenderSign(operationGet);
@@ -82,8 +85,8 @@ class SbpPaymentDataTest extends SbpPaymentIntegrationTest {
         assertNotNull(operationGet.getReceiverBankId());
         assertNotNull(operationGet.getReceiverDocument());
         assertNotNull(operationGet.getReceiverDocumentType());
-        assertNotNull(operationGet.getReceiverAccount());
         assertNotNull(operationGet.getReceiverPhoneNumber());
+        assertNotNull(operationGet.getReceiverAccount());
     }
 
     private void assertFirstSign(SbpPaymentOperationGet operationGet) {
@@ -124,7 +127,6 @@ class SbpPaymentDataTest extends SbpPaymentIntegrationTest {
     void updateData() throws Throwable {
         RequestId actual = generateSbpPayment(DOC_ID, 1);
         assertEquals(requestId, actual.getId());
-
         SbpPaymentOperationGet operationGet = searchSbpPayment(DOC_ID);
         assertEquals(requestId.toString(), operationGet.getRequestId());
         assertEquals(1, operationGet.getDocNumber());
@@ -134,7 +136,7 @@ class SbpPaymentDataTest extends SbpPaymentIntegrationTest {
     void validateModelRequiredParamOrgGuid() {
         SbpPaymentOperation operation = createRandomSbpPayment();
         operation.setOrgGuid(null);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> DataSpaceIntegrationTest.saveOrUpdateData(operation));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("orgGuid"), "Should contain orgGuid in message. Message: " + exceptionMessage);
     }
@@ -143,13 +145,13 @@ class SbpPaymentDataTest extends SbpPaymentIntegrationTest {
     void validateModelRequiredParamEmptySigns() {
         SbpPaymentOperation operation = createRandomSbpPayment();
         operation.setSigns(null);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> DataSpaceIntegrationTest.saveOrUpdateData(operation));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("signs"), "Should contain signs in message. Message: " + exceptionMessage);
     }
 
     @Test
-    void validateModelRequiredParamUserGuid() {
+    void validateModelRequiredParamFirstSignUserGuid() {
         SbpPaymentOperation operation = createRandomSbpPayment();
         String sign1 = "{" +
                 "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
@@ -165,45 +167,55 @@ class SbpPaymentDataTest extends SbpPaymentIntegrationTest {
                 "\"channelIndicator\": \"WEB\", " +
                 "\"userGuid\": \"\", " +
                 "\"signTime\": \"2020-03-23T15:01:15\", " +
-                "\"signIp\": \"78.245.9.87\", " +
                 "\"signLogin\": \"novikova01\", " +
                 "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
                 "\"signCryptoprofileType\": \"OneTimePassword\", " +
-                "\"signChannel\": \"WEB\", " +
                 "\"signToken\": \"signToken\", " +
                 "\"signType\": \"Единственная подпись\", " +
                 "\"signImsi\": \"6176CB3B83F33108E0CBD9F411CAF608\", " +
                 "\"signCertId\": \"signCertId\", " +
                 "\"signPhone\": \"915 168-67-32\", " +
                 "\"signEmail\": \"no@glavbaza36.ru\", " +
-                "\"signSource\": \"SMS\"" +
+                "\"signSource\": \"SMS\", " +
+                "\"clientDefinedChannelIndicator\": \"WEB\"" +
                 "}";
         operation.getSigns().set(1, sign1);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> DataSpaceIntegrationTest.saveOrUpdateData(operation));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("userGuid"), "Should contain userGuid in message. Message: " + exceptionMessage);
     }
 
     @Test
-    void validateModelRequiredParamSignTime() {
+    void validateModelRequiredParamSenderSignLogin() {
         SbpPaymentOperation operation = createRandomSbpPayment();
         String sign = "{" +
-                "\"signIp\": \"78.245.9.80\", " +
-                "\"signLogin\": \"ivanov05\", " +
+                "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
+                "\"httpReferer\": \"http://localhost:8000/reference_application/Login.do\", " +
+                "\"httpAcceptChars\": \"ISO-8859-1,utf-8;q=0.7,*;q=0.7\", " +
+                "\"httpAcceptEncoding\": \"gzip, deflate\", " +
+                "\"httpAcceptLanguage\": \"en,en-us;q=0.5\", " +
+                "\"ipAddress\": \"78.245.9.87\", " +
+                "\"privateIpAddress\": \"172.16.0.0\", " +
+                "\"tbCode\": \"546738\", " +
+                "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
+                "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
+                "\"channelIndicator\": \"WEB\", " +
+                "\"userGuid\": \"\", " +
+                "\"signTime\": \"2020-03-23T15:28:25\", " +
                 "\"signCryptoprofile\": \"Иванов Иван Иванович\", " +
                 "\"signCryptoprofileType\": \"OneTimePassword\", " +
-                "\"signChannel\": \"WEB\", " +
                 "\"signToken\": \"signToken\", " +
                 "\"signType\": \"Единственная подпись\", " +
                 "\"signImsi\": \"6176CB3B83F33108E0CBD9F411CAF608\", " +
                 "\"signCertId\": \"signCertId\", " +
                 "\"signPhone\": \"903 158-55-12\", " +
                 "\"signEmail\": \"iv@glavbaza36.ru\", " +
-                "\"signSource\": \"SMS\"" +
+                "\"signSource\": \"SMS\", " +
+                "\"clientDefinedChannelIndicator\": \"WEB\"" +
                 "}";
         operation.getSigns().set(0, sign);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> DataSpaceIntegrationTest.saveOrUpdateData(operation));
         String exceptionMessage = ex.getMessage();
-        Assertions.assertTrue(exceptionMessage.contains("SignTime"), "Should contain SignTime in message. Message: " + exceptionMessage);
+        Assertions.assertTrue(exceptionMessage.contains("SignLogin"), "Should contain SignLogin in message. Message: " + exceptionMessage);
     }
 }
