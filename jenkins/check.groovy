@@ -25,7 +25,7 @@ pipeline {
         GIT_REPOSITORY = 'sbbol-antifraud'
         PR_CHECK_LABEL = 'pr_check'
         pullRequest = null
-        SONAR_PROJECT = 'ru.sberbank.pprb.sbbol.antifraud:sbbol-antifraud'
+        SONAR_PROJECT = 'ru.sberbank.pprb.sbbol.antifraud'
         SONAR_TOKEN = credentials('sonar-token')
     }
     stages {
