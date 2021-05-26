@@ -24,7 +24,7 @@ commons:
   sonar:
     url: https://sbt-sonarqube.sigma.sbrf.ru/
     token: 9ab9e897f44908e741e194b03e73d95b1370abc1
-    projectKey: ru.sberbank.pprb.sbbol.antifraud:sbbol-antifraud
+    projectKey: ru.sberbank.pprb.sbbol.antifraud
   maven:
     pathSettings: ./config/sigma/settings.xml
 
