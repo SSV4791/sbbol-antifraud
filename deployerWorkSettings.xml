@@ -6,56 +6,56 @@
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>dataspace-antifraud</artifactId>
             </artifact>
-            <version>0.1.0-build.12</version>
+            <version>0.1.0-build.13</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-api</artifactId>
             </artifact>
-            <version>0.1.0-build.12</version>
+            <version>0.1.0-build.13</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-application</artifactId>
             </artifact>
-            <version>0.1.0-build.12</version>
+            <version>0.1.0-build.13</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-rpc-api</artifactId>
             </artifact>
-            <version>0.1.0-build.12</version>
+            <version>0.1.0-build.13</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud</artifactId>
             </artifact>
-            <version>0.1.0-build.12</version>
+            <version>0.1.0-build.13</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-model-sdk</artifactId>
             </artifact>
-            <version>0.1.0-build.12</version>
+            <version>0.1.0-build.13</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-model-jpa</artifactId>
             </artifact>
-            <version>0.1.0-build.12</version>
+            <version>0.1.0-build.13</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-service</artifactId>
             </artifact>
-            <version>0.1.0-build.12</version>
+            <version>0.1.0-build.13</version>
         </artifactVersion>
     </artifactVersions>
     <lastProjectDependencyTree>
@@ -164,7 +164,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>dataspace-core-local-runner</artifactId>
-                    <version>4.6.0-build.4</version>
+                    <version>4.6.0-build.7</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>test</scope>
@@ -188,7 +188,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>liquibase-deployer</artifactId>
-                    <version>4.2.0-build.173</version>
+                    <version>4.2.0-build.183</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>test</scope>
@@ -252,7 +252,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>sdk-api</artifactId>
-                    <version>4.2.0-build.205</version>
+                    <version>4.2.0-build.217</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -284,7 +284,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>liquibase-deployer</artifactId>
-                    <version>4.2.0-build.173</version>
+                    <version>4.2.0-build.183</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>test</scope>
@@ -292,7 +292,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>idempotence-interfaces</artifactId>
-                    <version>4.2.0-build.127</version>
+                    <version>4.2.0-build.128</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -300,7 +300,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>status-interfaces</artifactId>
-                    <version>4.2.0-build.129</version>
+                    <version>4.2.0-build.130</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -316,7 +316,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>base-entity-interfaces</artifactId>
-                    <version>4.2.0-build.127</version>
+                    <version>4.2.0-build.128</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -356,7 +356,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>status-service</artifactId>
-                    <version>4.2.0-build.205</version>
+                    <version>4.2.0-build.217</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>test</scope>
@@ -388,7 +388,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>sdk-api</artifactId>
-                    <version>4.2.0-build.205</version>
+                    <version>4.2.0-build.217</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -420,7 +420,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>liquibase-deployer</artifactId>
-                    <version>4.2.0-build.173</version>
+                    <version>4.2.0-build.183</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>test</scope>
@@ -428,7 +428,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>idempotence-interfaces</artifactId>
-                    <version>4.2.0-build.127</version>
+                    <version>4.2.0-build.128</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -436,7 +436,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>status-interfaces</artifactId>
-                    <version>4.2.0-build.129</version>
+                    <version>4.2.0-build.130</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -444,7 +444,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>base-entity-interfaces</artifactId>
-                    <version>4.2.0-build.127</version>
+                    <version>4.2.0-build.128</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -532,7 +532,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>sdk-api</artifactId>
-                    <version>4.2.0-build.205</version>
+                    <version>4.2.0-build.217</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -580,5 +580,5 @@
             </dependencies>
         </artifactDependencyTree>
     </lastProjectDependencyTree>
-    <lastCommitRevisionNumber>c9b93ba2cc991f43baf36b6f89db877ff62691c6</lastCommitRevisionNumber>
+    <lastCommitRevisionNumber>7198d3bde3f126a7833bdd7157303d35c906a0be</lastCommitRevisionNumber>
 </workSettings>
