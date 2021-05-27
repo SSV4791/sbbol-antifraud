@@ -5,7 +5,7 @@ metadata:
 data:
   application.properties: |-
     server.port=8080
-    fpis.endpoint=http://${FRAUD_ADAPTER_HOST}
+    fpis.endpoint=http://${FRAUD_ADAPTER_HOST}${FRAUD_ADAPTER_CONTEXT}
 
     spring.main.banner-mode=off
     spring.application.name=antifraud
