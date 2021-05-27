@@ -3,11 +3,12 @@
     <parent>
         <artifactId>dataspace-antifraud</artifactId>
         <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
-        <version>DEV-SNAPSHOT</version>
+        <version>0.1.0-build.14</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>antifraud-service</artifactId>
+    <version>0.1.0-build.14</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -18,17 +19,17 @@
         <dependency>
             <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
             <artifactId>antifraud-rpc-api</artifactId>
-            <version>DEV-SNAPSHOT</version>
+            <version>0.1.0-build.14</version>
         </dependency>
         <dependency>
             <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
             <artifactId>antifraud-model-jpa</artifactId>
-            <version>DEV-SNAPSHOT</version>
+            <version>0.1.0-build.14</version>
         </dependency>
         <dependency>
             <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
             <artifactId>antifraud-model-sdk</artifactId>
-            <version>DEV-SNAPSHOT</version>
+            <version>0.1.0-build.14</version>
         </dependency>
         <dependency>
             <groupId>sbp.com.sbt.dataspace</groupId>
