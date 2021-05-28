@@ -3,7 +3,6 @@ package ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Данные события
@@ -21,9 +20,9 @@ public class EventData implements Serializable {
     private TransactionData transactionData;
 
     /**
-     * Список атрибутов, определяющих клиента
+     * Атрибуты, определяющие клиента
      */
-    private List<Attribute> clientDefinedAttributeList;
+    private ClientDefinedAttributeList clientDefinedAttributeList;
 
     @JsonProperty("eventData")
     public EventDataHeader getEventDataHeader() {
@@ -42,11 +41,11 @@ public class EventData implements Serializable {
         this.transactionData = transactionData;
     }
 
-    public List<Attribute> getClientDefinedAttributeList() {
+    public ClientDefinedAttributeList getClientDefinedAttributeList() {
         return clientDefinedAttributeList;
     }
 
-    public void setClientDefinedAttributeList(List<Attribute> clientDefinedAttributeList) {
+    public void setClientDefinedAttributeList(ClientDefinedAttributeList clientDefinedAttributeList) {
         this.clientDefinedAttributeList = clientDefinedAttributeList;
     }
 

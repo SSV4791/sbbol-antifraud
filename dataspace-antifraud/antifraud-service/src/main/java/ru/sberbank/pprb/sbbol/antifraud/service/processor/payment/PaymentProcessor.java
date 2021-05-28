@@ -16,6 +16,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.PaymentAnalyzeRespon
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.PaymentSendRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.Amount;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.Attribute;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.ClientDefinedAttributeList;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.DeviceRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.EventData;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.EventDataHeader;
@@ -188,8 +189,8 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
         Map<String, String> descriptionMap = new HashMap<>(CAPACITY);
         descriptionMap.put(EPK_ID, "ЕПК.id");
         descriptionMap.put(DIGITAL_ID, "Личный кабинет");
-        descriptionMap.put(DOC_NUMBER, DOC_NUMBER);
-        descriptionMap.put(DOC_DATE, DOC_DATE);
+        descriptionMap.put(DOC_NUMBER, "Номер документа");
+        descriptionMap.put(DOC_DATE, "Дата документа");
         descriptionMap.put(BAL_ACC_NUMBER, "Бал.счет получателя");
         descriptionMap.put(RECEIVER_INN, "ИНН получателя");
         descriptionMap.put(DESTINATION, "Назначение платежа");
@@ -439,11 +440,12 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
         request.getEventDataList().getTransactionData().setMyAccountData(new PayerAccount(paymentGet.getAccountNumber()));
         request.getEventDataList().getTransactionData().setOtherAccountData(new ReceiverAccount());
         request.getEventDataList().getTransactionData().getOtherAccountData().setAccountName(paymentGet.getOtherAccName());
+        request.getEventDataList().getTransactionData().getOtherAccountData().setAccountNumber(paymentGet.getBalAccNumber());
         request.getEventDataList().getTransactionData().getOtherAccountData().setRoutingCode(paymentGet.getOtherBicCode());
         request.getEventDataList().getTransactionData().getOtherAccountData().setOtherAccountOwnershipType(paymentGet.getOtherAccOwnershipType());
         request.getEventDataList().getTransactionData().getOtherAccountData().setOtherAccountType(paymentGet.getOtherAccType());
         request.getEventDataList().getTransactionData().getOtherAccountData().setTransferMediumType(paymentGet.getTransferMediumType());
-        request.getEventDataList().setClientDefinedAttributeList(createClientDefinedAttributeList(paymentGet));
+        request.getEventDataList().setClientDefinedAttributeList(new ClientDefinedAttributeList(createClientDefinedAttributeList(paymentGet)));
         request.setClientDefinedChannelIndicator(paymentGet.getClientDefinedChannelIndicator());
         return request;
     }
