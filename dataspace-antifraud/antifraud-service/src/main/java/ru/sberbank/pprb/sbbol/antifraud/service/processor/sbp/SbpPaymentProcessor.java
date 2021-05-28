@@ -16,6 +16,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response.FullAnalyzeR
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.PaymentAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.Amount;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.Attribute;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.ClientDefinedAttributeList;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.DeviceRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.EventData;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.EventDataHeader;
@@ -167,8 +168,8 @@ public class SbpPaymentProcessor implements Processor<SbpPaymentOperation, SbpPa
         Map<String, String> descriptionMap = new HashMap<>(CAPACITY);
         descriptionMap.put(EPK_ID, "ЕПК.id");
         descriptionMap.put(DIGITAL_ID, "Личный кабинет");
-        descriptionMap.put(DOC_NUMBER, DOC_NUMBER);
-        descriptionMap.put(DOC_DATE, DOC_DATE);
+        descriptionMap.put(DOC_NUMBER, "Номер документа");
+        descriptionMap.put(DOC_DATE, "Дата документа");
         descriptionMap.put(DESTINATION, "Назначение платежа");
         descriptionMap.put(PAYER_FINANCIAL_NAME, "Полное наименование организации");
         descriptionMap.put(PAYER_OSB_NUM, "Номер ОСБ");
@@ -369,7 +370,7 @@ public class SbpPaymentProcessor implements Processor<SbpPaymentOperation, SbpPa
         request.setClientDefinedChannelIndicator(paymentGet.getClientDefinedChannelIndicator());
         request.setEventDataList(new EventData());
         request.getEventDataList().setTransactionData(new TransactionData());
-        request.getEventDataList().setClientDefinedAttributeList(createClientDefinedAttributeList(paymentGet));
+        request.getEventDataList().setClientDefinedAttributeList(new ClientDefinedAttributeList(createClientDefinedAttributeList(paymentGet)));
         request.getEventDataList().getTransactionData().setOtherAccountData(new ReceiverAccount());
         request.getEventDataList().getTransactionData().getOtherAccountData().setRoutingCode(paymentGet.getOtherBicCode());
         request.getEventDataList().getTransactionData().getOtherAccountData().setAccountName(paymentGet.getOtherAccName());
