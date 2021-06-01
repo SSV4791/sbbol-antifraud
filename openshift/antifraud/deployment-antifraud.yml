@@ -6,7 +6,7 @@ metadata:
     app: antifraud
     app.kubernetes.io/part-of: istio
 spec:
-  replicas: ${{REPLICAS_COUNT_APP}}
+  replicas: ${REPLICAS_COUNT_APP}
   strategy:
     type: RollingUpdate
     rollingUpdate:
