@@ -425,7 +425,7 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
         request.getDeviceRequest().setHttpAcceptChars(paymentGet.getHttpAcceptChars());
         request.getDeviceRequest().setHttpAcceptEncoding(paymentGet.getHttpAcceptEncoding());
         request.getDeviceRequest().setHttpAcceptLanguage(paymentGet.getHttpAcceptLanguage());
-        request.getDeviceRequest().setHttpReferer(paymentGet.getHttpReferer());
+        request.getDeviceRequest().setHttpReferrer(paymentGet.getHttpReferer());
         request.getDeviceRequest().setIpAddress(paymentGet.getIpAddress());
         request.getDeviceRequest().setUserAgent(paymentGet.getUserAgent());
         request.setChannelIndicator(paymentGet.getChannelIndicator());

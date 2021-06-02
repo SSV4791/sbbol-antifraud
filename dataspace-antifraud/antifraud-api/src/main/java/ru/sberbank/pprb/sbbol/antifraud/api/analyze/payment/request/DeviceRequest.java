@@ -40,7 +40,7 @@ public class DeviceRequest implements Serializable {
     /**
      * Значение заголовка Referer HTTP-запроса
      */
-    private String httpReferer;
+    private String httpReferrer;
 
     /**
      * IP адрес
@@ -100,12 +100,12 @@ public class DeviceRequest implements Serializable {
         this.httpAcceptLanguage = httpAcceptLanguage;
     }
 
-    public String getHttpReferer() {
-        return httpReferer;
+    public String getHttpReferrer() {
+        return httpReferrer;
     }
 
-    public void setHttpReferer(String httpReferer) {
-        this.httpReferer = httpReferer;
+    public void setHttpReferrer(String httpReferrer) {
+        this.httpReferrer = httpReferrer;
     }
 
     public String getIpAddress() {
@@ -133,7 +133,7 @@ public class DeviceRequest implements Serializable {
                 ", httpAcceptChars='" + httpAcceptChars + '\'' +
                 ", httpAcceptEncoding='" + httpAcceptEncoding + '\'' +
                 ", httpAcceptLanguage='" + httpAcceptLanguage + '\'' +
-                ", httpReferer='" + httpReferer + '\'' +
+                ", httpReferrer='" + httpReferrer + '\'' +
                 ", ipAddress='" + ipAddress + '\'' +
                 ", userAgent='" + userAgent + '\'' +
                 '}';

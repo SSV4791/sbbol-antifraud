@@ -384,7 +384,7 @@ public class SbpPaymentProcessor implements Processor<SbpPaymentOperation, SbpPa
         request.setDeviceRequest(new DeviceRequest());
         request.getDeviceRequest().setUserAgent(paymentGet.getUserAgent());
         request.getDeviceRequest().setIpAddress(paymentGet.getIpAddress());
-        request.getDeviceRequest().setHttpReferer(paymentGet.getHttpReferer());
+        request.getDeviceRequest().setHttpReferrer(paymentGet.getHttpReferer());
         request.getDeviceRequest().setHttpAcceptLanguage(paymentGet.getHttpAcceptLanguage());
         request.getDeviceRequest().setHttpAcceptEncoding(paymentGet.getHttpAcceptEncoding());
         request.getDeviceRequest().setHttpAcceptChars(paymentGet.getHttpAcceptChars());
