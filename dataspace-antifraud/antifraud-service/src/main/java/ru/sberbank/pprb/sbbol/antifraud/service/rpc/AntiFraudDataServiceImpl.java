@@ -24,9 +24,9 @@ public class AntiFraudDataServiceImpl implements AntiFraudDataService {
     }
 
     @Override
-    public RequestId saveOrUpdateData(Operation record) {
+    public RequestId saveOrUpdateData(Operation request) {
         try {
-            return resolver.getProcessor(record).saveOrUpdate(record);
+            return resolver.getProcessor(request).saveOrUpdate(request);
         } catch (SdkJsonRpcClientException ex) {
             throw new ApplicationException("Error calling DataSpace api", ex);
         } catch (ConstraintViolationException ex) {
