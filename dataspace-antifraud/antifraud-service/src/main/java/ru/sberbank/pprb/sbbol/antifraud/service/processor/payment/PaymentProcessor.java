@@ -30,7 +30,9 @@ import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.graph.get.PaymentOperationGet;
+import ru.sberbank.pprb.sbbol.antifraud.graph.with.PaymentOperationCollectionWith;
 import ru.sberbank.pprb.sbbol.antifraud.grasp.DataspaceCoreSearchClient;
+import ru.sberbank.pprb.sbbol.antifraud.grasp.PaymentOperationGrasp;
 import ru.sberbank.pprb.sbbol.antifraud.packet.packet.Packet;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.Processor;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.SignMapper;
@@ -59,7 +61,6 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
     public static final String DIGITAL_ID = "digitalId";
     public static final String DOC_NUMBER = "docNumber";
     public static final String DOC_DATE = "docDate";
-    public static final String BAL_ACC_NUMBER = "balAccNumber";
     public static final String RECEIVER_INN = "receiverInn";
     public static final String DESTINATION = "destination";
     public static final String PAYER_INN = "payerInn";
@@ -119,7 +120,7 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
 
     private static final Map<String, Function<PaymentOperationGet, Object>> CRITERIA_MAP;
     private static final Map<String, String> DESCRIPTION_MAP;
-    private static final int CAPACITY = 61;
+    private static final int CAPACITY = 60;
 
     static {
         Map<String, Function<PaymentOperationGet, Object>> criteriaMap = new HashMap<>(CAPACITY);
@@ -127,7 +128,6 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
         criteriaMap.put(DIGITAL_ID, PaymentOperationGet::getDigitalId);
         criteriaMap.put(DOC_NUMBER, PaymentOperationGet::getDocNumber);
         criteriaMap.put(DOC_DATE, PaymentOperationGet::getDocDate);
-        criteriaMap.put(BAL_ACC_NUMBER, PaymentOperationGet::getBalAccNumber);
         criteriaMap.put(RECEIVER_INN, PaymentOperationGet::getReceiverInn);
         criteriaMap.put(DESTINATION, PaymentOperationGet::getDestination);
         criteriaMap.put(PAYER_INN, PaymentOperationGet::getPayerInn);
@@ -191,7 +191,6 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
         descriptionMap.put(DIGITAL_ID, "Личный кабинет");
         descriptionMap.put(DOC_NUMBER, "Номер документа");
         descriptionMap.put(DOC_DATE, "Дата документа");
-        descriptionMap.put(BAL_ACC_NUMBER, "Бал.счет получателя");
         descriptionMap.put(RECEIVER_INN, "ИНН получателя");
         descriptionMap.put(DESTINATION, "Назначение платежа");
         descriptionMap.put(PAYER_INN, "ИНН отправителя");
@@ -271,24 +270,24 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
     }
 
     @Override
-    public RequestId saveOrUpdate(@Valid PaymentOperation record) throws SdkJsonRpcClientException {
-        logger.info("Processing payment operation request. PaymentOperation docId: {}", record.getDocument().getId());
-        record.setMappedSigns(SignMapper.convertSigns(record.getSigns()));
-        PaymentModelValidator.validate(record);
+    public RequestId saveOrUpdate(@Valid PaymentOperation request) throws SdkJsonRpcClientException {
+        logger.info("Processing payment operation request. PaymentOperation docId: {}", request.getDocument().getId());
+        request.setMappedSigns(SignMapper.convertSigns(request.getSigns()));
+        PaymentModelValidator.validate(request);
 
         GraphCollection<PaymentOperationGet> collection = searchClient.searchPaymentOperation(payment ->
                 payment
                         .withRequestId()
-                        .setWhere(where -> where.docIdEq(record.getDocument().getId().toString()))
+                        .setWhere(where -> where.docIdEq(request.getDocument().getId().toString()))
                         .setLimit(1));
         Packet packet = Packet.createPacket();
 
         RequestId requestId;
         if (collection.isEmpty()) {
-            requestId = PaymentPacketCommandAdder.addCreateCommandToPaket(packet, record);
+            requestId = PaymentPacketCommandAdder.addCreateCommandToPaket(packet, request);
         } else {
             requestId = new RequestId(UUID.fromString(collection.get(0).getRequestId()));
-            PaymentPacketCommandAdder.addUpdateCommandToPacket(packet, record, collection.get(0).getObjectId());
+            PaymentPacketCommandAdder.addUpdateCommandToPacket(packet, request, collection.get(0).getObjectId());
         }
 
         packetClient.execute(packet);
@@ -312,102 +311,109 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
     }
 
     private PaymentAnalyzeRequest createPaymentAnalyzeRequest(UUID docId) throws SdkJsonRpcClientException {
-        GraphCollection<PaymentOperationGet> collection = searchClient.searchPaymentOperation(payment ->
-                payment
-                        .withRequestId()
-                        .withTimeStamp()
-                        .withEpkId()
-                        .withDigitalId()
-                        .withUserGuid()
-                        .withTbCode()
-                        .withHttpAccept()
-                        .withHttpReferer()
-                        .withHttpAcceptChars()
-                        .withHttpAcceptEncoding()
-                        .withHttpAcceptLanguage()
-                        .withIpAddress()
-                        .withUserAgent()
-                        .withDevicePrint()
-                        .withMobSdkData()
-                        .withChannelIndicator()
-                        .withTimeOfOccurrence()
-                        .withDocId()
-                        .withDocNumber()
-                        .withDocDate()
-                        .withAmount()
-                        .withCurrency()
-                        .withExecutionSpeed()
-                        .withOtherAccBankType()
-                        .withAccountNumber()
-                        .withOtherAccName()
-                        .withBalAccNumber()
-                        .withOtherBicCode()
-                        .withOtherAccOwnershipType()
-                        .withOtherAccType()
-                        .withTransferMediumType()
-                        .withReceiverInn()
-                        .withDestination()
-                        .withPayerInn()
-                        .withFirstSignTime()
-                        .withFirstSignIp()
-                        .withFirstSignLogin()
-                        .withFirstSignCryptoprofile()
-                        .withFirstSignCryptoprofileType()
-                        .withFirstSignChannel()
-                        .withFirstSignToken()
-                        .withFirstSignType()
-                        .withFirstSignImsi()
-                        .withFirstSignCertId()
-                        .withFirstSignPhone()
-                        .withFirstSignEmail()
-                        .withFirstSignSource()
-                        .withPrivateIpAddress()
-                        .withSenderSignTime()
-                        .withSenderIp()
-                        .withSenderLogin()
-                        .withSenderCryptoprofile()
-                        .withSenderCryptoprofileType()
-                        .withSenderSignChannel()
-                        .withSenderToken()
-                        .withSenderSignType()
-                        .withSenderSignImsi()
-                        .withSenderCertId()
-                        .withSenderPhone()
-                        .withSenderEmail()
-                        .withSenderSource()
-                        .withSecondSignTime()
-                        .withSecondSignIp()
-                        .withSecondSignLogin()
-                        .withSecondSignCryptoprofile()
-                        .withSecondSignCryptoprofileType()
-                        .withSecondSignChannel()
-                        .withSecondSignToken()
-                        .withSecondSignType()
-                        .withSecondSignImsi()
-                        .withSecondSignCertId()
-                        .withSecondSignPhone()
-                        .withSecondSignEmail()
-                        .withSecondSignSource()
-                        .withThirdSignTime()
-                        .withThirdSignIp()
-                        .withThirdSignLogin()
-                        .withThirdSignCryptoprofile()
-                        .withThirdSignCryptoprofileType()
-                        .withThirdSignChannel()
-                        .withThirdSignToken()
-                        .withThirdSignType()
-                        .withThirdSignImsi()
-                        .withThirdSignCertId()
-                        .withThirdSignPhone()
-                        .withThirdSignEmail()
-                        .withThirdSignSource()
-                        .withClientDefinedChannelIndicator()
-                        .setWhere(where -> where.docIdEq(docId.toString()))
-                        .setLimit(1));
+        GraphCollection<PaymentOperationGet> collection = searchClient.searchPaymentOperation(payment -> {
+            payment
+                    .withRequestId()
+                    .withTimeStamp()
+                    .withEpkId()
+                    .withDigitalId()
+                    .withUserGuid()
+                    .withTbCode()
+                    .withHttpAccept()
+                    .withHttpReferer()
+                    .withHttpAcceptChars()
+                    .withHttpAcceptEncoding()
+                    .withHttpAcceptLanguage()
+                    .withIpAddress()
+                    .withUserAgent()
+                    .withDevicePrint()
+                    .withMobSdkData()
+                    .withChannelIndicator()
+                    .withTimeOfOccurrence()
+                    .withDocId()
+                    .withDocNumber()
+                    .withDocDate()
+                    .withAmount()
+                    .withCurrency()
+                    .withExecutionSpeed()
+                    .withOtherAccBankType()
+                    .withAccountNumber()
+                    .withOtherAccName()
+                    .withBalAccNumber()
+                    .withOtherBicCode()
+                    .withOtherAccOwnershipType()
+                    .withOtherAccType()
+                    .withTransferMediumType()
+                    .withReceiverInn()
+                    .withDestination()
+                    .withPayerInn()
+                    .withClientDefinedChannelIndicator();
+            withSigns(payment)
+                    .setWhere(where -> where.docIdEq(docId.toString()))
+                    .setLimit(1);
+        });
         if (collection.isEmpty()) {
             throw new ApplicationException("PaymentOperation with docId=" + docId + " not found");
         }
         return convertToPaymentAnalyzeRequest(collection.get(0));
+    }
+
+    private PaymentOperationCollectionWith<PaymentOperationGrasp> withSigns(PaymentOperationCollectionWith<PaymentOperationGrasp> payment) {
+        payment
+                .withFirstSignTime()
+                .withFirstSignIp()
+                .withFirstSignLogin()
+                .withFirstSignCryptoprofile()
+                .withFirstSignCryptoprofileType()
+                .withFirstSignChannel()
+                .withFirstSignToken()
+                .withFirstSignType()
+                .withFirstSignImsi()
+                .withFirstSignCertId()
+                .withFirstSignPhone()
+                .withFirstSignEmail()
+                .withFirstSignSource()
+                .withPrivateIpAddress()
+                .withSenderSignTime()
+                .withSenderIp()
+                .withSenderLogin()
+                .withSenderCryptoprofile()
+                .withSenderCryptoprofileType()
+                .withSenderSignChannel()
+                .withSenderToken()
+                .withSenderSignType()
+                .withSenderSignImsi()
+                .withSenderCertId()
+                .withSenderPhone()
+                .withSenderEmail()
+                .withSenderSource()
+                .withSecondSignTime()
+                .withSecondSignIp()
+                .withSecondSignLogin()
+                .withSecondSignCryptoprofile()
+                .withSecondSignCryptoprofileType()
+                .withSecondSignChannel()
+                .withSecondSignToken()
+                .withSecondSignType()
+                .withSecondSignImsi()
+                .withSecondSignCertId()
+                .withSecondSignPhone()
+                .withSecondSignEmail()
+                .withSecondSignSource()
+                .withThirdSignTime()
+                .withThirdSignIp()
+                .withThirdSignLogin()
+                .withThirdSignCryptoprofile()
+                .withThirdSignCryptoprofileType()
+                .withThirdSignChannel()
+                .withThirdSignToken()
+                .withThirdSignType()
+                .withThirdSignImsi()
+                .withThirdSignCertId()
+                .withThirdSignPhone()
+                .withThirdSignEmail()
+                .withThirdSignSource();
+        return payment;
     }
 
     private PaymentAnalyzeRequest convertToPaymentAnalyzeRequest(PaymentOperationGet paymentGet) {
