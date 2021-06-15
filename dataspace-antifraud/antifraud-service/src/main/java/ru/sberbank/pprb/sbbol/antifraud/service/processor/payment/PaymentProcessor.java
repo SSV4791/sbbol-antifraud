@@ -422,6 +422,7 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
         request.setIdentificationData(new IdentificationData());
         request.getIdentificationData().setClientTransactionId(paymentGet.getDocId());
         request.getIdentificationData().setOrgName(paymentGet.getTbCode());
+        request.getIdentificationData().setUserName("");
         request.getIdentificationData().setDboOperation(supportedDboOperation());
         request.getIdentificationData().setRequestId(UUID.fromString(paymentGet.getRequestId()));
         request.setDeviceRequest(new DeviceRequest());
