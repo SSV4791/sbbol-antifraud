@@ -31,7 +31,9 @@ import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.sbp.SbpPaymentOperation;
 import ru.sberbank.pprb.sbbol.antifraud.graph.get.SbpPaymentOperationGet;
+import ru.sberbank.pprb.sbbol.antifraud.graph.with.SbpPaymentOperationCollectionWith;
 import ru.sberbank.pprb.sbbol.antifraud.grasp.DataspaceCoreSearchClient;
+import ru.sberbank.pprb.sbbol.antifraud.grasp.SbpPaymentOperationGrasp;
 import ru.sberbank.pprb.sbbol.antifraud.packet.packet.Packet;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.Processor;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.SignMapper;
@@ -280,89 +282,95 @@ public class SbpPaymentProcessor implements Processor<SbpPaymentOperation, SbpPa
     }
 
     private PaymentAnalyzeRequest createSbpPaymentAnalyzeRequest(UUID docId) throws SdkJsonRpcClientException {
-        GraphCollection<SbpPaymentOperationGet> collection = searchClient.searchSbpPaymentOperation(operation ->
-                operation
-                        .withRequestId()
-                        .withTimeStamp()
-                        .withEpkId()
-                        .withDigitalId()
-                        .withUserGuid()
-                        .withTbCode()
-                        .withHttpAccept()
-                        .withHttpReferer()
-                        .withHttpAcceptChars()
-                        .withHttpAcceptEncoding()
-                        .withHttpAcceptLanguage()
-                        .withIpAddress()
-                        .withUserAgent()
-                        .withDevicePrint()
-                        .withMobSdkData()
-                        .withChannelIndicator()
-                        .withTimeOfOccurrence()
-                        .withDocId()
-                        .withDocNumber()
-                        .withDocDate()
-                        .withAmount()
-                        .withCurrency()
-                        .withIdOperationOPKC()
-                        .withAccountNumber()
-                        .withOtherAccName()
-                        .withOtherBicCode()
-                        .withReceiverInn()
-                        .withReceiverBankName()
-                        .withReceiverBankCountryCode()
-                        .withReceiverBankCorrAcc()
-                        .withReceiverBankId()
-                        .withReceiverPhoneNumber()
-                        .withReceiverDocument()
-                        .withReceiverDocumentType()
-                        .withReceiverAccount()
-                        .withDestination()
-                        .withPayerFinancialName()
-                        .withPayerOsbNum()
-                        .withPayerVspNum()
-                        .withPayerAccBalance()
-                        .withPayerAccCreateDate()
-                        .withPayerBic()
-                        .withPayerDocumentNumber()
-                        .withPayerDocumentType()
-                        .withPayerSegment()
-                        .withPayerInn()
-                        .withFirstSignTime()
-                        .withFirstSignIp()
-                        .withFirstSignLogin()
-                        .withFirstSignCryptoprofile()
-                        .withFirstSignCryptoprofileType()
-                        .withFirstSignChannel()
-                        .withFirstSignToken()
-                        .withFirstSignType()
-                        .withFirstSignImsi()
-                        .withFirstSignCertId()
-                        .withFirstSignPhone()
-                        .withFirstSignEmail()
-                        .withFirstSignSource()
-                        .withPrivateIpAddress()
-                        .withSenderSignTime()
-                        .withSenderIp()
-                        .withSenderLogin()
-                        .withSenderCryptoprofile()
-                        .withSenderCryptoprofileType()
-                        .withSenderSignChannel()
-                        .withSenderToken()
-                        .withSenderSignType()
-                        .withSenderSignImsi()
-                        .withSenderCertId()
-                        .withSenderPhone()
-                        .withSenderEmail()
-                        .withSenderSource()
-                        .withClientDefinedChannelIndicator()
-                        .setWhere(where -> where.docIdEq(docId.toString()))
-                        .setLimit(1)
-        );
+        GraphCollection<SbpPaymentOperationGet> collection = searchClient.searchSbpPaymentOperation(operation -> {
+            operation
+                    .withRequestId()
+                    .withTimeStamp()
+                    .withEpkId()
+                    .withDigitalId()
+                    .withUserGuid()
+                    .withTbCode()
+                    .withHttpAccept()
+                    .withHttpReferer()
+                    .withHttpAcceptChars()
+                    .withHttpAcceptEncoding()
+                    .withHttpAcceptLanguage()
+                    .withIpAddress()
+                    .withUserAgent()
+                    .withDevicePrint()
+                    .withMobSdkData()
+                    .withChannelIndicator()
+                    .withTimeOfOccurrence()
+                    .withDocId()
+                    .withDocNumber()
+                    .withDocDate()
+                    .withAmount()
+                    .withCurrency()
+                    .withIdOperationOPKC()
+                    .withAccountNumber()
+                    .withOtherAccName()
+                    .withOtherBicCode()
+                    .withReceiverInn()
+                    .withReceiverBankName()
+                    .withReceiverBankCountryCode()
+                    .withReceiverBankCorrAcc()
+                    .withReceiverBankId()
+                    .withReceiverPhoneNumber()
+                    .withReceiverDocument()
+                    .withReceiverDocumentType()
+                    .withReceiverAccount()
+                    .withDestination()
+                    .withPayerFinancialName()
+                    .withPayerOsbNum()
+                    .withPayerVspNum()
+                    .withPayerAccBalance()
+                    .withPayerAccCreateDate()
+                    .withPayerBic()
+                    .withPayerDocumentNumber()
+                    .withPayerDocumentType()
+                    .withPayerSegment()
+                    .withPayerInn()
+                    .withClientDefinedChannelIndicator();
+            withSigns(operation)
+                    .setWhere(where -> where.docIdEq(docId.toString()))
+                    .setLimit(1);
+        });
         if (collection.isEmpty()) {
             throw new ApplicationException("SbpPaymentOperation with docId=" + docId + " not found");
         }
         return convertToSbpPaymentAnalyzeRequest(collection.get(0));
+    }
+
+    private SbpPaymentOperationCollectionWith<SbpPaymentOperationGrasp> withSigns(SbpPaymentOperationCollectionWith<SbpPaymentOperationGrasp> operation) {
+        operation
+                .withFirstSignTime()
+                .withFirstSignIp()
+                .withFirstSignLogin()
+                .withFirstSignCryptoprofile()
+                .withFirstSignCryptoprofileType()
+                .withFirstSignChannel()
+                .withFirstSignToken()
+                .withFirstSignType()
+                .withFirstSignImsi()
+                .withFirstSignCertId()
+                .withFirstSignPhone()
+                .withFirstSignEmail()
+                .withFirstSignSource()
+                .withPrivateIpAddress()
+                .withSenderSignTime()
+                .withSenderIp()
+                .withSenderLogin()
+                .withSenderCryptoprofile()
+                .withSenderCryptoprofileType()
+                .withSenderSignChannel()
+                .withSenderToken()
+                .withSenderSignType()
+                .withSenderSignImsi()
+                .withSenderCertId()
+                .withSenderPhone()
+                .withSenderEmail()
+                .withSenderSource();
+        return operation;
     }
 
     private PaymentAnalyzeRequest convertToSbpPaymentAnalyzeRequest(SbpPaymentOperationGet paymentGet) {
@@ -394,6 +402,7 @@ public class SbpPaymentProcessor implements Processor<SbpPaymentOperation, SbpPa
         request.setIdentificationData(new IdentificationData());
         request.getIdentificationData().setRequestId(UUID.fromString(paymentGet.getRequestId()));
         request.getIdentificationData().setDboOperation(supportedDboOperation());
+        request.getIdentificationData().setUserName("");
         request.getIdentificationData().setOrgName(paymentGet.getTbCode());
         request.getIdentificationData().setClientTransactionId(paymentGet.getDocId());
         request.setMessageHeader(new MessageHeader(paymentGet.getTimeStamp()));
