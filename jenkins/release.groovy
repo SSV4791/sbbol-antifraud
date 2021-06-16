@@ -113,7 +113,7 @@ pipeline {
                     }
                     def triggerBuildResponse = httpRequest(
                             httpMode: 'POST',
-                            authentication: "sbt-jenkins-sigma",
+                            authentication: "TUZ_DCBMSC5_SBT",
                             ignoreSslErrors: true,
                             quiet: true,
                             consoleLogResponseBody: false,
@@ -126,7 +126,7 @@ pipeline {
                     String buildLink = null
                     while (!buildLink) {
                         def queueResponse = httpRequest(
-                                authentication: "sbt-jenkins-sigma",
+                                authentication: "TUZ_DCBMSC5_SBT",
                                 ignoreSslErrors: true,
                                 quiet: true,
                                 consoleLogResponseBody: false,
@@ -145,7 +145,7 @@ pipeline {
                     def result = null
                     while (!finished) {
                         def buildResponse = httpRequest(
-                                authentication: "sbt-jenkins-sigma",
+                                authentication: "TUZ_DCBMSC5_SBT",
                                 ignoreSslErrors: true,
                                 quiet: true,
                                 consoleLogResponseBody: false,
@@ -207,12 +207,12 @@ pipeline {
             steps {
                 script {
                     log.info("Downloading customer distrib ${CUSTOMER_DISTRIB_URL}")
-                    httpRequest authentication: "sbbol-nexus",
+                    httpRequest authentication: "TUZ_DCBMSC5",
                             outputFile: CUSTOMER_ARCHIVE_NAME,
                             responseHandle: 'NONE',
                             url: "${CUSTOMER_DISTRIB_URL}"
                     log.info("Downloading dataspace distrib ${DATASPACE_DISTRIB_URL}")
-                    httpRequest authentication: "sbbol-nexus",
+                    httpRequest authentication: "TUZ_DCBMSC5",
                             outputFile: DATASPACE_ARCHIVE_NAME,
                             responseHandle: 'NONE',
                             url: "${DATASPACE_DISTRIB_URL}"
@@ -253,7 +253,7 @@ pipeline {
                     dir('distrib') {
                         log.info("Publishing artifact to ${DEV_REPOSITORY}")
                         publishDev(
-                                credentialId: "sbbol-nexus",
+                                credentialId: "TUZ_DCBMSC5",
                                 repository: "corp-releases",
                                 groupId: "ru.sberbank.pprb.sbbol.antifraud",
                                 artifactId: CUSTOMER_ARTIFACT_ID,
@@ -338,8 +338,14 @@ pipeline {
                     dir('distrib') {
                         def sbrfNexusCustomerLink = getSbrfNexusLink(CUSTOMER_ARTIFACT_ID, VERSION)
                         def sbrfNexusDataspaceLink = getSbrfNexusLink(DATASPACE_ARTIFACT_ID, VERSION)
-                        createReleaseNotesWithDescription(projectLog, latestCommitHash, PROJECT_URL, sbrfNexusCustomerLink, sbrfNexusDataspaceLink)
-                        nexus.publishReleaseNotes(GROUP_ID, CUSTOMER_ARTIFACT_ID, "${VERSION}-eip")
+                        releaseNotes = createReleaseNotesWithDescription(projectLog, latestCommitHash, PROJECT_URL, sbrfNexusCustomerLink, sbrfNexusDataspaceLink)
+                        try {
+                            nexus.publishReleaseNotes(GROUP_ID, CUSTOMER_ARTIFACT_ID, "${VERSION}-eip")
+                        } catch (e) {
+                            sendEmail('Smorzhok.D.Ale@sberbank.ru', 'Failed push ReleaseNotes to nexus', e)
+                            sendEmail('fmpisarev@sberbank.ru', 'Failed push ReleaseNotes to nexus', e)
+                        }
+                        qgm.publishReleaseNotes(GROUP_ID, CUSTOMER_ARTIFACT_ID, "${VERSION}-eip", releaseNotes)
                         archiveArtifacts artifacts: "release-notes"
                     }
                 }
@@ -431,10 +437,10 @@ def createReleaseNotesWithDescription(String releaseNotes, String latestCommit, 
             releaseNotes: [
 
             ],
-            codeNotes: [
+            codeNotes: [[
                     'commit': latestCommit,
                     'repository': projectUrl
-            ],
+            ]],
             desc: [
                     'customerDistribUrl': customerDistribUrl,
                     'dataspaceDistribUrl': dataspaceDistribUrl
@@ -456,4 +462,5 @@ def createReleaseNotesWithDescription(String releaseNotes, String latestCommit, 
     def json = JsonOutput.toJson(data)
     log.info("ReleaseNotes: ${json}")
     writeFile file: 'release-notes', text: json
+    return data
 }

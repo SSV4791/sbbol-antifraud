@@ -19,8 +19,7 @@ pipeline {
         string(name: 'pullRequestId', description: 'ID пулл-реквеста')
     }
     environment {
-        BITBUCKET_CREDENTIALS_ID = 'sbbol-bitbucket'
-        NEXUS_CREDENTIALS_ID = 'SBBOL-build'
+        CREDENTIALS_ID = 'TUZ_DCBMSC5'
         GIT_PROJECT = 'CIBPPRB'
         GIT_REPOSITORY = 'sbbol-antifraud'
         PR_CHECK_LABEL = 'pr_check'
@@ -32,10 +31,10 @@ pipeline {
         stage('Init') {
             steps {
                 script {
-                    pullRequest = bitbucket.getPullRequest(BITBUCKET_CREDENTIALS_ID, GIT_PROJECT, GIT_REPOSITORY, params.pullRequestId.toInteger())
+                    pullRequest = bitbucket.getPullRequest(CREDENTIALS_ID, GIT_PROJECT, GIT_REPOSITORY, params.pullRequestId.toInteger())
                     bitbucket.setJobPullRequestLink(pullRequest)
-                    bitbucket.setJenkinsLabelInfo(BITBUCKET_CREDENTIALS_ID, GIT_PROJECT, GIT_REPOSITORY, params.pullRequestId, PR_CHECK_LABEL)
-                    bitbucket.updateBitbucketHistoryBuild(BITBUCKET_CREDENTIALS_ID, GIT_PROJECT, GIT_REPOSITORY, params.pullRequestId, PR_CHECK_LABEL, stage_name, "running")
+                    bitbucket.setJenkinsLabelInfo(CREDENTIALS_ID, GIT_PROJECT, GIT_REPOSITORY, params.pullRequestId, PR_CHECK_LABEL)
+                    bitbucket.updateBitbucketHistoryBuild(CREDENTIALS_ID, GIT_PROJECT, GIT_REPOSITORY, params.pullRequestId, PR_CHECK_LABEL, stage_name, "running")
                 }
             }
         }
@@ -52,11 +51,11 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(
-                            credentialsId: NEXUS_CREDENTIALS_ID,
+                            credentialsId: CREDENTIALS_ID,
                             usernameVariable: 'USERNAME',
                             passwordVariable: 'PASSWORD'
                     )]) {
-                        docker.withRegistry(Const.OPENSHIFT_REGISTRY, NEXUS_CREDENTIALS_ID) {
+                        docker.withRegistry(Const.OPENSHIFT_REGISTRY, CREDENTIALS_ID) {
                             sh 'docker run --rm ' +
                                     '-v "$(pwd)":/build ' +
                                     '-v "$(pwd)"/../.m2:/root/.m2 ' +
@@ -77,13 +76,13 @@ pipeline {
     post {
         success {
             script {
-                bitbucket.setJenkinsLabelStatus(BITBUCKET_CREDENTIALS_ID, GIT_PROJECT, GIT_REPOSITORY, params.pullRequestId, PR_CHECK_LABEL, true)
-                bitbucket.updateBitbucketHistoryBuild(BITBUCKET_CREDENTIALS_ID, GIT_PROJECT, GIT_REPOSITORY, params.pullRequestId, PR_CHECK_LABEL, "success", "successful")
+                bitbucket.setJenkinsLabelStatus(CREDENTIALS_ID, GIT_PROJECT, GIT_REPOSITORY, params.pullRequestId, PR_CHECK_LABEL, true)
+                bitbucket.updateBitbucketHistoryBuild(CREDENTIALS_ID, GIT_PROJECT, GIT_REPOSITORY, params.pullRequestId, PR_CHECK_LABEL, "success", "successful")
             }
         }
         failure {
             script {
-                bitbucket.updateBitbucketHistoryBuild(BITBUCKET_CREDENTIALS_ID, GIT_PROJECT, GIT_REPOSITORY, params.pullRequestId, PR_CHECK_LABEL, "failure", "failed")
+                bitbucket.updateBitbucketHistoryBuild(CREDENTIALS_ID, GIT_PROJECT, GIT_REPOSITORY, params.pullRequestId, PR_CHECK_LABEL, "failure", "failed")
             }
         }
         cleanup {
