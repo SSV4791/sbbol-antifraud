@@ -1,21 +1,21 @@
 Deployer:
-  releasers: "16693193,18396199,sbt-sbbol"
+  releasers: "16693193,18396199,cab-sa-dcbmsc05"
   needBuildImage: "true"
   needChangeImageUrl: "true"
 
 commons:
   ci:
-    credentials: DS_sbbol-nexus
+    credentials: DS_MSC5
   openshift:
-    credentials: DS_sbbol-nexus
+    credentials: DS_MSC5
     url: api.dev-gen2.sigma.sbrf.ru:6443
   nexus:
-    credentials: DS_sbbol-nexus
+    credentials: DS_MSC5
     url: sbtatlas.sigma.sbrf.ru/nexus
     snapshotRepository: corp-snapshots
     releaseRepository: corp-releases
   registry:
-    credentials: DS_sbbol-nexus
+    credentials: DS_MSC5
     url: registry.sigma.sbrf.ru
     snapshotProject: pprb-dev/ci02473994/ci03045533_sbbol_antifraud_dev
     releaseProject: pprb/ci02473994/ci03045533_sbbol_antifraud
@@ -32,7 +32,7 @@ QualityGates:
   sbrf:
     url: https://sbrf-nexus.sigma.sbrf.ru/nexus
     groupId: Nexus_PROD.CI03045533_sbbol-antifraud
-    credentials: DS_sbbol-nexus
+    credentials: DS_MSC5
     repositoryId: release
   sast:
     credentials: DS_SAST_CRED
