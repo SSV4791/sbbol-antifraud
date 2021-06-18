@@ -1133,4 +1133,11 @@
     <changeSet author="antifraud" id="0.1.0-build.21-applied">
         <tagDatabase tag="antifraud-0.1.0-build.21-applied"/>
     </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.22-before">
+        <tagDatabase tag="antifraud-0.1.0-build.22-before"/>
+    </changeSet>
+
+    <changeSet author="antifraud" id="0.1.0-build.22-applied">
+        <tagDatabase tag="antifraud-0.1.0-build.22-applied"/>
+    </changeSet>
 </databaseChangeLog>
