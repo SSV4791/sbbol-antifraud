@@ -2,9 +2,12 @@ package ru.sberbank.pprb.sbbol.antifraud.sbp;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -13,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
+import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response.FullAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response.IdentificationData;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response.RiskResult;
@@ -28,7 +32,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
+import static ru.dcbqa.coverage.swagger.reporter.reporters.TestRestTemplateCoverageReporter.enrich;
 
+@ApiTestLayer
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SbpPaymentAnalyzeTest extends SbpPaymentIntegrationTest{
 
     @Autowired
@@ -51,6 +58,7 @@ class SbpPaymentAnalyzeTest extends SbpPaymentIntegrationTest{
     }
 
     @Test
+    @AllureId("19654")
     void sendRequest() throws JsonProcessingException {
         FullAnalyzeResponse expected = createAnalyzeResponse();
         mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
@@ -69,6 +77,7 @@ class SbpPaymentAnalyzeTest extends SbpPaymentIntegrationTest{
     }
 
     @Test
+    @AllureId("19648")
     void validateModelRequiredParamDocId() {
         SbpPaymentSendRequest request = new SbpPaymentSendRequest(null);
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> DataSpaceIntegrationTest.sendData(request));

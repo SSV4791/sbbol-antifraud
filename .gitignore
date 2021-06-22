@@ -35,3 +35,7 @@ test*.txt
 /model/src/main/resources/model/localmodel/
 /dataspace-antifraud/antifraud-application/src/test/resources/dataspace-core-local-runner.properties
 /dataspace-antifraud/antifraud-application/src/test/resources/application-test.properties
+
+# формируются после прохождения тестов.
+allure-results
+.qa

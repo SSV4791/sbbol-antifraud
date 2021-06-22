@@ -82,6 +82,42 @@
             <artifactId>hamcrest-library</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!--Swagger-->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.9.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Coverage -->
+        <dependency>
+            <groupId>ru.dcbqa.allureee.annotations</groupId>
+            <artifactId>dcb-allure-annotations</artifactId>
+            <version>1.1.6</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.dcbqa.swagger.coverage.reporter</groupId>
+            <artifactId>swagger-coverage-reporter</artifactId>
+            <version>2.2.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- PACT -->
+        <dependency>
+            <groupId>au.com.dius.pact.consumer</groupId>
+            <artifactId>junit5</artifactId>
+            <version>4.1.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>au.com.dius.pact.consumer</groupId>
+            <artifactId>java8</artifactId>
+            <version>4.1.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -191,6 +227,82 @@
                                 </artifactItem>
                             </artifactItems>
                             <outputDirectory>${project.build.directory}/local-core/resources</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report-aggregate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>ru.sbrf.build.gradle.qa.reporter</groupId>
+                <artifactId>qa-maven-plugin</artifactId>
+                <version>2.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <id>generate-swagger</id>
+                        <goals>
+                            <goal>generate-swagger</goal>
+                        </goals>
+                        <configuration>
+                            <locations>ru.sberbank.pprb.sbbol.antifraud</locations>
+                            <swaggerDirectory>../.qa/coverage/api/</swaggerDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>api-coverage</id>
+                        <goals>
+                            <goal>swagger-coverage</goal>
+                        </goals>
+                        <configuration>
+                            <name>api</name>
+                            <swaggerPath>../.qa/coverage/api/swagger.json</swaggerPath>
+                            <resultsPattern>../**/tests-coverage-result/*.json</resultsPattern>
+                            <resultsPattern>target/restassured-coverage-report/**/tests-coverage-result/*.json</resultsPattern>
+                            <workDir>../.qa/coverage</workDir>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>pact-coverage</id>
+                        <goals>
+                            <goal>swagger-coverage</goal>
+                        </goals>
+                        <configuration>
+                            <name>pact</name>
+                            <swaggerPath>../.qa/coverage/api/swagger.json</swaggerPath>
+                            <resultsPattern>target/pact-coverage-report/**/tests-coverage-result/*.json</resultsPattern>
+                            <workDir>../.qa/coverage</workDir>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>upload</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>qa-portal-upload</goal>
+                        </goals>
+                        <configuration>
+                            <projectKey>sbbol-antifraud</projectKey>
+                            <jacocoXml>target/site/jacoco-aggregate/jacoco.xml</jacocoXml>
+                            <jacocoHtml>target/site/jacoco-aggregate</jacocoHtml>
+                            <apiHtml>../.qa/coverage/api/result/html</apiHtml>
+                            <apiJson>../.qa/coverage/api/result/report.json</apiJson>
+                            <execInfo>../.qa/executedTests.log</execInfo>
                         </configuration>
                     </execution>
                 </executions>

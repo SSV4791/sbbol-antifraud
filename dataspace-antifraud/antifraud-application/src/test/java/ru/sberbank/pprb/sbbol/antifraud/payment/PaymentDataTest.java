@@ -1,7 +1,9 @@
 package ru.sberbank.pprb.sbbol.antifraud.payment;
 
+import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import ru.dcbqa.allureee.annotations.layers.UnitTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
@@ -14,9 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@UnitTestLayer
 class PaymentDataTest extends PaymentIntegrationTest {
 
     @Test
+    @AllureId("19651")
     void createData() throws Throwable {
         UUID docId = UUID.fromString("123e4567-e89b-12d3-a456-426614174001");
         Integer docNumber = 15;
@@ -121,6 +125,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("19646")
     void updateData() throws Throwable {
         RequestId actual = generatePayment(DOC_ID, 1);
         assertEquals(requestId, actual.getId());
@@ -130,6 +135,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("19656")
     void validateModelRequiredParamOrgGuid() {
         PaymentOperation operation = createRandomPayment();
         operation.setOrgGuid(null);
@@ -139,6 +145,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("19641")
     void validateModelRequiredParamEmptySigns() {
         PaymentOperation operation = createRandomPayment();
         operation.setSigns(null);
@@ -148,6 +155,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("19652")
     void validateModelRequiredParamFirstSignUserGuid() {
         PaymentOperation operation = createRandomPayment();
         String sign1 = "{" +
@@ -183,6 +191,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("19649")
     void validateModelRequiredParamSenderSignLogin() {
         PaymentOperation operation = createRandomPayment();
         String sign = "{" +
