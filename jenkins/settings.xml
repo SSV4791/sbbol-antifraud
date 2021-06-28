@@ -9,7 +9,52 @@
             <username>${env.REPO_USER}</username>
             <password>${env.REPO_PASSWORD}</password>
         </server>
+        <server>
+            <id>SBBOL_thirdparty</id>
+            <username>${env.REPO_USER}</username>
+            <password>${env.REPO_PASSWORD}</password>
+        </server>
+        <server>
+            <id>public</id>
+            <username>${env.REPO_USER}</username>
+            <password>${env.REPO_PASSWORD}</password>
+        </server>
+        <server>
+            <id>thirdparty</id>
+            <username>${env.REPO_USER}</username>
+            <password>${env.REPO_PASSWORD}</password>
+        </server>
     </servers>
+
+    <profiles>
+        <profile>
+
+            <repositories>
+                <repository>
+                    <id>SBBOL_thirdparty</id>
+                    <url>http://sbtatlas.sigma.sbrf.ru/nexus/content/repositories/SBBOL_thirdparty/</url>
+                </repository>
+            </repositories>
+
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>SBBOL_thirdparty</id>
+                    <url>http://sbtatlas.sigma.sbrf.ru/nexus/content/repositories/SBBOL_thirdparty/</url>
+                </pluginRepository>
+
+                <pluginRepository>
+                    <id>public</id>
+                    <url>http://sbtatlas.sigma.sbrf.ru/nexus/content/groups/public/</url>
+                </pluginRepository>
+
+                <pluginRepository>
+                    <id>thirdparty</id>
+                    <url>http://sbtatlas.sigma.sbrf.ru/nexus/content/repositories/thirdparty</url>
+                </pluginRepository>
+            </pluginRepositories>
+
+        </profile>
+    </profiles>
 
     <mirrors>
         <mirror>

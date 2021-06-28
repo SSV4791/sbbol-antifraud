@@ -1,7 +1,9 @@
 package ru.sberbank.pprb.sbbol.antifraud.sbp;
 
+import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import ru.dcbqa.allureee.annotations.layers.UnitTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.common.DataSpaceIntegrationTest;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
@@ -15,9 +17,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@UnitTestLayer
 class SbpPaymentDataTest extends SbpPaymentIntegrationTest {
 
     @Test
+    @AllureId("19644")
     void createData() throws Throwable {
         UUID docId = UUID.fromString("123e4567-e89b-12d3-a456-426614174001");
         Integer docNumber = 15;
@@ -124,6 +128,7 @@ class SbpPaymentDataTest extends SbpPaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("19643")
     void updateData() throws Throwable {
         RequestId actual = generateSbpPayment(DOC_ID, 1);
         assertEquals(requestId, actual.getId());
@@ -133,6 +138,7 @@ class SbpPaymentDataTest extends SbpPaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("19647")
     void validateModelRequiredParamOrgGuid() {
         SbpPaymentOperation operation = createRandomSbpPayment();
         operation.setOrgGuid(null);
@@ -142,6 +148,7 @@ class SbpPaymentDataTest extends SbpPaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("19645")
     void validateModelRequiredParamEmptySigns() {
         SbpPaymentOperation operation = createRandomSbpPayment();
         operation.setSigns(null);
@@ -151,6 +158,7 @@ class SbpPaymentDataTest extends SbpPaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("19650")
     void validateModelRequiredParamFirstSignUserGuid() {
         SbpPaymentOperation operation = createRandomSbpPayment();
         String sign1 = "{" +
@@ -186,6 +194,7 @@ class SbpPaymentDataTest extends SbpPaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("19642")
     void validateModelRequiredParamSenderSignLogin() {
         SbpPaymentOperation operation = createRandomSbpPayment();
         String sign = "{" +
