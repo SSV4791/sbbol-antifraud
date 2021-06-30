@@ -121,7 +121,7 @@
         <property name="accountNumber" type="String" length="20" label="Номер счета отправителя (плательщика)"/>
         <property name="otherAccName" type="String" length="200" label="Наименование получателя"/>
         <property name="otherBicCode" type="String" length="11" label="БИК SWIFT получателя"/>
-        <property name="receiverInn" type="String" length="12" label="ИНН получателя"/>
+        <property name="receiverInn" type="String" length="25" label="ИНН получателя"/>
         <property name="receiverBankName" type="String" label="Наименование Банка получателя"/>
         <property name="receiverBankCountryCode" type="String" length="4" label="Код страны банка получателя"/>
         <property name="receiverBankCorrAcc" type="String" label="Корсчет Банка получателя"/>
@@ -131,7 +131,7 @@
         <property name="receiverDocument" type="String" label="Документ Получателя"/>
         <property name="receiverDocumentType" type="String" label="Тип документа получателя"/>
         <property name="destination" type="String" label="Сообщение получателю"/>
-        <property name="receiverAccount" type="String" length="20" label="Бал.счет получателя"/>
+        <property name="receiverAccount" type="String" length="50" label="Бал.счет получателя"/>
         <property name="payerFinancialName" type="String" label="Полное наименование организации"/>
         <property name="payerOsbNum" type="String" label="Номер ОСБ"/>
         <property name="payerVspNum" type="String" label="Номер ВСП"/>
