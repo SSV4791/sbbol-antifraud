@@ -60,3 +60,15 @@ spec:
         mode: MUTUAL
         privateKey: /etc/istio/ingressgateway-certs/${CERT_KEY_GEO_OTT}
         serverCertificate: /etc/istio/ingressgateway-certs/${CERT_GEO_OTT}
+    #HEALTHCHECK
+    - hosts:
+        - ${INGRESS_HOST_HEALTHCHECK}
+      port:
+        name: https-${INGRESS_HOST_HEALTHCHECK_PORT}
+        number: ${INGRESS_HOST_HEALTHCHECK_PORT}
+        protocol: HTTPS
+      tls:
+        caCertificates: /etc/istio/ingressgateway-ca-certs/${CHAIN_PEM_GEO_TLS}
+        mode: MUTUAL
+        privateKey: /etc/istio/ingressgateway-certs/${CERT_KEY_GEO_TLS}
+        serverCertificate: /etc/istio/ingressgateway-certs/${CERT_GEO_TLS}
