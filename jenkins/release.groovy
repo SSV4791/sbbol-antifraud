@@ -40,6 +40,9 @@ pipeline {
 
         CUSTOMER_DISTRIB_URL = ''
         DATASPACE_DISTRIB_URL = ''
+
+        CREDENTIAL_ID = "TUZ_DCBMSC5"
+        CREDENTIAL_ID_SBT = "TUZ_DCBMSC5_SBT"
     }
 
     stages {
@@ -113,7 +116,7 @@ pipeline {
                     }
                     def triggerBuildResponse = httpRequest(
                             httpMode: 'POST',
-                            authentication: "TUZ_DCBMSC5_SBT",
+                            authentication: CREDENTIAL_ID_SBT,
                             ignoreSslErrors: true,
                             quiet: true,
                             consoleLogResponseBody: false,
@@ -126,7 +129,7 @@ pipeline {
                     String buildLink = null
                     while (!buildLink) {
                         def queueResponse = httpRequest(
-                                authentication: "TUZ_DCBMSC5_SBT",
+                                authentication: CREDENTIAL_ID_SBT,
                                 ignoreSslErrors: true,
                                 quiet: true,
                                 consoleLogResponseBody: false,
@@ -145,7 +148,7 @@ pipeline {
                     def result = null
                     while (!finished) {
                         def buildResponse = httpRequest(
-                                authentication: "TUZ_DCBMSC5_SBT",
+                                authentication: CREDENTIAL_ID_SBT,
                                 ignoreSslErrors: true,
                                 quiet: true,
                                 consoleLogResponseBody: false,
@@ -207,12 +210,12 @@ pipeline {
             steps {
                 script {
                     log.info("Downloading customer distrib ${CUSTOMER_DISTRIB_URL}")
-                    httpRequest authentication: "TUZ_DCBMSC5",
+                    httpRequest authentication: CREDENTIAL_ID,
                             outputFile: CUSTOMER_ARCHIVE_NAME,
                             responseHandle: 'NONE',
                             url: "${CUSTOMER_DISTRIB_URL}"
                     log.info("Downloading dataspace distrib ${DATASPACE_DISTRIB_URL}")
-                    httpRequest authentication: "TUZ_DCBMSC5",
+                    httpRequest authentication: CREDENTIAL_ID,
                             outputFile: DATASPACE_ARCHIVE_NAME,
                             responseHandle: 'NONE',
                             url: "${DATASPACE_DISTRIB_URL}"
@@ -253,7 +256,7 @@ pipeline {
                     dir('distrib') {
                         log.info("Publishing artifact to ${DEV_REPOSITORY}")
                         publishDev(
-                                credentialId: "TUZ_DCBMSC5",
+                                credentialId: CREDENTIAL_ID,
                                 repository: "corp-releases",
                                 groupId: "ru.sberbank.pprb.sbbol.antifraud",
                                 artifactId: CUSTOMER_ARTIFACT_ID,
@@ -268,13 +271,13 @@ pipeline {
                         if (params.release) {
                             log.info("Uploading CustomerBuilder distribs to sbrf-nexus")
 
-                            nexus.publishZip(GROUP_ID, DATASPACE_ARTIFACT_ID, "distrib", "../${DATASPACE_ARCHIVE_NAME}", VERSION)
+                            nexus.publishZip(GROUP_ID, DATASPACE_ARTIFACT_ID, "distrib", "../${DATASPACE_ARCHIVE_NAME}", VERSION, CREDENTIAL_ID)
                             log.info("Successfully published to ${getSbrfNexusLink(DATASPACE_ARTIFACT_ID, "D-${VERSION}")}")
-                            nexus.publishZip(GROUP_ID, CUSTOMER_ARTIFACT_ID, "distrib", "../${CUSTOMER_ARCHIVE_NAME}", VERSION)
+                            nexus.publishZip(GROUP_ID, CUSTOMER_ARTIFACT_ID, "distrib", "../${CUSTOMER_ARCHIVE_NAME}", VERSION, CREDENTIAL_ID)
                             log.info("Successfully published to ${getSbrfNexusLink(CUSTOMER_ARTIFACT_ID, "D-${VERSION}")}")
 
                             log.info("Publishing artifact to ${NEXUSSBRF_RELEASE_REPOSITORY}")
-                            nexus.publishZip(GROUP_ID, CUSTOMER_ARTIFACT_ID, "distrib", ARTIFACT_NAME_OS, "${VERSION}-eip")
+                            nexus.publishZip(GROUP_ID, CUSTOMER_ARTIFACT_ID, "distrib", ARTIFACT_NAME_OS, "${VERSION}-eip", CREDENTIAL_ID)
                             log.info("Successfully published to ${getSbrfNexusLink(CUSTOMER_ARTIFACT_ID, "D-${VERSION}-eip")}")
                         }
                         archiveArtifacts artifacts: "*.zip"
@@ -314,7 +317,7 @@ pipeline {
                     }
                     log.info("QG result: ${qgPassed}")
                     if (qgPassed) {
-                        dpm.publishFlags("${VERSION}-eip", CUSTOMER_ARTIFACT_ID, GROUP_ID, ["ci", "sast", "oss", "meta"])
+                        dpm.publishFlags("${VERSION}-eip", CUSTOMER_ARTIFACT_ID, GROUP_ID, ["ci", "sast", "oss", "meta"], CREDENTIAL_ID)
                     }
                 }
             }
@@ -339,13 +342,7 @@ pipeline {
                         def sbrfNexusCustomerLink = getSbrfNexusLink(CUSTOMER_ARTIFACT_ID, VERSION)
                         def sbrfNexusDataspaceLink = getSbrfNexusLink(DATASPACE_ARTIFACT_ID, VERSION)
                         releaseNotes = createReleaseNotesWithDescription(projectLog, latestCommitHash, PROJECT_URL, sbrfNexusCustomerLink, sbrfNexusDataspaceLink)
-                        try {
-                            nexus.publishReleaseNotes(GROUP_ID, CUSTOMER_ARTIFACT_ID, "${VERSION}-eip")
-                        } catch (e) {
-                            sendEmail('Smorzhok.D.Ale@sberbank.ru', 'Failed push ReleaseNotes to nexus', e)
-                            sendEmail('fmpisarev@sberbank.ru', 'Failed push ReleaseNotes to nexus', e)
-                        }
-                        qgm.publishReleaseNotes(GROUP_ID, CUSTOMER_ARTIFACT_ID, "${VERSION}-eip", releaseNotes)
+                        qgm.publishReleaseNotes(GROUP_ID, CUSTOMER_ARTIFACT_ID, "${VERSION}-eip", releaseNotes, CREDENTIAL_ID)
                         archiveArtifacts artifacts: "release-notes"
                     }
                 }
