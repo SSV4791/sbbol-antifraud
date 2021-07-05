@@ -6,56 +6,56 @@
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>dataspace-antifraud</artifactId>
             </artifact>
-            <version>0.1.0-build.22</version>
+            <version>0.1.0-build.23</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-api</artifactId>
             </artifact>
-            <version>0.1.0-build.22</version>
+            <version>0.1.0-build.23</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-application</artifactId>
             </artifact>
-            <version>0.1.0-build.22</version>
+            <version>0.1.0-build.23</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-rpc-api</artifactId>
             </artifact>
-            <version>0.1.0-build.22</version>
+            <version>0.1.0-build.23</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud</artifactId>
             </artifact>
-            <version>0.1.0-build.22</version>
+            <version>0.1.0-build.23</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-model-sdk</artifactId>
             </artifact>
-            <version>0.1.0-build.22</version>
+            <version>0.1.0-build.23</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-model-jpa</artifactId>
             </artifact>
-            <version>0.1.0-build.22</version>
+            <version>0.1.0-build.23</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-service</artifactId>
             </artifact>
-            <version>0.1.0-build.22</version>
+            <version>0.1.0-build.23</version>
         </artifactVersion>
     </artifactVersions>
     <lastProjectDependencyTree>
@@ -65,6 +65,46 @@
                 <artifactId>dataspace-antifraud</artifactId>
             </artifact>
             <dependencies>
+                <dependency>
+                    <groupId>au.com.dius.pact.consumer</groupId>
+                    <artifactId>junit5</artifactId>
+                    <version>4.1.0</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>au.com.dius.pact.consumer</groupId>
+                    <artifactId>java8</artifactId>
+                    <version>4.1.0</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>io.springfox</groupId>
+                    <artifactId>springfox-swagger2</artifactId>
+                    <version>2.9.2</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>ru.dcbqa.allureee.annotations</groupId>
+                    <artifactId>dcb-allure-annotations</artifactId>
+                    <version>1.1.6</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>ru.dcbqa.swagger.coverage.reporter</groupId>
+                    <artifactId>swagger-coverage-reporter</artifactId>
+                    <version>2.2.1</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
             </dependencies>
         </artifactDependencyTree>
         <artifactDependencyTree>
@@ -104,6 +144,46 @@
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>au.com.dius.pact.consumer</groupId>
+                    <artifactId>junit5</artifactId>
+                    <version>4.1.0</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>au.com.dius.pact.consumer</groupId>
+                    <artifactId>java8</artifactId>
+                    <version>4.1.0</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>io.springfox</groupId>
+                    <artifactId>springfox-swagger2</artifactId>
+                    <version>2.9.2</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>ru.dcbqa.allureee.annotations</groupId>
+                    <artifactId>dcb-allure-annotations</artifactId>
+                    <version>1.1.6</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>ru.dcbqa.swagger.coverage.reporter</groupId>
+                    <artifactId>swagger-coverage-reporter</artifactId>
+                    <version>2.2.1</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
                 </dependency>
             </dependencies>
         </artifactDependencyTree>
@@ -209,6 +289,46 @@
                     <packaging>jar</packaging>
                     <scope>test</scope>
                 </dependency>
+                <dependency>
+                    <groupId>io.springfox</groupId>
+                    <artifactId>springfox-swagger2</artifactId>
+                    <version>2.9.2</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>ru.dcbqa.allureee.annotations</groupId>
+                    <artifactId>dcb-allure-annotations</artifactId>
+                    <version>1.1.6</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>ru.dcbqa.swagger.coverage.reporter</groupId>
+                    <artifactId>swagger-coverage-reporter</artifactId>
+                    <version>2.2.1</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>au.com.dius.pact.consumer</groupId>
+                    <artifactId>junit5</artifactId>
+                    <version>4.1.0</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>au.com.dius.pact.consumer</groupId>
+                    <artifactId>java8</artifactId>
+                    <version>4.1.0</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
             </dependencies>
         </artifactDependencyTree>
         <artifactDependencyTree>
@@ -232,6 +352,46 @@
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>au.com.dius.pact.consumer</groupId>
+                    <artifactId>junit5</artifactId>
+                    <version>4.1.0</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>au.com.dius.pact.consumer</groupId>
+                    <artifactId>java8</artifactId>
+                    <version>4.1.0</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>io.springfox</groupId>
+                    <artifactId>springfox-swagger2</artifactId>
+                    <version>2.9.2</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>ru.dcbqa.allureee.annotations</groupId>
+                    <artifactId>dcb-allure-annotations</artifactId>
+                    <version>1.1.6</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>ru.dcbqa.swagger.coverage.reporter</groupId>
+                    <artifactId>swagger-coverage-reporter</artifactId>
+                    <version>2.2.1</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
                 </dependency>
             </dependencies>
         </artifactDependencyTree>
@@ -577,8 +737,48 @@
                     <packaging>jar</packaging>
                     <scope>compile</scope>
                 </dependency>
+                <dependency>
+                    <groupId>au.com.dius.pact.consumer</groupId>
+                    <artifactId>junit5</artifactId>
+                    <version>4.1.0</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>au.com.dius.pact.consumer</groupId>
+                    <artifactId>java8</artifactId>
+                    <version>4.1.0</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>io.springfox</groupId>
+                    <artifactId>springfox-swagger2</artifactId>
+                    <version>2.9.2</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>ru.dcbqa.allureee.annotations</groupId>
+                    <artifactId>dcb-allure-annotations</artifactId>
+                    <version>1.1.6</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>ru.dcbqa.swagger.coverage.reporter</groupId>
+                    <artifactId>swagger-coverage-reporter</artifactId>
+                    <version>2.2.1</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
+                </dependency>
             </dependencies>
         </artifactDependencyTree>
     </lastProjectDependencyTree>
-    <lastCommitRevisionNumber>3492a274552d1058e6f118389c513f9f1e30c09b</lastCommitRevisionNumber>
+    <lastCommitRevisionNumber>b61a14ec16e7bf60615eec4f0163e6c1dd557b16</lastCommitRevisionNumber>
 </workSettings>
