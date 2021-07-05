@@ -1,5 +1,5 @@
 <PdmModel>
-  <model model-name="antifraud" component-code="НЕ ЗАДАНО" version="0.1.0-build.22" versioned-entities="false">
+  <model model-name="antifraud" component-code="НЕ ЗАДАНО" version="0.1.0-build.23" versioned-entities="false">
     <class name="PaymentOperation" extends="BaseEntity" label="Модель платежного поручения" tableName="T_PAYMENTOPERATION" pk-index-name="PK_T_PAYMENTOPERATION" description="" affinity="objectId" class-access="UPDATE" strategy="JOINED" lockable="false">
       <id type="String" category="SNOWFLAKE"/>
       <property name="requestId" type="String" length="36" label="Идентификатор запроса во ФродМониторинг" column-name="REQUESTID" description="" column-type="VARCHAR(36)"/>
@@ -130,7 +130,7 @@
       <property name="accountNumber" type="String" length="20" label="Номер счета отправителя (плательщика)" column-name="ACCOUNTNUMBER" description="" column-type="VARCHAR(20)"/>
       <property name="otherAccName" type="String" length="200" label="Наименование получателя" column-name="OTHERACCNAME" description="" column-type="VARCHAR(200)"/>
       <property name="otherBicCode" type="String" length="11" label="БИК SWIFT получателя" column-name="OTHERBICCODE" description="" column-type="VARCHAR(11)"/>
-      <property name="receiverInn" type="String" length="12" label="ИНН получателя" column-name="RECEIVERINN" description="" column-type="VARCHAR(12)"/>
+      <property name="receiverInn" type="String" length="25" label="ИНН получателя" column-name="RECEIVERINN" description="" column-type="VARCHAR(25)"/>
       <property name="receiverBankName" type="String" length="254" label="Наименование Банка получателя" column-name="RECEIVERBANKNAME" description="" column-type="VARCHAR(254)"/>
       <property name="receiverBankCountryCode" type="String" length="4" label="Код страны банка получателя" column-name="RECEIVERBANKCOUNTRYCODE" description="" column-type="VARCHAR(4)"/>
       <property name="receiverBankCorrAcc" type="String" length="254" label="Корсчет Банка получателя" column-name="RECEIVERBANKCORRACC" description="" column-type="VARCHAR(254)"/>
@@ -140,7 +140,7 @@
       <property name="receiverDocument" type="String" length="254" label="Документ Получателя" column-name="RECEIVERDOCUMENT" description="" column-type="VARCHAR(254)"/>
       <property name="receiverDocumentType" type="String" length="254" label="Тип документа получателя" column-name="RECEIVERDOCUMENTTYPE" description="" column-type="VARCHAR(254)"/>
       <property name="destination" type="String" length="254" label="Сообщение получателю" column-name="DESTINATION" description="" column-type="VARCHAR(254)"/>
-      <property name="receiverAccount" type="String" length="20" label="Бал.счет получателя" column-name="RECEIVERACCOUNT" description="" column-type="VARCHAR(20)"/>
+      <property name="receiverAccount" type="String" length="50" label="Бал.счет получателя" column-name="RECEIVERACCOUNT" description="" column-type="VARCHAR(50)"/>
       <property name="payerFinancialName" type="String" length="254" label="Полное наименование организации" column-name="PAYERFINANCIALNAME" description="" column-type="VARCHAR(254)"/>
       <property name="payerOsbNum" type="String" length="254" label="Номер ОСБ" column-name="PAYEROSBNUM" description="" column-type="VARCHAR(254)"/>
       <property name="payerVspNum" type="String" length="254" label="Номер ВСП" column-name="PAYERVSPNUM" description="" column-type="VARCHAR(254)"/>

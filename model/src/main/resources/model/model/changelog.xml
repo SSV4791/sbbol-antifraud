@@ -1140,4 +1140,23 @@
     <changeSet author="antifraud" id="0.1.0-build.22-applied">
         <tagDatabase tag="antifraud-0.1.0-build.22-applied"/>
     </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.23-before">
+        <tagDatabase tag="antifraud-0.1.0-build.23-before"/>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.23-6981393595534213124">
+        <modifyDataType columnName="RECEIVERINN" newDataType="VARCHAR(25)" tableName="T_SBPPAYMENTOPERATION"/>
+        <rollback>
+            <modifyDataType columnName="RECEIVERINN" newDataType="VARCHAR(12)" tableName="T_SBPPAYMENTOPERATION"/>
+        </rollback>
+    </changeSet>
+    <changeSet author="antifraud" id="0.1.0-build.23-6981393595534213125">
+        <modifyDataType columnName="RECEIVERACCOUNT" newDataType="VARCHAR(50)" tableName="T_SBPPAYMENTOPERATION"/>
+        <rollback>
+            <modifyDataType columnName="RECEIVERACCOUNT" newDataType="VARCHAR(20)" tableName="T_SBPPAYMENTOPERATION"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="antifraud" id="0.1.0-build.23-applied">
+        <tagDatabase tag="antifraud-0.1.0-build.23-applied"/>
+    </changeSet>
 </databaseChangeLog>
