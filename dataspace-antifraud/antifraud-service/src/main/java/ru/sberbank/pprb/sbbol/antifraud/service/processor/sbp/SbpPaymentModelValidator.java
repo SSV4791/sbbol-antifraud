@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Сервис валидации наличия полей в запросе на сохранение или обновление данных
  */
-public class SbpPaymentModelValidator extends ModelValidator {
+public final class SbpPaymentModelValidator extends ModelValidator {
 
     private SbpPaymentModelValidator() {
     }
@@ -54,15 +54,11 @@ public class SbpPaymentModelValidator extends ModelValidator {
     }
 
     private static void validateSigns(List<Sign> signs) {
-        validateSbpFirstSignUserData(signs.get(0));
-        validateFirstOrSenderSign(signs.get(0), "firstSign");
+        validateFirstSignUserData(signs.get(0));
+        validateFirstSign(signs.get(0));
         if (signs.size() > 1) {
-            validateFirstOrSenderSign(signs.get(signs.size() - 1), "senderSign");
+            validateSenderSign(signs.get(signs.size() - 1));
         }
     }
 
-    private static void validateSbpFirstSignUserData(Sign sign) {
-        logError(sign.getPrivateIpAddress(), "privateIpAddress");
-        validateFirstSignUserData(sign);
-    }
 }
