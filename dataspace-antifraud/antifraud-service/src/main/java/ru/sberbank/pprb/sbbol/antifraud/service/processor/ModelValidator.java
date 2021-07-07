@@ -40,6 +40,7 @@ public abstract class ModelValidator {
         logError(sign.getHttpAcceptEncoding(), "httpAcceptEncoding");
         logError(sign.getHttpAcceptLanguage(), "httpAcceptLanguage");
         logError(sign.getIpAddress(), "ipAddress");
+        logError(sign.getPrivateIpAddress(), "privateIpAddress");
         validateRequiredParam(sign.getTbCode(), "tbCode");
         logError(sign.getUserAgent(), "userAgent");
         logError(sign.getDevicePrint(), "devicePrint");
@@ -49,10 +50,18 @@ public abstract class ModelValidator {
         validateRequiredParam(sign.getClientDefinedChannelIndicator(), "clientDefinedChannelIndicator");
     }
 
-    protected static void validateFirstOrSenderSign(Sign sign, String signName) {
+    protected static void validateFirstSign(Sign sign) {
+        validateRequiredParam(sign.getSignCryptoprofile(), "firstSignCryptoprofile");
+        validateSignWithRequiredParams(sign, "firstSign");
+    }
+
+    protected static void validateSenderSign(Sign sign) {
+        validateSignWithRequiredParams(sign, "senderSign");
+    }
+
+    protected static void validateSignWithRequiredParams(Sign sign, String signName) {
         validateRequiredParam(sign.getSignTime(), signName + "Time");
         validateRequiredParam(sign.getSignLogin(), signName + "Login");
-        validateRequiredParam(sign.getSignCryptoprofile(), signName + "Cryptoprofile");
         validateRequiredParam(sign.getChannelIndicator(), signName + "Channel");
         validateRequiredParam(sign.getSignPhone(), signName + "Phone");
         validateSign(sign, signName);

@@ -224,4 +224,36 @@ class PaymentDataTest extends PaymentIntegrationTest {
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("SignLogin"), "Should contain SignLogin in message. Message: " + exceptionMessage);
     }
+
+    @Test
+    void createDataOnlyWithRequiredSignParams() throws Throwable {
+        PaymentOperation paymentOperation = createRandomPayment();
+        String firstSign = "{" +
+                "\"ipAddress\": \"78.245.9.87\", " +
+                "\"tbCode\": \"546738\", " +
+                "\"channelIndicator\": \"WEB\", " +
+                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
+                "\"signTime\": \"2020-03-23T15:01:15\", " +
+                "\"signLogin\": \"novikova01\", " +
+                "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
+                "\"signPhone\": \"915 168-67-32\", " +
+                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
+                "}";
+        String senderSign = "{" +
+                "\"ipAddress\": \"78.245.9.87\", " +
+                "\"tbCode\": \"546738\", " +
+                "\"channelIndicator\": \"WEB\", " +
+                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
+                "\"signTime\": \"2020-03-23T15:01:15\", " +
+                "\"signLogin\": \"novikova01\", " +
+                "\"signPhone\": \"915 168-67-32\", " +
+                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
+                "}";
+        paymentOperation.getSigns().clear();
+        paymentOperation.getSigns().add(firstSign);
+        paymentOperation.getSigns().add(senderSign);
+        RequestId requestId = saveOrUpdateData(paymentOperation);
+        assertNotNull(requestId);
+    }
+
 }

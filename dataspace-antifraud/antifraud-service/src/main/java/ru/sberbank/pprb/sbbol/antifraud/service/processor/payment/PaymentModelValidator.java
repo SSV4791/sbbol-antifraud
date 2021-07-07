@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Сервис валидации наличия полей в запросе на сохранение или обновление данных
  */
-public class PaymentModelValidator extends ModelValidator {
+public final class PaymentModelValidator extends ModelValidator {
 
     private PaymentModelValidator() {
     }
@@ -38,9 +38,9 @@ public class PaymentModelValidator extends ModelValidator {
 
     private static void validateSigns(List<Sign> signs) {
         validatePaymentFirstSignUserData(signs.get(0));
-        validatePaymentFirstOrSenderSign(signs.get(0), "firstSign");
+        validateFirstSign(signs.get(0));
         if (signs.size() > 1) {
-            validatePaymentFirstOrSenderSign(signs.get(signs.size() - 1), "senderSign");
+            validateSenderSign(signs.get(signs.size() - 1));
         }
         for (int i = 1; i < signs.size() - 1; i++) {
             validateSign(signs.get(i), signNameSwitcher(i));
@@ -52,8 +52,4 @@ public class PaymentModelValidator extends ModelValidator {
         validateFirstSignUserData(sign);
     }
 
-    private static void validatePaymentFirstOrSenderSign(Sign sign, String signName) {
-        validateRequiredParam(sign.getSignEmail(), signName + "Email");
-        validateFirstOrSenderSign(sign, signName);
-    }
 }
