@@ -14,7 +14,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 /**
  * Сервис сохранения или обновления данных
  */
-@JsonRpcService("/savedata")
+@JsonRpcService("/v1/savedata")
 public interface AntiFraudDataService {
 
     /**

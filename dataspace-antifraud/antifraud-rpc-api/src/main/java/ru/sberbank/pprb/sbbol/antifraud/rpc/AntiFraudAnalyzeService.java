@@ -14,7 +14,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendRequest;
 /**
  * Сервис отправки данных в ФП ИС для последующего анализа
  */
-@JsonRpcService("/analyzeoperation")
+@JsonRpcService("/v1/analyzeoperation")
 public interface AntiFraudAnalyzeService {
 
     /**
