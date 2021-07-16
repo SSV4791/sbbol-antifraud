@@ -28,7 +28,7 @@ import java.util.Collections;
 @ActiveProfiles("test")
 public abstract class DataSpaceIntegrationTest {
 
-    private static final String URL_ROOT = "http://localhost:8080";
+    private static final String URL_ROOT = "http://localhost:8080/v1";
 
     private static JsonRpcRestClient createRpcClient;
     protected static JsonRpcRestClient searchRpcClient;

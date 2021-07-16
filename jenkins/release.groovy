@@ -1,5 +1,4 @@
 import groovy.json.JsonOutput
-import ru.sbrf.ufs.pipeline.Const
 
 @Library(['ufs-jobs@master']) _
 
