@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import ru.sberbank.pprb.sbbol.antifraud.api.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response.FullAnalyzeResponse;
@@ -28,6 +29,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.ReceiverAcco
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.TransactionData;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
+import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.graph.get.PaymentOperationGet;
 import ru.sberbank.pprb.sbbol.antifraud.graph.with.PaymentOperationCollectionWith;
@@ -254,18 +256,18 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
     private final DataspaceCoreSearchClient searchClient;
 
     private final RestTemplate restTemplate;
-    private final HttpHeaders httpHeaders;
     private final ObjectMapper objectMapper;
+    private final HttpHeaders httpHeaders;
 
     private final String endPoint;
 
     public PaymentProcessor(DataspaceCorePacketClient packetClient, DataspaceCoreSearchClient searchClient, RestTemplate restTemplate,
-                            HttpHeaders httpHeaders, ObjectMapper objectMapper, @Value("${fpis.endpoint}") String endPoint) {
+                            ObjectMapper objectMapper, HttpHeaders httpHeaders, @Value("${fpis.endpoint}") String endPoint) {
         this.packetClient = packetClient;
         this.searchClient = searchClient;
         this.restTemplate = restTemplate;
-        this.httpHeaders = httpHeaders;
         this.objectMapper = objectMapper;
+        this.httpHeaders = httpHeaders;
         this.endPoint = endPoint;
     }
 
@@ -298,16 +300,19 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
     public PaymentAnalyzeResponse send(@Valid PaymentSendRequest request) throws SdkJsonRpcClientException {
         logger.info("Sending payment operation to analyze. PaymentOperation docId: {}", request.getDocId());
         PaymentAnalyzeRequest paymentAnalyzeRequest = createPaymentAnalyzeRequest(request.getDocId());
-        String jsonRequest;
         try {
-            jsonRequest = objectMapper.writeValueAsString(paymentAnalyzeRequest);
-            logger.trace("PaymentAnalyzeRequest: {}", jsonRequest);
+            String jsonRequest = objectMapper.writeValueAsString(paymentAnalyzeRequest);
+            logger.debug("Payment analyze request: {}", jsonRequest);
+            String jsonResponse = restTemplate.postForObject(endPoint, new HttpEntity<>(paymentAnalyzeRequest, httpHeaders), String.class);
+            logger.debug("Payment full analyze response: {}", jsonResponse);
+            FullAnalyzeResponse fullAnalyzeResponse = objectMapper.readValue(jsonResponse, FullAnalyzeResponse.class);
+            return convertToPaymentAnalyzeResponse(fullAnalyzeResponse);
+        } catch (HttpStatusCodeException e) {
+            throw new AnalyzeException("Payment analyze error: statusCodeValue=" + e.getRawStatusCode() +
+                    ", error='" + e.getResponseBodyAsString() + "'", e);
         } catch (JsonProcessingException e) {
-            throw new ApplicationException("Anti fraud aggregator internal error: error parsing PaymentAnalyzeRequest", e);
+            throw new ApplicationException("Anti fraud aggregator internal error: error parsing", e);
         }
-        HttpEntity<String> httpEntityRequest = new HttpEntity<>(jsonRequest, httpHeaders);
-        FullAnalyzeResponse fullAnalyzeResponse = restTemplate.postForObject(endPoint, httpEntityRequest, FullAnalyzeResponse.class);
-        return fullAnalyzeResponse != null ? convertToPaymentAnalyzeResponse(fullAnalyzeResponse) : null;
     }
 
     private PaymentAnalyzeRequest createPaymentAnalyzeRequest(UUID docId) throws SdkJsonRpcClientException {
@@ -438,7 +443,7 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
         request.setChannelIndicator(paymentGet.getChannelIndicator());
         request.setEventDataList(new EventData());
         EventDataHeader eventData = new EventDataHeader(supportedDboOperation().getEventType(), supportedDboOperation().getEventDescription(),
-                supportedDboOperation().getClientDefinedEventType(), paymentGet.getTimeOfOccurrence());
+                supportedDboOperation().getClientDefinedEventType(paymentGet.getChannelIndicator()), paymentGet.getTimeOfOccurrence());
         request.getEventDataList().setEventDataHeader(eventData);
         request.getEventDataList().setTransactionData(new TransactionData());
         request.getEventDataList().getTransactionData().setAmount(new Amount(paymentGet.getAmount(), paymentGet.getCurrency()));
@@ -474,11 +479,17 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
 
     private PaymentAnalyzeResponse convertToPaymentAnalyzeResponse(FullAnalyzeResponse fullAnalyzeResponse) {
         PaymentAnalyzeResponse paymentAnalyzeResponse = new PaymentAnalyzeResponse();
-        paymentAnalyzeResponse.setTransactionId(fullAnalyzeResponse.getIdentificationData().getTransactionId());
-        paymentAnalyzeResponse.setActionCode(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getActionCode());
-        paymentAnalyzeResponse.setComment(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getComment());
-        paymentAnalyzeResponse.setDetailledComment(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getDetailledComment());
-        paymentAnalyzeResponse.setWaitingTime(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getWaitingTime());
+        if (fullAnalyzeResponse != null) {
+            if (fullAnalyzeResponse.getIdentificationData() != null) {
+                paymentAnalyzeResponse.setTransactionId(fullAnalyzeResponse.getIdentificationData().getTransactionId());
+            }
+            if (fullAnalyzeResponse.getRiskResult() != null && fullAnalyzeResponse.getRiskResult().getTriggeredRule() != null) {
+                paymentAnalyzeResponse.setActionCode(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getActionCode());
+                paymentAnalyzeResponse.setComment(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getComment());
+                paymentAnalyzeResponse.setDetailledComment(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getDetailledComment());
+                paymentAnalyzeResponse.setWaitingTime(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getWaitingTime());
+            }
+        }
         return paymentAnalyzeResponse;
     }
 

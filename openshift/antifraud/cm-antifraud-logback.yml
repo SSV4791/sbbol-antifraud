@@ -98,4 +98,5 @@ data:
             <appender-ref ref="FILE"/>
             <appender-ref ref="JSON"/>
         </root>
+        <logger name="ru.sberbank.pprb.sbbol.antifraud" level="DEBUG"/>
     </configuration>

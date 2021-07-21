@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -17,12 +16,14 @@ import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
+import ru.sberbank.pprb.sbbol.antifraud.api.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response.FullAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response.IdentificationData;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response.RiskResult;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response.TriggeredRule;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.PaymentAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.PaymentSendRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.rpc.AntiFraudAnalyzeService;
 
@@ -31,7 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
-import static ru.dcbqa.coverage.swagger.reporter.reporters.TestRestTemplateCoverageReporter.enrich;
 
 @ApiTestLayer
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -69,10 +69,10 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
         PaymentAnalyzeResponse actual = (PaymentAnalyzeResponse) analyzeService.analyzeOperation(request);
         mockServer.verify();
         assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId());
-        assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode() , actual.getActionCode() );
-        assertEquals(expected.getRiskResult().getTriggeredRule().getComment() , actual.getComment() );
-        assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment() , actual.getDetailledComment() );
-        assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime() , actual.getWaitingTime() );
+        assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode());
+        assertEquals(expected.getRiskResult().getTriggeredRule().getComment(), actual.getComment());
+        assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment(), actual.getDetailledComment());
+        assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime(), actual.getWaitingTime());
     }
 
     @Test
@@ -82,6 +82,28 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> sendData(request));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("docId"), "Should contain docId in message. Message: " + exceptionMessage);
+    }
+
+    @Test
+    void analyzeErrorTest() {
+        mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
+        PaymentSendRequest request = new PaymentSendRequest(DOC_ID);
+        AnalyzeException ex = assertThrows(AnalyzeException.class, () -> analyzeService.analyzeOperation(request));
+        mockServer.verify();
+        String exceptionMessage = ex.getMessage();
+        Assertions.assertTrue(exceptionMessage.contains("statusCodeValue=500"), "Should contain \"statusCodeValue=500\" in message. Message: " + exceptionMessage);
+    }
+
+    @Test
+    void clientDefinedEventTypeTest() {
+        String web = DboOperation.PAYMENT_DT_0401060.getClientDefinedEventType("WEB");
+        assertEquals("BROWSER_PAYDOCRU", web);
+        String mobile = DboOperation.PAYMENT_DT_0401060.getClientDefinedEventType("MOBILE");
+        assertEquals("MOBSBBOL_PAYDOCRU", mobile);
+        String branch = DboOperation.PAYMENT_DT_0401060.getClientDefinedEventType("BRANCH");
+        assertEquals("BRANCH_PAYDOCRU", branch);
     }
 
     private FullAnalyzeResponse createAnalyzeResponse() {

@@ -31,7 +31,7 @@ public final class SbpPaymentModelValidator extends ModelValidator {
 
     private static void validateDocument(SbpDocument document) {
         logError(document.getNumber(), "document.number");
-        logError(document.getIdOperationOPKC(), "document.idOperationOPKC");
+        validateRequiredParam(document.getIdOperationOPKC(), "document.idOperationOPKC");
         logError(document.getDestination(), "document.destination");
         validatePayer(document.getPayer());
         validateReceiver(document.getReceiver());

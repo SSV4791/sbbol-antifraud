@@ -8,17 +8,31 @@ public enum DboOperation {
     /**
      * Тип операции "платежное поручение"
      */
-    PAYMENT_DT_0401060("BROWSER_PAYDOCRU", "PAYMENT", "Платежное поручение"),
+    PAYMENT_DT_0401060("PAYMENT", "Платежное поручение") {
+        @Override
+        public String getClientDefinedEventType(String channelIndicator) {
+            switch (channelIndicator) {
+                case "WEB":
+                    return "BROWSER_PAYDOCRU";
+                case "MOBILE":
+                    return "MOBSBBOL_PAYDOCRU";
+                case "BRANCH":
+                    return "BRANCH_PAYDOCRU";
+                default:
+                    throw new IllegalArgumentException("Unknown type of channel indicator: " + channelIndicator);
+            }
+        }
+    },
 
     /**
      * Тип операции "платежное поручение СБП"
      */
-    SBP_B2C("SBP", "PAYMENT", "Перевод СБП");
-
-    /**
-     * Тип устройства, через которое работает пользователь
-     */
-    private final String clientDefinedEventType;
+    SBP_B2C("PAYMENT", "Перевод СБП") {
+        @Override
+        public String getClientDefinedEventType(String channelIndicator) {
+            return "SBP";
+        }
+    };
 
     /**
      * Тип события
@@ -30,15 +44,18 @@ public enum DboOperation {
      */
     private final String eventDescription;
 
-    DboOperation(String clientDefinedEventType, String eventType, String eventDescription) {
-        this.clientDefinedEventType = clientDefinedEventType;
+    DboOperation(String eventType, String eventDescription) {
         this.eventType = eventType;
         this.eventDescription = eventDescription;
     }
 
-    public String getClientDefinedEventType() {
-        return clientDefinedEventType;
-    }
+    /**
+     * Получить тип устройства через которое работает пользователь
+     *
+     * @param channelIndicator тип канала связи, через который осуществляется связь клиента с банком
+     * @return тип устройства через которое работает пользователь
+     */
+    public abstract String getClientDefinedEventType(String channelIndicator);
 
     public String getEventType() {
         return eventType;
@@ -47,4 +64,5 @@ public enum DboOperation {
     public String getEventDescription() {
         return eventDescription;
     }
+
 }
