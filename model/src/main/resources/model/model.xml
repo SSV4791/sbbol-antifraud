@@ -1,4 +1,4 @@
-<model model-name="antifraud" version="0.1.0-build.26">
+<model model-name="antifraud" version="DEV-SNAPSHOT">
 
     <class name="PaymentOperation" label="Модель платежного поручения">
         <property name="requestId" type="String" length="36" label="Идентификатор запроса во ФродМониторинг"/>
