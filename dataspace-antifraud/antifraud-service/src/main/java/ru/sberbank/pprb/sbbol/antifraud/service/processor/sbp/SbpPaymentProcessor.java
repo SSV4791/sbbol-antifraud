@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import ru.sberbank.pprb.sbbol.antifraud.api.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeResponse;
@@ -28,8 +29,9 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.ReceiverAcco
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.TransactionData;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.sbp.SbpPaymentSendRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
-import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.sbp.SbpPaymentOperation;
+import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
+import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.graph.get.SbpPaymentOperationGet;
 import ru.sberbank.pprb.sbbol.antifraud.graph.with.SbpPaymentOperationCollectionWith;
 import ru.sberbank.pprb.sbbol.antifraud.grasp.DataspaceCoreSearchClient;
@@ -225,18 +227,18 @@ public class SbpPaymentProcessor implements Processor<SbpPaymentOperation, SbpPa
     private final DataspaceCoreSearchClient searchClient;
 
     private final RestTemplate restTemplate;
-    private final HttpHeaders httpHeaders;
     private final ObjectMapper objectMapper;
+    private final HttpHeaders httpHeaders;
 
     private final String endPoint;
 
     public SbpPaymentProcessor(DataspaceCorePacketClient packetClient, DataspaceCoreSearchClient searchClient, RestTemplate restTemplate,
-                               HttpHeaders httpHeaders, ObjectMapper objectMapper, @Value("${fpis.endpoint}") String endPoint) {
+                               ObjectMapper objectMapper, HttpHeaders httpHeaders, @Value("${fpis.endpoint}") String endPoint) {
         this.packetClient = packetClient;
         this.searchClient = searchClient;
         this.restTemplate = restTemplate;
-        this.httpHeaders = httpHeaders;
         this.objectMapper = objectMapper;
+        this.httpHeaders = httpHeaders;
         this.endPoint = endPoint;
     }
 
@@ -267,18 +269,21 @@ public class SbpPaymentProcessor implements Processor<SbpPaymentOperation, SbpPa
 
     @Override
     public AnalyzeResponse send(@Valid SbpPaymentSendRequest request) throws SdkJsonRpcClientException {
-        logger.info("Sending SBP payment operation to analyze. SbpPaymentOperation docId: {}", request.getDocId());
+        logger.info("Sending SBP operation to analyze. SbpPaymentOperation docId: {}", request.getDocId());
         PaymentAnalyzeRequest paymentAnalyzeRequest = createSbpPaymentAnalyzeRequest(request.getDocId());
-        String jsonRequest;
         try {
-            jsonRequest = objectMapper.writeValueAsString(paymentAnalyzeRequest);
-            logger.trace("SbpPaymentAnalyzeRequest: {}", jsonRequest);
+            String jsonRequest = objectMapper.writeValueAsString(paymentAnalyzeRequest);
+            logger.debug("SBP analyze request: {}", jsonRequest);
+            String jsonResponse = restTemplate.postForObject(endPoint, new HttpEntity<>(paymentAnalyzeRequest, httpHeaders), String.class);
+            logger.debug("SBP full analyze response: {}", jsonResponse);
+            FullAnalyzeResponse fullAnalyzeResponse = objectMapper.readValue(jsonResponse, FullAnalyzeResponse.class);
+            return convertToPaymentAnalyzeResponse(fullAnalyzeResponse);
+        } catch (HttpStatusCodeException e) {
+            throw new AnalyzeException("SBP analyze error: statusCodeValue=" + e.getRawStatusCode() +
+                    ", error='" + e.getResponseBodyAsString() + "'", e);
         } catch (JsonProcessingException e) {
-            throw new ApplicationException("Anti fraud aggregator internal error: error parsing SbpPaymentAnalyzeRequest", e);
+            throw new ApplicationException("Anti fraud aggregator internal error: error parsing", e);
         }
-        HttpEntity<String> httpEntityRequest = new HttpEntity<>(jsonRequest, httpHeaders);
-        FullAnalyzeResponse fullAnalyzeResponse = restTemplate.postForObject(endPoint, httpEntityRequest, FullAnalyzeResponse.class);
-        return fullAnalyzeResponse != null ? convertToPaymentAnalyzeResponse(fullAnalyzeResponse) : null;
     }
 
     private PaymentAnalyzeRequest createSbpPaymentAnalyzeRequest(UUID docId) throws SdkJsonRpcClientException {
@@ -386,7 +391,7 @@ public class SbpPaymentProcessor implements Processor<SbpPaymentOperation, SbpPa
         request.getEventDataList().getTransactionData().setMyAccountData(new PayerAccount(paymentGet.getAccountNumber()));
         request.getEventDataList().getTransactionData().setAmount(new Amount(paymentGet.getAmount(), paymentGet.getCurrency()));
         EventDataHeader eventData = new EventDataHeader(supportedDboOperation().getEventType(), supportedDboOperation().getEventDescription(),
-                supportedDboOperation().getClientDefinedEventType(), paymentGet.getTimeOfOccurrence());
+                supportedDboOperation().getClientDefinedEventType(paymentGet.getChannelIndicator()), paymentGet.getTimeOfOccurrence());
         request.getEventDataList().setEventDataHeader(eventData);
         request.setChannelIndicator(paymentGet.getChannelIndicator());
         request.setDeviceRequest(new DeviceRequest());
@@ -426,11 +431,17 @@ public class SbpPaymentProcessor implements Processor<SbpPaymentOperation, SbpPa
 
     private PaymentAnalyzeResponse convertToPaymentAnalyzeResponse(FullAnalyzeResponse fullAnalyzeResponse) {
         PaymentAnalyzeResponse paymentAnalyzeResponse = new PaymentAnalyzeResponse();
-        paymentAnalyzeResponse.setWaitingTime(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getWaitingTime());
-        paymentAnalyzeResponse.setDetailledComment(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getDetailledComment());
-        paymentAnalyzeResponse.setComment(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getComment());
-        paymentAnalyzeResponse.setActionCode(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getActionCode());
-        paymentAnalyzeResponse.setTransactionId(fullAnalyzeResponse.getIdentificationData().getTransactionId());
+        if (fullAnalyzeResponse != null) {
+            if (fullAnalyzeResponse.getRiskResult() != null && fullAnalyzeResponse.getRiskResult().getTriggeredRule() != null) {
+                paymentAnalyzeResponse.setWaitingTime(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getWaitingTime());
+                paymentAnalyzeResponse.setDetailledComment(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getDetailledComment());
+                paymentAnalyzeResponse.setComment(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getComment());
+                paymentAnalyzeResponse.setActionCode(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getActionCode());
+            }
+            if (fullAnalyzeResponse.getIdentificationData() != null) {
+                paymentAnalyzeResponse.setTransactionId(fullAnalyzeResponse.getIdentificationData().getTransactionId());
+            }
+        }
         return paymentAnalyzeResponse;
     }
 

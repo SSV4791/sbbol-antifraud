@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -17,12 +16,14 @@ import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
+import ru.sberbank.pprb.sbbol.antifraud.api.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response.FullAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response.IdentificationData;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response.RiskResult;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response.TriggeredRule;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.PaymentAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.sbp.SbpPaymentSendRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
 import ru.sberbank.pprb.sbbol.antifraud.common.DataSpaceIntegrationTest;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.rpc.AntiFraudAnalyzeService;
@@ -32,7 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
-import static ru.dcbqa.coverage.swagger.reporter.reporters.TestRestTemplateCoverageReporter.enrich;
 
 @ApiTestLayer
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -83,6 +83,24 @@ class SbpPaymentAnalyzeTest extends SbpPaymentIntegrationTest{
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> DataSpaceIntegrationTest.sendData(request));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("docId"), "Should contain docId in message. Message: " + exceptionMessage);
+    }
+
+    @Test
+    void analyzeErrorTest() {
+        mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
+        SbpPaymentSendRequest request = new SbpPaymentSendRequest(DOC_ID);
+        AnalyzeException ex = assertThrows(AnalyzeException.class, () -> analyzeService.analyzeOperation(request));
+        mockServer.verify();
+        String exceptionMessage = ex.getMessage();
+        Assertions.assertTrue(exceptionMessage.contains("statusCodeValue=500"), "Should contain \"statusCodeValue=500\" in message. Message: " + exceptionMessage);
+    }
+
+    @Test
+    void clientDefinedEventTypeTest() {
+        String sbp = DboOperation.SBP_B2C.getClientDefinedEventType("WEB");
+        assertEquals("SBP", sbp);
     }
 
     private FullAnalyzeResponse createAnalyzeResponse() {
