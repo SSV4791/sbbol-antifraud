@@ -243,24 +243,24 @@ public class SbpPaymentProcessor implements Processor<SbpPaymentOperation, SbpPa
     }
 
     @Override
-    public RequestId saveOrUpdate(@Valid SbpPaymentOperation record) throws SdkJsonRpcClientException {
-        logger.info("Processing SBP payment operation request. PaymentOperation docId: {}", record.getDocument().getId());
-        record.setMappedSigns(SignMapper.convertSigns(record.getSigns()));
-        SbpPaymentModelValidator.validate(record);
+    public RequestId saveOrUpdate(@Valid SbpPaymentOperation request) throws SdkJsonRpcClientException {
+        logger.info("Processing SBP payment operation request. PaymentOperation docId: {}", request.getDocument().getId());
+        request.setMappedSigns(SignMapper.convertSigns(request.getSigns()));
+        SbpPaymentModelValidator.validate(request);
 
         GraphCollection<SbpPaymentOperationGet> collection = searchClient.searchSbpPaymentOperation(sbpPayment ->
                 sbpPayment
                         .withRequestId()
-                        .setWhere(where -> where.docIdEq(record.getDocument().getId().toString()))
+                        .setWhere(where -> where.docIdEq(request.getDocument().getId().toString()))
                         .setLimit(1));
         Packet packet = Packet.createPacket();
 
         RequestId requestId;
         if (collection.isEmpty()) {
-            requestId = SbpPaymentPacketCommandAdder.addCreateCommandToPacket(packet, record);
+            requestId = SbpPaymentPacketCommandAdder.addCreateCommandToPacket(packet, request);
         } else {
             requestId = new RequestId(UUID.fromString(collection.get(0).getRequestId()));
-            SbpPaymentPacketCommandAdder.addUpdateCommandToPacket(packet, record, collection.get(0).getObjectId());
+            SbpPaymentPacketCommandAdder.addUpdateCommandToPacket(packet, request, collection.get(0).getObjectId());
         }
 
         packetClient.execute(packet);
@@ -274,7 +274,7 @@ public class SbpPaymentProcessor implements Processor<SbpPaymentOperation, SbpPa
         try {
             String jsonRequest = objectMapper.writeValueAsString(paymentAnalyzeRequest);
             logger.debug("SBP analyze request: {}", jsonRequest);
-            String jsonResponse = restTemplate.postForObject(endPoint, new HttpEntity<>(paymentAnalyzeRequest, httpHeaders), String.class);
+            String jsonResponse = restTemplate.postForObject(endPoint, new HttpEntity<>(jsonRequest, httpHeaders), String.class);
             logger.debug("SBP full analyze response: {}", jsonResponse);
             FullAnalyzeResponse fullAnalyzeResponse = objectMapper.readValue(jsonResponse, FullAnalyzeResponse.class);
             return convertToPaymentAnalyzeResponse(fullAnalyzeResponse);

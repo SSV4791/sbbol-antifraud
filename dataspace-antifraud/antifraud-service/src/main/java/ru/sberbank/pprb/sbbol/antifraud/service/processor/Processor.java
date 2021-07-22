@@ -24,11 +24,11 @@ public interface Processor<T extends Operation, R extends SendRequest> {
     /**
      * Сохранение или обновление данных
      *
-     * @param record данные для сохранения
+     * @param request данные для сохранения
      * @return идентификатор запроса
      */
     @EyeOn(category = "ru.sberbank.pprb.sbbol.antifraud")
-    RequestId saveOrUpdate(@Valid T record) throws SdkJsonRpcClientException;
+    RequestId saveOrUpdate(@Valid T request) throws SdkJsonRpcClientException;
 
     /**
      * Отправка данных в ФП ИС

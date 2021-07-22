@@ -303,7 +303,7 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
         try {
             String jsonRequest = objectMapper.writeValueAsString(paymentAnalyzeRequest);
             logger.debug("Payment analyze request: {}", jsonRequest);
-            String jsonResponse = restTemplate.postForObject(endPoint, new HttpEntity<>(paymentAnalyzeRequest, httpHeaders), String.class);
+            String jsonResponse = restTemplate.postForObject(endPoint, new HttpEntity<>(jsonRequest, httpHeaders), String.class);
             logger.debug("Payment full analyze response: {}", jsonResponse);
             FullAnalyzeResponse fullAnalyzeResponse = objectMapper.readValue(jsonResponse, FullAnalyzeResponse.class);
             return convertToPaymentAnalyzeResponse(fullAnalyzeResponse);
