@@ -1,6 +1,7 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.rpc;
 
 import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImpl;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import ru.sberbank.pprb.sbbol.antifraud.rpc.AntiFraudDataService;
 import ru.sberbank.pprb.sbbol.antifraud.service.ProcessorResolver;
@@ -11,11 +12,14 @@ import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import sbp.sbt.sdk.exception.SdkJsonRpcClientException;
 
 import javax.validation.ConstraintViolationException;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 @AutoJsonRpcServiceImpl
 public class AntiFraudDataServiceImpl implements AntiFraudDataService {
+
+    private static final String REQUEST_UID = "requestUid";
 
     private final ProcessorResolver resolver;
 
@@ -25,6 +29,7 @@ public class AntiFraudDataServiceImpl implements AntiFraudDataService {
 
     @Override
     public RequestId saveOrUpdateData(Operation request) {
+        MDC.put(REQUEST_UID, UUID.randomUUID().toString());
         try {
             return resolver.getProcessor(request).saveOrUpdate(request);
         } catch (SdkJsonRpcClientException ex) {
@@ -34,6 +39,8 @@ public class AntiFraudDataServiceImpl implements AntiFraudDataService {
                     .map(cv -> cv == null ? "null" : (cv.getPropertyPath() + ": " + cv.getMessage()))
                     .collect(Collectors.joining(", "));
             throw new ModelArgumentException("Model validation error: " + validationErrors, ex);
+        } finally {
+            MDC.remove(REQUEST_UID);
         }
     }
 

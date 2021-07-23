@@ -6,6 +6,7 @@ import com.googlecode.jsonrpc4j.JsonRpcError;
 import com.googlecode.jsonrpc4j.JsonRpcErrors;
 import com.googlecode.jsonrpc4j.JsonRpcParam;
 import com.googlecode.jsonrpc4j.JsonRpcService;
+import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeResponse;
@@ -27,7 +28,8 @@ public interface AntiFraudAnalyzeService {
             @JsonRpcError(exception = ModelArgumentException.class, code = -32600),
             @JsonRpcError(exception = InvalidFormatException.class, code = -32600),
             @JsonRpcError(exception = InvalidTypeIdException.class, code = -32600),
-            @JsonRpcError(exception = ApplicationException.class, code = -32001)
+            @JsonRpcError(exception = ApplicationException.class, code = -32001),
+            @JsonRpcError(exception = AnalyzeException.class, code = -32001),
     })
     AnalyzeResponse analyzeOperation(@JsonRpcParam(value = "analyzeparams") SendRequest request);
 }
