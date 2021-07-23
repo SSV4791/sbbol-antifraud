@@ -3,11 +3,12 @@
     <parent>
         <artifactId>dataspace-antifraud</artifactId>
         <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
-        <version>DEV-SNAPSHOT</version>
+        <version>0.1.0-build.30</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>antifraud-rpc-api</artifactId>
+    <version>0.1.0-build.30</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -18,7 +19,7 @@
         <dependency>
             <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
             <artifactId>antifraud-api</artifactId>
-            <version>DEV-SNAPSHOT</version>
+            <version>0.1.0-build.30</version>
         </dependency>
         <!--jsonrpc4j-->
         <dependency>
