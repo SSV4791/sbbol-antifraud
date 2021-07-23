@@ -11,7 +11,7 @@
 
     <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
     <artifactId>antifraud</artifactId>
-    <version>DEV-SNAPSHOT</version>
+    <version>0.1.0-build.29</version>
     <packaging>pom</packaging>
 
     <name>antifraud</name>
