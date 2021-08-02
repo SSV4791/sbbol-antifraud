@@ -91,18 +91,22 @@ spec:
             limits:
               cpu: ${LIMIT_CPU}
               memory: ${LIMIT_MEMORY}
+              ephemeral-storage: ${LIMIT_EPHEMERAL_STORAGE}
             requests:
               cpu: ${REQUEST_CPU}
               memory: ${REQUEST_MEMORY}
+              ephemeral-storage: ${REQUEST_EPHEMERAL_STORAGE}
         - name: fluentbit
           image: ${FLUENTBIT_IMAGE}
           resources:
             limits:
               cpu: ${fluentBitLimitCPU}
               memory: ${fluentBitLimitMemory}
+              ephemeral-storage: ${fluentBitLimitEphemeralStorage}
             requests:
               cpu: ${fluentBitRequestCPU}
               memory: ${fluentBitRequestMemory}
+              ephemeral-storage: ${fluentBitRequestEphemeralStorage}
           env:
             - name: service
               value: antifraud
