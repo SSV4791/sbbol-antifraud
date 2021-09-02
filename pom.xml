@@ -57,7 +57,7 @@
     </distributionManagement>
 
     <properties>
-        <meta.componentId>БХБ189</meta.componentId>
+        <meta.componentId>8255f180-74c2-11eb-6742-005056b72594</meta.componentId>
         <headless.meta>https://meta.sigma.sbrf.ru</headless.meta>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
