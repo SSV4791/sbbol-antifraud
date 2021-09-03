@@ -32,6 +32,16 @@ public enum DboOperation {
         public String getClientDefinedEventType(String channelIndicator) {
             return "SBP";
         }
+    },
+
+    /**
+     * Тип операции "электронный чек"
+     */
+    ELECTRONIC_CHEQUE("CLIENT_DEFINED", "Заказ наличных с использованием электронного чека") {
+        @Override
+        public String getClientDefinedEventType(String channelIndicator) {
+            return "CASH_ORDER";
+        }
     };
 
     /**

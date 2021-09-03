@@ -1,4 +1,4 @@
-package ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request;
+package ru.sberbank.pprb.sbbol.antifraud.api.analyze.request;
 
 import java.io.Serializable;
 

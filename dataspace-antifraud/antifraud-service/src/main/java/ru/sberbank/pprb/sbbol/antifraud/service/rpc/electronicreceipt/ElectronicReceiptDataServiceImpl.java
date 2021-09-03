@@ -1,14 +1,15 @@
-package ru.sberbank.pprb.sbbol.antifraud.service.rpc;
+package ru.sberbank.pprb.sbbol.antifraud.service.rpc.electronicreceipt;
 
 import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImpl;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
-import ru.sberbank.pprb.sbbol.antifraud.rpc.AntiFraudAnalyzeService;
-import ru.sberbank.pprb.sbbol.antifraud.service.ProcessorResolver;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ElectronicReceiptOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendRequest;
+import ru.sberbank.pprb.sbbol.antifraud.rpc.electronicreceipt.ElectronicReceiptDataService;
+import ru.sberbank.pprb.sbbol.antifraud.service.processor.Processor;
 import sbp.sbt.sdk.exception.SdkJsonRpcClientException;
 
 import javax.validation.ConstraintViolationException;
@@ -17,21 +18,21 @@ import java.util.stream.Collectors;
 
 @Service
 @AutoJsonRpcServiceImpl
-public class AntiFraudAnalyzeServiceImpl implements AntiFraudAnalyzeService {
+public class ElectronicReceiptDataServiceImpl implements ElectronicReceiptDataService {
 
     private static final String REQUEST_UID = "requestUid";
 
-    private final ProcessorResolver resolver;
+    private final Processor<ElectronicReceiptOperation, SendToAnalyzeRequest> processor;
 
-    public AntiFraudAnalyzeServiceImpl(ProcessorResolver resolver) {
-        this.resolver = resolver;
+    public ElectronicReceiptDataServiceImpl(Processor<ElectronicReceiptOperation, SendToAnalyzeRequest> processor) {
+        this.processor = processor;
     }
 
     @Override
-    public AnalyzeResponse analyzeOperation(SendRequest request) {
+    public RequestId saveOrUpdateData(ElectronicReceiptOperation request) {
         MDC.put(REQUEST_UID, UUID.randomUUID().toString());
         try {
-            return resolver.getProcessor(request).send(request);
+            return processor.saveOrUpdate(request);
         } catch (SdkJsonRpcClientException ex) {
             throw new ApplicationException("Error calling DataSpace api", ex);
         } catch (ConstraintViolationException ex) {

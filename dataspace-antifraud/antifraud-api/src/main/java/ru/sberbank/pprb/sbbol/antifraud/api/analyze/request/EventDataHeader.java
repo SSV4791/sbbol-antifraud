@@ -1,4 +1,4 @@
-package ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request;
+package ru.sberbank.pprb.sbbol.antifraud.api.analyze.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -46,6 +46,9 @@ public class EventDataHeader implements Serializable {
         this.eventDescription = eventDescription;
         this.clientDefinedEventType = clientDefinedEventType;
         this.timeOfOccurrence = timeOfOccurrence;
+    }
+
+    public EventDataHeader() {
     }
 
     public String getEventType() {

@@ -1,11 +1,11 @@
-package ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request;
+package ru.sberbank.pprb.sbbol.antifraud.api.analyze.request;
 
 import java.io.Serializable;
 
 /**
  * Модель данных для отправки в ФП ИС
  */
-public class PaymentAnalyzeRequest implements Serializable {
+public class AnalyzeRequest implements Serializable {
 
     /**
      * Сообщение заголовка

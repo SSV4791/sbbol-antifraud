@@ -1,4 +1,6 @@
-package ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request;
+package ru.sberbank.pprb.sbbol.antifraud.api.analyze.request;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.io.Serializable;
 
@@ -30,6 +32,7 @@ public class TransactionData implements Serializable {
     /**
      * Данные счета получателя
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private ReceiverAccount otherAccountData;
 
     public Amount getAmount() {

@@ -1,26 +1,28 @@
-package ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request;
+package ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
  * Данные устройства
  */
-public class DeviceRequest implements Serializable {
+public class ReceiptDeviceRequest implements Serializable {
 
     /**
-     * Слепок устройства
+     * Слепок устройства. Значения из скрипта rsa.js
      */
+    @NotBlank(message = "The deviceRequest.devicePrint attribute must be filled")
     private String devicePrint;
 
     /**
-     * Информация о мобильном устройстве в формате json
-     */
-    private String mobSdkData;
-
-    /**
-     * Значение заголовка Accept HTTP-запроса
+     * Значение заголовка Accept HTTP-запроса. Список допустимых форматов ресурса
      */
     private String httpAccept;
+
+    /**
+     * Значение заголовка Referer HTTP-запроса
+     */
+    private String httpReferer;
 
     /**
      * Значение заголовка Accept-Charset HTTP-запроса
@@ -38,18 +40,15 @@ public class DeviceRequest implements Serializable {
     private String httpAcceptLanguage;
 
     /**
-     * Значение заголовка Referer HTTP-запроса
+     * IP адрес из HTTP-запроса
      */
-    private String httpReferrer;
-
-    /**
-     * IP адрес
-     */
+    @NotBlank(message = "The deviceRequest.ipAddress attribute must be filled")
     private String ipAddress;
 
     /**
      * Значение заголовка User-Agent HTTP-запроса
      */
+    @NotBlank(message = "The deviceRequest.userAgent attribute must be filled")
     private String userAgent;
 
     public String getDevicePrint() {
@@ -60,20 +59,20 @@ public class DeviceRequest implements Serializable {
         this.devicePrint = devicePrint;
     }
 
-    public String getMobSdkData() {
-        return mobSdkData;
-    }
-
-    public void setMobSdkData(String mobSdkData) {
-        this.mobSdkData = mobSdkData;
-    }
-
     public String getHttpAccept() {
         return httpAccept;
     }
 
     public void setHttpAccept(String httpAccept) {
         this.httpAccept = httpAccept;
+    }
+
+    public String getHttpReferer() {
+        return httpReferer;
+    }
+
+    public void setHttpReferer(String httpReferer) {
+        this.httpReferer = httpReferer;
     }
 
     public String getHttpAcceptChars() {
@@ -100,14 +99,6 @@ public class DeviceRequest implements Serializable {
         this.httpAcceptLanguage = httpAcceptLanguage;
     }
 
-    public String getHttpReferrer() {
-        return httpReferrer;
-    }
-
-    public void setHttpReferrer(String httpReferrer) {
-        this.httpReferrer = httpReferrer;
-    }
-
     public String getIpAddress() {
         return ipAddress;
     }
@@ -128,14 +119,14 @@ public class DeviceRequest implements Serializable {
     public String toString() {
         return "{" +
                 "devicePrint='" + devicePrint + '\'' +
-                ", mobSdkData='" + mobSdkData + '\'' +
                 ", httpAccept='" + httpAccept + '\'' +
+                ", httpReferer='" + httpReferer + '\'' +
                 ", httpAcceptChars='" + httpAcceptChars + '\'' +
                 ", httpAcceptEncoding='" + httpAcceptEncoding + '\'' +
                 ", httpAcceptLanguage='" + httpAcceptLanguage + '\'' +
-                ", httpReferrer='" + httpReferrer + '\'' +
                 ", ipAddress='" + ipAddress + '\'' +
                 ", userAgent='" + userAgent + '\'' +
                 '}';
     }
+
 }
