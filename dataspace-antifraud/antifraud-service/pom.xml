@@ -34,6 +34,16 @@
             <groupId>sbp.com.sbt.dataspace</groupId>
             <artifactId>sdk-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.4.2.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>1.4.2.Final</version>
+        </dependency>
         <!--Spring actuator (jmx-метрики из коробки)-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -55,6 +65,12 @@
         <dependency>
             <groupId>sbp.com.sbt.dataspace.support</groupId>
             <artifactId>watch-service-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>uk.co.jemos.podam</groupId>
+            <artifactId>podam</artifactId>
+            <version>7.2.7.RELEASE</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

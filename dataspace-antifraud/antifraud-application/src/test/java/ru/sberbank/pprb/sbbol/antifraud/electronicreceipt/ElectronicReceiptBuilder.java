@@ -12,6 +12,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ReceiptSign;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
 import java.util.UUID;
 
@@ -140,7 +141,7 @@ class ElectronicReceiptBuilder {
         operation.getSign().setSignNumber(signNumber != null ? signNumber : 1);
         operation.getSign().setSignIpAddress(signIpAddress != null ? signIpAddress : generateIpAddress());
         operation.getSign().setSignChannel(signChannel != null ? signChannel : RandomStringUtils.randomAlphabetic(25));
-        operation.getSign().setSignTime(signTime != null ? signTime : LocalDateTime.now());
+        operation.getSign().setSignTime(signTime != null ? signTime : LocalDateTime.parse(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").format(LocalDateTime.now())));
         operation.getSign().setSignLogin(signLogin != null ? signLogin : RandomStringUtils.randomAlphabetic(25));
         operation.getSign().setSignType(signType != null ? signType : RandomStringUtils.randomAlphabetic(25));
         operation.getSign().setSignCryptoprofile(signCryptoprofile != null ? signCryptoprofile : RandomStringUtils.randomAlphabetic(25));

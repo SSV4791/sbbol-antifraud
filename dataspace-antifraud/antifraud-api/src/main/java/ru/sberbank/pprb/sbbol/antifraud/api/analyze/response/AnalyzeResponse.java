@@ -1,13 +1,14 @@
-package ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment;
+package ru.sberbank.pprb.sbbol.antifraud.api.analyze.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeResponse;
+
+import java.io.Serializable;
 
 /**
  * Модель ответа для исполненных РПП с результатами анализа операции
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PaymentAnalyzeResponse implements AnalyzeResponse {
+public class AnalyzeResponse implements Serializable {
 
     /**
      * Идентификатор транзакции. Формируется системой «ФРОД-мониторинг» автоматически при вставке транзакции

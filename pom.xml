@@ -106,6 +106,9 @@
                 <sonar.coverage.exclusions>
                     **/ru/sberbank/pprb/sbbol/antifraud/api/**/*
                 </sonar.coverage.exclusions>
+                <sonar.cpd.exclusions>
+                    **/ru/sberbank/pprb/sbbol/antifraud/api/**/*
+                </sonar.cpd.exclusions>
             </properties>
             <build>
                 <plugins>

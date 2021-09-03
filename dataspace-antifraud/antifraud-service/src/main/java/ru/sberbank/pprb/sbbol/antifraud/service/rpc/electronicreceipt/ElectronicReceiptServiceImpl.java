@@ -4,11 +4,12 @@ import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImpl;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ElectronicReceiptOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
-import ru.sberbank.pprb.sbbol.antifraud.rpc.electronicreceipt.ElectronicReceiptDataService;
+import ru.sberbank.pprb.sbbol.antifraud.rpc.electronicreceipt.ElectronicReceiptService;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.Processor;
 import sbp.sbt.sdk.exception.SdkJsonRpcClientException;
 
@@ -18,13 +19,13 @@ import java.util.stream.Collectors;
 
 @Service
 @AutoJsonRpcServiceImpl
-public class ElectronicReceiptDataServiceImpl implements ElectronicReceiptDataService {
+public class ElectronicReceiptServiceImpl implements ElectronicReceiptService {
 
     private static final String REQUEST_UID = "requestUid";
 
     private final Processor<ElectronicReceiptOperation, SendToAnalyzeRequest> processor;
 
-    public ElectronicReceiptDataServiceImpl(Processor<ElectronicReceiptOperation, SendToAnalyzeRequest> processor) {
+    public ElectronicReceiptServiceImpl(Processor<ElectronicReceiptOperation, SendToAnalyzeRequest> processor) {
         this.processor = processor;
     }
 
@@ -33,6 +34,23 @@ public class ElectronicReceiptDataServiceImpl implements ElectronicReceiptDataSe
         MDC.put(REQUEST_UID, UUID.randomUUID().toString());
         try {
             return processor.saveOrUpdate(request);
+        } catch (SdkJsonRpcClientException ex) {
+            throw new ApplicationException("Error calling DataSpace api", ex);
+        } catch (ConstraintViolationException ex) {
+            String validationErrors = ex.getConstraintViolations().stream()
+                    .map(cv -> cv == null ? "null" : (cv.getPropertyPath() + ": " + cv.getMessage()))
+                    .collect(Collectors.joining(", "));
+            throw new ModelArgumentException("Model validation error: " + validationErrors, ex);
+        } finally {
+            MDC.remove(REQUEST_UID);
+        }
+    }
+
+    @Override
+    public AnalyzeResponse analyzeOperation(SendToAnalyzeRequest request) {
+        MDC.put(REQUEST_UID, UUID.randomUUID().toString());
+        try {
+            return processor.send(request);
         } catch (SdkJsonRpcClientException ex) {
             throw new ApplicationException("Error calling DataSpace api", ex);
         } catch (ConstraintViolationException ex) {

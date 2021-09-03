@@ -18,7 +18,7 @@ public class ElectronicReceiptPacketCommandAdder {
     /**
      * Добавление команды создания записи на основе модели электронного чека в пакет команд
      *
-     * @param packet    покет команд
+     * @param packet    пакет команд
      * @param operation модель платежного поручения
      * @return идентификатор запроса (UUID)
      */
@@ -112,7 +112,7 @@ public class ElectronicReceiptPacketCommandAdder {
     /**
      * Добавление команды обновления записи на основе модели электронного чека в пакет команд
      *
-     * @param packet    покет команд
+     * @param packet    пакет команд
      * @param operation модель платежного поручения
      * @param objectId  идентификатор записи в базе данных
      */

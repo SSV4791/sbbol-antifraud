@@ -1,4 +1,4 @@
-package ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response;
+package ru.sberbank.pprb.sbbol.antifraud.api.analyze.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

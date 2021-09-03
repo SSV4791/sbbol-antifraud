@@ -1,13 +1,12 @@
-package ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response;
+package ru.sberbank.pprb.sbbol.antifraud.api.analyze.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeResponse;
 
 /**
  * Ответ от ФП ИС с результатами анализа операции
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class FullAnalyzeResponse implements AnalyzeResponse {
+public class FullAnalyzeResponse {
 
     /**
      * Идентификационные данные транзакции

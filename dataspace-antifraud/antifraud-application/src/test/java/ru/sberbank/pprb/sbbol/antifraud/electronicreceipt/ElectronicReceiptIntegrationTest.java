@@ -32,21 +32,17 @@ import java.util.UUID;
 @ActiveProfiles("test")
 abstract class ElectronicReceiptIntegrationTest {
 
-    private static final String URL_ROOT = "http://localhost:8080/v1/electronicreceipt";
-
-    private static JsonRpcRestClient createRpcClient;
-    private static JsonRpcRestClient searchRpcClient;
+    private static JsonRpcRestClient rpcRestClient;
     @Autowired
     private DataspaceCoreSearchClient searchClient;
 
     @BeforeAll
     static void setup() throws MalformedURLException {
-        createRpcClient = new JsonRpcRestClient(new URL(URL_ROOT + "/savedata"), Collections.emptyMap());
-        searchRpcClient = new JsonRpcRestClient(new URL(URL_ROOT + "/analyzeoperation"), Collections.emptyMap());
+        rpcRestClient = new JsonRpcRestClient(new URL("http://localhost:8080/v1/electronicreceipt"), Collections.emptyMap());
     }
 
     protected static RequestId saveOrUpdateData(ElectronicReceiptOperation operation) throws Throwable {
-        return createRpcClient.invoke(
+        return rpcRestClient.invoke(
                 "saveOrUpdateData",
                 Collections.singletonMap("dataparams", operation),
                 RequestId.class
@@ -54,7 +50,7 @@ abstract class ElectronicReceiptIntegrationTest {
     }
 
     protected static AnalyzeResponse sendData(SendToAnalyzeRequest request) throws Throwable {
-        return searchRpcClient.invoke(
+        return rpcRestClient.invoke(
                 "analyzeOperation",
                 Collections.singletonMap("analyzeparams", request),
                 AnalyzeResponse.class

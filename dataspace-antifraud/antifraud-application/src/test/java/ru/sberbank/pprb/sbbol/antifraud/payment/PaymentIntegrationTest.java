@@ -18,7 +18,7 @@ public abstract class PaymentIntegrationTest extends DataSpaceIntegrationTest {
     protected static UUID requestId;
 
     @BeforeEach
-    private void fillDatabase() throws Throwable {
+    protected void fillDatabase() throws Throwable {
         requestId = generatePayment(DOC_ID, DOC_NUMBER).getId();
         generatePayment(null, null);
     }
