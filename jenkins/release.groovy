@@ -49,11 +49,6 @@ pipeline {
         stage('Input params validation') {
             steps {
                 script {
-                    if (params.forceVersion) {
-                        if (!params.forceVersion.matches(VERSION_PATTERN)) {
-                            error("Version should match pattern (digits).(digits).(digits)[-build.(digits)]")
-                        }
-                    }
                     if (!params.forceVersion && !params.versionIncrement) {
                         error("Version increment or forceVersion are required")
                     }
@@ -297,7 +292,7 @@ pipeline {
                                 repositoryId: 'Nexus_PROD',
                                 groupId: "Nexus_PROD/CI03045533_sbbol-antifraud",
                                 artifactId: DATASPACE_ARTIFACT_ID,
-                                version: VERSION
+                                version: "D-${VERSION}"
                         )
                         log.info("QGM result for ${artifactId}: ${response}")
                         def success = true;
