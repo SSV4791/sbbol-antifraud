@@ -17,11 +17,11 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.DboOperation;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response.FullAnalyzeResponse;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response.IdentificationData;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response.RiskResult;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response.TriggeredRule;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.PaymentAnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.IdentificationData;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.RiskResult;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.TriggeredRule;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.sbp.SbpPaymentSendRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
 import ru.sberbank.pprb.sbbol.antifraud.common.DataSpaceIntegrationTest;
@@ -67,7 +67,7 @@ class SbpPaymentAnalyzeTest extends SbpPaymentIntegrationTest{
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(objectMapper.writeValueAsString(expected)));
         SbpPaymentSendRequest request = new SbpPaymentSendRequest(DOC_ID);
-        PaymentAnalyzeResponse actual = (PaymentAnalyzeResponse) analyzeService.analyzeOperation(request);
+        AnalyzeResponse actual = (AnalyzeResponse) analyzeService.analyzeOperation(request);
         mockServer.verify();
         assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId());
         assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode() , actual.getActionCode() );

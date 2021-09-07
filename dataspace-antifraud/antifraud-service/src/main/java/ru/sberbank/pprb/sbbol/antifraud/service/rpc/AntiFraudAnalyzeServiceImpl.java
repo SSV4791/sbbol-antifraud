@@ -3,11 +3,11 @@ package ru.sberbank.pprb.sbbol.antifraud.service.rpc;
 import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImpl;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.rpc.AntiFraudAnalyzeService;
 import ru.sberbank.pprb.sbbol.antifraud.service.ProcessorResolver;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendRequest;
 import sbp.sbt.sdk.exception.SdkJsonRpcClientException;
 

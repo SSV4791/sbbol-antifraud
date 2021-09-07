@@ -2,7 +2,7 @@ package ru.sberbank.pprb.sbbol.antifraud.service.processor;
 
 import org.springframework.validation.annotation.Validated;
 import ru.sberbank.pprb.sbbol.antifraud.api.DboOperation;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.Operation;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendRequest;

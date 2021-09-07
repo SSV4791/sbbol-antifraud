@@ -1,7 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.api;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import ru.sberbank.pprb.sbbol.antifraud.api.DboOperation;
 
 import java.io.Serializable;
 

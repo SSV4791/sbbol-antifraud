@@ -12,21 +12,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import ru.sberbank.pprb.sbbol.antifraud.api.DboOperation;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeResponse;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.common.response.FullAnalyzeResponse;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.PaymentAnalyzeResponse;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.Amount;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.Attribute;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.ClientDefinedAttributeList;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.DeviceRequest;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.EventData;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.EventDataHeader;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.IdentificationData;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.MessageHeader;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.PayerAccount;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.PaymentAnalyzeRequest;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.ReceiverAccount;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.request.TransactionData;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.Amount;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.Attribute;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.ClientDefinedAttributeList;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.DeviceRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.EventData;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.EventDataHeader;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.IdentificationData;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.MessageHeader;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.PayerAccount;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.ReceiverAccount;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.TransactionData;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.sbp.SbpPaymentSendRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.sbp.SbpPaymentOperation;
@@ -270,7 +269,7 @@ public class SbpPaymentProcessor implements Processor<SbpPaymentOperation, SbpPa
     @Override
     public AnalyzeResponse send(@Valid SbpPaymentSendRequest request) throws SdkJsonRpcClientException {
         logger.info("Sending SBP operation to analyze. SbpPaymentOperation docId: {}", request.getDocId());
-        PaymentAnalyzeRequest paymentAnalyzeRequest = createSbpPaymentAnalyzeRequest(request.getDocId());
+        AnalyzeRequest paymentAnalyzeRequest = createSbpPaymentAnalyzeRequest(request.getDocId());
         try {
             String jsonRequest = objectMapper.writeValueAsString(paymentAnalyzeRequest);
             logger.debug("SBP analyze request: {}", jsonRequest);
@@ -286,7 +285,7 @@ public class SbpPaymentProcessor implements Processor<SbpPaymentOperation, SbpPa
         }
     }
 
-    private PaymentAnalyzeRequest createSbpPaymentAnalyzeRequest(UUID docId) throws SdkJsonRpcClientException {
+    private AnalyzeRequest createSbpPaymentAnalyzeRequest(UUID docId) throws SdkJsonRpcClientException {
         GraphCollection<SbpPaymentOperationGet> collection = searchClient.searchSbpPaymentOperation(operation -> {
             operation
                     .withRequestId()
@@ -378,8 +377,8 @@ public class SbpPaymentProcessor implements Processor<SbpPaymentOperation, SbpPa
         return operation;
     }
 
-    private PaymentAnalyzeRequest convertToSbpPaymentAnalyzeRequest(SbpPaymentOperationGet paymentGet) {
-        PaymentAnalyzeRequest request = new PaymentAnalyzeRequest();
+    private AnalyzeRequest convertToSbpPaymentAnalyzeRequest(SbpPaymentOperationGet paymentGet) {
+        AnalyzeRequest request = new AnalyzeRequest();
         request.setClientDefinedChannelIndicator(paymentGet.getClientDefinedChannelIndicator());
         request.setEventDataList(new EventData());
         request.getEventDataList().setTransactionData(new TransactionData());
@@ -429,8 +428,8 @@ public class SbpPaymentProcessor implements Processor<SbpPaymentOperation, SbpPa
         return clientDefinedAttributeList;
     }
 
-    private PaymentAnalyzeResponse convertToPaymentAnalyzeResponse(FullAnalyzeResponse fullAnalyzeResponse) {
-        PaymentAnalyzeResponse paymentAnalyzeResponse = new PaymentAnalyzeResponse();
+    private AnalyzeResponse convertToPaymentAnalyzeResponse(FullAnalyzeResponse fullAnalyzeResponse) {
+        AnalyzeResponse paymentAnalyzeResponse = new AnalyzeResponse();
         if (fullAnalyzeResponse != null) {
             if (fullAnalyzeResponse.getRiskResult() != null && fullAnalyzeResponse.getRiskResult().getTriggeredRule() != null) {
                 paymentAnalyzeResponse.setWaitingTime(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getWaitingTime());

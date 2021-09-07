@@ -18,7 +18,7 @@ public abstract class SbpPaymentIntegrationTest extends DataSpaceIntegrationTest
     protected static UUID requestId;
 
     @BeforeEach
-    private void fillDatabase() throws Throwable {
+    protected void fillDatabase() throws Throwable {
         requestId = generateSbpPayment(DOC_ID, DOC_NUMBER).getId();
         generateSbpPayment(null, null);
     }

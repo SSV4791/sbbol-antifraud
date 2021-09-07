@@ -1,0 +1,71 @@
+{
+  "jsonrpc": "2.0",
+  "method": "saveOrUpdateData",
+  "id": 1,
+  "params": {
+    "dataparams": {
+      "orgGuid": "5899acd3-dba7-41d4-83e4-ea17525d0d38",
+      "digitalId": "123456",
+      "dboOperation": "ELECTRONIC_CHEQUE",
+      "privateIpAddress": "10.41.111.111",
+      "document": {
+        "id": "36ff1f5f-a0d2-4337-a4bd-1f620ac3462b",
+        "number": 257,
+        "date": "2020-03-23",
+        "amount": 332484,
+        "currency": "RUB",
+        "destination": "Заявка на выдачу наличных денежных средств",
+        "payer": {
+          "tbCode": "038",
+          "accountNumber": "40702810500112958634",
+          "codeBic": "345678769",
+          "name": "ООО Обнальщик",
+          "inn": "7704681547"
+        },
+        "receiver": {
+          "firstName": "Иван",
+          "secondName": "Иванов",
+          "middleName": "Иванович",
+          "birthDay": "2001-01-01",
+          "dulType": "21",
+          "dulSerieNumber": "5038956712",
+          "dulWhoIssue": "ГУ МВД России по г.Москве",
+          "dulDateIssue": "2021-01-25",
+          "dulCodeIssue": "503-712"
+        },
+        "receipt": {
+          "receiptDate": "2021-08-08",
+          "receiptTbCode": "038",
+          "receiptOsbNumber": "9038",
+          "receiptVspNumber": "01654",
+          "receiptPlaceName": "Доп.офис №9038/01654",
+          "receiptPlaceAddress": "г.Москва, Пресненская набережная, д.2"
+        }
+      },
+      "deviceRequest": {
+        "devicePrint": "version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20",
+        "httpAccept": "text/javascript, text/html, application/xml, text/xml, */*",
+        "httpReferer": "http://localhost:8000/reference_application/Login.do",
+        "httpAcceptChars": "ISO-8859-1,utf-8;q=0.7,*;q=0.7",
+        "httpAcceptEncoding": "gzip, deflate",
+        "httpAcceptLanguage": "en,en-us;q=0.5",
+        "ipAddress": "78.245.9.87",
+        "userAgent": "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)"
+      },
+      "sign": {
+        "signNumber": 1,
+        "signIpAddress": "78.245.9.87",
+        "signTime": "2020-03-23T15:01:15",
+        "signLogin": "novikova01",
+        "signCryptoprofile": "Новикова Ольга Трофимовна",
+        "signCryptoprofileType": "OneTimePassword",
+        "signType": "Единственная подпись",
+        "signEmail": "no@glavbaza36.ru",
+        "userGuid": "36ff1f5f-a0d2-4337-a4bd-1f620ac3462b",
+        "signChannel": "TOKEN",
+        "signToken": "TOKEN;IC0_T32S0000L_C1_VT505NT5;2017-08-10 13:41:33.000;TLS00786854C;23;1",
+        "signCertId": "50CACB3B83F33108E0CBD9F411CAF608"
+      }
+    }
+  }
+}
