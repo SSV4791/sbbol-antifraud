@@ -292,7 +292,7 @@ pipeline {
                                 repositoryId: 'Nexus_PROD',
                                 groupId: "Nexus_PROD/CI03045533_sbbol-antifraud",
                                 artifactId: DATASPACE_ARTIFACT_ID,
-                                version: "D-${VERSION}"
+                                version: VERSION
                         )
                         log.info("QGM result for ${artifactId}: ${response}")
                         def success = true;
