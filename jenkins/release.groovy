@@ -36,6 +36,7 @@ pipeline {
         NEXUSSBRF_RELEASE_REPOSITORY = 'https://sbrf-nexus.sigma.sbrf.ru/nexus/service/local/artifact/maven/content'
         DEV_REPOSITORY = 'https://nexus.sigma.sbrf.ru/nexus/service/local/artifact/maven/content'
         PROJECT_URL = "https://sbtatlas.sigma.sbrf.ru/stashdbo/projects/${GIT_PROJECT}/repos/${GIT_REPOSITORY}/"
+        DOCS_PATH = "${GIT_REPOSITORY}/${env.BRANCH_NAME}"
 
         CUSTOMER_DISTRIB_URL = ''
         DATASPACE_DISTRIB_URL = ''
@@ -280,6 +281,34 @@ pipeline {
             }
         }
 
+        stage('Publish documentation') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(
+                            credentialsId: 'SBBOL-build',
+                            usernameVariable: 'USERNAME',
+                            passwordVariable: 'PASSWORD'
+                    )]) {
+                        sh 'docker run --rm ' +
+                                '-v "$(pwd)":/build ' +
+                                '-v "$(pwd)"/../.m2:/root/.m2 ' +
+                                '-w /build ' +
+                                '-e "M2_HOME=/root/.m2" ' +
+                                '-e "MVNW_REPOURL=http://sbtatlas.sigma.sbrf.ru/nexus/content/groups/public/" ' +
+                                '-e "MVNW_VERBOSE=true" ' +
+                                "-e \"REPO_USER=${USERNAME}\" " +
+                                "-e \"REPO_PASSWORD=${PASSWORD}\" " +
+                                'sbtatlas.sigma.sbrf.ru:5000/openjdk:11 ' +
+                                './mvnw -P asciidoc clean org.asciidoctor:asciidoctor-maven-plugin:process-asciidoc -X -s /build/jenkins/settings.xml'
+                    }
+
+                    sh 'ls admin-guide/target/generated-docs'
+
+                    docs.publish('documentation-publisher', 'admin-guide/target/generated-docs', DOCS_PATH)
+                }
+            }
+        }
+
         stage('Push technical flags') {
             when {
                 expression { params.release }
@@ -292,7 +321,7 @@ pipeline {
                                 repositoryId: 'Nexus_PROD',
                                 groupId: "Nexus_PROD/CI03045533_sbbol-antifraud",
                                 artifactId: DATASPACE_ARTIFACT_ID,
-                                version: "D-${VERSION}"
+                                version: VERSION
                         )
                         log.info("QGM result for ${artifactId}: ${response}")
                         def success = true;
