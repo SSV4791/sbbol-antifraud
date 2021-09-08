@@ -89,25 +89,25 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <plugin>
-                        <groupId>au.com.dius.pact.provider</groupId>
-                        <artifactId>maven</artifactId>
-                        <version>4.1.11</version>
-                        <configuration>
-                            <pactBrokerUrl>${pact.url}</pactBrokerUrl>
-                            <pactBrokerUsername>${pactbroker.auth.username}</pactBrokerUsername>
-                            <pactBrokerPassword>${pactbroker.auth.password}</pactBrokerPassword>
-                            <projectVersion>${pact.consumer.version}</projectVersion>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>publish</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
+<!--                    <plugin>-->
+<!--                        <groupId>au.com.dius.pact.provider</groupId>-->
+<!--                        <artifactId>maven</artifactId>-->
+<!--                        <version>4.1.11</version>-->
+<!--                        <configuration>-->
+<!--                            <pactBrokerUrl>${pact.url}</pactBrokerUrl>-->
+<!--                            <pactBrokerUsername>${pactbroker.auth.username}</pactBrokerUsername>-->
+<!--                            <pactBrokerPassword>${pactbroker.auth.password}</pactBrokerPassword>-->
+<!--                            <projectVersion>${pact.consumer.version}</projectVersion>-->
+<!--                        </configuration>-->
+<!--                        <executions>-->
+<!--                            <execution>-->
+<!--                                <phase>verify</phase>-->
+<!--                                <goals>-->
+<!--                                    <goal>publish</goal>-->
+<!--                                </goals>-->
+<!--                            </execution>-->
+<!--                        </executions>-->
+<!--                    </plugin>-->
                 </plugins>
             </build>
         </profile>
