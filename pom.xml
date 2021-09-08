@@ -40,6 +40,7 @@
     </developers>
 
     <modules>
+        <module>admin-guide</module>
         <module>dataspace-antifraud</module>
         <module>antifraud-model-jpa</module>
         <module>antifraud-model-sdk</module>
