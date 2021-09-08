@@ -308,10 +308,14 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
             FullAnalyzeResponse fullAnalyzeResponse = objectMapper.readValue(jsonResponse, FullAnalyzeResponse.class);
             return convertToPaymentAnalyzeResponse(fullAnalyzeResponse);
         } catch (HttpStatusCodeException e) {
-            throw new AnalyzeException("Payment analyze error: statusCodeValue=" + e.getRawStatusCode() +
-                    ", error='" + e.getResponseBodyAsString() + "'", e);
+            String message = "Payment analyze error: statusCodeValue=" + e.getRawStatusCode() +
+                    ", error='" + e.getResponseBodyAsString() + "'";
+            logger.error(message);
+            throw new AnalyzeException(message, e);
         } catch (JsonProcessingException e) {
-            throw new ApplicationException("Anti fraud aggregator internal error: error parsing", e);
+            String message = "Anti fraud aggregator internal error: " + e.getMessage();
+            logger.error(message);
+            throw new ApplicationException(message, e);
         }
     }
 
