@@ -129,6 +129,7 @@ public class SbpPaymentBuilder {
                 "\"signCertId\": \"signCertId\", " +
                 "\"signPhone\": \"915 168-67-32\", " +
                 "\"signEmail\": \"no@glavbaza36.ru\", " +
+                "\"signChannel\": \"TOKEN\", " +
                 "\"signSource\": \"SMS\", " +
                 "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
                 "}";
@@ -156,6 +157,7 @@ public class SbpPaymentBuilder {
                 "\"signCertId\": \"signCertId\", " +
                 "\"signPhone\": \"903 158-55-12\", " +
                 "\"signEmail\": \"iv@glavbaza36.ru\", " +
+                "\"signChannel\": \"TOKEN\", " +
                 "\"signSource\": \"SMS\", " +
                 "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
                 "}";

@@ -30,7 +30,7 @@ public final class SbpPaymentPacketCommandAdder {
                 param.setSenderSignTime(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignTime());
                 param.setSenderCryptoprofile(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignCryptoprofile());
                 param.setSenderLogin(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignLogin());
-                param.setSenderSignChannel(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getChannelIndicator());
+                param.setSenderSignChannel(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignChannel());
                 param.setSenderCryptoprofileType(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignCryptoprofileType());
                 param.setSenderSignType(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignType());
                 param.setSenderToken(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignToken());
@@ -44,7 +44,7 @@ public final class SbpPaymentPacketCommandAdder {
                 param.setFirstSignTime(operation.getMappedSigns().get(0).getSignTime());
                 param.setFirstSignCryptoprofile(operation.getMappedSigns().get(0).getSignCryptoprofile());
                 param.setFirstSignLogin(operation.getMappedSigns().get(0).getSignLogin());
-                param.setFirstSignChannel(operation.getMappedSigns().get(0).getChannelIndicator());
+                param.setFirstSignChannel(operation.getMappedSigns().get(0).getSignChannel());
                 param.setFirstSignCryptoprofileType(operation.getMappedSigns().get(0).getSignCryptoprofileType());
                 param.setFirstSignType(operation.getMappedSigns().get(0).getSignType());
                 param.setFirstSignToken(operation.getMappedSigns().get(0).getSignToken());
@@ -135,7 +135,7 @@ public final class SbpPaymentPacketCommandAdder {
                 param.setSenderToken(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignToken());
                 param.setSenderSignType(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignType());
                 param.setSenderCryptoprofileType(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignCryptoprofileType());
-                param.setSenderSignChannel(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getChannelIndicator());
+                param.setSenderSignChannel(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignChannel());
                 param.setSenderLogin(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignLogin());
                 param.setSenderCryptoprofile(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignCryptoprofile());
                 param.setSenderSignTime(operation.getMappedSigns().get(operation.getMappedSigns().size() - 1).getSignTime());
@@ -150,7 +150,7 @@ public final class SbpPaymentPacketCommandAdder {
                 param.setFirstSignToken(operation.getMappedSigns().get(0).getSignToken());
                 param.setFirstSignType(operation.getMappedSigns().get(0).getSignType());
                 param.setFirstSignCryptoprofileType(operation.getMappedSigns().get(0).getSignCryptoprofileType());
-                param.setFirstSignChannel(operation.getMappedSigns().get(0).getChannelIndicator());
+                param.setFirstSignChannel(operation.getMappedSigns().get(0).getSignChannel());
                 param.setFirstSignLogin(operation.getMappedSigns().get(0).getSignLogin());
                 param.setFirstSignCryptoprofile(operation.getMappedSigns().get(0).getSignCryptoprofile());
                 param.setFirstSignTime(operation.getMappedSigns().get(0).getSignTime());
@@ -214,4 +214,5 @@ public final class SbpPaymentPacketCommandAdder {
             param.setTimeStamp(operation.getTimeStamp());
         });
     }
+
 }

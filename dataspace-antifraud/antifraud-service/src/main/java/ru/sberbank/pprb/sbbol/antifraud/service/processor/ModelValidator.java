@@ -62,7 +62,7 @@ public abstract class ModelValidator {
     protected static void validateSignWithRequiredParams(Sign sign, String signName) {
         validateRequiredParam(sign.getSignTime(), signName + "Time");
         validateRequiredParam(sign.getSignLogin(), signName + "Login");
-        validateRequiredParam(sign.getChannelIndicator(), signName + "Channel");
+        validateRequiredParam(sign.getSignChannel(), signName + "Channel");
         validateRequiredParam(sign.getSignPhone(), signName + "Phone");
         validateSign(sign, signName);
     }

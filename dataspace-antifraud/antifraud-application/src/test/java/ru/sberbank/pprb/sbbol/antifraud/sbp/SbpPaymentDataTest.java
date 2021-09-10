@@ -183,6 +183,7 @@ class SbpPaymentDataTest extends SbpPaymentIntegrationTest {
                 "\"signCertId\": \"signCertId\", " +
                 "\"signPhone\": \"915 168-67-32\", " +
                 "\"signEmail\": \"no@glavbaza36.ru\", " +
+                "\"signChannel\": \"TOKEN\", " +
                 "\"signSource\": \"SMS\", " +
                 "\"clientDefinedChannelIndicator\": \"WEB\"" +
                 "}";
@@ -218,6 +219,7 @@ class SbpPaymentDataTest extends SbpPaymentIntegrationTest {
                 "\"signCertId\": \"signCertId\", " +
                 "\"signPhone\": \"903 158-55-12\", " +
                 "\"signEmail\": \"iv@glavbaza36.ru\", " +
+                "\"signChannel\": \"TOKEN\", " +
                 "\"signSource\": \"SMS\", " +
                 "\"clientDefinedChannelIndicator\": \"WEB\"" +
                 "}";
@@ -225,6 +227,76 @@ class SbpPaymentDataTest extends SbpPaymentIntegrationTest {
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> DataSpaceIntegrationTest.saveOrUpdateData(operation));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("SignLogin"), "Should contain SignLogin in message. Message: " + exceptionMessage);
+    }
+
+    @Test
+    void validateModelRequiredParamFirstSignChannel() {
+        SbpPaymentOperation operation = createRandomSbpPayment();
+        String sign1 = "{" +
+                "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
+                "\"httpReferer\": \"http://localhost:8000/reference_application/Login.do\", " +
+                "\"httpAcceptChars\": \"ISO-8859-1,utf-8;q=0.7,*;q=0.7\", " +
+                "\"httpAcceptEncoding\": \"gzip, deflate\", " +
+                "\"httpAcceptLanguage\": \"en,en-us;q=0.5\", " +
+                "\"ipAddress\": \"78.245.9.87\", " +
+                "\"privateIpAddress\": \"172.16.0.0\", " +
+                "\"tbCode\": \"546738\", " +
+                "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
+                "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
+                "\"channelIndicator\": \"WEB\", " +
+                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
+                "\"signTime\": \"2020-03-23T15:01:15\", " +
+                "\"signLogin\": \"novikova01\", " +
+                "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
+                "\"signCryptoprofileType\": \"OneTimePassword\", " +
+                "\"signToken\": \"signToken\", " +
+                "\"signType\": \"Единственная подпись\", " +
+                "\"signImsi\": \"6176CB3B83F33108E0CBD9F411CAF608\", " +
+                "\"signCertId\": \"signCertId\", " +
+                "\"signPhone\": \"915 168-67-32\", " +
+                "\"signEmail\": \"no@glavbaza36.ru\", " +
+                "\"signSource\": \"SMS\", " +
+                "\"clientDefinedChannelIndicator\": \"WEB\"" +
+                "}";
+        operation.getSigns().set(1, sign1);
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(operation));
+        String exceptionMessage = ex.getMessage();
+        Assertions.assertTrue(exceptionMessage.contains("firstSignChannel"), "Should contain firstSignChannel in message. Message: " + exceptionMessage);
+    }
+
+    @Test
+    void validateModelRequiredParamSenderSignChannel() {
+        SbpPaymentOperation operation = createRandomSbpPayment();
+        String sign = "{" +
+                "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
+                "\"httpReferer\": \"http://localhost:8000/reference_application/Login.do\", " +
+                "\"httpAcceptChars\": \"ISO-8859-1,utf-8;q=0.7,*;q=0.7\", " +
+                "\"httpAcceptEncoding\": \"gzip, deflate\", " +
+                "\"httpAcceptLanguage\": \"en,en-us;q=0.5\", " +
+                "\"ipAddress\": \"78.245.9.87\", " +
+                "\"privateIpAddress\": \"172.16.0.0\", " +
+                "\"tbCode\": \"546738\", " +
+                "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
+                "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
+                "\"channelIndicator\": \"WEB\", " +
+                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
+                "\"signTime\": \"2020-03-23T16:32:05\", " +
+                "\"signLogin\": \"novikova01\", " +
+                "\"signCryptoprofile\": \"Иванов Иван Иванович\", " +
+                "\"signCryptoprofileType\": \"OneTimePassword\", " +
+                "\"signToken\": \"signToken\", " +
+                "\"signType\": \"Единственная подпись\", " +
+                "\"signImsi\": \"6176CB3B83F33108E0CBD9F411CAF608\", " +
+                "\"signCertId\": \"signCertId\", " +
+                "\"signPhone\": \"903 158-55-12\", " +
+                "\"signEmail\": \"iv@glavbaza36.ru\", " +
+                "\"signSource\": \"SMS\", " +
+                "\"clientDefinedChannelIndicator\": \"WEB\"" +
+                "}";
+        operation.getSigns().set(0, sign);
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(operation));
+        String exceptionMessage = ex.getMessage();
+        Assertions.assertTrue(exceptionMessage.contains("senderSignChannel"), "Should contain senderSignChannel in message. Message: " + exceptionMessage);
     }
 
     @Test
@@ -239,6 +311,7 @@ class SbpPaymentDataTest extends SbpPaymentIntegrationTest {
                 "\"signLogin\": \"novikova01\", " +
                 "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
                 "\"signPhone\": \"915 168-67-32\", " +
+                "\"signChannel\": \"TOKEN\", " +
                 "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
                 "}";
         String senderSign = "{" +
@@ -248,6 +321,7 @@ class SbpPaymentDataTest extends SbpPaymentIntegrationTest {
                 "\"signTime\": \"2020-03-23T15:01:15\", " +
                 "\"signLogin\": \"novikova01\", " +
                 "\"signPhone\": \"915 168-67-32\", " +
+                "\"signChannel\": \"TOKEN\", " +
                 "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
                 "}";
         paymentOperation.getSigns().clear();
