@@ -191,7 +191,7 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
         Map<String, String> descriptionMap = new HashMap<>(CAPACITY);
         descriptionMap.put(EPK_ID, "ЕПК.id");
         descriptionMap.put(DIGITAL_ID, "Личный кабинет");
-        descriptionMap.put(DOC_NUMBER, "Номер документа");
+        descriptionMap.put(DOC_NUMBER, "Номер платежного документа");
         descriptionMap.put(DOC_DATE, "Дата документа");
         descriptionMap.put(RECEIVER_INN, "ИНН получателя");
         descriptionMap.put(DESTINATION, "Назначение платежа");
