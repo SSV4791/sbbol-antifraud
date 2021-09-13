@@ -132,6 +132,11 @@ public class Sign implements Serializable {
     private String signEmail;
 
     /**
+     * Канал подписи
+     */
+    private String signChannel;
+
+    /**
      * Канал
      */
     private String signSource;
@@ -325,6 +330,14 @@ public class Sign implements Serializable {
         this.signEmail = signEmail;
     }
 
+    public String getSignChannel() {
+        return signChannel;
+    }
+
+    public void setSignChannel(String signChannel) {
+        this.signChannel = signChannel;
+    }
+
     public String getSignSource() {
         return signSource;
     }
@@ -367,8 +380,10 @@ public class Sign implements Serializable {
                 ", signCertId='" + signCertId + '\'' +
                 ", signPhone='" + signPhone + '\'' +
                 ", signEmail='" + signEmail + '\'' +
+                ", signChannel='" + signChannel + '\'' +
                 ", signSource='" + signSource + '\'' +
                 ", clientDefinedChannelIndicator='" + clientDefinedChannelIndicator + '\'' +
                 '}';
     }
+
 }

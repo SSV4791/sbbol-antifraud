@@ -104,13 +104,14 @@
                 <sonar.coverage.jacoco.xmlReportPaths>
                     ${maven.multiModuleProjectDirectory}/dataspace-antifraud/antifraud-application/target/site/jacoco-aggregate/jacoco.xml
                 </sonar.coverage.jacoco.xmlReportPaths>
-                <sonar.coverage.exclusions>
-                    **/ru/sberbank/pprb/sbbol/antifraud/api/**/*,
+                <sonar.exclusions>
                     **/admin-guide/src/docs/**/*
+                </sonar.exclusions>
+                <sonar.coverage.exclusions>
+                    **/ru/sberbank/pprb/sbbol/antifraud/api/**/*
                 </sonar.coverage.exclusions>
                 <sonar.cpd.exclusions>
-                    **/ru/sberbank/pprb/sbbol/antifraud/api/**/*,
-                    **/admin-guide/src/docs/**/*
+                    **/ru/sberbank/pprb/sbbol/antifraud/api/**/*
                 </sonar.cpd.exclusions>
             </properties>
             <build>

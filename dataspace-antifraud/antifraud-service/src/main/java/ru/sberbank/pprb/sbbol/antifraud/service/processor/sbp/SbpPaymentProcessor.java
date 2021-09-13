@@ -171,7 +171,7 @@ public class SbpPaymentProcessor implements Processor<SbpPaymentOperation, SbpPa
         Map<String, String> descriptionMap = new HashMap<>(CAPACITY);
         descriptionMap.put(EPK_ID, "ЕПК.id");
         descriptionMap.put(DIGITAL_ID, "Личный кабинет");
-        descriptionMap.put(DOC_NUMBER, "Номер документа");
+        descriptionMap.put(DOC_NUMBER, "Номер платежного документа");
         descriptionMap.put(DOC_DATE, "Дата документа");
         descriptionMap.put(DESTINATION, "Назначение платежа");
         descriptionMap.put(PAYER_FINANCIAL_NAME, "Полное наименование организации");

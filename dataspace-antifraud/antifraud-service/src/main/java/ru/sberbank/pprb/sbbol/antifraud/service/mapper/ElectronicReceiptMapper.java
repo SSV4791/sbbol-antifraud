@@ -162,7 +162,7 @@ public abstract class ElectronicReceiptMapper implements CommonMapper {
         descriptionMap.put(DIGITAL_ID, "Личный кабинет");
         descriptionMap.put(PRIVATE_IP_ADDRESS, "Локальный IP сервера");
         descriptionMap.put(USER_GUID, "Уникальный идентификатор пользователя");
-        descriptionMap.put(DOC_NUMBER, "Номер документа");
+        descriptionMap.put(DOC_NUMBER, "Номер платежного документа");
         descriptionMap.put(DOC_DATE, "Дата документа");
         descriptionMap.put(CODE_BIC, "БИК банка");
         descriptionMap.put(DESTINATION, "Назначение платежа");

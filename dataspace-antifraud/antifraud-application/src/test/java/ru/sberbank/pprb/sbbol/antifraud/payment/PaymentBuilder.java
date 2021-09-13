@@ -9,6 +9,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentReceiver;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -48,10 +49,10 @@ public class PaymentBuilder {
 
     public PaymentOperation build() {
         PaymentOperation payment = new PaymentOperation();
-        payment.setTimeStamp(timeStamp != null ? timeStamp : LocalDateTime.now());
+        payment.setTimeStamp(timeStamp != null ? timeStamp : LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
         payment.setOrgGuid(orgGuid != null ? orgGuid : UUID.randomUUID().toString());
         payment.setDigitalId(digitalId != null ? digitalId : RandomStringUtils.randomNumeric(5));
-        payment.setTimeOfOccurrence(timeOfOccurrence != null ? timeOfOccurrence : LocalDateTime.now());
+        payment.setTimeOfOccurrence(timeOfOccurrence != null ? timeOfOccurrence : LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
 
         payment.setDocument(new PaymentDocument());
         payment.getDocument().setId(docId != null ? docId : UUID.randomUUID());
@@ -105,6 +106,7 @@ public class PaymentBuilder {
                 "\"signCertId\": \"signCertId\", " +
                 "\"signPhone\": \"915 168-67-32\", " +
                 "\"signEmail\": \"no@glavbaza36.ru\", " +
+                "\"signChannel\": \"TOKEN\", " +
                 "\"signSource\": \"SMS\", " +
                 "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
                 "}";
@@ -132,6 +134,7 @@ public class PaymentBuilder {
                 "\"signCertId\": \"signCertId\", " +
                 "\"signPhone\": \"903 158-55-12\", " +
                 "\"signEmail\": \"iv@glavbaza36.ru\", " +
+                "\"signChannel\": \"TOKEN\", " +
                 "\"signSource\": \"SMS\", " +
                 "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
                 "}";
@@ -159,13 +162,43 @@ public class PaymentBuilder {
                 "\"signCertId\": \"signCertId\", " +
                 "\"signPhone\": \"916 243-67-34\", " +
                 "\"signEmail\": \"pe@glavbaza36.ru\", " +
+                "\"signChannel\": \"TOKEN\", " +
                 "\"signSource\": \"SMS\", " +
                 "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
                 "}";
-        List<String> signs = new ArrayList<>(3);
+        String sign4 = "{" +
+                "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
+                "\"httpReferer\": \"http://localhost:8000/reference_application/Login.do\", " +
+                "\"httpAcceptChars\": \"ISO-8859-1,utf-8;q=0.7,*;q=0.7\", " +
+                "\"httpAcceptEncoding\": \"gzip, deflate\", " +
+                "\"httpAcceptLanguage\": \"en,en-us;q=0.5\", " +
+                "\"ipAddress\": \"78.245.9.90\", " +
+                "\"privateIpAddress\": \"172.16.0.0\", " +
+                "\"tbCode\": \"546738\", " +
+                "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
+                "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
+                "\"mobSdkData\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3D\", " +
+                "\"channelIndicator\": \"WEB\", " +
+                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522016f\", " +
+                "\"signTime\": \"2020-03-23T16:32:05\", " +
+                "\"signLogin\": \"sidorov22\", " +
+                "\"signCryptoprofile\": \"Сидоров ПМ\", " +
+                "\"signCryptoprofileType\": \"OneTimePassword\", " +
+                "\"signToken\": \"signToken\", " +
+                "\"signType\": \"Единственная подпись\", " +
+                "\"signImsi\": \"6176CB3B83F33108E0CBD9F411CAF608\", " +
+                "\"signCertId\": \"signCertId\", " +
+                "\"signPhone\": \"903 243-60-30\", " +
+                "\"signEmail\": \"pe@glavbaza36.ru\", " +
+                "\"signChannel\": \"TOKEN\", " +
+                "\"signSource\": \"SMS\", " +
+                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
+                "}";
+        List<String> signs = new ArrayList<>(4);
         signs.add(sign3);
         signs.add(sign1);
         signs.add(sign2);
+        signs.add(sign4);
         return signs;
     }
 
