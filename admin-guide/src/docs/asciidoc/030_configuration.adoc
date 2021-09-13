@@ -2,7 +2,7 @@
 
 === Стендозависимые параметры деплоя
 
-Описание всех переменных в install_eip. Пример:
+Описание всех переменных в install_eip
 
 .os_props.conf
 [%collapsible]
@@ -302,6 +302,8 @@ REQUEST_EPHEMERAL_STORAGE=2Gi
 ----
 ====
 
+Перечень папок в поставке для раскатки в OpenShift
+
 .os_yaml_dirs.conf
 [%collapsible]
 ====
@@ -320,7 +322,61 @@ REQUEST_EPHEMERAL_STORAGE=2Gi
 /configs/audit
 /dataspace/configs
 ----
+====
 
+Конфигурация dataspace в os_namespaces.yml
+
+.os_namespaces.yml
+[%collapsible]
+====
+[source,yaml]
+----
+projects:
+- name: "dev-gen2-pprb"
+  openShiftNamespace: "ci02642164-edevgen2-pprb-kib-dev-sbbol-antifraud"
+  openShiftURL: api.dev-gen2.sigma.sbrf.ru:6443
+  oc_token: antifraud_dev_token_pprb
+  os_props: "os_props_main.conf"
+  backupResources: false
+  deleteResources: false
+  validateDeploy: false
+  rollback:
+    - needToRollback: false
+      healthCheckTimeout: 360    # Таймаут ожидания успешного завершения хелсчека.
+      healthCheckDelay: 30       # Периодичность проверки хелсчека.
+  uniqueParams:
+    dataspace-core-template.yaml:
+      MODULE_NAME: dataspace-core-antifraud
+      limitCPU: 700m
+      limitMemory: 2Gi
+      requestCPU: 700m
+      requestMemory: 2Gi
+      replicasCount: 1
+    dataspace-gigabas-template.yaml:
+      MODULE_NAME: dataspace-gigabas-antifraud
+      limitCPU: 1
+      limitMemory: 2Gi
+      requestCPU: 1
+      requestMemory: 2Gi
+      replicasCount: 1
+----
+====
+
+Пример конфигурации Install_EIP для обновления БД
+
+.liquibase.conf
+[%collapsible]
+====
+[source]
+----
+liquibase_log: changelog.xml
+liquibase_basedir: "distrib/dataspace/configs/db"
+liquibase_user: sbbol_antifraud
+liquibase_pass: "{{ db_ora_password_dataspace }}"
+liquibase_version: "3.7.0"
+liquibase_params: "--url=jdbc:postgresql://10.53.223.31:5433/sbbol_antifraud --changeLogFile={{ liquibase_log }} --driver=org.postgresql.Driver --logLevel=info update -Dtablespace_t=pg_default -Dtablespace_i=pg_default -Dschemaname=sbbol_antifraud -DdefaultSchemaName=sbbol_antifraud"
+liquibase_get_tag: "grep 'tag='  {{ WORKSPACE }}/{{ liquibase_basedir }}/changelog.xml | cut -d'=' -f4 | cut -d'/' -f1 | sed 's/\"//g' | tail -1"
+----
 ====
 
 
@@ -338,6 +394,7 @@ REQUEST_EPHEMERAL_STORAGE=2Gi
 Секрет для подключения ПЖ
 
 * secret-appjournal-settings
+* kafka-ssl-secret
 
 Секреты для OTT
 
@@ -359,7 +416,7 @@ spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
 ----
 ====
 
-..pgdb-si-secret (ключ secret.properties)
+.pgdb-si-secret (ключ secret.properties)
 [%collapsible]
 ====
 [source,properties]
