@@ -4,12 +4,18 @@ import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.dcbqa.allureee.annotations.layers.UnitTestLayer;
-import ru.sberbank.pprb.sbbol.antifraud.common.DataSpaceIntegrationTest;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
-import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
-import ru.sberbank.pprb.sbbol.antifraud.graph.get.SbpPaymentOperationGet;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.common.Sign;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.sbp.SbpDocument;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.sbp.SbpPayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.sbp.SbpPaymentOperation;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.sbp.SbpReceiver;
+import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
+import ru.sberbank.pprb.sbbol.antifraud.common.DataSpaceIntegrationTest;
+import ru.sberbank.pprb.sbbol.antifraud.graph.get.SbpPaymentOperationGet;
+import ru.sberbank.pprb.sbbol.antifraud.service.processor.SignMapper;
 
+import java.util.Random;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,118 +28,134 @@ class SbpPaymentDataTest extends SbpPaymentIntegrationTest {
     @Test
     @AllureId("19644")
     void createData() throws Throwable {
-        UUID docId = UUID.fromString("123e4567-e89b-12d3-a456-426614174001");
-        Integer docNumber = 15;
-        RequestId actual = generateSbpPayment(docId, docNumber);
-        assertNotNull(actual);
+        UUID docId = UUID.randomUUID();
+        Integer docNumber = Math.abs(new Random().nextInt());
+        SbpPaymentOperation payment = SbpPaymentBuilder.getInstance()
+                .withDocId(docId)
+                .withDocNumber(docNumber)
+                .build();
+        RequestId requestId = saveOrUpdateData(payment);
+        payment.setMappedSigns(SignMapper.convertSigns(payment.getSigns()));
+        assertNotNull(requestId);
 
         SbpPaymentOperationGet operationGet = searchSbpPayment(docId);
-        assertEquals(operationGet.getRequestId(), actual.getId().toString());
-        assertNotNull(operationGet.getTimeStamp());
-        assertNotNull(operationGet.getEpkId());
-        assertNotNull(operationGet.getDigitalId());
-        assertNotNull(operationGet.getUserGuid());
-        assertNotNull(operationGet.getTbCode());
-        assertNotNull(operationGet.getHttpAccept());
-        assertNotNull(operationGet.getHttpReferer());
-        assertNotNull(operationGet.getHttpAcceptChars());
-        assertNotNull(operationGet.getHttpAcceptEncoding());
-        assertNotNull(operationGet.getHttpAcceptLanguage());
-        assertNotNull(operationGet.getIpAddress());
-        assertNotNull(operationGet.getUserAgent());
-        assertNotNull(operationGet.getDevicePrint());
-        assertNotNull(operationGet.getMobSdkData());
-        assertNotNull(operationGet.getChannelIndicator());
-        assertNotNull(operationGet.getTimeOfOccurrence());
-        assertNotNull(operationGet.getPrivateIpAddress());
-        assertNotNull(operationGet.getClientDefinedChannelIndicator());
-        assertDoc(operationGet, docId, docNumber);
-        assertFirstSign(operationGet);
-        assertSenderSign(operationGet);
-    }
-
-    private void assertDoc(SbpPaymentOperationGet operationGet, UUID docId, Integer docNumber) {
-        assertEquals(docId.toString(), operationGet.getDocId());
-        assertEquals(docNumber, operationGet.getDocNumber());
-        assertNotNull(operationGet.getDocDate());
-        assertNotNull(operationGet.getAmount());
-        assertNotNull(operationGet.getCurrency());
-        assertNotNull(operationGet.getIdOperationOPKC());
-        assertNotNull(operationGet.getDestination());
-        assetPayer(operationGet);
-        assertReceiver(operationGet);
-    }
-
-    private void assetPayer(SbpPaymentOperationGet operationGet) {
-        assertNotNull(operationGet.getAccountNumber());
-        assertNotNull(operationGet.getPayerFinancialName());
-        assertNotNull(operationGet.getPayerOsbNum());
-        assertNotNull(operationGet.getPayerVspNum());
-        assertNotNull(operationGet.getPayerAccBalance());
-        assertNotNull(operationGet.getPayerAccCreateDate());
-        assertNotNull(operationGet.getPayerBic());
-        assertNotNull(operationGet.getPayerDocumentNumber());
-        assertNotNull(operationGet.getPayerDocumentType());
-        assertNotNull(operationGet.getPayerSegment());
-        assertNotNull(operationGet.getPayerInn());
-    }
-
-    private void assertReceiver(SbpPaymentOperationGet operationGet) {
-        assertNotNull(operationGet.getOtherAccName());
-        assertNotNull(operationGet.getOtherBicCode());
-        assertNotNull(operationGet.getReceiverInn());
-        assertNotNull(operationGet.getReceiverBankName());
-        assertNotNull(operationGet.getReceiverBankCountryCode());
-        assertNotNull(operationGet.getReceiverBankCorrAcc());
-        assertNotNull(operationGet.getReceiverBankId());
-        assertNotNull(operationGet.getReceiverDocument());
-        assertNotNull(operationGet.getReceiverDocumentType());
-        assertNotNull(operationGet.getReceiverPhoneNumber());
-        assertNotNull(operationGet.getReceiverAccount());
-    }
-
-    private void assertFirstSign(SbpPaymentOperationGet operationGet) {
-        assertEquals("2020-03-23T15:01:15", operationGet.getFirstSignTime().toString());
-        assertNotNull(operationGet.getFirstSignIp());
-        assertEquals(operationGet.getFirstSignIp(), operationGet.getIpAddress());
-        assertNotNull(operationGet.getFirstSignLogin());
-        assertNotNull(operationGet.getFirstSignCryptoprofile());
-        assertNotNull(operationGet.getFirstSignCryptoprofileType());
-        assertNotNull(operationGet.getFirstSignChannel());
-        assertEquals(operationGet.getFirstSignChannel(), operationGet.getChannelIndicator());
-        assertNotNull(operationGet.getFirstSignToken());
-        assertNotNull(operationGet.getFirstSignType());
-        assertNotNull(operationGet.getFirstSignImsi());
-        assertNotNull(operationGet.getFirstSignCertId());
-        assertNotNull(operationGet.getFirstSignPhone());
-        assertNotNull(operationGet.getFirstSignEmail());
-        assertNotNull(operationGet.getFirstSignSource());
-    }
-
-    private void assertSenderSign(SbpPaymentOperationGet operationGet) {
-        assertEquals("2020-03-23T15:28:25", operationGet.getSenderSignTime().toString());
-        assertNotNull(operationGet.getSenderIp());
-        assertNotNull(operationGet.getSenderLogin());
-        assertNotNull(operationGet.getSenderCryptoprofile());
-        assertNotNull(operationGet.getSenderCryptoprofileType());
-        assertNotNull(operationGet.getSenderSignChannel());
-        assertNotNull(operationGet.getSenderToken());
-        assertNotNull(operationGet.getSenderSignType());
-        assertNotNull(operationGet.getSenderSignImsi());
-        assertNotNull(operationGet.getSenderCertId());
-        assertNotNull(operationGet.getSenderPhone());
-        assertNotNull(operationGet.getSenderEmail());
-        assertNotNull(operationGet.getSenderSource());
+        assertOperation(payment, requestId.getId(), operationGet);
+        assertDoc(payment.getDocument(), operationGet);
+        assertFirstSign(payment.getMappedSigns().get(0), operationGet);
+        assertSenderSign(payment.getMappedSigns().get(1), operationGet);
     }
 
     @Test
     @AllureId("19643")
     void updateData() throws Throwable {
-        RequestId actual = generateSbpPayment(DOC_ID, 1);
+        SbpPaymentOperation payment = SbpPaymentBuilder.getInstance()
+                .withDocId(DOC_ID)
+                .withDocNumber(1)
+                .build();
+        RequestId actual = saveOrUpdateData(payment);
+        payment.setMappedSigns(SignMapper.convertSigns(payment.getSigns()));
         assertEquals(requestId, actual.getId());
+
         SbpPaymentOperationGet operationGet = searchSbpPayment(DOC_ID);
-        assertEquals(requestId.toString(), operationGet.getRequestId());
-        assertEquals(1, operationGet.getDocNumber());
+        assertOperation(payment, requestId, operationGet);
+        assertDoc(payment.getDocument(), operationGet);
+        assertFirstSign(payment.getMappedSigns().get(0), operationGet);
+        assertSenderSign(payment.getMappedSigns().get(1), operationGet);
+    }
+
+    private void assertOperation(SbpPaymentOperation payment, UUID requestId, SbpPaymentOperationGet paymentGet) {
+        assertEquals(requestId.toString(), paymentGet.getRequestId());
+        assertEquals(payment.getTimeStamp(), paymentGet.getTimeStamp());
+        assertEquals(payment.getOrgGuid(), paymentGet.getEpkId());
+        assertEquals(payment.getDigitalId(), paymentGet.getDigitalId());
+        assertEquals(payment.getMappedSigns().get(0).getUserGuid().toString(), paymentGet.getUserGuid());
+        assertEquals(payment.getMappedSigns().get(0).getTbCode(), paymentGet.getTbCode());
+        assertEquals(payment.getMappedSigns().get(0).getHttpAccept(), paymentGet.getHttpAccept());
+        assertEquals(payment.getMappedSigns().get(0).getHttpReferer(), paymentGet.getHttpReferer());
+        assertEquals(payment.getMappedSigns().get(0).getHttpAcceptChars(), paymentGet.getHttpAcceptChars());
+        assertEquals(payment.getMappedSigns().get(0).getHttpAcceptEncoding(), paymentGet.getHttpAcceptEncoding());
+        assertEquals(payment.getMappedSigns().get(0).getHttpAcceptLanguage(), paymentGet.getHttpAcceptLanguage());
+        assertEquals(payment.getMappedSigns().get(0).getIpAddress(), paymentGet.getIpAddress());
+        assertEquals(payment.getMappedSigns().get(0).getUserAgent(), paymentGet.getUserAgent());
+        assertEquals(payment.getMappedSigns().get(0).getDevicePrint(), paymentGet.getDevicePrint());
+        assertEquals(payment.getMappedSigns().get(0).getMobSdkData(), paymentGet.getMobSdkData());
+        assertEquals(payment.getMappedSigns().get(0).getChannelIndicator(), paymentGet.getChannelIndicator());
+        assertEquals(payment.getTimeOfOccurrence(), paymentGet.getTimeOfOccurrence());
+        assertEquals(payment.getMappedSigns().get(0).getPrivateIpAddress(), paymentGet.getPrivateIpAddress());
+        assertEquals(payment.getMappedSigns().get(0).getClientDefinedChannelIndicator(), paymentGet.getClientDefinedChannelIndicator());
+    }
+
+    private void assertDoc(SbpDocument document, SbpPaymentOperationGet operationGet) {
+        assertEquals(document.getId().toString(), operationGet.getDocId());
+        assertEquals(document.getNumber(), operationGet.getDocNumber());
+        assertEquals(document.getDate(), operationGet.getDocDate());
+        assertEquals(document.getAmount(), operationGet.getAmount());
+        assertEquals(document.getCurrency(), operationGet.getCurrency());
+        assertEquals(document.getIdOperationOPKC(), operationGet.getIdOperationOPKC());
+        assertEquals(document.getDestination(), operationGet.getDestination());
+        assetPayer(document.getPayer(), operationGet);
+        assertReceiver(document.getReceiver(), operationGet);
+    }
+
+    private void assetPayer(SbpPayer payer, SbpPaymentOperationGet operationGet) {
+        assertEquals(payer.getAccountNumber(), operationGet.getAccountNumber());
+        assertEquals(payer.getFinancialName(), operationGet.getPayerFinancialName());
+        assertEquals(payer.getOsbNum(), operationGet.getPayerOsbNum());
+        assertEquals(payer.getVspNum(), operationGet.getPayerVspNum());
+        assertEquals(payer.getAccBalance(), operationGet.getPayerAccBalance());
+        assertEquals(payer.getAccCreateDate(), operationGet.getPayerAccCreateDate());
+        assertEquals(payer.getBic(), operationGet.getPayerBic());
+        assertEquals(payer.getDocumentNumber(), operationGet.getPayerDocumentNumber());
+        assertEquals(payer.getDocumentType(), operationGet.getPayerDocumentType());
+        assertEquals(payer.getSegment(), operationGet.getPayerSegment());
+        assertEquals(payer.getInn(), operationGet.getPayerInn());
+    }
+
+    private void assertReceiver(SbpReceiver receiver, SbpPaymentOperationGet operationGet) {
+        assertEquals(receiver.getOtherAccName(), operationGet.getOtherAccName());
+        assertEquals(receiver.getOtherBicCode(), operationGet.getOtherBicCode());
+        assertEquals(receiver.getInn(), operationGet.getReceiverInn());
+        assertEquals(receiver.getBankName(), operationGet.getReceiverBankName());
+        assertEquals(receiver.getBankCountryCode(), operationGet.getReceiverBankCountryCode());
+        assertEquals(receiver.getBankCorrAcc(), operationGet.getReceiverBankCorrAcc());
+        assertEquals(receiver.getBankId(), operationGet.getReceiverBankId());
+        assertEquals(receiver.getDocument(), operationGet.getReceiverDocument());
+        assertEquals(receiver.getDocumentType(), operationGet.getReceiverDocumentType());
+        assertEquals(receiver.getPhoneNumber(), operationGet.getReceiverPhoneNumber());
+        assertEquals(receiver.getAccount(), operationGet.getReceiverAccount());
+    }
+
+    private void assertFirstSign(Sign firstSign, SbpPaymentOperationGet paymentGet) {
+        assertEquals(firstSign.getSignTime(), paymentGet.getFirstSignTime());
+        assertEquals(firstSign.getIpAddress(), paymentGet.getFirstSignIp());
+        assertEquals(paymentGet.getFirstSignIp(), paymentGet.getIpAddress());
+        assertEquals(firstSign.getSignLogin(), paymentGet.getFirstSignLogin());
+        assertEquals(firstSign.getSignCryptoprofile(), paymentGet.getFirstSignCryptoprofile());
+        assertEquals(firstSign.getSignCryptoprofileType(), paymentGet.getFirstSignCryptoprofileType());
+        assertEquals(firstSign.getSignChannel(), paymentGet.getFirstSignChannel());
+        assertEquals(firstSign.getSignToken(), paymentGet.getFirstSignToken());
+        assertEquals(firstSign.getSignType(), paymentGet.getFirstSignType());
+        assertEquals(firstSign.getSignImsi(), paymentGet.getFirstSignImsi());
+        assertEquals(firstSign.getSignCertId(), paymentGet.getFirstSignCertId());
+        assertEquals(firstSign.getSignPhone(), paymentGet.getFirstSignPhone());
+        assertEquals(firstSign.getSignEmail(), paymentGet.getFirstSignEmail());
+        assertEquals(firstSign.getSignSource(), paymentGet.getFirstSignSource());
+    }
+
+    private void assertSenderSign(Sign senderSign, SbpPaymentOperationGet paymentGet) {
+        assertEquals(senderSign.getSignTime(), paymentGet.getSenderSignTime());
+        assertEquals(senderSign.getIpAddress(), paymentGet.getSenderIp());
+        assertEquals(senderSign.getSignLogin(), paymentGet.getSenderLogin());
+        assertEquals(senderSign.getSignCryptoprofile(), paymentGet.getSenderCryptoprofile());
+        assertEquals(senderSign.getSignCryptoprofileType(), paymentGet.getSenderCryptoprofileType());
+        assertEquals(senderSign.getSignChannel(), paymentGet.getSenderSignChannel());
+        assertEquals(senderSign.getSignToken(), paymentGet.getSenderToken());
+        assertEquals(senderSign.getSignType(), paymentGet.getSenderSignType());
+        assertEquals(senderSign.getSignImsi(), paymentGet.getSenderSignImsi());
+        assertEquals(senderSign.getSignCertId(), paymentGet.getSenderCertId());
+        assertEquals(senderSign.getSignPhone(), paymentGet.getSenderPhone());
+        assertEquals(senderSign.getSignEmail(), paymentGet.getSenderEmail());
+        assertEquals(senderSign.getSignSource(), paymentGet.getSenderSource());
     }
 
     @Test
@@ -209,7 +231,7 @@ class SbpPaymentDataTest extends SbpPaymentIntegrationTest {
                 "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
                 "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
                 "\"channelIndicator\": \"WEB\", " +
-                "\"userGuid\": \"\", " +
+                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
                 "\"signTime\": \"2020-03-23T15:28:25\", " +
                 "\"signCryptoprofile\": \"Иванов Иван Иванович\", " +
                 "\"signCryptoprofileType\": \"OneTimePassword\", " +

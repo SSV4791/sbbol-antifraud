@@ -102,7 +102,7 @@ public final class PaymentPacketCommandAdder {
                 param.setSenderSource(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getSignSource());
             }
 
-            if (payment.getMappedSigns().size() > 1) {
+            if (payment.getMappedSigns().size() > 2) {
                 param.setSecondSignTime(payment.getMappedSigns().get(1).getSignTime());
                 param.setSecondSignIp(payment.getMappedSigns().get(1).getIpAddress());
                 param.setSecondSignLogin(payment.getMappedSigns().get(1).getSignLogin());
@@ -118,7 +118,7 @@ public final class PaymentPacketCommandAdder {
                 param.setSecondSignSource(payment.getMappedSigns().get(1).getSignSource());
             }
 
-            if (payment.getMappedSigns().size() > 2) {
+            if (payment.getMappedSigns().size() > 3) {
                 param.setThirdSignTime(payment.getMappedSigns().get(2).getSignTime());
                 param.setThirdSignIp(payment.getMappedSigns().get(2).getIpAddress());
                 param.setThirdSignLogin(payment.getMappedSigns().get(2).getSignLogin());
@@ -222,7 +222,7 @@ public final class PaymentPacketCommandAdder {
                 param.setSenderSignTime(payment.getMappedSigns().get(payment.getMappedSigns().size() - 1).getSignTime());
             }
 
-            if (payment.getMappedSigns().size() > 1) {
+            if (payment.getMappedSigns().size() > 2) {
                 param.setSecondSignSource(payment.getMappedSigns().get(1).getSignSource());
                 param.setSecondSignEmail(payment.getMappedSigns().get(1).getSignEmail());
                 param.setSecondSignPhone(payment.getMappedSigns().get(1).getSignPhone());
@@ -238,7 +238,7 @@ public final class PaymentPacketCommandAdder {
                 param.setSecondSignTime(payment.getMappedSigns().get(1).getSignTime());
             }
 
-            if (payment.getMappedSigns().size() > 2) {
+            if (payment.getMappedSigns().size() > 3) {
                 param.setThirdSignSource(payment.getMappedSigns().get(2).getSignSource());
                 param.setThirdSignEmail(payment.getMappedSigns().get(2).getSignEmail());
                 param.setThirdSignPhone(payment.getMappedSigns().get(2).getSignPhone());

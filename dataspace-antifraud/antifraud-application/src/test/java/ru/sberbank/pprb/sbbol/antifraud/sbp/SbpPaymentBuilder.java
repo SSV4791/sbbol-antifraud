@@ -9,6 +9,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.data.sbp.SbpPaymentOperation;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -60,10 +61,10 @@ public class SbpPaymentBuilder {
     
     public SbpPaymentOperation build() {
         SbpPaymentOperation operation = new SbpPaymentOperation();
-        operation.setTimeStamp(timeStamp != null ? timeStamp : LocalDateTime.now());
+        operation.setTimeStamp(timeStamp != null ? timeStamp : LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
         operation.setOrgGuid(orgGuid != null ? orgGuid : UUID.randomUUID().toString());
         operation.setDigitalId(digitalId != null ? digitalId : RandomStringUtils.randomNumeric(5));
-        operation.setTimeOfOccurrence(timeOfOccurrence != null ? timeOfOccurrence : LocalDateTime.now());
+        operation.setTimeOfOccurrence(timeOfOccurrence != null ? timeOfOccurrence : LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
 
         operation.setDocument(new SbpDocument());
         operation.getDocument().setId(docId != null ? docId : UUID.randomUUID());

@@ -8,12 +8,13 @@ import ru.sberbank.pprb.sbbol.antifraud.graph.get.PaymentOperationGet;
 import ru.sberbank.pprb.sbbol.antifraud.common.DataSpaceIntegrationTest;
 import sbp.sbt.sdk.exception.SdkJsonRpcClientException;
 
+import java.util.Random;
 import java.util.UUID;
 
 public abstract class PaymentIntegrationTest extends DataSpaceIntegrationTest {
 
-    protected static final UUID DOC_ID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
-    protected static final Integer DOC_NUMBER = 888;
+    protected static final UUID DOC_ID = UUID.randomUUID();
+    protected static final Integer DOC_NUMBER = Math.abs(new Random().nextInt());
 
     protected static UUID requestId;
 
