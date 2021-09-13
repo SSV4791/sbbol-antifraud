@@ -97,10 +97,14 @@ public class ElectronicReceiptProcessor implements Processor<ElectronicReceiptOp
             FullAnalyzeResponse fullAnalyzeResponse = objectMapper.readValue(jsonResponse, FullAnalyzeResponse.class);
             return mapper.toAnalyzeResponse(fullAnalyzeResponse);
         } catch (HttpStatusCodeException e) {
-            throw new AnalyzeException("Electronic receipt analyze error: statusCodeValue=" + e.getRawStatusCode() +
-                    ", error='" + e.getResponseBodyAsString() + "'", e);
+            String message = "Electronic receipt analyze error: statusCodeValue=" + e.getRawStatusCode() +
+                    ", error='" + e.getResponseBodyAsString() + "'";
+            logger.error(message);
+            throw new AnalyzeException(message, e);
         } catch (JsonProcessingException e) {
-            throw new ApplicationException("Anti fraud aggregator internal error: error parsing", e);
+            String message = "Anti fraud aggregator internal error: " + e.getMessage();
+            logger.error(message);
+            throw new ApplicationException(message, e);
         }
     }
 

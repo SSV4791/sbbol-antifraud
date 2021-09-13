@@ -5,16 +5,19 @@ metadata:
 data:
   application.properties: |-
     server.port=8080
+    server.shutdown=graceful
+
     fpis.endpoint=http://${FRAUD_ADAPTER_HOST}${FRAUD_ADAPTER_CONTEXT}
 
     spring.main.banner-mode=off
     spring.application.name=antifraud
     spring.profiles.active=default
 
-    spring.http.encoding.charset=UTF-8
-    spring.http.encoding.force=true
-    spring.http.encoding.enabled=true
+    server.servlet.encoding.charset=UTF-8
+    server.servlet.encoding.force=true
+    server.servlet.encoding.enabled=true
     server.tomcat.uri-encoding=UTF-8
+
     management.metrics.tags.application=antifraud
     management.metrics.export.prometheus.enabled=true
 
