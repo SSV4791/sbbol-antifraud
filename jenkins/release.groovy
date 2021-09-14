@@ -1,4 +1,5 @@
 import groovy.json.JsonOutput
+import ru.sbrf.ufs.pipeline.Const
 
 @Library(['ufs-jobs@master']) _
 
@@ -285,21 +286,23 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(
-                            credentialsId: 'SBBOL-build',
+                            credentialsId: CREDENTIAL_ID,
                             usernameVariable: 'USERNAME',
                             passwordVariable: 'PASSWORD'
                     )]) {
-                        sh 'docker run --rm ' +
-                                '-v "$(pwd)":/build ' +
-                                '-v "$(pwd)"/../.m2:/root/.m2 ' +
-                                '-w /build ' +
-                                '-e "M2_HOME=/root/.m2" ' +
-                                '-e "MVNW_REPOURL=http://sbtatlas.sigma.sbrf.ru/nexus/content/groups/public/" ' +
-                                '-e "MVNW_VERBOSE=true" ' +
-                                "-e \"REPO_USER=${USERNAME}\" " +
-                                "-e \"REPO_PASSWORD=${PASSWORD}\" " +
-                                'sbtatlas.sigma.sbrf.ru:5000/openjdk:11 ' +
-                                './mvnw -P asciidoc clean org.asciidoctor:asciidoctor-maven-plugin:process-asciidoc -X -s /build/jenkins/settings.xml'
+                        docker.withRegistry(Const.OPENSHIFT_REGISTRY, CREDENTIAL_ID) {
+                            sh 'docker run --rm ' +
+                                    '-v "$(pwd)":/build ' +
+                                    '-v "$(pwd)"/../.m2:/root/.m2 ' +
+                                    '-w /build ' +
+                                    '-e "M2_HOME=/root/.m2" ' +
+                                    '-e "MVNW_REPOURL=http://sbtatlas.sigma.sbrf.ru/nexus/content/groups/public/" ' +
+                                    '-e "MVNW_VERBOSE=true" ' +
+                                    "-e \"REPO_USER=${USERNAME}\" " +
+                                    "-e \"REPO_PASSWORD=${PASSWORD}\" " +
+                                    'registry.sigma.sbrf.ru/ci00149046/ci00405008_sbbolufs/openjdk:11-with-certs ' +
+                                    './mvnw -P asciidoc clean org.asciidoctor:asciidoctor-maven-plugin:process-asciidoc -X -s /build/jenkins/settings.xml'
+                        }
                     }
 
                     sh 'ls admin-guide/target/generated-docs'
