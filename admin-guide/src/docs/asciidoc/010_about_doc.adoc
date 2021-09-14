@@ -1,7 +1,8 @@
 == Общее описание
 
 *Команда*: https://confluence.sberbank.ru/pages/viewpage.action?pageId=760909105[Москва-5] +
-*Владелец продукта*: mailto:Tsyplakov.S.Vl@sberbank.ru[Сергей Цыплаков]
+*Владелец продукта*: mailto:Tsyplakov.S.Vl@sberbank.ru[Сергей Цыплаков] +
+*Проект в Jira*: https://jira.sberbank.ru/projects/DCBEFSMSC5/issues
 
 Настоящее руководство предназначено для администраторов, которые выполняют
 инсталляцию, конфигурирование и сопровождение фабрики События антифрода на серверах Openshift.
