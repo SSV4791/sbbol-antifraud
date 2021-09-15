@@ -312,6 +312,32 @@ pipeline {
             }
         }
 
+        stage('Push ReleaseNotes') {
+            when {
+                expression { params.release }
+            }
+            steps {
+                script {
+                    def latestCommitHash = checkoutRef('bitbucket-dbo-key', GIT_PROJECT, GIT_REPOSITORY, GIT_BRANCH)
+                    List versionTags = git.tags().findAll { it.matches(VERSION_PATTERN) }.sort()
+                    def lastVersion = versionTags.isEmpty() ? '' : versionTags.last()
+                    log.info("Last version: ${lastVersion}")
+                    def projectLog = sh(
+                            returnStdout: true,
+                            script: "git log --oneline --no-merges --pretty=tformat:'%s' " +
+                                    "${lastVersion ? lastVersion + '..HEAD' : ''}"
+                    )
+                    dir('distrib') {
+                        def sbrfNexusCustomerLink = getSbrfNexusLink(CUSTOMER_ARTIFACT_ID, VERSION)
+                        def sbrfNexusDataspaceLink = getSbrfNexusLink(DATASPACE_ARTIFACT_ID, VERSION)
+                        releaseNotes = createReleaseNotesWithDescription(projectLog, latestCommitHash, PROJECT_URL, sbrfNexusCustomerLink, sbrfNexusDataspaceLink)
+                        qgm.publishReleaseNotes(GROUP_ID, CUSTOMER_ARTIFACT_ID, "${VERSION}-eip", releaseNotes, CREDENTIAL_ID)
+                        archiveArtifacts artifacts: "release-notes"
+                    }
+                }
+            }
+        }
+
         stage('Push technical flags') {
             when {
                 expression { params.release }
@@ -349,32 +375,6 @@ pipeline {
             }
         }
 
-        stage('Push ReleaseNotes') {
-            when {
-                expression { params.release }
-            }
-            steps {
-                script {
-                    def latestCommitHash = git.checkoutRef('bitbucket-dbo-key', GIT_PROJECT, GIT_REPOSITORY, GIT_BRANCH)
-                    List versionTags = git.tags().findAll { it.matches(VERSION_PATTERN) }.sort()
-                    def lastVersion = versionTags.isEmpty() ? '' : versionTags.last()
-                    log.info("Last version: ${lastVersion}")
-                    def projectLog = sh(
-                            returnStdout: true,
-                            script: "git log --oneline --no-merges --pretty=tformat:'%s' " +
-                                    "${lastVersion ? lastVersion + '..HEAD' : ''}"
-                    )
-                    dir('distrib') {
-                        def sbrfNexusCustomerLink = getSbrfNexusLink(CUSTOMER_ARTIFACT_ID, VERSION)
-                        def sbrfNexusDataspaceLink = getSbrfNexusLink(DATASPACE_ARTIFACT_ID, VERSION)
-                        releaseNotes = createReleaseNotesWithDescription(projectLog, latestCommitHash, PROJECT_URL, sbrfNexusCustomerLink, sbrfNexusDataspaceLink)
-                        qgm.publishReleaseNotes(GROUP_ID, CUSTOMER_ARTIFACT_ID, "${VERSION}-eip", releaseNotes, CREDENTIAL_ID)
-                        archiveArtifacts artifacts: "release-notes"
-                    }
-                }
-            }
-        }
-
         stage('Tag current version') {
             when {
                 expression { params.release }
@@ -395,6 +395,26 @@ pipeline {
 
 static String getSbrfNexusLink(String artifactId, String version) {
     return "https://sbrf-nexus.sigma.sbrf.ru/nexus/content/repositories/Nexus_PROD/Nexus_PROD/CI03045533_sbbol-antifraud/${artifactId}/${version}/${artifactId}-${version}-distrib.zip"
+}
+
+def checkoutRef(String credentialsId, String project, String slug, String ref) {
+    sh 'git init'
+    sh 'git reset --hard --quiet'
+    sh 'git clean -xfd --quiet'
+    withSSH(credentialsId) {
+        sh "git fetch --quiet --tags ${Const.BITBUCKET_SERVER_URL}/${project}/${slug}.git $ref"
+    }
+    sh "git checkout SBP-antifraud-${VERSION}"
+    sh 'git prune -v'
+    sh (script: 'git rev-parse HEAD', returnStdout: true).trim()
+}
+
+def withSSH(String credential, Closure body) {
+    withEnv(["GIT_SSH_COMMAND=ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"]) {
+        sshagent(credentials: [credential]) {
+            body.call()
+        }
+    }
 }
 
 /**
