@@ -23,8 +23,9 @@ import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.graph.get.ElectronicReceiptOperationGet;
 import ru.sberbank.pprb.sbbol.antifraud.grasp.DataspaceCoreSearchClient;
 import ru.sberbank.pprb.sbbol.antifraud.packet.packet.Packet;
-import ru.sberbank.pprb.sbbol.antifraud.service.mapper.ElectronicReceiptMapper;
+import ru.sberbank.pprb.sbbol.antifraud.service.mapper.electronicreceipt.ElectronicReceiptMapper;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.Processor;
+import ru.sberbank.pprb.sbbol.antifraud.service.validator.electronicreceipt.ElectronicReceiptModelValidator;
 import sbp.sbt.sdk.DataspaceCorePacketClient;
 import sbp.sbt.sdk.exception.SdkJsonRpcClientException;
 

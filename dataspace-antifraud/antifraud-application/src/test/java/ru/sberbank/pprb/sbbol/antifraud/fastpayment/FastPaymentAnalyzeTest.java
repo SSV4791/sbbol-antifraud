@@ -1,4 +1,4 @@
-package ru.sberbank.pprb.sbbol.antifraud.payment;
+package ru.sberbank.pprb.sbbol.antifraud.fastpayment;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.googlecode.jsonrpc4j.spring.rest.JsonRpcRestClient;
@@ -24,7 +24,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.IdentificationData;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.RiskResult;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.TriggeredRule;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.PaymentSendRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.fastpayment.FastPaymentSendRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 
@@ -36,7 +36,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 @ApiTestLayer
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class PaymentAnalyzeTest extends PaymentIntegrationTest {
+class FastPaymentAnalyzeTest extends FastPaymentIntegrationTest {
 
     @Autowired
     private RestTemplate restTemplate;
@@ -51,7 +51,7 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
         mockServer = MockRestServiceServer.createServer(restTemplate);
     }
 
-    @AllureId("19653")
+    @AllureId("19654")
     @ParameterizedTest
     @MethodSource("searchRpcClientProvider")
     void sendRequest(JsonRpcRestClient searchRpcClient) throws Throwable {
@@ -61,21 +61,21 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
                 .andRespond(withStatus(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(objectMapper.writeValueAsString(expected)));
-        PaymentSendRequest request = new PaymentSendRequest(DOC_ID);
+        FastPaymentSendRequest request = new FastPaymentSendRequest(DOC_ID);
         AnalyzeResponse actual = sendData(searchRpcClient, request);
         mockServer.verify();
         assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId());
-        assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode());
-        assertEquals(expected.getRiskResult().getTriggeredRule().getComment(), actual.getComment());
-        assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment(), actual.getDetailledComment());
-        assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime(), actual.getWaitingTime());
+        assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode() , actual.getActionCode() );
+        assertEquals(expected.getRiskResult().getTriggeredRule().getComment() , actual.getComment() );
+        assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment() , actual.getDetailledComment() );
+        assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime() , actual.getWaitingTime() );
     }
 
-    @AllureId("19655")
+    @AllureId("19648")
     @ParameterizedTest
     @MethodSource("searchRpcClientProvider")
     void validateModelRequiredParamDocId(JsonRpcRestClient searchRpcClient) {
-        PaymentSendRequest request = new PaymentSendRequest(null);
+        FastPaymentSendRequest request = new FastPaymentSendRequest(null);
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> sendData(searchRpcClient, request));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("docId"), "Should contain docId in message. Message: " + exceptionMessage);
@@ -87,7 +87,7 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
         mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
                 .andExpect(method(HttpMethod.POST))
                 .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
-        PaymentSendRequest request = new PaymentSendRequest(DOC_ID);
+        FastPaymentSendRequest request = new FastPaymentSendRequest(DOC_ID);
         AnalyzeException ex = assertThrows(AnalyzeException.class, () -> sendData(searchRpcClient, request));
         mockServer.verify();
         String exceptionMessage = ex.getMessage();
@@ -96,12 +96,8 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
 
     @Test
     void clientDefinedEventTypeTest() {
-        String web = DboOperation.PAYMENT_DT_0401060.getClientDefinedEventType("WEB");
-        assertEquals("BROWSER_PAYDOCRU", web);
-        String mobile = DboOperation.PAYMENT_DT_0401060.getClientDefinedEventType("MOBILE");
-        assertEquals("MOBSBBOL_PAYDOCRU", mobile);
-        String branch = DboOperation.PAYMENT_DT_0401060.getClientDefinedEventType("BRANCH");
-        assertEquals("BRANCH_PAYDOCRU", branch);
+        String sbp = DboOperation.SBP_B2C.getClientDefinedEventType(null);
+        assertEquals("SBP", sbp);
     }
 
     private FullAnalyzeResponse createAnalyzeResponse() {

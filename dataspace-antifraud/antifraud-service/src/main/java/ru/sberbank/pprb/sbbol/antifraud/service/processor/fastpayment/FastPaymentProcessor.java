@@ -1,4 +1,4 @@
-package ru.sberbank.pprb.sbbol.antifraud.service.processor.payment;
+package ru.sberbank.pprb.sbbol.antifraud.service.processor.fastpayment;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,23 +12,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import ru.sberbank.pprb.sbbol.antifraud.api.DboOperation;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.PaymentSendRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.fastpayment.FastPaymentSendRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
-import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
-import ru.sberbank.pprb.sbbol.antifraud.graph.get.PaymentOperationGet;
-import ru.sberbank.pprb.sbbol.antifraud.graph.with.PaymentOperationCollectionWith;
+import ru.sberbank.pprb.sbbol.antifraud.graph.get.SbpPaymentOperationGet;
+import ru.sberbank.pprb.sbbol.antifraud.graph.with.SbpPaymentOperationCollectionWith;
 import ru.sberbank.pprb.sbbol.antifraud.grasp.DataspaceCoreSearchClient;
-import ru.sberbank.pprb.sbbol.antifraud.grasp.PaymentOperationGrasp;
+import ru.sberbank.pprb.sbbol.antifraud.grasp.SbpPaymentOperationGrasp;
 import ru.sberbank.pprb.sbbol.antifraud.packet.packet.Packet;
-import ru.sberbank.pprb.sbbol.antifraud.service.mapper.payment.PaymentMapper;
-import ru.sberbank.pprb.sbbol.antifraud.service.mapper.payment.PaymentSignMapper;
+import ru.sberbank.pprb.sbbol.antifraud.service.mapper.fastpayment.FastPaymentMapper;
+import ru.sberbank.pprb.sbbol.antifraud.service.mapper.fastpayment.FastPaymentSignMapper;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.Processor;
-import ru.sberbank.pprb.sbbol.antifraud.service.validator.payment.PaymentModelValidator;
+import ru.sberbank.pprb.sbbol.antifraud.service.validator.fastpayment.FastPaymentModelValidator;
 import sbp.sbt.sdk.DataspaceCorePacketClient;
 import sbp.sbt.sdk.exception.SdkJsonRpcClientException;
 
@@ -36,30 +36,30 @@ import javax.validation.Valid;
 import java.util.UUID;
 
 /**
- * Обработчик платежных поручений. Добавляет запись в таблицу PaymentOperation.
+ * Обработчик платежных поручений СБП. Добавляет запись в таблицу SbpPaymentOperation.
  * Осуществляет отправку данных в ФП ИС.
  */
 @Service
-public class PaymentProcessor implements Processor<PaymentOperation, PaymentSendRequest> {
+public class FastPaymentProcessor implements Processor<FastPaymentOperation, FastPaymentSendRequest> {
 
-    private static final Logger logger = LoggerFactory.getLogger(PaymentProcessor.class);
+    private static final Logger logger = LoggerFactory.getLogger(FastPaymentProcessor.class);
 
     private final DataspaceCorePacketClient packetClient;
     private final DataspaceCoreSearchClient searchClient;
-    private final PaymentMapper mapper;
+    private final FastPaymentMapper mapper;
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     private final HttpHeaders httpHeaders;
 
     private final String endPoint;
 
-    public PaymentProcessor(DataspaceCorePacketClient packetClient,
-                            DataspaceCoreSearchClient searchClient,
-                            PaymentMapper mapper,
-                            RestTemplate restTemplate,
-                            ObjectMapper objectMapper,
-                            HttpHeaders httpHeaders,
-                            @Value("${fpis.endpoint}") String endPoint) {
+    public FastPaymentProcessor(DataspaceCorePacketClient packetClient,
+                                DataspaceCoreSearchClient searchClient,
+                                FastPaymentMapper mapper,
+                                RestTemplate restTemplate,
+                                ObjectMapper objectMapper,
+                                HttpHeaders httpHeaders,
+                                @Value("${fpis.endpoint}") String endPoint) {
         this.packetClient = packetClient;
         this.searchClient = searchClient;
         this.mapper = mapper;
@@ -70,13 +70,13 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
     }
 
     @Override
-    public RequestId saveOrUpdate(@Valid PaymentOperation request) throws SdkJsonRpcClientException {
-        logger.info("Processing payment operation request. PaymentOperation docId: {}", request.getDocument().getId());
-        request.setMappedSigns(PaymentSignMapper.convertSigns(request.getSigns()));
-        PaymentModelValidator.validate(request);
+    public RequestId saveOrUpdate(@Valid FastPaymentOperation request) throws SdkJsonRpcClientException {
+        logger.info("Processing SBP payment operation request. PaymentOperation docId: {}", request.getDocument().getId());
+        request.setMappedSigns(FastPaymentSignMapper.convertSigns(request.getSigns()));
+        FastPaymentModelValidator.validate(request);
 
-        GraphCollection<PaymentOperationGet> collection = searchClient.searchPaymentOperation(payment ->
-                payment
+        GraphCollection<SbpPaymentOperationGet> collection = searchClient.searchSbpPaymentOperation(sbpPayment ->
+                sbpPayment
                         .withRequestId()
                         .setWhere(where -> where.docIdEq(request.getDocument().getId().toString()))
                         .setLimit(1));
@@ -84,10 +84,10 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
 
         RequestId requestId;
         if (collection.isEmpty()) {
-            requestId = PaymentPacketCommandAdder.addCreateCommandToPaket(packet, request);
+            requestId = FastPaymentPacketCommandAdder.addCreateCommandToPacket(packet, request);
         } else {
             requestId = new RequestId(UUID.fromString(collection.get(0).getRequestId()));
-            PaymentPacketCommandAdder.addUpdateCommandToPacket(packet, request, collection.get(0).getObjectId());
+            FastPaymentPacketCommandAdder.addUpdateCommandToPacket(packet, request, collection.get(0).getObjectId());
         }
 
         packetClient.execute(packet);
@@ -95,18 +95,18 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
     }
 
     @Override
-    public AnalyzeResponse send(@Valid PaymentSendRequest request) throws SdkJsonRpcClientException {
-        logger.info("Sending payment operation to analyze. PaymentOperation docId: {}", request.getDocId());
-        AnalyzeRequest paymentAnalyzeRequest = createPaymentAnalyzeRequest(request.getDocId());
+    public AnalyzeResponse send(@Valid FastPaymentSendRequest request) throws SdkJsonRpcClientException {
+        logger.info("Sending SBP operation to analyze. SbpPaymentOperation docId: {}", request.getDocId());
+        AnalyzeRequest paymentAnalyzeRequest = createSbpPaymentAnalyzeRequest(request.getDocId());
         try {
             String jsonRequest = objectMapper.writeValueAsString(paymentAnalyzeRequest);
-            logger.debug("Payment analyze request: {}", jsonRequest);
+            logger.debug("SBP analyze request: {}", jsonRequest);
             String jsonResponse = restTemplate.postForObject(endPoint, new HttpEntity<>(jsonRequest, httpHeaders), String.class);
-            logger.debug("Payment full analyze response: {}", jsonResponse);
+            logger.debug("SBP full analyze response: {}", jsonResponse);
             FullAnalyzeResponse fullAnalyzeResponse = objectMapper.readValue(jsonResponse, FullAnalyzeResponse.class);
             return mapper.toAnalyzeResponse(fullAnalyzeResponse);
         } catch (HttpStatusCodeException e) {
-            String message = "Payment analyze error: statusCodeValue=" + e.getRawStatusCode() +
+            String message = "SBP analyze error: statusCodeValue=" + e.getRawStatusCode() +
                     ", error='" + e.getResponseBodyAsString() + "'";
             logger.error(message);
             throw new AnalyzeException(message, e);
@@ -117,9 +117,9 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
         }
     }
 
-    private AnalyzeRequest createPaymentAnalyzeRequest(UUID docId) throws SdkJsonRpcClientException {
-        GraphCollection<PaymentOperationGet> collection = searchClient.searchPaymentOperation(payment -> {
-            payment
+    private AnalyzeRequest createSbpPaymentAnalyzeRequest(UUID docId) throws SdkJsonRpcClientException {
+        GraphCollection<SbpPaymentOperationGet> collection = searchClient.searchSbpPaymentOperation(operation -> {
+            operation
                     .withRequestId()
                     .withTimeStamp()
                     .withEpkId()
@@ -142,31 +142,43 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
                     .withDocDate()
                     .withAmount()
                     .withCurrency()
-                    .withExecutionSpeed()
-                    .withOtherAccBankType()
+                    .withIdOperationOPKC()
                     .withAccountNumber()
                     .withOtherAccName()
-                    .withBalAccNumber()
                     .withOtherBicCode()
-                    .withOtherAccOwnershipType()
-                    .withOtherAccType()
-                    .withTransferMediumType()
                     .withReceiverInn()
+                    .withReceiverBankName()
+                    .withReceiverBankCountryCode()
+                    .withReceiverBankCorrAcc()
+                    .withReceiverBankId()
+                    .withReceiverPhoneNumber()
+                    .withReceiverDocument()
+                    .withReceiverDocumentType()
+                    .withReceiverAccount()
                     .withDestination()
+                    .withPayerFinancialName()
+                    .withPayerOsbNum()
+                    .withPayerVspNum()
+                    .withPayerAccBalance()
+                    .withPayerAccCreateDate()
+                    .withPayerBic()
+                    .withPayerDocumentNumber()
+                    .withPayerDocumentType()
+                    .withPayerSegment()
                     .withPayerInn()
                     .withClientDefinedChannelIndicator();
-            withSigns(payment)
+            withSigns(operation)
                     .setWhere(where -> where.docIdEq(docId.toString()))
                     .setLimit(1);
         });
         if (collection.isEmpty()) {
-            throw new ApplicationException("PaymentOperation with docId=" + docId + " not found");
+            throw new ApplicationException("SbpPaymentOperation with docId=" + docId + " not found");
         }
         return mapper.toAnalyzeRequest(collection.get(0));
     }
 
-    private PaymentOperationCollectionWith<PaymentOperationGrasp> withSigns(PaymentOperationCollectionWith<PaymentOperationGrasp> payment) {
-        payment
+    private SbpPaymentOperationCollectionWith<SbpPaymentOperationGrasp> withSigns(SbpPaymentOperationCollectionWith<SbpPaymentOperationGrasp> operation) {
+        operation
                 .withFirstSignTime()
                 .withFirstSignIp()
                 .withFirstSignLogin()
@@ -193,39 +205,13 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
                 .withSenderCertId()
                 .withSenderPhone()
                 .withSenderEmail()
-                .withSenderSource()
-                .withSecondSignTime()
-                .withSecondSignIp()
-                .withSecondSignLogin()
-                .withSecondSignCryptoprofile()
-                .withSecondSignCryptoprofileType()
-                .withSecondSignChannel()
-                .withSecondSignToken()
-                .withSecondSignType()
-                .withSecondSignImsi()
-                .withSecondSignCertId()
-                .withSecondSignPhone()
-                .withSecondSignEmail()
-                .withSecondSignSource()
-                .withThirdSignTime()
-                .withThirdSignIp()
-                .withThirdSignLogin()
-                .withThirdSignCryptoprofile()
-                .withThirdSignCryptoprofileType()
-                .withThirdSignChannel()
-                .withThirdSignToken()
-                .withThirdSignType()
-                .withThirdSignImsi()
-                .withThirdSignCertId()
-                .withThirdSignPhone()
-                .withThirdSignEmail()
-                .withThirdSignSource();
-        return payment;
+                .withSenderSource();
+        return operation;
     }
 
     @Override
     public DboOperation supportedDboOperation() {
-        return DboOperation.PAYMENT_DT_0401060;
+        return DboOperation.SBP_B2C;
     }
 
 }

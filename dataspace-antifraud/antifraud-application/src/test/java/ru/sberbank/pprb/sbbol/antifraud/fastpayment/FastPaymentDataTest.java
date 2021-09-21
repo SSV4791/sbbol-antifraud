@@ -1,4 +1,4 @@
-package ru.sberbank.pprb.sbbol.antifraud.payment;
+package ru.sberbank.pprb.sbbol.antifraud.fastpayment;
 
 import com.googlecode.jsonrpc4j.spring.rest.JsonRpcRestClient;
 import io.qameta.allure.AllureId;
@@ -7,12 +7,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.dcbqa.allureee.annotations.layers.UnitTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
-import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentDocument;
-import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
-import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentSign;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentDocument;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentOperation;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentPayer;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentReceiver;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentSign;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
-import ru.sberbank.pprb.sbbol.antifraud.graph.get.PaymentOperationGet;
-import ru.sberbank.pprb.sbbol.antifraud.service.mapper.payment.PaymentSignMapper;
+import ru.sberbank.pprb.sbbol.antifraud.graph.get.SbpPaymentOperationGet;
+import ru.sberbank.pprb.sbbol.antifraud.service.mapper.fastpayment.FastPaymentSignMapper;
 
 import java.util.Random;
 import java.util.UUID;
@@ -22,55 +24,49 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @UnitTestLayer
-class PaymentDataTest extends PaymentIntegrationTest {
+class FastPaymentDataTest extends FastPaymentIntegrationTest {
 
-    @AllureId("19651")
+    @AllureId("19644")
     @ParameterizedTest
     @MethodSource("createRpcClientProvider")
     void createData(JsonRpcRestClient createRpcClient) throws Throwable {
         UUID docId = UUID.randomUUID();
         Integer docNumber = Math.abs(new Random().nextInt());
-        PaymentOperation payment = PaymentBuilder.getInstance()
+        FastPaymentOperation payment = FastPaymentBuilder.getInstance()
                 .withDocId(docId)
                 .withDocNumber(docNumber)
                 .build();
         RequestId requestId = saveOrUpdateData(createRpcClient, payment);
-        payment.setMappedSigns(PaymentSignMapper.convertSigns(payment.getSigns()));
+        payment.setMappedSigns(FastPaymentSignMapper.convertSigns(payment.getSigns()));
         assertNotNull(requestId);
 
-        PaymentOperationGet paymentGet = searchPayment(docId);
-        assertOperation(payment, requestId.getId(), paymentGet);
-        assertDoc(payment.getDocument(), paymentGet);
-        assertFirstSign(payment.getMappedSigns().get(0), paymentGet);
-        assertSecondSign(payment.getMappedSigns().get(1), paymentGet);
-        assertThirdSign(payment.getMappedSigns().get(2), paymentGet);
-        assertSenderSign(payment.getMappedSigns().get(3), paymentGet);
+        SbpPaymentOperationGet operationGet = searchSbpPayment(docId);
+        assertOperation(payment, requestId.getId(), operationGet);
+        assertDoc(payment.getDocument(), operationGet);
+        assertFirstSign(payment.getMappedSigns().get(0), operationGet);
+        assertSenderSign(payment.getMappedSigns().get(1), operationGet);
     }
 
-    @AllureId("19646")
+    @AllureId("19643")
     @ParameterizedTest
     @MethodSource("createRpcClientProvider")
     void updateData(JsonRpcRestClient createRpcClient) throws Throwable {
-        PaymentOperation payment = PaymentBuilder.getInstance()
+        FastPaymentOperation payment = FastPaymentBuilder.getInstance()
                 .withDocId(DOC_ID)
                 .withDocNumber(1)
                 .build();
         RequestId actual = saveOrUpdateData(createRpcClient, payment);
-        payment.setMappedSigns(PaymentSignMapper.convertSigns(payment.getSigns()));
+        payment.setMappedSigns(FastPaymentSignMapper.convertSigns(payment.getSigns()));
         assertEquals(requestId, actual.getId());
 
-        PaymentOperationGet paymentGet = searchPayment(DOC_ID);
-        assertOperation(payment, requestId, paymentGet);
-        assertDoc(payment.getDocument(), paymentGet);
-        assertFirstSign(payment.getMappedSigns().get(0), paymentGet);
-        assertSecondSign(payment.getMappedSigns().get(1), paymentGet);
-        assertThirdSign(payment.getMappedSigns().get(2), paymentGet);
-        assertSenderSign(payment.getMappedSigns().get(3), paymentGet);
-        assertEquals(requestId.toString(), paymentGet.getRequestId());
-        assertEquals(1, paymentGet.getDocNumber());
+        SbpPaymentOperationGet operationGet = searchSbpPayment(DOC_ID);
+        assertOperation(payment, requestId, operationGet);
+        assertDoc(payment.getDocument(), operationGet);
+        assertFirstSign(payment.getMappedSigns().get(0), operationGet);
+        assertSenderSign(payment.getMappedSigns().get(1), operationGet);
     }
 
-    private void assertOperation(PaymentOperation payment, UUID requestId, PaymentOperationGet paymentGet) {
+    private void assertOperation(FastPaymentOperation payment, UUID requestId, SbpPaymentOperationGet paymentGet) {
         assertEquals(requestId.toString(), paymentGet.getRequestId());
         assertEquals(payment.getTimeStamp(), paymentGet.getTimeStamp());
         assertEquals(payment.getOrgGuid(), paymentGet.getEpkId());
@@ -92,27 +88,47 @@ class PaymentDataTest extends PaymentIntegrationTest {
         assertEquals(payment.getMappedSigns().get(0).getClientDefinedChannelIndicator(), paymentGet.getClientDefinedChannelIndicator());
     }
 
-    private void assertDoc(PaymentDocument document, PaymentOperationGet paymentGet) {
-        assertEquals(document.getId().toString(), paymentGet.getDocId());
-        assertEquals(document.getNumber(), paymentGet.getDocNumber());
-        assertEquals(document.getDate(), paymentGet.getDocDate());
-        assertEquals(document.getAmount(), paymentGet.getAmount());
-        assertEquals(document.getCurrency(), paymentGet.getCurrency());
-        assertEquals(document.getExecutionSpeed(), paymentGet.getExecutionSpeed());
-        assertEquals(document.getOtherAccBankType(), paymentGet.getOtherAccBankType());
-        assertEquals(document.getPayer().getAccountNumber(), paymentGet.getAccountNumber());
-        assertEquals(document.getReceiver().getBalAccNumber(), paymentGet.getBalAccNumber());
-        assertEquals(document.getReceiver().getOtherAccName(), paymentGet.getOtherAccName());
-        assertEquals(document.getReceiver().getOtherBicCode(), paymentGet.getOtherBicCode());
-        assertEquals(document.getOtherAccOwnershipType(), paymentGet.getOtherAccOwnershipType());
-        assertEquals(document.getReceiver().getOtherAccType(), paymentGet.getOtherAccType());
-        assertEquals(document.getTransferMediumType(), paymentGet.getTransferMediumType());
-        assertEquals(document.getReceiver().getInn(), paymentGet.getReceiverInn());
-        assertEquals(document.getDestination(), paymentGet.getDestination());
-        assertEquals(document.getPayer().getInn(), paymentGet.getPayerInn());
+    private void assertDoc(FastPaymentDocument document, SbpPaymentOperationGet operationGet) {
+        assertEquals(document.getId().toString(), operationGet.getDocId());
+        assertEquals(document.getNumber(), operationGet.getDocNumber());
+        assertEquals(document.getDate(), operationGet.getDocDate());
+        assertEquals(document.getAmount(), operationGet.getAmount());
+        assertEquals(document.getCurrency(), operationGet.getCurrency());
+        assertEquals(document.getIdOperationOPKC(), operationGet.getIdOperationOPKC());
+        assertEquals(document.getDestination(), operationGet.getDestination());
+        assetPayer(document.getPayer(), operationGet);
+        assertReceiver(document.getReceiver(), operationGet);
     }
 
-    private void assertFirstSign(PaymentSign firstSign, PaymentOperationGet paymentGet) {
+    private void assetPayer(FastPaymentPayer payer, SbpPaymentOperationGet operationGet) {
+        assertEquals(payer.getAccountNumber(), operationGet.getAccountNumber());
+        assertEquals(payer.getFinancialName(), operationGet.getPayerFinancialName());
+        assertEquals(payer.getOsbNum(), operationGet.getPayerOsbNum());
+        assertEquals(payer.getVspNum(), operationGet.getPayerVspNum());
+        assertEquals(payer.getAccBalance(), operationGet.getPayerAccBalance());
+        assertEquals(payer.getAccCreateDate(), operationGet.getPayerAccCreateDate());
+        assertEquals(payer.getBic(), operationGet.getPayerBic());
+        assertEquals(payer.getDocumentNumber(), operationGet.getPayerDocumentNumber());
+        assertEquals(payer.getDocumentType(), operationGet.getPayerDocumentType());
+        assertEquals(payer.getSegment(), operationGet.getPayerSegment());
+        assertEquals(payer.getInn(), operationGet.getPayerInn());
+    }
+
+    private void assertReceiver(FastPaymentReceiver receiver, SbpPaymentOperationGet operationGet) {
+        assertEquals(receiver.getOtherAccName(), operationGet.getOtherAccName());
+        assertEquals(receiver.getOtherBicCode(), operationGet.getOtherBicCode());
+        assertEquals(receiver.getInn(), operationGet.getReceiverInn());
+        assertEquals(receiver.getBankName(), operationGet.getReceiverBankName());
+        assertEquals(receiver.getBankCountryCode(), operationGet.getReceiverBankCountryCode());
+        assertEquals(receiver.getBankCorrAcc(), operationGet.getReceiverBankCorrAcc());
+        assertEquals(receiver.getBankId(), operationGet.getReceiverBankId());
+        assertEquals(receiver.getDocument(), operationGet.getReceiverDocument());
+        assertEquals(receiver.getDocumentType(), operationGet.getReceiverDocumentType());
+        assertEquals(receiver.getPhoneNumber(), operationGet.getReceiverPhoneNumber());
+        assertEquals(receiver.getAccount(), operationGet.getReceiverAccount());
+    }
+
+    private void assertFirstSign(FastPaymentSign firstSign, SbpPaymentOperationGet paymentGet) {
         assertEquals(firstSign.getSignTime(), paymentGet.getFirstSignTime());
         assertEquals(firstSign.getIpAddress(), paymentGet.getFirstSignIp());
         assertEquals(paymentGet.getFirstSignIp(), paymentGet.getIpAddress());
@@ -129,39 +145,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
         assertEquals(firstSign.getSignSource(), paymentGet.getFirstSignSource());
     }
 
-    private void assertSecondSign(PaymentSign secondSign, PaymentOperationGet paymentGet) {
-        assertEquals(secondSign.getSignTime(), paymentGet.getSecondSignTime());
-        assertEquals(secondSign.getIpAddress(), paymentGet.getSecondSignIp());
-        assertEquals(secondSign.getSignLogin(), paymentGet.getSecondSignLogin());
-        assertEquals(secondSign.getSignCryptoprofile(), paymentGet.getSecondSignCryptoprofile());
-        assertEquals(secondSign.getSignCryptoprofileType(), paymentGet.getSecondSignCryptoprofileType());
-        assertEquals(secondSign.getSignChannel(), paymentGet.getSecondSignChannel());
-        assertEquals(secondSign.getSignToken(), paymentGet.getSecondSignToken());
-        assertEquals(secondSign.getSignType(), paymentGet.getSecondSignType());
-        assertEquals(secondSign.getSignImsi(), paymentGet.getSecondSignImsi());
-        assertEquals(secondSign.getSignCertId(), paymentGet.getSecondSignCertId());
-        assertEquals(secondSign.getSignPhone(), paymentGet.getSecondSignPhone());
-        assertEquals(secondSign.getSignEmail(), paymentGet.getSecondSignEmail());
-        assertEquals(secondSign.getSignSource(), paymentGet.getSecondSignSource());
-    }
-
-    private void assertThirdSign(PaymentSign thirdSign, PaymentOperationGet paymentGet) {
-        assertEquals(thirdSign.getSignTime(), paymentGet.getThirdSignTime());
-        assertEquals(thirdSign.getIpAddress(), paymentGet.getThirdSignIp());
-        assertEquals(thirdSign.getSignLogin(), paymentGet.getThirdSignLogin());
-        assertEquals(thirdSign.getSignCryptoprofile(), paymentGet.getThirdSignCryptoprofile());
-        assertEquals(thirdSign.getSignCryptoprofileType(), paymentGet.getThirdSignCryptoprofileType());
-        assertEquals(thirdSign.getSignChannel(), paymentGet.getThirdSignChannel());
-        assertEquals(thirdSign.getSignToken(), paymentGet.getThirdSignToken());
-        assertEquals(thirdSign.getSignType(), paymentGet.getThirdSignType());
-        assertEquals(thirdSign.getSignImsi(), paymentGet.getThirdSignImsi());
-        assertEquals(thirdSign.getSignCertId(), paymentGet.getThirdSignCertId());
-        assertEquals(thirdSign.getSignPhone(), paymentGet.getThirdSignPhone());
-        assertEquals(thirdSign.getSignEmail(), paymentGet.getThirdSignEmail());
-        assertEquals(thirdSign.getSignSource(), paymentGet.getThirdSignSource());
-    }
-    
-    private void assertSenderSign(PaymentSign senderSign, PaymentOperationGet paymentGet) {
+    private void assertSenderSign(FastPaymentSign senderSign, SbpPaymentOperationGet paymentGet) {
         assertEquals(senderSign.getSignTime(), paymentGet.getSenderSignTime());
         assertEquals(senderSign.getIpAddress(), paymentGet.getSenderIp());
         assertEquals(senderSign.getSignLogin(), paymentGet.getSenderLogin());
@@ -177,33 +161,33 @@ class PaymentDataTest extends PaymentIntegrationTest {
         assertEquals(senderSign.getSignSource(), paymentGet.getSenderSource());
     }
 
-    @AllureId("19656")
+    @AllureId("19647")
     @ParameterizedTest
     @MethodSource("createRpcClientProvider")
     void validateModelRequiredParamOrgGuid(JsonRpcRestClient createRpcClient) {
-        PaymentOperation operation = createRandomPayment();
+        FastPaymentOperation operation = createRandomSbpPayment();
         operation.setOrgGuid(null);
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(createRpcClient, operation));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("orgGuid"), "Should contain orgGuid in message. Message: " + exceptionMessage);
     }
 
-    @AllureId("19641")
+    @AllureId("19645")
     @ParameterizedTest
     @MethodSource("createRpcClientProvider")
     void validateModelRequiredParamEmptySigns(JsonRpcRestClient createRpcClient) {
-        PaymentOperation operation = createRandomPayment();
+        FastPaymentOperation operation = createRandomSbpPayment();
         operation.setSigns(null);
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(createRpcClient, operation));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("signs"), "Should contain signs in message. Message: " + exceptionMessage);
     }
 
-    @AllureId("19652")
+    @AllureId("19650")
     @ParameterizedTest
     @MethodSource("createRpcClientProvider")
     void validateModelRequiredParamFirstSignUserGuid(JsonRpcRestClient createRpcClient) {
-        PaymentOperation operation = createRandomPayment();
+        FastPaymentOperation operation = createRandomSbpPayment();
         String sign1 = "{" +
                 "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
                 "\"httpReferer\": \"http://localhost:8000/reference_application/Login.do\", " +
@@ -237,11 +221,11 @@ class PaymentDataTest extends PaymentIntegrationTest {
         Assertions.assertTrue(exceptionMessage.contains("userGuid"), "Should contain userGuid in message. Message: " + exceptionMessage);
     }
 
-    @AllureId("19649")
+    @AllureId("19642")
     @ParameterizedTest
     @MethodSource("createRpcClientProvider")
     void validateModelRequiredParamSenderSignLogin(JsonRpcRestClient createRpcClient) {
-        PaymentOperation operation = createRandomPayment();
+        FastPaymentOperation operation = createRandomSbpPayment();
         String sign = "{" +
                 "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
                 "\"httpReferer\": \"http://localhost:8000/reference_application/Login.do\", " +
@@ -255,7 +239,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
                 "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
                 "\"channelIndicator\": \"WEB\", " +
                 "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
-                "\"signTime\": \"2020-03-23T16:32:05\", " +
+                "\"signTime\": \"2020-03-23T15:28:25\", " +
                 "\"signCryptoprofile\": \"Иванов Иван Иванович\", " +
                 "\"signCryptoprofileType\": \"OneTimePassword\", " +
                 "\"signToken\": \"signToken\", " +
@@ -268,16 +252,16 @@ class PaymentDataTest extends PaymentIntegrationTest {
                 "\"signSource\": \"SMS\", " +
                 "\"clientDefinedChannelIndicator\": \"WEB\"" +
                 "}";
-        operation.getSigns().set(3, sign);
+        operation.getSigns().set(0, sign);
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(createRpcClient, operation));
         String exceptionMessage = ex.getMessage();
-        Assertions.assertTrue(exceptionMessage.contains("senderSignLogin"), "Should contain senderSignLogin in message. Message: " + exceptionMessage);
+        Assertions.assertTrue(exceptionMessage.contains("SignLogin"), "Should contain SignLogin in message. Message: " + exceptionMessage);
     }
 
     @ParameterizedTest
     @MethodSource("createRpcClientProvider")
     void validateModelRequiredParamFirstSignChannel(JsonRpcRestClient createRpcClient) {
-        PaymentOperation operation = createRandomPayment();
+        FastPaymentOperation operation = createRandomSbpPayment();
         String sign1 = "{" +
                 "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
                 "\"httpReferer\": \"http://localhost:8000/reference_application/Login.do\", " +
@@ -313,7 +297,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
     @ParameterizedTest
     @MethodSource("createRpcClientProvider")
     void validateModelRequiredParamSenderSignChannel(JsonRpcRestClient createRpcClient) {
-        PaymentOperation operation = createRandomPayment();
+        FastPaymentOperation operation = createRandomSbpPayment();
         String sign = "{" +
                 "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
                 "\"httpReferer\": \"http://localhost:8000/reference_application/Login.do\", " +
@@ -340,7 +324,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
                 "\"signSource\": \"SMS\", " +
                 "\"clientDefinedChannelIndicator\": \"WEB\"" +
                 "}";
-        operation.getSigns().set(3, sign);
+        operation.getSigns().set(0, sign);
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(createRpcClient, operation));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("senderSignChannel"), "Should contain senderSignChannel in message. Message: " + exceptionMessage);
@@ -349,9 +333,9 @@ class PaymentDataTest extends PaymentIntegrationTest {
     @ParameterizedTest
     @MethodSource("createRpcClientProvider")
     void createDataOnlyWithRequiredSignParams(JsonRpcRestClient createRpcClient) throws Throwable {
-        PaymentOperation paymentOperation = createRandomPayment();
+        FastPaymentOperation paymentOperation = createRandomSbpPayment();
+        paymentOperation.setDigitalId(null);
         String firstSign = "{" +
-                "\"ipAddress\": \"78.245.9.87\", " +
                 "\"tbCode\": \"546738\", " +
                 "\"channelIndicator\": \"WEB\", " +
                 "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
@@ -363,7 +347,6 @@ class PaymentDataTest extends PaymentIntegrationTest {
                 "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
                 "}";
         String senderSign = "{" +
-                "\"ipAddress\": \"78.245.9.87\", " +
                 "\"tbCode\": \"546738\", " +
                 "\"channelIndicator\": \"WEB\", " +
                 "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
