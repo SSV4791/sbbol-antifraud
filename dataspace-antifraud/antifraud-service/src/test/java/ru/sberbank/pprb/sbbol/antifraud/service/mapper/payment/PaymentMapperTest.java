@@ -1,7 +1,6 @@
-package ru.sberbank.pprb.sbbol.antifraud.service.mapper.electronicreceipt;
+package ru.sberbank.pprb.sbbol.antifraud.service.mapper.payment;
 
 import org.junit.jupiter.api.Test;
-import ru.sberbank.pprb.sbbol.antifraud.api.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
@@ -12,34 +11,37 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static ru.sberbank.pprb.sbbol.antifraud.api.DboOperation.PAYMENT_DT_0401060;
 
-class ElectronicReceiptMapperTest extends MapperTest {
+class PaymentMapperTest extends MapperTest {
 
-    private static final ElectronicReceiptMapper MAPPER = new ElectronicReceiptMapperImpl();
+    private static final PaymentMapper MAPPER = new PaymentMapperImpl();
 
     @Test
-    void electronicReceiptOperationToAnalyzeRequestTest() {
+    void paymentOperationToAnalyzeRequestTest() {
         PodamFactory podamFactory = podamFactory();
-        ElectronicReceiptOperationGetImpl operationGet = podamFactory.populatePojo(new ElectronicReceiptOperationGetImpl());
+        PaymentOperationGetImpl operationGet = podamFactory.populatePojo(new PaymentOperationGetImpl());
         operationGet.setRequestId(UUID.randomUUID().toString());
         operationGet.setEpkId(UUID.randomUUID().toString());
         operationGet.setUserGuid(UUID.randomUUID().toString());
+        operationGet.setChannelIndicator("WEB");
+
         AnalyzeRequest analyzeRequest = MAPPER.toAnalyzeRequest(operationGet);
         assertNotNull(analyzeRequest);
+
         assertNotNull(analyzeRequest.getMessageHeader());
         assertEquals(operationGet.getTimeStamp(), analyzeRequest.getMessageHeader().getTimeStamp());
 
         assertNotNull(analyzeRequest.getIdentificationData());
         assertEquals(operationGet.getDocId(), analyzeRequest.getIdentificationData().getClientTransactionId());
         assertEquals(operationGet.getTbCode(), analyzeRequest.getIdentificationData().getOrgName());
-        assertNull(analyzeRequest.getIdentificationData().getUserName());
-        assertEquals(DboOperation.ELECTRONIC_CHEQUE, analyzeRequest.getIdentificationData().getDboOperation());
+        assertEquals("", analyzeRequest.getIdentificationData().getUserName());
+        assertEquals(PAYMENT_DT_0401060, analyzeRequest.getIdentificationData().getDboOperation());
         assertEquals(operationGet.getRequestId(), analyzeRequest.getIdentificationData().getRequestId().toString());
 
         assertNotNull(analyzeRequest.getDeviceRequest());
         assertEquals(operationGet.getDevicePrint(), analyzeRequest.getDeviceRequest().getDevicePrint());
-        assertNull(analyzeRequest.getDeviceRequest().getMobSdkData());
+        assertEquals(operationGet.getMobSdkData(), analyzeRequest.getDeviceRequest().getMobSdkData());
         assertEquals(operationGet.getHttpAccept(), analyzeRequest.getDeviceRequest().getHttpAccept());
         assertEquals(operationGet.getHttpAcceptChars(), analyzeRequest.getDeviceRequest().getHttpAcceptChars());
         assertEquals(operationGet.getHttpAcceptEncoding(), analyzeRequest.getDeviceRequest().getHttpAcceptEncoding());
@@ -48,26 +50,38 @@ class ElectronicReceiptMapperTest extends MapperTest {
         assertEquals(operationGet.getIpAddress(), analyzeRequest.getDeviceRequest().getIpAddress());
         assertEquals(operationGet.getUserAgent(), analyzeRequest.getDeviceRequest().getUserAgent());
 
+        assertEquals(operationGet.getChannelIndicator(), analyzeRequest.getChannelIndicator());
+        assertEquals(operationGet.getClientDefinedChannelIndicator(), analyzeRequest.getClientDefinedChannelIndicator());
+
         assertNotNull(analyzeRequest.getEventDataList());
+
         assertNotNull(analyzeRequest.getEventDataList().getEventDataHeader());
-        assertEquals(DboOperation.ELECTRONIC_CHEQUE.getEventType(), analyzeRequest.getEventDataList().getEventDataHeader().getEventType());
-        assertEquals(DboOperation.ELECTRONIC_CHEQUE.getEventDescription(), analyzeRequest.getEventDataList().getEventDataHeader().getEventDescription());
-        assertEquals(DboOperation.ELECTRONIC_CHEQUE.getClientDefinedEventType(null), analyzeRequest.getEventDataList().getEventDataHeader().getClientDefinedEventType());
+        assertEquals(PAYMENT_DT_0401060.getEventType(), analyzeRequest.getEventDataList().getEventDataHeader().getEventType());
+        assertEquals(PAYMENT_DT_0401060.getEventDescription(), analyzeRequest.getEventDataList().getEventDataHeader().getEventDescription());
+        assertEquals(PAYMENT_DT_0401060.getClientDefinedEventType(operationGet.getChannelIndicator()), analyzeRequest.getEventDataList().getEventDataHeader().getClientDefinedEventType());
         assertEquals(operationGet.getTimeOfOccurrence(), analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence());
+
         assertNotNull(analyzeRequest.getEventDataList().getTransactionData());
+
         assertNotNull(analyzeRequest.getEventDataList().getTransactionData().getAmount());
         assertEquals(operationGet.getAmount(), analyzeRequest.getEventDataList().getTransactionData().getAmount().getSum());
         assertEquals(operationGet.getCurrency(), analyzeRequest.getEventDataList().getTransactionData().getAmount().getCurrency());
-        assertNull(analyzeRequest.getEventDataList().getTransactionData().getExecutionSpeed());
-        assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountBankType());
+        assertEquals(operationGet.getExecutionSpeed(), analyzeRequest.getEventDataList().getTransactionData().getExecutionSpeed());
+        assertEquals(operationGet.getOtherAccBankType(), analyzeRequest.getEventDataList().getTransactionData().getOtherAccountBankType());
+
         assertNotNull(analyzeRequest.getEventDataList().getTransactionData().getMyAccountData());
         assertEquals(operationGet.getAccountNumber(), analyzeRequest.getEventDataList().getTransactionData().getMyAccountData().getAccountNumber());
-        assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData());
-        assertNotNull(analyzeRequest.getEventDataList().getClientDefinedAttributeList());
-        assertEquals(ElectronicReceiptMapper.CAPACITY, analyzeRequest.getEventDataList().getClientDefinedAttributeList().getFact().size());
 
-        assertEquals(ElectronicReceiptMapper.CHANNEL_INDICATOR, analyzeRequest.getChannelIndicator());
-        assertEquals(ElectronicReceiptMapper.CLIENT_DEFINED_CHANNEL_INDICATOR, analyzeRequest.getClientDefinedChannelIndicator());
+        assertNotNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData());
+        assertEquals(operationGet.getOtherAccName(), analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getAccountName());
+        assertEquals(operationGet.getBalAccNumber(), analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getAccountNumber());
+        assertEquals(operationGet.getOtherBicCode(), analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getRoutingCode());
+        assertEquals(operationGet.getOtherAccOwnershipType(), analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getOtherAccountOwnershipType());
+        assertEquals(operationGet.getOtherAccType(), analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getOtherAccountType());
+        assertEquals(operationGet.getTransferMediumType(), analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getTransferMediumType());
+
+        assertNotNull(analyzeRequest.getEventDataList().getClientDefinedAttributeList());
+        assertEquals(PaymentMapper.CAPACITY, analyzeRequest.getEventDataList().getClientDefinedAttributeList().getFact().size());
     }
 
     @Test

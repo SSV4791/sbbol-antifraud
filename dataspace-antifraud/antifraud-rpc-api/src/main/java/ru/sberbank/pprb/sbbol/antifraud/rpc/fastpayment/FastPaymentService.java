@@ -1,4 +1,4 @@
-package ru.sberbank.pprb.sbbol.antifraud.rpc.electronicreceipt;
+package ru.sberbank.pprb.sbbol.antifraud.rpc.fastpayment;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.InvalidTypeIdException;
@@ -6,19 +6,19 @@ import com.googlecode.jsonrpc4j.JsonRpcError;
 import com.googlecode.jsonrpc4j.JsonRpcErrors;
 import com.googlecode.jsonrpc4j.JsonRpcParam;
 import com.googlecode.jsonrpc4j.JsonRpcService;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.fastpayment.FastPaymentSendRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
-import ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ElectronicReceiptOperation;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 
 /**
- * Сервис сохранения, обновления и отправки данных электронных чеков в ФП ИС для последующего анализа
+ * Сервис сохранения, обновления и отправки данных СБП в ФП ИС для последующего анализа
  */
-@JsonRpcService("/v2/electronicreceipt")
-public interface ElectronicReceiptService {
+@JsonRpcService("/v2/fastpayment")
+public interface FastPaymentService {
 
     /**
      * Сохранение или обновление данных
@@ -32,7 +32,7 @@ public interface ElectronicReceiptService {
             @JsonRpcError(exception = InvalidTypeIdException.class, code = -32600),
             @JsonRpcError(exception = ApplicationException.class, code = -32001)
     })
-    RequestId saveOrUpdateData(@JsonRpcParam(value = "dataparams") ElectronicReceiptOperation request);
+    RequestId saveOrUpdateData(@JsonRpcParam(value = "dataparams") FastPaymentOperation request);
 
     /**
      * Отправка данных для анализа
@@ -47,6 +47,6 @@ public interface ElectronicReceiptService {
             @JsonRpcError(exception = ApplicationException.class, code = -32001),
             @JsonRpcError(exception = AnalyzeException.class, code = -32001),
     })
-    AnalyzeResponse analyzeOperation(@JsonRpcParam(value = "analyzeparams") SendToAnalyzeRequest request);
+    AnalyzeResponse analyzeOperation(@JsonRpcParam(value = "analyzeparams") FastPaymentSendRequest request);
 
 }

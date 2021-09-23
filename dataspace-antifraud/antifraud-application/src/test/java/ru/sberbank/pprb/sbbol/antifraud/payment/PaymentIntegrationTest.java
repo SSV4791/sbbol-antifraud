@@ -1,6 +1,8 @@
 package ru.sberbank.pprb.sbbol.antifraud.payment;
 
+import com.googlecode.jsonrpc4j.spring.rest.JsonRpcRestClient;
 import com.sbt.pprb.ac.graph.collection.GraphCollection;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
@@ -8,8 +10,12 @@ import ru.sberbank.pprb.sbbol.antifraud.graph.get.PaymentOperationGet;
 import ru.sberbank.pprb.sbbol.antifraud.common.DataSpaceIntegrationTest;
 import sbp.sbt.sdk.exception.SdkJsonRpcClientException;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Collections;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public abstract class PaymentIntegrationTest extends DataSpaceIntegrationTest {
 
@@ -18,10 +24,29 @@ public abstract class PaymentIntegrationTest extends DataSpaceIntegrationTest {
 
     protected static UUID requestId;
 
+    private static JsonRpcRestClient createRpcClientV1;
+    private static JsonRpcRestClient searchRpcClientV1;
+    private static JsonRpcRestClient rpcRestClientV2;
+
+    @BeforeAll
+    static void setup() throws MalformedURLException {
+        createRpcClientV1 = new JsonRpcRestClient(new URL(URL_ROOT + "/v1/savedata"), Collections.emptyMap());
+        searchRpcClientV1 = new JsonRpcRestClient(new URL(URL_ROOT + "/v1/analyzeoperation"), Collections.emptyMap());
+        rpcRestClientV2 = new JsonRpcRestClient(new URL(URL_ROOT + "/v2/payment"), Collections.emptyMap());
+    }
+
     @BeforeEach
     protected void fillDatabase() throws Throwable {
         requestId = generatePayment(DOC_ID, DOC_NUMBER).getId();
         generatePayment(null, null);
+    }
+
+    protected static Stream<JsonRpcRestClient> createRpcClientProvider() {
+        return Stream.of(createRpcClientV1, rpcRestClientV2);
+    }
+
+    protected static Stream<JsonRpcRestClient> searchRpcClientProvider() {
+        return Stream.of(searchRpcClientV1, rpcRestClientV2);
     }
 
     protected RequestId generatePayment(UUID docId, Integer docNumber) throws Throwable {
@@ -29,7 +54,7 @@ public abstract class PaymentIntegrationTest extends DataSpaceIntegrationTest {
                 .withDocId(docId)
                 .withDocNumber(docNumber)
                 .build();
-        return saveOrUpdateData(payment);
+        return saveOrUpdateData(createRpcClientV1, payment);
     }
 
     protected PaymentOperation createRandomPayment() {

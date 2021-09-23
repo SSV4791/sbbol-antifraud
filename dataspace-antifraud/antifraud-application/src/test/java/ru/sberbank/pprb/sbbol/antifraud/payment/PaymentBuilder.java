@@ -2,7 +2,7 @@ package ru.sberbank.pprb.sbbol.antifraud.payment;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
-import ru.sberbank.pprb.sbbol.antifraud.api.data.common.Payer;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentPayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentDocument;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentReceiver;
@@ -66,7 +66,7 @@ public class PaymentBuilder {
         payment.getDocument().setTransferMediumType(transferMediumType != null ? transferMediumType : RandomStringUtils.randomAlphabetic(30));
         payment.getDocument().setDestination(destination != null ? destination : RandomStringUtils.randomAlphabetic(25));
 
-        payment.getDocument().setPayer(new Payer());
+        payment.getDocument().setPayer(new PaymentPayer());
         payment.getDocument().getPayer().setAccountNumber(accountNumber != null ? accountNumber : RandomStringUtils.randomNumeric(20));
         payment.getDocument().getPayer().setInn(payerInn != null ? payerInn : RandomStringUtils.randomNumeric(12));
 

@@ -3,19 +3,14 @@ package ru.sberbank.pprb.sbbol.antifraud.electronicreceipt;
 import com.googlecode.jsonrpc4j.spring.rest.JsonRpcRestClient;
 import com.sbt.pprb.ac.graph.collection.GraphCollection;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
-import ru.sberbank.pprb.sbbol.antifraud.AntiFraudRunner;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ElectronicReceiptOperation;
+import ru.sberbank.pprb.sbbol.antifraud.common.DataSpaceIntegrationTest;
 import ru.sberbank.pprb.sbbol.antifraud.graph.get.ElectronicReceiptOperationGet;
 import ru.sberbank.pprb.sbbol.antifraud.grasp.DataspaceCoreSearchClient;
-import sbp.com.sbt.dataspace.core.local.runner.junit5.JUnit5DataSpaceCoreLocalRunnerExtension;
 import sbp.sbt.sdk.exception.SdkJsonRpcClientException;
 
 import java.net.MalformedURLException;
@@ -23,14 +18,7 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.UUID;
 
-@SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-        classes = {AntiFraudRunner.class}
-)
-@ExtendWith(JUnit5DataSpaceCoreLocalRunnerExtension.class)
-@DirtiesContext
-@ActiveProfiles("test")
-abstract class ElectronicReceiptIntegrationTest {
+abstract class ElectronicReceiptIntegrationTest extends DataSpaceIntegrationTest {
 
     private static JsonRpcRestClient rpcRestClient;
     @Autowired
@@ -38,7 +26,7 @@ abstract class ElectronicReceiptIntegrationTest {
 
     @BeforeAll
     static void setup() throws MalformedURLException {
-        rpcRestClient = new JsonRpcRestClient(new URL("http://localhost:8080/v1/electronicreceipt"), Collections.emptyMap());
+        rpcRestClient = new JsonRpcRestClient(new URL("http://localhost:8080/v2/electronicreceipt"), Collections.emptyMap());
     }
 
     protected static RequestId saveOrUpdateData(ElectronicReceiptOperation operation) throws Throwable {

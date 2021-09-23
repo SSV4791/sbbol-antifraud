@@ -1,4 +1,4 @@
-package ru.sberbank.pprb.sbbol.antifraud.api.data.payment;
+package ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -15,9 +15,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Модель платежного поручения
+ * Модель платежного поручения СБП
  */
-public class PaymentOperation implements Operation {
+public class FastPaymentOperation implements Operation {
 
     /**
      * Дата и время формирования события
@@ -49,7 +49,7 @@ public class PaymentOperation implements Operation {
      */
     @Valid
     @NotNull(message = "Document attribute cannot be null")
-    private PaymentDocument document;
+    private FastPaymentDocument document;
 
     /**
      * Список данных по подписям в виде json-строк
@@ -60,11 +60,11 @@ public class PaymentOperation implements Operation {
     /**
      * Список данных по подписям, приведенных к модели подписи
      */
-    private List<PaymentSign> mappedSigns;
+    private List<FastPaymentSign> mappedSigns;
 
     @Override
     public DboOperation getDboOperation() {
-        return DboOperation.PAYMENT_DT_0401060;
+        return DboOperation.SBP_B2C;
     }
 
     public LocalDateTime getTimeStamp() {
@@ -99,11 +99,11 @@ public class PaymentOperation implements Operation {
         this.timeOfOccurrence = timeOfOccurrence;
     }
 
-    public PaymentDocument getDocument() {
+    public FastPaymentDocument getDocument() {
         return document;
     }
 
-    public void setDocument(PaymentDocument document) {
+    public void setDocument(FastPaymentDocument document) {
         this.document = document;
     }
 
@@ -115,17 +115,17 @@ public class PaymentOperation implements Operation {
         this.signs = signs;
     }
 
-    public List<PaymentSign> getMappedSigns() {
+    public List<FastPaymentSign> getMappedSigns() {
         return mappedSigns;
     }
 
-    public void setMappedSigns(List<PaymentSign> mappedSigns) {
+    public void setMappedSigns(List<FastPaymentSign> mappedSigns) {
         this.mappedSigns = mappedSigns;
     }
 
     @Override
     public String toString() {
-        return "PaymentOperation{" +
+        return "FastPaymentOperation{" +
                 "timeStamp=" + timeStamp +
                 ", orgGuid='" + orgGuid + '\'' +
                 ", digitalId='" + digitalId + '\'' +

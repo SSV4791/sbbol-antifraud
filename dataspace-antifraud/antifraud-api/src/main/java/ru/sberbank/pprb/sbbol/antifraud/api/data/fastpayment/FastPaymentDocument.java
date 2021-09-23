@@ -1,4 +1,4 @@
-package ru.sberbank.pprb.sbbol.antifraud.api.data.payment;
+package ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -13,9 +13,9 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 /**
- * Данные документа платежного поручения
+ * Данные документа платежного поручения СБП
  */
-public class PaymentDocument implements Serializable {
+public class FastPaymentDocument implements Serializable {
 
     /**
      * ID документа
@@ -55,38 +55,23 @@ public class PaymentDocument implements Serializable {
     private String destination;
 
     /**
-     * Скорость обработки документа
+     * Идентификатор Операции ОПКЦ СБП
      */
-    private String executionSpeed;
-
-    /**
-     * Вид платежа в ЭД
-     */
-    private String otherAccBankType;
-
-    /**
-     * Направление передачи средств
-     */
-    private String otherAccOwnershipType;
-
-    /**
-     * Метод перевода средств между пользователем и получателем
-     */
-    private String transferMediumType;
+    private String idOperationOPKC;
 
     /**
      * Данные плательщика
      */
     @Valid
     @NotNull(message = "Document.payer attribute cannot be null")
-    private PaymentPayer payer;
+    private FastPaymentPayer payer;
 
     /**
      * Данные получателя
      */
     @Valid
     @NotNull(message = "Document.receiver attribute cannot be null")
-    private PaymentReceiver receiver;
+    private FastPaymentReceiver receiver;
 
     public UUID getId() {
         return id;
@@ -136,51 +121,27 @@ public class PaymentDocument implements Serializable {
         this.destination = destination;
     }
 
-    public String getExecutionSpeed() {
-        return executionSpeed;
+    public String getIdOperationOPKC() {
+        return idOperationOPKC;
     }
 
-    public void setExecutionSpeed(String executionSpeed) {
-        this.executionSpeed = executionSpeed;
+    public void setIdOperationOPKC(String idOperationOPKC) {
+        this.idOperationOPKC = idOperationOPKC;
     }
 
-    public String getOtherAccBankType() {
-        return otherAccBankType;
-    }
-
-    public void setOtherAccBankType(String otherAccBankType) {
-        this.otherAccBankType = otherAccBankType;
-    }
-
-    public String getOtherAccOwnershipType() {
-        return otherAccOwnershipType;
-    }
-
-    public void setOtherAccOwnershipType(String otherAccOwnershipType) {
-        this.otherAccOwnershipType = otherAccOwnershipType;
-    }
-
-    public String getTransferMediumType() {
-        return transferMediumType;
-    }
-
-    public void setTransferMediumType(String transferMediumType) {
-        this.transferMediumType = transferMediumType;
-    }
-
-    public PaymentPayer getPayer() {
+    public FastPaymentPayer getPayer() {
         return payer;
     }
 
-    public void setPayer(PaymentPayer payer) {
+    public void setPayer(FastPaymentPayer payer) {
         this.payer = payer;
     }
 
-    public PaymentReceiver getReceiver() {
+    public FastPaymentReceiver getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(PaymentReceiver receiver) {
+    public void setReceiver(FastPaymentReceiver receiver) {
         this.receiver = receiver;
     }
 
@@ -193,10 +154,7 @@ public class PaymentDocument implements Serializable {
                 ", amount=" + amount +
                 ", currency='" + currency + '\'' +
                 ", destination='" + destination + '\'' +
-                ", executionSpeed='" + executionSpeed + '\'' +
-                ", otherAccBankType='" + otherAccBankType + '\'' +
-                ", otherAccOwnershipType='" + otherAccOwnershipType + '\'' +
-                ", transferMediumType='" + transferMediumType + '\'' +
+                ", idOperationOPKC='" + idOperationOPKC + '\'' +
                 ", payer=" + payer +
                 ", receiver=" + receiver +
                 '}';

@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-public class ElectronicReceiptOperationGetImpl implements ElectronicReceiptOperationGet {
+class ElectronicReceiptOperationGetImpl implements ElectronicReceiptOperationGet {
 
     private String objectId;
     private String requestId;
