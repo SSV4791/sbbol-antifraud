@@ -93,7 +93,7 @@ pipeline {
                                         "-Dtest-layer=unit,api,web " +
                                         '-Dtest.results.location=../.qa/executedTests.log ' +
                                         "-Dallure.link=${Const.ALLURE_ENTRYPOINT_URL}jobrun/${launch.jobRunId} " +
-                                        '-s /build/jenkins/settings.xml install'
+                                        '-s /build/jenkins/settings.xml'
                                 )
                                 .run()
                     }
