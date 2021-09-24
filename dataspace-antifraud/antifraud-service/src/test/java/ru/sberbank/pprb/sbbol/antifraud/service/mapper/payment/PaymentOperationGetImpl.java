@@ -949,4 +949,9 @@ class PaymentOperationGetImpl implements PaymentOperationGet {
         return null;
     }
 
+    @Override
+    public Long getSysLastHistVersion() {
+        return null;
+    }
+
 }

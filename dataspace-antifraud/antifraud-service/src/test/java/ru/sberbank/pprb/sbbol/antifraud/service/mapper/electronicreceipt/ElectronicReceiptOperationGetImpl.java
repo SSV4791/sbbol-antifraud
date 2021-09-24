@@ -838,4 +838,10 @@ class ElectronicReceiptOperationGetImpl implements ElectronicReceiptOperationGet
     public <T> T $getCalculated(String s, Class<T> aClass) {
         return null;
     }
+
+    @Override
+    public Long getSysLastHistVersion() {
+        return null;
+    }
+
 }

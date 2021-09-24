@@ -5,7 +5,7 @@
     <parent>
         <groupId>sbp.com.sbt.dataspace</groupId>
         <artifactId>dataspace-bom</artifactId>
-        <version>4.2.130</version>
+        <version>4.3.63</version>
         <relativePath/>
     </parent>
 
@@ -66,7 +66,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <model>${project.parent.basedir}/model/src/main/resources/model</model>
         <modelPackage>${project.groupId}</modelPackage>
-        <support-bom.version>4.5.3-build.12</support-bom.version>
+        <support-bom.version>4.6.0-build.3</support-bom.version>
     </properties>
 
     <dependencyManagement>

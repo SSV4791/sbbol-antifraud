@@ -809,4 +809,9 @@ public class SbpPaymentOperationGetImpl implements SbpPaymentOperationGet {
         return null;
     }
 
+    @Override
+    public Long getSysLastHistVersion() {
+        return null;
+    }
+
 }
