@@ -6,56 +6,63 @@
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>dataspace-antifraud</artifactId>
             </artifact>
-            <version>0.1.0-build.31</version>
+            <version>01.001.00_0000</version>
+        </artifactVersion>
+        <artifactVersion>
+            <artifact>
+                <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
+                <artifactId>admin-guide</artifactId>
+            </artifact>
+            <version>01.001.00_0000</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-api</artifactId>
             </artifact>
-            <version>0.1.0-build.31</version>
+            <version>01.001.00_0000</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-application</artifactId>
             </artifact>
-            <version>0.1.0-build.31</version>
+            <version>01.001.00_0000</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-rpc-api</artifactId>
             </artifact>
-            <version>0.1.0-build.31</version>
+            <version>01.001.00_0000</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud</artifactId>
             </artifact>
-            <version>0.1.0-build.31</version>
+            <version>01.001.00_0000</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-model-sdk</artifactId>
             </artifact>
-            <version>0.1.0-build.31</version>
+            <version>01.001.00_0000</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-model-jpa</artifactId>
             </artifact>
-            <version>0.1.0-build.31</version>
+            <version>01.001.00_0000</version>
         </artifactVersion>
         <artifactVersion>
             <artifact>
                 <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
                 <artifactId>antifraud-service</artifactId>
             </artifact>
-            <version>0.1.0-build.31</version>
+            <version>01.001.00_0000</version>
         </artifactVersion>
     </artifactVersions>
     <lastProjectDependencyTree>
@@ -105,6 +112,14 @@
                     <packaging>jar</packaging>
                     <scope>test</scope>
                 </dependency>
+            </dependencies>
+        </artifactDependencyTree>
+        <artifactDependencyTree>
+            <artifact>
+                <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
+                <artifactId>admin-guide</artifactId>
+            </artifact>
+            <dependencies>
             </dependencies>
         </artifactDependencyTree>
         <artifactDependencyTree>
@@ -268,7 +283,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>liquibase-deployer</artifactId>
-                    <version>4.2.0-build.183</version>
+                    <version>4.3.48</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>test</scope>
@@ -412,7 +427,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>sdk-api</artifactId>
-                    <version>4.2.0-build.217</version>
+                    <version>4.3.48</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -444,7 +459,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>liquibase-deployer</artifactId>
-                    <version>4.2.0-build.183</version>
+                    <version>4.3.48</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>test</scope>
@@ -452,7 +467,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>idempotence-interfaces</artifactId>
-                    <version>4.2.0-build.128</version>
+                    <version>4.3.48</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -460,7 +475,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>status-interfaces</artifactId>
-                    <version>4.2.0-build.130</version>
+                    <version>4.3.48</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -468,7 +483,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>applocks-interfaces</artifactId>
-                    <version>4.2.0-build.124</version>
+                    <version>4.3.48</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -476,7 +491,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>base-entity-interfaces</artifactId>
-                    <version>4.2.0-build.128</version>
+                    <version>4.3.48</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -508,7 +523,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>aggregate-interface</artifactId>
-                    <version>4.2.0-build.124</version>
+                    <version>4.3.48</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -516,7 +531,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>status-service</artifactId>
-                    <version>4.2.0-build.217</version>
+                    <version>4.3.48</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>test</scope>
@@ -524,7 +539,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>external-reference-interface</artifactId>
-                    <version>4.2.0-build.129</version>
+                    <version>4.3.48</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -532,7 +547,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>jpa-model-support</artifactId>
-                    <version>4.2.0-build.130</version>
+                    <version>4.3.48</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>test</scope>
@@ -548,7 +563,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>sdk-api</artifactId>
-                    <version>4.2.0-build.217</version>
+                    <version>4.3.48</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -580,7 +595,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>liquibase-deployer</artifactId>
-                    <version>4.2.0-build.183</version>
+                    <version>4.3.48</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>test</scope>
@@ -588,7 +603,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>idempotence-interfaces</artifactId>
-                    <version>4.2.0-build.128</version>
+                    <version>4.3.48</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -596,7 +611,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>status-interfaces</artifactId>
-                    <version>4.2.0-build.130</version>
+                    <version>4.3.48</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -604,7 +619,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>base-entity-interfaces</artifactId>
-                    <version>4.2.0-build.128</version>
+                    <version>4.3.48</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -636,7 +651,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>aggregate-interface</artifactId>
-                    <version>4.2.0-build.124</version>
+                    <version>4.3.48</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -644,7 +659,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>applocks-interfaces</artifactId>
-                    <version>4.2.0-build.124</version>
+                    <version>4.3.48</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -652,7 +667,7 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>external-reference-interface</artifactId>
-                    <version>4.2.0-build.129</version>
+                    <version>4.3.48</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -692,7 +707,23 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace</groupId>
                     <artifactId>sdk-api</artifactId>
-                    <version>4.2.0-build.217</version>
+                    <version>4.3.48</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.mapstruct</groupId>
+                    <artifactId>mapstruct</artifactId>
+                    <version>1.4.2.Final</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.mapstruct</groupId>
+                    <artifactId>mapstruct-processor</artifactId>
+                    <version>1.4.2.Final</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
@@ -732,10 +763,18 @@
                 <dependency>
                     <groupId>sbp.com.sbt.dataspace.support</groupId>
                     <artifactId>watch-service-starter</artifactId>
-                    <version>4.5.0-build.16</version>
+                    <version>4.6.0-build.1</version>
                     <classifier/>
                     <packaging>jar</packaging>
                     <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>uk.co.jemos.podam</groupId>
+                    <artifactId>podam</artifactId>
+                    <version>7.2.7.RELEASE</version>
+                    <classifier/>
+                    <packaging>jar</packaging>
+                    <scope>test</scope>
                 </dependency>
                 <dependency>
                     <groupId>au.com.dius.pact.consumer</groupId>
@@ -780,5 +819,5 @@
             </dependencies>
         </artifactDependencyTree>
     </lastProjectDependencyTree>
-    <lastCommitRevisionNumber>5b5c705ca9aca622d45472b09dc980654b3f700c</lastCommitRevisionNumber>
+    <lastCommitRevisionNumber>2d6d39c5b61c201eb6f8220b3fa742f02f7a28d5</lastCommitRevisionNumber>
 </workSettings>
