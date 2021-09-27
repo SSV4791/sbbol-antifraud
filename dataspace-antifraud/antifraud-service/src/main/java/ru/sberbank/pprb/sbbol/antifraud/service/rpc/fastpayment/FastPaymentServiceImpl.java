@@ -1,6 +1,7 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.rpc.fastpayment;
 
 import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImpl;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.fastpayment.FastPaymentSendRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
@@ -16,7 +17,7 @@ public class FastPaymentServiceImpl extends AbstractService implements FastPayme
 
     private final Processor<FastPaymentOperation, FastPaymentSendRequest> processor;
 
-    public FastPaymentServiceImpl(Processor<FastPaymentOperation, FastPaymentSendRequest> processor) {
+    public FastPaymentServiceImpl(@Qualifier("fastPaymentProcessor") Processor<FastPaymentOperation, FastPaymentSendRequest> processor) {
         this.processor = processor;
     }
 

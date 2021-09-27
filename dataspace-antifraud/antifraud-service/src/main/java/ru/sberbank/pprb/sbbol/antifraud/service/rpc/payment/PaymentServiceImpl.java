@@ -1,6 +1,7 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.rpc.payment;
 
 import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImpl;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.PaymentSendRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
@@ -16,7 +17,7 @@ public class PaymentServiceImpl extends AbstractService implements PaymentServic
 
     private final Processor<PaymentOperation, PaymentSendRequest> processor;
 
-    public PaymentServiceImpl(Processor<PaymentOperation, PaymentSendRequest> processor) {
+    public PaymentServiceImpl(@Qualifier("paymentProcessor") Processor<PaymentOperation, PaymentSendRequest> processor) {
         this.processor = processor;
     }
 

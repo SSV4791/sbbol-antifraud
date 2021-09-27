@@ -1,6 +1,7 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.rpc.electronicreceipt;
 
 import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImpl;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
@@ -16,7 +17,7 @@ public class ElectronicReceiptServiceImpl extends AbstractService implements Ele
 
     private final Processor<ElectronicReceiptOperation, SendToAnalyzeRequest> processor;
 
-    public ElectronicReceiptServiceImpl(Processor<ElectronicReceiptOperation, SendToAnalyzeRequest> processor) {
+    public ElectronicReceiptServiceImpl(@Qualifier("electronicReceiptProcessor") Processor<ElectronicReceiptOperation, SendToAnalyzeRequest> processor) {
         this.processor = processor;
     }
 

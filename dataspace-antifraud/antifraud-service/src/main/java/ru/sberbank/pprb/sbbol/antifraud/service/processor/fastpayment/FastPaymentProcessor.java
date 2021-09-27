@@ -39,7 +39,7 @@ import java.util.UUID;
  * Обработчик платежных поручений СБП. Добавляет запись в таблицу SbpPaymentOperation.
  * Осуществляет отправку данных в ФП ИС.
  */
-@Service
+@Service("fastPaymentProcessor")
 public class FastPaymentProcessor implements Processor<FastPaymentOperation, FastPaymentSendRequest> {
 
     private static final Logger logger = LoggerFactory.getLogger(FastPaymentProcessor.class);
