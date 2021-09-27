@@ -39,7 +39,7 @@ import java.util.UUID;
  * Обработчик платежных поручений. Добавляет запись в таблицу PaymentOperation.
  * Осуществляет отправку данных в ФП ИС.
  */
-@Service
+@Service("paymentProcessor")
 public class PaymentProcessor implements Processor<PaymentOperation, PaymentSendRequest> {
 
     private static final Logger logger = LoggerFactory.getLogger(PaymentProcessor.class);

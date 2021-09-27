@@ -35,7 +35,7 @@ import java.util.UUID;
  * Обработчик электронных чеков. Добавляет запись в таблицу ElectronicReceiptOperation.
  * Осуществляет отправку данных в ФП ИС.
  */
-@Service
+@Service("electronicReceiptProcessor")
 public class ElectronicReceiptProcessor implements Processor<ElectronicReceiptOperation, SendToAnalyzeRequest> {
 
     private static final Logger logger = LoggerFactory.getLogger(ElectronicReceiptProcessor.class);
