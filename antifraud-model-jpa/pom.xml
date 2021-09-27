@@ -3,11 +3,12 @@
     <parent>
         <artifactId>antifraud</artifactId>
         <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
-        <version>DEV-SNAPSHOT</version>
+        <version>01.001.00_0001</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>antifraud-model-jpa</artifactId>
+    <version>01.001.00_0001</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

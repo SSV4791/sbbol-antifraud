@@ -5,10 +5,11 @@
     <parent>
         <artifactId>antifraud</artifactId>
         <groupId>ru.sberbank.pprb.sbbol.antifraud</groupId>
-        <version>DEV-SNAPSHOT</version>
+        <version>01.001.00_0001</version>
     </parent>
 
     <artifactId>admin-guide</artifactId>
+    <version>01.001.00_0001</version>
     <packaging>pom</packaging>
 
     <profiles>

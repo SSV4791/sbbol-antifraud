@@ -1,5 +1,5 @@
 <PdmModel>
-  <model model-name="antifraud" component-code="НЕ ЗАДАНО" version="01.001.00_0000" versioned-entities="false">
+  <model model-name="antifraud" component-code="НЕ ЗАДАНО" version="01.001.00_0001" versioned-entities="false">
     <import type="SysLockModelGenerator" file=""/>
     <import type="HISTORY_CHANGES" file=""/>
     <import type="IdempotenceModelGenerator" file=""/>
@@ -406,7 +406,7 @@
       <property name="recModelVersion" type="String" length="254" label="System attribute: Record model version" column-name="SYS_RECMODELVERSION" description="" column-type="VARCHAR(254)" system-field="true" changeable="SYSTEM"/>
       <property name="chgCnt" type="Long" label="Счетчик изменений (технический)" column-name="CHGCNT" description="" column-type="${type_long}" changeable="READ_ONLY"/>
       <property name="offFlag" type="Byte" label="Признак деактивации записи" column-name="OFFFLAG" description="" column-type="${type_byte}" system-field="true" changeable="SYSTEM"/>
-      <property name="sysLastHistVersion" type="Long" label="Версия историцирования" column-name="SYSLASTHISTVERSION" column-type="${type_long}" changeable="READ_ONLY"/>
+      <property name="sysLastHistVersion" type="Long" label="Версия историцирования" column-name="SYSLASTHISTVERSION" description="" column-type="${type_long}" changeable="READ_ONLY"/>
     </class>
     <class name="ElectronicReceiptOperation" extends="BaseEntity" label="Модель электронного чека" tableName="T_ELECTRONICRECEIPTOPERATION" pk-index-name="PK_T_ELECTRONICRECEIPTOPERATION" description="" affinity="objectId" class-access="UPDATE" strategy="JOINED" import-model-name="antifraud" is-updated-root-dictionaries="false">
       <id type="String" category="SNOWFLAKE"/>
@@ -497,11 +497,11 @@
       <property name="secondSignCertId" type="String" length="254" label="2-я подпись Идентификатор сертификата" column-name="SECONDSIGNCERTID" description="" column-type="VARCHAR(254)"/>
       <property name="secondSignPhone" type="String" length="13" label="2-я подпись Номер телефона" column-name="SECONDSIGNPHONE" description="" column-type="VARCHAR(13)"/>
       <property name="secondSignEmail" type="String" length="320" label="2-я подпись Адрес электронной почты" column-name="SECONDSIGNEMAIL" description="" column-type="VARCHAR(320)"/>
-      <property name="apiCalls" type="ElectronicReceiptOperationApiCall" length="254" collection="SET" label="Коллекция с результатами идемпотентных вызовов" column-type="VARCHAR(254)" system-field="true" changeable="SYSTEM" mappedBy="parentObject" object-link="O2M"/>
-      <property name="objectId" type="String" length="254" label="Прикладной ID объекта" mandatory="true" column-name="OBJECT_ID" column-type="VARCHAR(254)" id="true" changeable="READ_ONLY"/>
+      <property name="apiCalls" type="ElectronicReceiptOperationApiCall" length="254" collection="SET" label="Коллекция с результатами идемпотентных вызовов" description="" column-type="VARCHAR(254)" system-field="true" changeable="SYSTEM" mappedBy="parentObject" object-link="O2M"/>
+      <property name="objectId" type="String" length="254" label="Прикладной ID объекта" mandatory="true" column-name="OBJECT_ID" description="" column-type="VARCHAR(254)" id="true" changeable="READ_ONLY"/>
       <property name="type" type="String" length="254" label="Дискриминатор классов" mandatory="true" index="true" column-name="TYPE" description="Дискриминатор" column-type="VARCHAR(254)" changeable="READ_ONLY"/>
     </class>
-    <class name="RootDictionary" label="Класс агрегат справочника" tableName="T_ROOTDICTIONARY" pk-index-name="PK_T_ROOTDICTIONARY" is-dictionary="true" affinity="objectId" class-access="READ_ONLY" strategy="JOINED" import-model-name="antifraud">
+    <class name="RootDictionary" label="Класс агрегат справочника" tableName="T_ROOTDICTIONARY" pk-index-name="PK_T_ROOTDICTIONARY" description="" is-dictionary="true" affinity="objectId" class-access="READ_ONLY" strategy="JOINED" import-model-name="antifraud" is-updated-root-dictionaries="false">
       <id type="String" category="MANUAL"/>
       <root-type>RootDictionary</root-type>
       <index index-name="PK_T_ROOTDICTIONARY" primary-key="true">
@@ -510,10 +510,10 @@
       <index index-name="I_ROOTDICTIONARY_TYPE">
         <property name="type"/>
       </index>
-      <property name="objectId" type="String" length="254" label="Прикладной ID объекта" mandatory="true" column-name="OBJECT_ID" column-type="VARCHAR(254)" id="true" changeable="READ_ONLY"/>
+      <property name="objectId" type="String" length="254" label="Прикладной ID объекта" mandatory="true" column-name="OBJECT_ID" description="" column-type="VARCHAR(254)" id="true" changeable="READ_ONLY"/>
       <property name="type" type="String" length="254" label="Дискриминатор классов" mandatory="true" index="true" column-name="TYPE" description="Дискриминатор" column-type="VARCHAR(254)" changeable="READ_ONLY"/>
     </class>
-    <class name="ElectronicReceiptOperationApiCall" extends="BaseEntity" label="Результат обработки пакета Unit of Work для ElectronicReceiptOperation" tableName="T_ELECTRONICRECEIPTOPERATIONAPICALL" pk-index-name="PK_T_ELECTRONICRECEIPTOPERATIONAPICALL" affinity="parentObject" class-access="SYSTEM" final-class="true" strategy="JOINED" import-model-name="antifraud">
+    <class name="ElectronicReceiptOperationApiCall" extends="BaseEntity" label="Результат обработки пакета Unit of Work для ElectronicReceiptOperation" tableName="T_ELECTRONICRECEIPTOPERATIONAPICALL" pk-index-name="PK_T_ELECTRONICRECEIPTOPERATIONAPICALL" description="" affinity="parentObject" class-access="SYSTEM" final-class="true" strategy="JOINED" import-model-name="antifraud" is-updated-root-dictionaries="false">
       <id type="String" category="SNOWFLAKE"/>
       <root-type>ElectronicReceiptOperation</root-type>
       <index index-name="PK_T_ELECTRONICRECEIPTOPERATIONAPICALL" primary-key="true">
@@ -528,33 +528,33 @@
       <index index-name="I_ELECTRONICRECEIPTOPERATIONAPICALL_AGGREGATEROOT_ID">
         <property name="aggregateRoot"/>
       </index>
-      <property name="apiCallId" type="String" length="254" label="Идентификатор пакета" unique="true" column-name="APICALLID" column-type="VARCHAR(254)" system-field="true" changeable="SYSTEM"/>
-      <property name="firstCallDate" type="Date" length="3" label="Дата первого успешного вызова пакета" column-name="FIRSTCALLDATE" column-type="TIMESTAMP(3)" system-field="true" changeable="SYSTEM"/>
-      <property name="data" type="String" length="4000" label="Результат обработки пакета" column-name="DATA" column-type="VARCHAR(4000)" system-field="true" changeable="SYSTEM"/>
-      <property name="bigData" type="String" length="4001" label="Результат обработки пакета, используется если результат не помещается в поле data" column-name="BIGDATA" column-type="CLOB" system-field="true" changeable="SYSTEM"/>
-      <property name="parentObject" type="ElectronicReceiptOperation" length="254" label="Ссылка на родительский объект" mandatory="true" index="true" column-name="PARENTOBJECT_ID" column-type="VARCHAR(254)" changeable="CREATE" parent="true" object-link="M2O"/>
-      <property name="objectId" type="String" length="254" label="Прикладной ID объекта" mandatory="true" column-name="OBJECT_ID" column-type="VARCHAR(254)" id="true" changeable="READ_ONLY"/>
-      <property name="aggregateRoot" type="ElectronicReceiptOperation" length="254" label="ссылка на корень агрегата" index="true" column-name="AGGREGATEROOT_ID" column-type="VARCHAR(254)" changeable="READ_ONLY" object-link="M2O"/>
+      <property name="apiCallId" type="String" length="254" label="Идентификатор пакета" unique="true" column-name="APICALLID" description="" column-type="VARCHAR(254)" system-field="true" changeable="SYSTEM"/>
+      <property name="firstCallDate" type="Date" length="3" label="Дата первого успешного вызова пакета" column-name="FIRSTCALLDATE" description="" column-type="TIMESTAMP(3)" system-field="true" changeable="SYSTEM"/>
+      <property name="data" type="String" length="4000" label="Результат обработки пакета" column-name="DATA" description="" column-type="VARCHAR(4000)" system-field="true" changeable="SYSTEM"/>
+      <property name="bigData" type="String" length="4001" label="Результат обработки пакета, используется если результат не помещается в поле data" column-name="BIGDATA" description="" column-type="CLOB" system-field="true" changeable="SYSTEM"/>
+      <property name="parentObject" type="ElectronicReceiptOperation" length="254" label="Ссылка на родительский объект" mandatory="true" index="true" column-name="PARENTOBJECT_ID" description="" column-type="VARCHAR(254)" changeable="CREATE" parent="true" object-link="M2O"/>
+      <property name="objectId" type="String" length="254" label="Прикладной ID объекта" mandatory="true" column-name="OBJECT_ID" description="" column-type="VARCHAR(254)" id="true" changeable="READ_ONLY"/>
+      <property name="aggregateRoot" type="ElectronicReceiptOperation" length="254" label="ссылка на корень агрегата" index="true" column-name="AGGREGATEROOT_ID" description="" column-type="VARCHAR(254)" changeable="READ_ONLY" object-link="M2O"/>
     </class>
-    <class name="InitTask" extends="BaseEntity" label="Таблица с задачами репликации ТСА" tableName="T_REPL_CR_INIT_TASK" pk-index-name="PK_T_REPL_CR_INIT_TASK" class-access="SYSTEM" final-class="true" strategy="JOINED" generate-jpa="false" import-model-name="antifraud">
+    <class name="InitTask" extends="BaseEntity" label="Таблица с задачами репликации ТСА" tableName="T_REPL_CR_INIT_TASK" pk-index-name="PK_T_REPL_CR_INIT_TASK" description="" class-access="SYSTEM" final-class="true" strategy="JOINED" generate-jpa="false" import-model-name="antifraud" is-updated-root-dictionaries="false">
       <id type="String" category="MANUAL"/>
       <index index-name="PK_T_REPL_CR_INIT_TASK" primary-key="true">
         <property name="objectId"/>
       </index>
-      <property name="aggregateType" type="String" length="254" label="Возврат типа у агрегата" column-name="AGGREGATETYPE" column-type="VARCHAR(254)"/>
-      <property name="objectId" type="String" length="254" label="Прикладной ID объекта" mandatory="true" column-name="OBJECT_ID" column-type="VARCHAR(254)" id="true" changeable="READ_ONLY"/>
+      <property name="aggregateType" type="String" length="254" label="Возврат типа у агрегата" column-name="AGGREGATETYPE" description="" column-type="VARCHAR(254)"/>
+      <property name="objectId" type="String" length="254" label="Прикладной ID объекта" mandatory="true" column-name="OBJECT_ID" description="" column-type="VARCHAR(254)" id="true" changeable="READ_ONLY"/>
     </class>
-    <class name="InitSubTask" extends="BaseEntity" label="Таблица с подзадачами репликации ТСА" tableName="T_REPL_CR_INIT_SUBTASK" pk-index-name="PK_T_REPL_CR_INIT_SUBTASK" class-access="SYSTEM" final-class="true" strategy="JOINED" generate-jpa="false" import-model-name="antifraud">
+    <class name="InitSubTask" extends="BaseEntity" label="Таблица с подзадачами репликации ТСА" tableName="T_REPL_CR_INIT_SUBTASK" pk-index-name="PK_T_REPL_CR_INIT_SUBTASK" description="" class-access="SYSTEM" final-class="true" strategy="JOINED" generate-jpa="false" import-model-name="antifraud" is-updated-root-dictionaries="false">
       <id type="String" category="MANUAL"/>
       <index index-name="PK_T_REPL_CR_INIT_SUBTASK" primary-key="true">
         <property name="objectId"/>
       </index>
-      <property name="task" type="String" length="254" label="Возвращает основную задачу" column-name="TASK" column-type="VARCHAR(254)"/>
-      <property name="status" type="String" length="254" label="Возврат статуса выполнения подзадачи" column-name="STATUS" column-type="VARCHAR(254)"/>
-      <property name="aggregateId" type="String" length="254" label="Возврат id агрегата" column-name="AGGREGATEID" column-type="VARCHAR(254)"/>
-      <property name="entityType" type="String" length="254" label="Возврат типа у сущности" column-name="ENTITYTYPE" column-type="VARCHAR(254)"/>
-      <property name="offset" type="Long" label="Возврат оффсета" column-name="OFFSET_" column-type="${type_long}"/>
-      <property name="objectId" type="String" length="254" label="Прикладной ID объекта" mandatory="true" column-name="OBJECT_ID" column-type="VARCHAR(254)" id="true" changeable="READ_ONLY"/>
+      <property name="task" type="String" length="254" label="Возвращает основную задачу" column-name="TASK" description="" column-type="VARCHAR(254)"/>
+      <property name="status" type="String" length="254" label="Возврат статуса выполнения подзадачи" column-name="STATUS" description="" column-type="VARCHAR(254)"/>
+      <property name="aggregateId" type="String" length="254" label="Возврат id агрегата" column-name="AGGREGATEID" description="" column-type="VARCHAR(254)"/>
+      <property name="entityType" type="String" length="254" label="Возврат типа у сущности" column-name="ENTITYTYPE" description="" column-type="VARCHAR(254)"/>
+      <property name="offset" type="Long" label="Возврат оффсета" column-name="OFFSET_" description="" column-type="${type_long}"/>
+      <property name="objectId" type="String" length="254" label="Прикладной ID объекта" mandatory="true" column-name="OBJECT_ID" description="" column-type="VARCHAR(254)" id="true" changeable="READ_ONLY"/>
     </class>
   </model>
   <status/>

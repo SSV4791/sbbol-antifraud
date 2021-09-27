@@ -1989,4 +1989,11 @@
     <changeSet author="antifraud" id="01.001.00_0000-applied">
         <tagDatabase tag="antifraud-01.001.00_0000-applied"/>
     </changeSet>
+    <changeSet author="antifraud" id="01.001.00_0001-before">
+        <tagDatabase tag="antifraud-01.001.00_0001-before"/>
+    </changeSet>
+
+    <changeSet author="antifraud" id="01.001.00_0001-applied">
+        <tagDatabase tag="antifraud-01.001.00_0001-applied"/>
+    </changeSet>
 </databaseChangeLog>
