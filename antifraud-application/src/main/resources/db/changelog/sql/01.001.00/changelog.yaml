@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - include:
+      file: 1633072940006_drop_dataspace_tables_and_columns.sql
+      relativeToChangelogFile: true
+  - include:
+      file: 1633077459535_create_em_tables_and_add_colums.sql
+      relativeToChangelogFile: true
+  - include:
+      file: 1633337709568_rename_columns_timestamp.sql
+      relativeToChangelogFile: true

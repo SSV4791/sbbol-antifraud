@@ -5,7 +5,7 @@
       "sectionMetadata" : {
         "code" : "Risks",
         "name" : "Проблемы и угрозы",
-        "order" : 6,
+        "order" : 5,
         "imageCode" : "risk",
         "hasOptions" : false
       },
@@ -18,7 +18,7 @@
             "type" : "DataTable",
             "title" : "Чек-лист профиля",
             "hint" : "Множество таблиц, каждая из которых характеризует использовнаие правил валидации того или иного профиля.",
-            "uid" : "165",
+            "uid" : "141",
             "imageLink" : "",
             "columns" : [ {
               "title" : "Статус",
@@ -49,8 +49,8 @@
               "imageCode" : "type_service_exchange",
               "cell1" : "#icon:problem_info",
               "cell2" : "PR-002: ППРБ-АП-Т-1 Использование API ЕПК",
-              "cell3" : "#icon:problem_ok",
-              "cell4" : "1"
+              "cell3" : "1",
+              "cell4" : "0"
             }, {
               "key" : 1,
               "imageCode" : "type_service_exchange",
@@ -63,8 +63,8 @@
               "imageCode" : "type_service_exchange",
               "cell1" : "#icon:problem_info",
               "cell2" : "PR-004: ППРБ-АП-Т-9: Использование API НСИ",
-              "cell3" : "#icon:problem_ok",
-              "cell4" : "1"
+              "cell3" : "1",
+              "cell4" : "0"
             }, {
               "key" : 1,
               "imageCode" : "type_service_exchange",
@@ -77,8 +77,15 @@
               "imageCode" : "type_service_exchange",
               "cell1" : "#icon:problem_info",
               "cell2" : "PR-006: ППРБ-АП-Т-5/ППРБ-АП-М-8: Использование API ТС Архивирование",
-              "cell3" : "#icon:problem_ok",
-              "cell4" : "1"
+              "cell3" : "1",
+              "cell4" : "0"
+            }, {
+              "key" : 1,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "#icon:problem_info",
+              "cell2" : "PR-006: ППРБ-АП-Т-5/ППРБ-АП-М-8: Использование Транспорта ТС Архивирование",
+              "cell3" : "1",
+              "cell4" : "0"
             }, {
               "key" : 1,
               "imageCode" : "type_service_exchange",
@@ -98,15 +105,15 @@
               "imageCode" : "type_service_exchange",
               "cell1" : "#icon:problem_info",
               "cell2" : "PR-009: ППРБ-ИА-Т-4: Использование Synapse",
-              "cell3" : "#icon:problem_ok",
-              "cell4" : "1"
+              "cell3" : "1",
+              "cell4" : "0"
             }, {
               "key" : 1,
               "imageCode" : "type_service_exchange",
               "cell1" : "#icon:problem_info",
               "cell2" : "PR-010: ППРБ-ИА-Т-4: Использование ММТ",
-              "cell3" : "#icon:problem_ok",
-              "cell4" : "1"
+              "cell3" : "1",
+              "cell4" : "0"
             }, {
               "key" : 1,
               "imageCode" : "type_service_exchange",
@@ -126,22 +133,22 @@
               "imageCode" : "type_service_exchange",
               "cell1" : "#icon:problem_info",
               "cell2" : "PR-013: ППРБ-АП-Т-2: Использование HTTP Bridge ППРБ для построения UI",
-              "cell3" : "#icon:problem_ok",
-              "cell4" : "1"
+              "cell3" : "1",
+              "cell4" : "0"
             }, {
               "key" : 1,
               "imageCode" : "type_service_exchange",
               "cell1" : "#icon:problem_info",
               "cell2" : "PR-014: ППРБ-АП-Т-2: Использование стэка UFS для построения UI",
-              "cell3" : "#icon:problem_ok",
-              "cell4" : "1"
+              "cell3" : "1",
+              "cell4" : "0"
             }, {
               "key" : 1,
               "imageCode" : "type_service_exchange",
               "cell1" : "#icon:problem_info",
               "cell2" : "PR-015: ППРБ-АН-Т-1: Реализация самодиагностики с выгрузкой данных в ТС Failover",
-              "cell3" : "#icon:problem_ok",
-              "cell4" : "1"
+              "cell3" : "1",
+              "cell4" : "0"
             }, {
               "key" : 1,
               "imageCode" : "type_service_exchange",
@@ -154,22 +161,22 @@
               "imageCode" : "type_service_exchange",
               "cell1" : "#icon:problem_info",
               "cell2" : "PR-017: ППРБ-АН-Т-4: Использование API ТС Прикладной мониторинг",
-              "cell3" : "#icon:problem_ok",
-              "cell4" : "1"
+              "cell3" : "1",
+              "cell4" : "0"
             }, {
               "key" : 1,
               "imageCode" : "type_service_exchange",
               "cell1" : "#icon:problem_warning",
               "cell2" : "PR-018: ППРБ-АН-Т-6: Наличие зависимости на ТС Журналирование в проекте",
-              "cell3" : "#icon:problem_ok",
-              "cell4" : "1"
+              "cell3" : "1",
+              "cell4" : "0"
             }, {
               "key" : 1,
               "imageCode" : "type_service_exchange",
               "cell1" : "#icon:problem_info",
               "cell2" : "PR-019: ППРБ-ИБ-Т-6: Использование API ТС Сервис авторизации",
-              "cell3" : "#icon:problem_ok",
-              "cell4" : "1"
+              "cell3" : "1",
+              "cell4" : "0"
             }, {
               "key" : 1,
               "imageCode" : "type_service_exchange",
@@ -182,8 +189,8 @@
               "imageCode" : "type_service_exchange",
               "cell1" : "#icon:problem_info",
               "cell2" : "PR-021: ППРБ-ИБ-Т-7: Использование API ТС ОТТ",
-              "cell3" : "#icon:problem_ok",
-              "cell4" : "1"
+              "cell3" : "1",
+              "cell4" : "0"
             }, {
               "key" : 1,
               "imageCode" : "type_service_exchange",
@@ -196,14 +203,14 @@
               "imageCode" : "type_service_exchange",
               "cell1" : "#icon:problem_info",
               "cell2" : "PR-023: ППРБ-ИБ-Т-3: Использование API ТС Прикладной аудит",
-              "cell3" : "#icon:problem_ok",
-              "cell4" : "1"
+              "cell3" : "1",
+              "cell4" : "0"
             }, {
               "key" : 1,
               "imageCode" : "type_service_exchange",
               "cell1" : "#icon:problem_info",
               "cell2" : "PR-024: ППРБ-ИА-Т-7 Предоставление API для реализации компенсационных сценариев со стороны БПС",
-              "cell3" : "#icon:problem_ok",
+              "cell3" : "1",
               "cell4" : "0"
             }, {
               "key" : 1,
@@ -217,36 +224,36 @@
               "imageCode" : "type_service_exchange",
               "cell1" : "#icon:problem_info",
               "cell2" : "PR-026: ППРБ-АП-М-4 Использование в проекте On-line Compliance Control",
-              "cell3" : "#icon:problem_ok",
-              "cell4" : "1"
+              "cell3" : "1",
+              "cell4" : "0"
             }, {
               "key" : 1,
               "imageCode" : "type_service_exchange",
               "cell1" : "#icon:problem_info",
               "cell2" : "PR-027: ППРБ-АП-М-4 Использование в проекте проверки против «черных» списков",
-              "cell3" : "#icon:problem_ok",
-              "cell4" : "1"
+              "cell3" : "1",
+              "cell4" : "0"
             }, {
               "key" : 1,
               "imageCode" : "type_service_exchange",
               "cell1" : "#icon:problem_info",
               "cell2" : "PR-028: ППРБ-АП-М-6 Использование API ТС Устранение сбойных ситуаций",
-              "cell3" : "#icon:problem_ok",
-              "cell4" : "1"
+              "cell3" : "1",
+              "cell4" : "0"
             }, {
               "key" : 1,
               "imageCode" : "type_service_exchange",
               "cell1" : "#icon:problem_info",
               "cell2" : "PR-029: ППРБ-АН-Т-2 Использование API ТС Stand In",
-              "cell3" : "#icon:problem_ok",
-              "cell4" : "1"
+              "cell3" : "1",
+              "cell4" : "0"
             }, {
               "key" : 1,
               "imageCode" : "type_service_exchange",
               "cell1" : "#icon:problem_info",
               "cell2" : "PR-030: ППРБ-АП-Т-7 Зонирование по зонам обслуживания",
-              "cell3" : "#icon:problem_ok",
-              "cell4" : "1"
+              "cell3" : "1",
+              "cell4" : "0"
             }, {
               "key" : 1,
               "imageCode" : "type_service_exchange",
@@ -266,8 +273,8 @@
               "imageCode" : "type_service_exchange",
               "cell1" : "#icon:problem_info",
               "cell2" : "PR-033: ППРБ-АН-Т-7 Использование API ТС Сервис межкластерной индексации",
-              "cell3" : "#icon:problem_ok",
-              "cell4" : "1"
+              "cell3" : "1",
+              "cell4" : "0"
             }, {
               "key" : 1,
               "imageCode" : "type_service_exchange",
@@ -294,7 +301,7 @@
             "type" : "DataTable",
             "title" : "Найденные ошибки",
             "hint" : "Содержит список найденных ошибок и их описание.",
-            "uid" : "166",
+            "uid" : "142",
             "imageLink" : "",
             "columns" : [ {
               "title" : "Описание",
@@ -318,85 +325,95 @@
             }, {
               "key" : 3,
               "imageCode" : "balloon_info",
-              "cell1" : "PR-006: ППРБ-АП-Т-5/ППРБ-АП-М-8: В модулях проекта не найден вызов API ТС Архивирование",
+              "cell1" : "PR-006: ППРБ-АП-Т-5/ППРБ-АП-М-8: PR-037: ППРБ-АП-Т-5/ППРБ-АП-М-8: В модуле проекта не используется транспортный формат <Journal> для передачи данных через ТС Архивирование.",
               "cell2" : "project"
             }, {
               "key" : 4,
               "imageCode" : "balloon_info",
-              "cell1" : "PR-009: ППРБ-ИА-Т-4: В модулях проекта не найден ни один интеграционный вызов через Synapse",
+              "cell1" : "PR-006: ППРБ-АП-Т-5/ППРБ-АП-М-8: В модулях проекта не найден вызов API ТС Архивирование",
               "cell2" : "project"
             }, {
               "key" : 5,
               "imageCode" : "balloon_info",
-              "cell1" : "PR-010: ППРБ-ИА-Т-4: В модулях проекта не найден ни один интеграционный вызов через ММТ",
+              "cell1" : "PR-009: ППРБ-ИА-Т-4: В модулях проекта не найден ни один интеграционный вызов через Synapse",
               "cell2" : "project"
             }, {
               "key" : 6,
               "imageCode" : "balloon_info",
-              "cell1" : "PR-013: ППРБ-АП-Т-2: В проекте не найдено использования ТС HttpBridge",
+              "cell1" : "PR-010: ППРБ-ИА-Т-4: В модулях проекта не найден ни один интеграционный вызов через ММТ",
               "cell2" : "project"
             }, {
               "key" : 7,
               "imageCode" : "balloon_info",
-              "cell1" : "PR-014: ППРБ-АП-Т-2: В проекте не найдено использования ТС Аутентификации",
+              "cell1" : "PR-013: ППРБ-АП-Т-2: В проекте не найдено использования ТС HttpBridge",
               "cell2" : "project"
             }, {
               "key" : 8,
               "imageCode" : "balloon_info",
-              "cell1" : "PR-015: ППРБ-АН-Т-1: В проекте не найдено использования API Failover",
+              "cell1" : "PR-014: ППРБ-АП-Т-2: В проекте не найдено использования ТС Аутентификации",
               "cell2" : "project"
             }, {
               "key" : 9,
               "imageCode" : "balloon_info",
-              "cell1" : "PR-017: ППРБ-АН-Т-4: В проекте не используется вызов API ТС Прикладной мониторинг",
+              "cell1" : "PR-015: ППРБ-АН-Т-1: В проекте не найдено использования API Failover",
               "cell2" : "project"
             }, {
               "key" : 10,
+              "imageCode" : "balloon_info",
+              "cell1" : "PR-017: ППРБ-АН-Т-4: В проекте не используется вызов API ТС Прикладной мониторинг",
+              "cell2" : "project"
+            }, {
+              "key" : 11,
               "imageCode" : "balloon_warning",
               "cell1" : "PR-018: ППРБ-АН-Т-6: В проект не подключена зависимость на ТС Журналирование",
               "cell2" : "project"
             }, {
-              "key" : 11,
+              "key" : 12,
               "imageCode" : "balloon_info",
               "cell1" : "PR-019: ППРБ-ИБ-Т-6: В проекте не используется API ТС Сервис авторизации",
               "cell2" : "project"
             }, {
-              "key" : 12,
+              "key" : 13,
               "imageCode" : "balloon_info",
               "cell1" : "PR-021: ППРБ-ИБ-Т-7: В проекте не найден вызов API ТС ОТТ",
               "cell2" : "project"
             }, {
-              "key" : 13,
+              "key" : 14,
               "imageCode" : "balloon_info",
               "cell1" : "PR-023: ППРБ-ИБ-Т-3: В проекте не используется вызов API ТС Прикладной аудит.",
               "cell2" : "project"
             }, {
-              "key" : 14,
-              "imageCode" : "balloon_info",
-              "cell1" : "PR-026: ППРБ-АП-М-4: В проекте не найдено использования API On-line Compliance Control",
-              "cell2" : "project"
-            }, {
               "key" : 15,
               "imageCode" : "balloon_info",
-              "cell1" : "PR-027: ППРБ-АП-М-4: В проекте не найдено использования API Проверка против «черных» списков",
+              "cell1" : "PR-024: ППРБ-ИА-Т-7: Возможно в проекте не реализовано API, позволяющее выполнять компенсационные сценарии со стороны потребителей",
               "cell2" : "project"
             }, {
               "key" : 16,
               "imageCode" : "balloon_info",
-              "cell1" : "PR-028: ППРБ-АП-М-6: В проекте не найдено использования API ТС Устранение сбойных ситуаций",
+              "cell1" : "PR-026: ППРБ-АП-М-4: В проекте не найдено использования API On-line Compliance Control",
               "cell2" : "project"
             }, {
               "key" : 17,
               "imageCode" : "balloon_info",
-              "cell1" : "PR-029: ППРБ-АН-Т-2: В проекте не найдено использования API ТС Stand In",
+              "cell1" : "PR-027: ППРБ-АП-М-4: В проекте не найдено использования API Проверка против «черных» списков",
               "cell2" : "project"
             }, {
               "key" : 18,
               "imageCode" : "balloon_info",
-              "cell1" : "PR-030: ППРБ-АП-Т-7: В проекте не задекларировано зонирование по зонам обслуживания",
+              "cell1" : "PR-028: ППРБ-АП-М-6: В проекте не найдено использования API ТС Устранение сбойных ситуаций",
               "cell2" : "project"
             }, {
               "key" : 19,
+              "imageCode" : "balloon_info",
+              "cell1" : "PR-029: ППРБ-АН-Т-2: В проекте не найдено использования API ТС Stand In",
+              "cell2" : "project"
+            }, {
+              "key" : 20,
+              "imageCode" : "balloon_info",
+              "cell1" : "PR-030: ППРБ-АП-Т-7: В проекте не задекларировано зонирование по зонам обслуживания",
+              "cell2" : "project"
+            }, {
+              "key" : 21,
               "imageCode" : "balloon_info",
               "cell1" : "PR-033: ППРБ-АН-Т-7: В проекте не найдено использования API ТС Сервис межкластерной индексации",
               "cell2" : "project"
@@ -410,7 +427,7 @@
             "type" : "DataTable",
             "title" : "Найденные угрозы",
             "hint" : "Содержит список найденных угроз и их описание.",
-            "uid" : "167",
+            "uid" : "143",
             "imageLink" : "",
             "columns" : [ {
               "title" : "Описание",
@@ -433,7 +450,7 @@
             "type" : "DataTable",
             "title" : "Использование валидаторов ошибок",
             "hint" : "Статистика использования/срабатываний валидаторов в части ошибок.",
-            "uid" : "168",
+            "uid" : "144",
             "imageLink" : "",
             "columns" : [ {
               "title" : "Описание",
@@ -486,174 +503,180 @@
               "cell3" : "1"
             }, {
               "key" : 7,
+              "imageCode" : "balloon_info",
+              "cell1" : "PR-006: ППРБ-АП-Т-5/ППРБ-АП-М-8: Использование Транспорта ТС Архивирование",
+              "cell2" : "true",
+              "cell3" : "1"
+            }, {
+              "key" : 8,
               "imageCode" : "balloon_warning",
               "cell1" : "PR-007: ППРБ-АП-Т-6: Изоляция работы с данными",
               "cell2" : "true",
               "cell3" : "0"
             }, {
-              "key" : 8,
+              "key" : 9,
               "imageCode" : "balloon_warning",
               "cell1" : "PR-008: ППРБ-ИА-Т-4: Использование интеграционных компонентов платформы - Межмодульные интеграции",
               "cell2" : "true",
               "cell3" : "0"
             }, {
-              "key" : 9,
+              "key" : 10,
               "imageCode" : "balloon_info",
               "cell1" : "PR-009: ППРБ-ИА-Т-4: Использование Synapse",
               "cell2" : "true",
               "cell3" : "1"
             }, {
-              "key" : 10,
+              "key" : 11,
               "imageCode" : "balloon_info",
               "cell1" : "PR-010: ППРБ-ИА-Т-4: Использование ММТ",
               "cell2" : "true",
               "cell3" : "1"
             }, {
-              "key" : 11,
+              "key" : 12,
               "imageCode" : "balloon_warning",
               "cell1" : "PR-011: ППРБ-ИА-З-1: Запрещено файловое взаимодействие между сервисами",
               "cell2" : "true",
               "cell3" : "0"
             }, {
-              "key" : 12,
+              "key" : 13,
               "imageCode" : "balloon_warning",
               "cell1" : "PR-012: ППРБ-ИА-З-1: Запрещена выгрузка/отчуждение данных.",
               "cell2" : "true",
               "cell3" : "0"
             }, {
-              "key" : 13,
+              "key" : 14,
               "imageCode" : "balloon_info",
               "cell1" : "PR-013: ППРБ-АП-Т-2: Использование HTTP Bridge ППРБ для построения UI",
               "cell2" : "true",
               "cell3" : "1"
             }, {
-              "key" : 14,
+              "key" : 15,
               "imageCode" : "balloon_info",
               "cell1" : "PR-014: ППРБ-АП-Т-2: Использование стэка UFS для построения UI",
               "cell2" : "true",
               "cell3" : "1"
             }, {
-              "key" : 15,
+              "key" : 16,
               "imageCode" : "balloon_info",
               "cell1" : "PR-015: ППРБ-АН-Т-1: Реализация самодиагностики с выгрузкой данных в ТС Failover",
               "cell2" : "true",
               "cell3" : "1"
             }, {
-              "key" : 16,
+              "key" : 17,
               "imageCode" : "balloon_warning",
               "cell1" : "PR-016: ППРБ-АН-Т-4: Использование ТС Прикладной мониторинг в публичном API",
               "cell2" : "true",
               "cell3" : "0"
             }, {
-              "key" : 17,
+              "key" : 18,
               "imageCode" : "balloon_info",
               "cell1" : "PR-017: ППРБ-АН-Т-4: Использование API ТС Прикладной мониторинг",
               "cell2" : "true",
               "cell3" : "1"
             }, {
-              "key" : 18,
+              "key" : 19,
               "imageCode" : "balloon_warning",
               "cell1" : "PR-018: ППРБ-АН-Т-6: Наличие зависимости на ТС Журналирование в проекте",
               "cell2" : "true",
               "cell3" : "1"
             }, {
-              "key" : 19,
+              "key" : 20,
               "imageCode" : "balloon_info",
               "cell1" : "PR-019: ППРБ-ИБ-Т-6: Использование API ТС Сервис авторизации",
               "cell2" : "true",
               "cell3" : "1"
             }, {
-              "key" : 20,
+              "key" : 21,
               "imageCode" : "balloon_warning",
               "cell1" : "PR-020: ППРБ-ИБ-Т-7: Использование межсервисной интеграции без вызова ТС ОТТ",
               "cell2" : "true",
               "cell3" : "0"
             }, {
-              "key" : 21,
+              "key" : 22,
               "imageCode" : "balloon_info",
               "cell1" : "PR-021: ППРБ-ИБ-Т-7: Использование API ТС ОТТ",
               "cell2" : "true",
               "cell3" : "1"
             }, {
-              "key" : 22,
+              "key" : 23,
               "imageCode" : "balloon_warning",
               "cell1" : "PR-022: ППРБ-ИБ-Т-3: Использование ТС Прикладной Аудит в публичном API",
               "cell2" : "true",
               "cell3" : "0"
             }, {
-              "key" : 23,
+              "key" : 24,
               "imageCode" : "balloon_info",
               "cell1" : "PR-023: ППРБ-ИБ-Т-3: Использование API ТС Прикладной аудит",
               "cell2" : "true",
               "cell3" : "1"
             }, {
-              "key" : 24,
+              "key" : 25,
               "imageCode" : "balloon_info",
               "cell1" : "PR-024: ППРБ-ИА-Т-7 Предоставление API для реализации компенсационных сценариев со стороны БПС",
               "cell2" : "true",
-              "cell3" : "0"
+              "cell3" : "1"
             }, {
-              "key" : 25,
+              "key" : 26,
               "imageCode" : "balloon_info",
               "cell1" : "PR-025: ППРБ-ИБ-Т-5 Соблюдение стандарта PCI DSS",
               "cell2" : "true",
               "cell3" : "0"
             }, {
-              "key" : 26,
+              "key" : 27,
               "imageCode" : "balloon_info",
               "cell1" : "PR-026: ППРБ-АП-М-4 Использование в проекте On-line Compliance Control",
               "cell2" : "true",
               "cell3" : "1"
             }, {
-              "key" : 27,
+              "key" : 28,
               "imageCode" : "balloon_info",
               "cell1" : "PR-027: ППРБ-АП-М-4 Использование в проекте проверки против «черных» списков",
               "cell2" : "true",
               "cell3" : "1"
             }, {
-              "key" : 28,
+              "key" : 29,
               "imageCode" : "balloon_info",
               "cell1" : "PR-028: ППРБ-АП-М-6 Использование API ТС Устранение сбойных ситуаций",
               "cell2" : "true",
               "cell3" : "1"
             }, {
-              "key" : 29,
+              "key" : 30,
               "imageCode" : "balloon_info",
               "cell1" : "PR-029: ППРБ-АН-Т-2 Использование API ТС Stand In",
               "cell2" : "true",
               "cell3" : "1"
             }, {
-              "key" : 30,
+              "key" : 31,
               "imageCode" : "balloon_info",
               "cell1" : "PR-030: ППРБ-АП-Т-7 Зонирование по зонам обслуживания",
               "cell2" : "true",
               "cell3" : "1"
             }, {
-              "key" : 31,
+              "key" : 32,
               "imageCode" : "balloon_warning",
               "cell1" : "PR-031: ППРБ-АП-Т-7 Соответствие зонирования в API конфигурациям развертывания",
               "cell2" : "true",
               "cell3" : "0"
             }, {
-              "key" : 32,
+              "key" : 33,
               "imageCode" : "balloon_warning",
               "cell1" : "PR-032: ППРБ-АП-Т-7 Имплементация зонирования",
               "cell2" : "true",
               "cell3" : "0"
             }, {
-              "key" : 33,
+              "key" : 34,
               "imageCode" : "balloon_info",
               "cell1" : "PR-033: ППРБ-АН-Т-7 Использование API ТС Сервис межкластерной индексации",
               "cell2" : "true",
               "cell3" : "1"
             }, {
-              "key" : 34,
+              "key" : 35,
               "imageCode" : "balloon_info",
               "cell1" : "PR-034: ППРБ-АН-Т-3 Использование API ТС Stand In при оркестрации бизнес-транзакций",
               "cell2" : "true",
               "cell3" : "0"
             }, {
-              "key" : 35,
+              "key" : 36,
               "imageCode" : "balloon_warning",
               "cell1" : "PR-035: ППРБ-АП-Т-12 Использование бизнес-идентификаторов",
               "cell2" : "true",
@@ -668,7 +691,7 @@
             "type" : "DataTable",
             "title" : "Использование валидаторов угроз",
             "hint" : "Статистика использования/срабатываний валидаторов в части угроз.",
-            "uid" : "169",
+            "uid" : "145",
             "imageLink" : "",
             "columns" : [ {
               "title" : "Описание",
@@ -695,90 +718,14 @@
             "type" : "DataTable",
             "title" : "Исключения",
             "hint" : "Исключения",
-            "uid" : "170",
+            "uid" : "146",
             "imageLink" : "",
             "columns" : [ {
               "title" : "Описание",
               "dataIndex" : "cell1",
               "key" : "cell1"
             } ],
-            "table" : [ {
-              "key" : 1,
-              "imageCode" : "",
-              "cell1" : "-PR-002/не актуально"
-            }, {
-              "key" : 2,
-              "imageCode" : "",
-              "cell1" : "-PR-010/не актуально"
-            }, {
-              "key" : 3,
-              "imageCode" : "",
-              "cell1" : "-PR-029/не актуально"
-            }, {
-              "key" : 4,
-              "imageCode" : "",
-              "cell1" : "-PR-004/не актуально"
-            }, {
-              "key" : 5,
-              "imageCode" : "",
-              "cell1" : "-PR-013/не актуально"
-            }, {
-              "key" : 6,
-              "imageCode" : "",
-              "cell1" : "-PR-021/не актуально"
-            }, {
-              "key" : 7,
-              "imageCode" : "",
-              "cell1" : "-PR-019/не актуально"
-            }, {
-              "key" : 8,
-              "imageCode" : "",
-              "cell1" : "-PR-030/не актуально"
-            }, {
-              "key" : 9,
-              "imageCode" : "",
-              "cell1" : "-PR-018/не актуально"
-            }, {
-              "key" : 10,
-              "imageCode" : "",
-              "cell1" : "-PR-015/не актуально"
-            }, {
-              "key" : 11,
-              "imageCode" : "",
-              "cell1" : "-PR-027/не актуально"
-            }, {
-              "key" : 12,
-              "imageCode" : "",
-              "cell1" : "-PR-033/не актуально"
-            }, {
-              "key" : 13,
-              "imageCode" : "",
-              "cell1" : "-PR-014/не актуально"
-            }, {
-              "key" : 14,
-              "imageCode" : "",
-              "cell1" : "-PR-023/не актуально"
-            }, {
-              "key" : 15,
-              "imageCode" : "",
-              "cell1" : "-PR-028/не актуально"
-            }, {
-              "key" : 16,
-              "imageCode" : "",
-              "cell1" : "-PR-006/не актуально"
-            }, {
-              "key" : 17,
-              "imageCode" : "",
-              "cell1" : "-PR-009/не актуально"
-            }, {
-              "key" : 18,
-              "imageCode" : "",
-              "cell1" : "-PR-017/не актуально"
-            }, {
-              "key" : 19,
-              "imageCode" : "",
-              "cell1" : "-PR-026/не актуально"
-            } ],
+            "table" : [ ],
             "showHeader" : false
           }
         }, {
@@ -788,7 +735,7 @@
             "type" : "DataTable",
             "title" : "Комментарии в коде проекта",
             "hint" : "Содержит список комментариев в коде проекта.",
-            "uid" : "171",
+            "uid" : "147",
             "imageLink" : "",
             "columns" : [ {
               "title" : "Комментарий",
@@ -805,7 +752,7 @@
             "type" : "DataTable",
             "title" : "Активные задачи в Jira",
             "hint" : "Содержит список связанных задач в Jira.",
-            "uid" : "172",
+            "uid" : "148",
             "imageLink" : "",
             "columns" : [ {
               "title" : "Задача",
@@ -835,87 +782,87 @@
             "type" : "TagCloud",
             "title" : "Облако тэгов функционала (комментарии)",
             "hint" : "Содержит TOP-10 терминов, наиболее часто встречающихся в коде проекта",
-            "uid" : "130",
+            "uid" : "112",
             "imageLink" : "",
             "tagCloudElements" : [ {
-              "value" : "ПО",
-              "count" : 28,
-              "code" : "ПО"
+              "value" : "КРИПТОПРОФИЛЯ",
+              "count" : 96,
+              "code" : "КРИПТОПРОФИЛЯ"
             }, {
-              "value" : "СОБЫТИЯ",
-              "count" : 32,
-              "code" : "СОБЫТИЯ"
+              "value" : "2-Я",
+              "count" : 100,
+              "code" : "2-Я"
             }, {
-              "value" : "СЧЕТА",
-              "count" : 32,
-              "code" : "СЧЕТА"
+              "value" : "ВРЕМЯ",
+              "count" : 104,
+              "code" : "ВРЕМЯ"
             }, {
-              "value" : "НОМЕР",
-              "count" : 36,
-              "code" : "НОМЕР"
+              "value" : "НАИМЕНОВАНИЕ",
+              "count" : 108,
+              "code" : "НАИМЕНОВАНИЕ"
             }, {
-              "value" : "ДАННЫХ",
-              "count" : 36,
-              "code" : "ДАННЫХ"
+              "value" : "->",
+              "count" : 108,
+              "code" : "->"
+            }, {
+              "value" : "ДАННЫЕ",
+              "count" : 124,
+              "code" : "ДАННЫЕ"
+            }, {
+              "value" : "АДРЕС",
+              "count" : 128,
+              "code" : "АДРЕС"
             }, {
               "value" : "ДОКУМЕНТА",
-              "count" : 44,
+              "count" : 144,
               "code" : "ДОКУМЕНТА"
             }, {
-              "value" : "HTTP-ЗАПРОСА",
-              "count" : 44,
-              "code" : "HTTP-ЗАПРОСА"
+              "value" : "В",
+              "count" : 148,
+              "code" : "В"
             }, {
-              "value" : "КЛИЕНТА",
-              "count" : 44,
-              "code" : "КЛИЕНТА"
+              "value" : "1-Я",
+              "count" : 152,
+              "code" : "1-Я"
+            }, {
+              "value" : "ОТПРАВИВШИЙ",
+              "count" : 152,
+              "code" : "ОТПРАВИВШИЙ"
+            }, {
+              "value" : "ИДЕНТИФИКАТОР",
+              "count" : 156,
+              "code" : "ИДЕНТИФИКАТОР"
+            }, {
+              "value" : "ПОДПИСИ",
+              "count" : 160,
+              "code" : "ПОДПИСИ"
+            }, {
+              "value" : "НОМЕР",
+              "count" : 164,
+              "code" : "НОМЕР"
             }, {
               "value" : "ЗНАЧЕНИЕ",
-              "count" : 52,
+              "count" : 172,
               "code" : "ЗНАЧЕНИЕ"
             }, {
               "value" : "ЗАГОЛОВКА",
-              "count" : 52,
+              "count" : 172,
               "code" : "ЗАГОЛОВКА"
             }, {
-              "value" : "ИДЕНТИФИКАТОР",
-              "count" : 60,
-              "code" : "ИДЕНТИФИКАТОР"
-            }, {
-              "value" : "ДАННЫЕ",
-              "count" : 60,
-              "code" : "ДАННЫЕ"
-            }, {
-              "value" : "ТИП",
-              "count" : 64,
-              "code" : "ТИП"
-            }, {
-              "value" : "#SETWHERE}",
-              "count" : 68,
-              "code" : "#SETWHERE}"
-            }, {
               "value" : "ПОЛУЧАТЕЛЯ",
-              "count" : 80,
+              "count" : 184,
               "code" : "ПОЛУЧАТЕЛЯ"
             }, {
-              "value" : "В",
-              "count" : 84,
-              "code" : "В"
+              "value" : "ТИП",
+              "count" : 184,
+              "code" : "ТИП"
             }, {
-              "value" : "РЕКОМЕНДУЕТСЯ",
-              "count" : 84,
-              "code" : "РЕКОМЕНДУЕТСЯ"
-            }, {
-              "value" : "{@LINK",
-              "count" : 84,
-              "code" : "{@LINK"
-            }, {
-              "value" : "ИСПОЛЬЗОВАТЬ",
-              "count" : 84,
-              "code" : "ИСПОЛЬЗОВАТЬ"
+              "value" : "ПОДПИСЬ",
+              "count" : 304,
+              "code" : "ПОДПИСЬ"
             }, {
               "value" : "",
-              "count" : 54336,
+              "count" : 6064,
               "code" : ""
             } ]
           }
@@ -926,31 +873,47 @@
             "type" : "TagCloud",
             "title" : "Облако тэгов функционала сервисов",
             "hint" : "Содержит TOP-10 терминов, наиболее часто встречающихся при объявлении сервисов",
-            "uid" : "131",
+            "uid" : "113",
             "imageLink" : "",
             "tagCloudElements" : [ {
-              "value" : "ОБРАБОТЧИКА",
-              "count" : 4,
-              "code" : "ОБРАБОТЧИКА"
+              "value" : "ДОКУМЕНТА",
+              "count" : 12,
+              "code" : "ДОКУМЕНТА"
             }, {
-              "value" : "ПОЛУЧЕНИЕ",
-              "count" : 4,
-              "code" : "ПОЛУЧЕНИЕ"
+              "value" : "ОБНОВЛЕНИЕ",
+              "count" : 16,
+              "code" : "ОБНОВЛЕНИЕ"
             }, {
-              "value" : "ТИПУ",
-              "count" : 4,
-              "code" : "ТИПУ"
+              "value" : "АНАЛИЗА",
+              "count" : 16,
+              "code" : "АНАЛИЗА"
+            }, {
+              "value" : "ДЛЯ",
+              "count" : 16,
+              "code" : "ДЛЯ"
+            }, {
+              "value" : "СОХРАНЕНИЕ",
+              "count" : 16,
+              "code" : "СОХРАНЕНИЕ"
+            }, {
+              "value" : "ОТПРАВКА",
+              "count" : 16,
+              "code" : "ОТПРАВКА"
+            }, {
+              "value" : "ИЛИ",
+              "count" : 16,
+              "code" : "ИЛИ"
             }, {
               "value" : "ПО",
-              "count" : 4,
+              "count" : 16,
               "code" : "ПО"
             }, {
-              "value" : "СУЩНОСТИ",
-              "count" : 4,
-              "code" : "СУЩНОСТИ"
+              "value" : "ДАННЫХ",
+              "count" : 32,
+              "code" : "ДАННЫХ"
             }, {
               "value" : "",
-              "count" : 132,
+              "count" : 272,
               "code" : ""
             } ]
           }
@@ -961,47 +924,47 @@
             "type" : "TagCloud",
             "title" : "Облако тэгов функционала объектов данных",
             "hint" : "Содержит TOP-10 терминов, наиболее часто встречающихся при объявлении объектов данных",
-            "uid" : "132",
+            "uid" : "114",
             "imageLink" : "",
             "tagCloudElements" : [ {
-              "value" : "СЧЕТА",
-              "count" : 16,
-              "code" : "СЧЕТА"
+              "value" : "ПЛАТЕЖА",
+              "count" : 32,
+              "code" : "ПЛАТЕЖА"
             }, {
-              "value" : "БАНКА",
-              "count" : 16,
-              "code" : "БАНКА"
+              "value" : "ДАТА",
+              "count" : 40,
+              "code" : "ДАТА"
             }, {
               "value" : "ИДЕНТИФИКАТОР",
-              "count" : 20,
+              "count" : 44,
               "code" : "ИДЕНТИФИКАТОР"
             }, {
-              "value" : "ПЛАТЕЛЬЩИКА",
-              "count" : 20,
-              "code" : "ПЛАТЕЛЬЩИКА"
-            }, {
-              "value" : "В",
-              "count" : 24,
-              "code" : "В"
-            }, {
-              "value" : "ДОКУМЕНТА",
-              "count" : 24,
-              "code" : "ДОКУМЕНТА"
-            }, {
-              "value" : "НОМЕР",
-              "count" : 24,
-              "code" : "НОМЕР"
+              "value" : "ДС",
+              "count" : 48,
+              "code" : "ДС"
             }, {
               "value" : "ДАННЫЕ",
-              "count" : 24,
+              "count" : 48,
               "code" : "ДАННЫЕ"
             }, {
+              "value" : "В",
+              "count" : 56,
+              "code" : "В"
+            }, {
+              "value" : "НОМЕР",
+              "count" : 60,
+              "code" : "НОМЕР"
+            }, {
+              "value" : "ДОКУМЕНТА",
+              "count" : 72,
+              "code" : "ДОКУМЕНТА"
+            }, {
               "value" : "ПОЛУЧАТЕЛЯ",
-              "count" : 48,
+              "count" : 96,
               "code" : "ПОЛУЧАТЕЛЯ"
             }, {
               "value" : "",
-              "count" : 504,
+              "count" : 1300,
               "code" : ""
             } ]
           }
@@ -1012,31 +975,47 @@
             "type" : "TagCloud",
             "title" : "Облако тэгов функционала бинов",
             "hint" : "Содержит TOP-10 терминов, наиболее часто встречающихся при объявлении бинов",
-            "uid" : "133",
+            "uid" : "115",
             "imageLink" : "",
             "tagCloudElements" : [ {
-              "value" : "ОБРАБОТЧИКА",
-              "count" : 4,
-              "code" : "ОБРАБОТЧИКА"
+              "value" : "ДОКУМЕНТА",
+              "count" : 12,
+              "code" : "ДОКУМЕНТА"
             }, {
-              "value" : "ПОЛУЧЕНИЕ",
-              "count" : 4,
-              "code" : "ПОЛУЧЕНИЕ"
+              "value" : "ОБНОВЛЕНИЕ",
+              "count" : 16,
+              "code" : "ОБНОВЛЕНИЕ"
             }, {
-              "value" : "ТИПУ",
-              "count" : 4,
-              "code" : "ТИПУ"
+              "value" : "АНАЛИЗА",
+              "count" : 16,
+              "code" : "АНАЛИЗА"
+            }, {
+              "value" : "ДЛЯ",
+              "count" : 16,
+              "code" : "ДЛЯ"
+            }, {
+              "value" : "СОХРАНЕНИЕ",
+              "count" : 16,
+              "code" : "СОХРАНЕНИЕ"
+            }, {
+              "value" : "ОТПРАВКА",
+              "count" : 16,
+              "code" : "ОТПРАВКА"
+            }, {
+              "value" : "ИЛИ",
+              "count" : 16,
+              "code" : "ИЛИ"
             }, {
               "value" : "ПО",
-              "count" : 4,
+              "count" : 16,
               "code" : "ПО"
             }, {
-              "value" : "СУЩНОСТИ",
-              "count" : 4,
-              "code" : "СУЩНОСТИ"
+              "value" : "ДАННЫХ",
+              "count" : 32,
+              "code" : "ДАННЫХ"
             }, {
               "value" : "",
-              "count" : 268,
+              "count" : 444,
               "code" : ""
             } ]
           }
@@ -1047,11 +1026,11 @@
             "type" : "TagCloud",
             "title" : "Облако тэгов функционала объектов c ошибками",
             "hint" : "Содержит TOP-10 терминов, наиболее часто встречающихся при объявлении объектов с ошибками",
-            "uid" : "134",
+            "uid" : "116",
             "imageLink" : "",
             "tagCloudElements" : [ {
               "value" : "",
-              "count" : 2,
+              "count" : 1,
               "code" : ""
             } ]
           }
@@ -1062,7 +1041,7 @@
             "type" : "TagCloud",
             "title" : "Облако тэгов функционала объектов c угрозами",
             "hint" : "Содержит TOP-10 терминов, наиболее часто встречающихся при объявлении объектов с угрозами",
-            "uid" : "135",
+            "uid" : "117",
             "imageLink" : "",
             "tagCloudElements" : [ ]
           }
@@ -1070,6 +1049,677 @@
       }, {
         "tabPaneList" : [ {
           "title" : "list_module",
+          "key" : 1,
+          "element" : {
+            "type" : "DataTable",
+            "title" : "Распределение функционала по модулям",
+            "hint" : "Содержит статистику по составу типов модулей, доли распознанных и выявленной роли модулей.",
+            "uid" : "118",
+            "imageLink" : "",
+            "columns" : [ {
+              "title" : "Наименование",
+              "dataIndex" : "cell1",
+              "key" : "cell1"
+            }, {
+              "title" : "Типов",
+              "dataIndex" : "cell2",
+              "key" : "cell2"
+            }, {
+              "title" : "Распознано",
+              "dataIndex" : "cell3",
+              "key" : "cell3"
+            }, {
+              "title" : "Роль",
+              "dataIndex" : "cell4",
+              "key" : "cell4"
+            } ],
+            "table" : [ {
+              "key" : 1,
+              "imageCode" : "module",
+              "cell1" : "antifraud",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 2,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-api",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 3,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-api.main",
+              "cell2" : "47",
+              "cell3" : "0.87",
+              "cell4" : "App"
+            }, {
+              "key" : 4,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-api.test",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 5,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-application",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 6,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-application.main",
+              "cell2" : "6",
+              "cell3" : "0.83",
+              "cell4" : "Sys"
+            }, {
+              "key" : 7,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-application.test",
+              "cell2" : "14",
+              "cell3" : "0.07",
+              "cell4" : "Sys"
+            }, {
+              "key" : 8,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-rpc-api",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 9,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-rpc-api.main",
+              "cell2" : "6",
+              "cell3" : "1.00",
+              "cell4" : "App"
+            }, {
+              "key" : 10,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-rpc-api.test",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 11,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-service",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 12,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-service.main",
+              "cell2" : "32",
+              "cell3" : "0.78",
+              "cell4" : "App"
+            }, {
+              "key" : 13,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-service.test",
+              "cell2" : "5",
+              "cell3" : "0.20",
+              "cell4" : "Sys"
+            }, {
+              "key" : 14,
+              "imageCode" : "module",
+              "cell1" : "antifraud.buildSrc",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 15,
+              "imageCode" : "module",
+              "cell1" : "antifraud.buildSrc.main",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 16,
+              "imageCode" : "module",
+              "cell1" : "antifraud.buildSrc.test",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 17,
+              "imageCode" : "module",
+              "cell1" : "antifraud.docs",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 18,
+              "imageCode" : "module",
+              "cell1" : "antifraud.docs.main",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 19,
+              "imageCode" : "module",
+              "cell1" : "antifraud.docs.test",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 20,
+              "imageCode" : "module",
+              "cell1" : "antifraud.main",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 21,
+              "imageCode" : "module",
+              "cell1" : "antifraud.test",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            } ],
+            "showHeader" : true
+          }
+        }, {
+          "title" : "list_service",
+          "key" : 2,
+          "element" : {
+            "type" : "DataTable",
+            "title" : "Публичные сервисы",
+            "hint" : "Содержит список публичных сервисов и их технологические характеристики.",
+            "uid" : "119",
+            "imageLink" : "",
+            "columns" : [ {
+              "title" : "Наименование",
+              "dataIndex" : "cell1",
+              "key" : "cell1"
+            }, {
+              "title" : "Публичных api-методов",
+              "dataIndex" : "cell2",
+              "key" : "cell2"
+            }, {
+              "title" : "Data-типов",
+              "dataIndex" : "cell3",
+              "key" : "cell3"
+            } ],
+            "table" : [ ],
+            "showHeader" : true
+          }
+        }, {
+          "title" : "list_service_private",
+          "key" : 3,
+          "element" : {
+            "type" : "DataTable",
+            "title" : "Приватные сервисы",
+            "hint" : "Содержит список приватных сервисов и их технологические характеристики.",
+            "uid" : "120",
+            "imageLink" : "",
+            "columns" : [ {
+              "title" : "Наименование",
+              "dataIndex" : "cell1",
+              "key" : "cell1"
+            }, {
+              "title" : "Приватные api-методов",
+              "dataIndex" : "cell2",
+              "key" : "cell2"
+            }, {
+              "title" : "Data-типов",
+              "dataIndex" : "cell3",
+              "key" : "cell3"
+            } ],
+            "table" : [ {
+              "key" : 1,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "AbstractService",
+              "cell2" : "0",
+              "cell3" : "0",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.rpc.AbstractService"
+            }, {
+              "key" : 2,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "AntiFraudAnalyzeServiceImpl",
+              "cell2" : "2",
+              "cell3" : "1",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.rpc.AntiFraudAnalyzeServiceImpl"
+            }, {
+              "key" : 3,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "AntiFraudDataServiceImpl",
+              "cell2" : "2",
+              "cell3" : "1",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.rpc.AntiFraudDataServiceImpl"
+            }, {
+              "key" : 4,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "ElectronicReceiptProcessor",
+              "cell2" : "3",
+              "cell3" : "10",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.processor.electronicreceipt.ElectronicReceiptProcessor"
+            }, {
+              "key" : 5,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "ElectronicReceiptServiceImpl",
+              "cell2" : "5",
+              "cell3" : "10",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.rpc.electronicreceipt.ElectronicReceiptServiceImpl"
+            }, {
+              "key" : 6,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "FastPaymentProcessor",
+              "cell2" : "3",
+              "cell3" : "7",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.processor.fastpayment.FastPaymentProcessor"
+            }, {
+              "key" : 7,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "FastPaymentServiceImpl",
+              "cell2" : "5",
+              "cell3" : "7",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.rpc.fastpayment.FastPaymentServiceImpl"
+            }, {
+              "key" : 8,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "PaymentProcessor",
+              "cell2" : "3",
+              "cell3" : "7",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.processor.payment.PaymentProcessor"
+            }, {
+              "key" : 9,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "PaymentServiceImpl",
+              "cell2" : "5",
+              "cell3" : "7",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.rpc.payment.PaymentServiceImpl"
+            }, {
+              "key" : 10,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "ProcessorResolver",
+              "cell2" : "2",
+              "cell3" : "0",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.ProcessorResolver"
+            } ],
+            "showHeader" : true
+          }
+        }, {
+          "title" : "list_service_integration",
+          "key" : 4,
+          "element" : {
+            "type" : "DataTable",
+            "title" : "Сервисы интеграционного уровня или доступа к данным",
+            "hint" : "Содержит список интеграционных сервисов и их технологические характеристики.",
+            "uid" : "121",
+            "imageLink" : "",
+            "columns" : [ {
+              "title" : "Наименование",
+              "dataIndex" : "cell1",
+              "key" : "cell1"
+            }, {
+              "title" : "Фасадных методов",
+              "dataIndex" : "cell2",
+              "key" : "cell2"
+            }, {
+              "title" : "Data-типов",
+              "dataIndex" : "cell3",
+              "key" : "cell3"
+            } ],
+            "table" : [ ],
+            "showHeader" : true
+          }
+        }, {
+          "title" : "list_data",
+          "key" : 5,
+          "element" : {
+            "type" : "DataTable",
+            "title" : "Список доменных типов",
+            "hint" : "Содержит список классов, имеющих роль Value Object",
+            "uid" : "122",
+            "imageLink" : "",
+            "columns" : [ {
+              "title" : "Наименование",
+              "dataIndex" : "cell1",
+              "key" : "cell1"
+            }, {
+              "title" : "Параметров",
+              "dataIndex" : "cell2",
+              "key" : "cell2"
+            }, {
+              "title" : "Data-типов",
+              "dataIndex" : "cell3",
+              "key" : "cell3"
+            } ],
+            "table" : [ {
+              "key" : 1,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "AnalyzeResponse",
+              "cell2" : "5",
+              "cell3" : "2",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse"
+            }, {
+              "key" : 2,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "BaseEntity",
+              "cell2" : "1",
+              "cell3" : "2",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.entity.BaseEntity"
+            }, {
+              "key" : 3,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "ElectronicReceipt",
+              "cell2" : "77",
+              "cell3" : "6",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.entity.electronicreceipt.ElectronicReceipt"
+            }, {
+              "key" : 4,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "ElectronicReceiptOperation",
+              "cell2" : "6",
+              "cell3" : "12",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ElectronicReceiptOperation"
+            }, {
+              "key" : 5,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "FastPayment",
+              "cell2" : "74",
+              "cell3" : "6",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.entity.fastpayment.FastPayment"
+            }, {
+              "key" : 6,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "FastPaymentDocument",
+              "cell2" : "8",
+              "cell3" : "7",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentDocument"
+            }, {
+              "key" : 7,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "FastPaymentOperation",
+              "cell2" : "5",
+              "cell3" : "9",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentOperation"
+            }, {
+              "key" : 8,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "FastPaymentPayer",
+              "cell2" : "11",
+              "cell3" : "2",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentPayer"
+            }, {
+              "key" : 9,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "FastPaymentReceiver",
+              "cell2" : "11",
+              "cell3" : "1",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentReceiver"
+            }, {
+              "key" : 10,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "FastPaymentSendRequest",
+              "cell2" : "0",
+              "cell3" : "1",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.analyze.fastpayment.FastPaymentSendRequest"
+            }, {
+              "key" : 11,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "Payment",
+              "cell2" : "88",
+              "cell3" : "6",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.entity.payment.Payment"
+            }, {
+              "key" : 12,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "PaymentDocument",
+              "cell2" : "11",
+              "cell3" : "7",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentDocument"
+            }, {
+              "key" : 13,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "PaymentOperation",
+              "cell2" : "5",
+              "cell3" : "9",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation"
+            }, {
+              "key" : 14,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "PaymentPayer",
+              "cell2" : "2",
+              "cell3" : "1",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentPayer"
+            }, {
+              "key" : 15,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "PaymentReceiver",
+              "cell2" : "5",
+              "cell3" : "1",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentReceiver"
+            }, {
+              "key" : 16,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "PaymentSendRequest",
+              "cell2" : "0",
+              "cell3" : "1",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.PaymentSendRequest"
+            }, {
+              "key" : 17,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "Receipt",
+              "cell2" : "6",
+              "cell3" : "2",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.Receipt"
+            }, {
+              "key" : 18,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "ReceiptDeviceRequest",
+              "cell2" : "8",
+              "cell3" : "1",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ReceiptDeviceRequest"
+            }, {
+              "key" : 19,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "ReceiptDocument",
+              "cell2" : "8",
+              "cell3" : "8",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ReceiptDocument"
+            }, {
+              "key" : 20,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "ReceiptPayer",
+              "cell2" : "5",
+              "cell3" : "1",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ReceiptPayer"
+            }, {
+              "key" : 21,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "ReceiptReceiver",
+              "cell2" : "9",
+              "cell3" : "2",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ReceiptReceiver"
+            }, {
+              "key" : 22,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "ReceiptSign",
+              "cell2" : "13",
+              "cell3" : "4",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ReceiptSign"
+            }, {
+              "key" : 23,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "RequestId",
+              "cell2" : "1",
+              "cell3" : "1",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId"
+            }, {
+              "key" : 24,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "SendToAnalyzeRequest",
+              "cell2" : "0",
+              "cell3" : "1",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest"
+            } ],
+            "showHeader" : true
+          }
+        }, {
+          "title" : "list_bean",
+          "key" : 6,
+          "element" : {
+            "type" : "DataTable",
+            "title" : "Список бинов",
+            "hint" : "Содержит список классов, подключаемых как бины",
+            "uid" : "123",
+            "imageLink" : "",
+            "columns" : [ {
+              "title" : "Наименование",
+              "dataIndex" : "cell1",
+              "key" : "cell1"
+            }, {
+              "title" : "Входящих зависимосей",
+              "dataIndex" : "cell2",
+              "key" : "cell2"
+            }, {
+              "title" : "Исходящих зависимостей",
+              "dataIndex" : "cell3",
+              "key" : "cell3"
+            } ],
+            "table" : [ {
+              "key" : 1,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "AbstractService",
+              "cell2" : "0",
+              "cell3" : "0",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.rpc.AbstractService"
+            }, {
+              "key" : 2,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "AntiFraudAnalyzeServiceImpl",
+              "cell2" : "0",
+              "cell3" : "0",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.rpc.AntiFraudAnalyzeServiceImpl"
+            }, {
+              "key" : 3,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "AntiFraudDataServiceImpl",
+              "cell2" : "0",
+              "cell3" : "0",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.rpc.AntiFraudDataServiceImpl"
+            }, {
+              "key" : 4,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "ElectronicReceiptMapper",
+              "cell2" : "0",
+              "cell3" : "0",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.mapper.electronicreceipt.ElectronicReceiptMapper"
+            }, {
+              "key" : 5,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "ElectronicReceiptMapperImpl",
+              "cell2" : "0",
+              "cell3" : "0",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.mapper.electronicreceipt.ElectronicReceiptMapperImpl"
+            }, {
+              "key" : 6,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "ElectronicReceiptProcessor",
+              "cell2" : "0",
+              "cell3" : "0",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.processor.electronicreceipt.ElectronicReceiptProcessor"
+            }, {
+              "key" : 7,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "ElectronicReceiptServiceImpl",
+              "cell2" : "0",
+              "cell3" : "0",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.rpc.electronicreceipt.ElectronicReceiptServiceImpl"
+            }, {
+              "key" : 8,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "FastPaymentMapper",
+              "cell2" : "0",
+              "cell3" : "0",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.mapper.fastpayment.FastPaymentMapper"
+            }, {
+              "key" : 9,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "FastPaymentMapperImpl",
+              "cell2" : "0",
+              "cell3" : "0",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.mapper.fastpayment.FastPaymentMapperImpl"
+            }, {
+              "key" : 10,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "FastPaymentProcessor",
+              "cell2" : "0",
+              "cell3" : "0",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.processor.fastpayment.FastPaymentProcessor"
+            }, {
+              "key" : 11,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "FastPaymentServiceImpl",
+              "cell2" : "0",
+              "cell3" : "0",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.rpc.fastpayment.FastPaymentServiceImpl"
+            }, {
+              "key" : 12,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "PaymentMapper",
+              "cell2" : "0",
+              "cell3" : "0",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.mapper.payment.PaymentMapper"
+            }, {
+              "key" : 13,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "PaymentMapperImpl",
+              "cell2" : "0",
+              "cell3" : "0",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.mapper.payment.PaymentMapperImpl"
+            }, {
+              "key" : 14,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "PaymentProcessor",
+              "cell2" : "0",
+              "cell3" : "0",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.processor.payment.PaymentProcessor"
+            }, {
+              "key" : 15,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "PaymentServiceImpl",
+              "cell2" : "0",
+              "cell3" : "0",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.rpc.payment.PaymentServiceImpl"
+            }, {
+              "key" : 16,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "ProcessorResolver",
+              "cell2" : "0",
+              "cell3" : "0",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.ProcessorResolver"
+            }, {
+              "key" : 17,
+              "imageCode" : "type_service_exchange",
+              "cell1" : "StandInPluginConfig",
+              "cell2" : "0",
+              "cell3" : "0",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.config.StandInPluginConfig"
+            } ],
+            "showHeader" : true
+          }
+        } ]
+      } ]
+    },
+    "Component" : {
+      "sectionMetadata" : {
+        "code" : "Component",
+        "name" : "Компоненты",
+        "order" : 4,
+        "imageCode" : "component",
+        "hasOptions" : false
+      },
+      "viewElementList" : [ ],
+      "tabbedList" : [ {
+        "tabPaneList" : [ {
+          "title" : "list",
           "key" : 1,
           "element" : {
             "type" : "DataTable",
@@ -1104,49 +1754,140 @@
             }, {
               "key" : 2,
               "imageCode" : "module",
-              "cell1" : "antifraud-api",
-              "cell2" : "41",
-              "cell3" : "0.76",
-              "cell4" : "App"
+              "cell1" : "antifraud.antifraud-api",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
             }, {
               "key" : 3,
               "imageCode" : "module",
-              "cell1" : "antifraud-application",
-              "cell2" : "13",
-              "cell3" : "0.23",
-              "cell4" : "Sys"
+              "cell1" : "antifraud.antifraud-api.main",
+              "cell2" : "47",
+              "cell3" : "0.87",
+              "cell4" : "App"
             }, {
               "key" : 4,
               "imageCode" : "module",
-              "cell1" : "antifraud-model-jpa",
-              "cell2" : "7",
+              "cell1" : "antifraud.antifraud-api.test",
+              "cell2" : "1",
               "cell3" : "1.00",
-              "cell4" : "App"
+              "cell4" : "Sys"
             }, {
               "key" : 5,
               "imageCode" : "module",
-              "cell1" : "antifraud-model-sdk",
-              "cell2" : "94",
-              "cell3" : "0.29",
-              "cell4" : "App"
+              "cell1" : "antifraud.antifraud-application",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
             }, {
               "key" : 6,
               "imageCode" : "module",
-              "cell1" : "antifraud-rpc-api",
-              "cell2" : "3",
-              "cell3" : "0.33",
+              "cell1" : "antifraud.antifraud-application.main",
+              "cell2" : "6",
+              "cell3" : "0.83",
               "cell4" : "Sys"
             }, {
               "key" : 7,
               "imageCode" : "module",
-              "cell1" : "antifraud-service",
-              "cell2" : "13",
-              "cell3" : "0.46",
-              "cell4" : "App"
+              "cell1" : "antifraud.antifraud-application.test",
+              "cell2" : "14",
+              "cell3" : "0.07",
+              "cell4" : "Sys"
             }, {
               "key" : 8,
               "imageCode" : "module",
-              "cell1" : "dataspace-antifraud",
+              "cell1" : "antifraud.antifraud-rpc-api",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 9,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-rpc-api.main",
+              "cell2" : "6",
+              "cell3" : "1.00",
+              "cell4" : "App"
+            }, {
+              "key" : 10,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-rpc-api.test",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 11,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-service",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 12,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-service.main",
+              "cell2" : "32",
+              "cell3" : "0.78",
+              "cell4" : "App"
+            }, {
+              "key" : 13,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-service.test",
+              "cell2" : "5",
+              "cell3" : "0.20",
+              "cell4" : "Sys"
+            }, {
+              "key" : 14,
+              "imageCode" : "module",
+              "cell1" : "antifraud.buildSrc",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 15,
+              "imageCode" : "module",
+              "cell1" : "antifraud.buildSrc.main",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 16,
+              "imageCode" : "module",
+              "cell1" : "antifraud.buildSrc.test",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 17,
+              "imageCode" : "module",
+              "cell1" : "antifraud.docs",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 18,
+              "imageCode" : "module",
+              "cell1" : "antifraud.docs.main",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 19,
+              "imageCode" : "module",
+              "cell1" : "antifraud.docs.test",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 20,
+              "imageCode" : "module",
+              "cell1" : "antifraud.main",
+              "cell2" : "1",
+              "cell3" : "1.00",
+              "cell4" : "Sys"
+            }, {
+              "key" : 21,
+              "imageCode" : "module",
+              "cell1" : "antifraud.test",
               "cell2" : "1",
               "cell3" : "1.00",
               "cell4" : "Sys"
@@ -1154,12 +1895,12 @@
             "showHeader" : true
           }
         }, {
-          "title" : "list_service",
+          "title" : "list_bean",
           "key" : 2,
           "element" : {
             "type" : "DataTable",
-            "title" : "Публичные сервисы",
-            "hint" : "Содержит список публичных сервисов и их технологические характеристики.",
+            "title" : "Использование функционала платформы в разрезе модулей",
+            "hint" : "Содержит статистику по составу используемых сервисов в разрезе модулей.",
             "uid" : "137",
             "imageLink" : "",
             "columns" : [ {
@@ -1167,24 +1908,150 @@
               "dataIndex" : "cell1",
               "key" : "cell1"
             }, {
-              "title" : "Публичных api-методов",
+              "title" : "Точек использования",
               "dataIndex" : "cell2",
               "key" : "cell2"
             }, {
-              "title" : "Data-типов",
+              "title" : "Состав сервисов",
               "dataIndex" : "cell3",
               "key" : "cell3"
             } ],
-            "table" : [ ],
+            "table" : [ {
+              "key" : 1,
+              "imageCode" : "module",
+              "cell1" : "antifraud",
+              "cell2" : "0",
+              "cell3" : ""
+            }, {
+              "key" : 2,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-api",
+              "cell2" : "0",
+              "cell3" : ""
+            }, {
+              "key" : 3,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-api.main",
+              "cell2" : "0",
+              "cell3" : ""
+            }, {
+              "key" : 4,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-api.test",
+              "cell2" : "0",
+              "cell3" : ""
+            }, {
+              "key" : 5,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-application",
+              "cell2" : "0",
+              "cell3" : ""
+            }, {
+              "key" : 6,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-application.main",
+              "cell2" : "0",
+              "cell3" : ""
+            }, {
+              "key" : 7,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-application.test",
+              "cell2" : "0",
+              "cell3" : ""
+            }, {
+              "key" : 8,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-rpc-api",
+              "cell2" : "0",
+              "cell3" : ""
+            }, {
+              "key" : 9,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-rpc-api.main",
+              "cell2" : "0",
+              "cell3" : ""
+            }, {
+              "key" : 10,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-rpc-api.test",
+              "cell2" : "0",
+              "cell3" : ""
+            }, {
+              "key" : 11,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-service",
+              "cell2" : "0",
+              "cell3" : ""
+            }, {
+              "key" : 12,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-service.main",
+              "cell2" : "0",
+              "cell3" : ""
+            }, {
+              "key" : 13,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-service.test",
+              "cell2" : "0",
+              "cell3" : ""
+            }, {
+              "key" : 14,
+              "imageCode" : "module",
+              "cell1" : "antifraud.buildSrc",
+              "cell2" : "0",
+              "cell3" : ""
+            }, {
+              "key" : 15,
+              "imageCode" : "module",
+              "cell1" : "antifraud.buildSrc.main",
+              "cell2" : "0",
+              "cell3" : ""
+            }, {
+              "key" : 16,
+              "imageCode" : "module",
+              "cell1" : "antifraud.buildSrc.test",
+              "cell2" : "0",
+              "cell3" : ""
+            }, {
+              "key" : 17,
+              "imageCode" : "module",
+              "cell1" : "antifraud.docs",
+              "cell2" : "0",
+              "cell3" : ""
+            }, {
+              "key" : 18,
+              "imageCode" : "module",
+              "cell1" : "antifraud.docs.main",
+              "cell2" : "0",
+              "cell3" : ""
+            }, {
+              "key" : 19,
+              "imageCode" : "module",
+              "cell1" : "antifraud.docs.test",
+              "cell2" : "0",
+              "cell3" : ""
+            }, {
+              "key" : 20,
+              "imageCode" : "module",
+              "cell1" : "antifraud.main",
+              "cell2" : "0",
+              "cell3" : ""
+            }, {
+              "key" : 21,
+              "imageCode" : "module",
+              "cell1" : "antifraud.test",
+              "cell2" : "0",
+              "cell3" : ""
+            } ],
             "showHeader" : true
           }
         }, {
-          "title" : "list_service_private",
+          "title" : "list_module",
           "key" : 3,
           "element" : {
             "type" : "DataTable",
-            "title" : "Приватные сервисы",
-            "hint" : "Содержит список приватных сервисов и их технологические характеристики.",
+            "title" : "Межмодульные зависимости",
+            "hint" : "Содержит статистику по составу и направлению зависимостей в разрезе модулей.",
             "uid" : "138",
             "imageLink" : "",
             "columns" : [ {
@@ -1192,59 +2059,150 @@
               "dataIndex" : "cell1",
               "key" : "cell1"
             }, {
-              "title" : "Приватные api-методов",
+              "title" : "Внутренних",
               "dataIndex" : "cell2",
               "key" : "cell2"
             }, {
-              "title" : "Data-типов",
+              "title" : "Внешних",
               "dataIndex" : "cell3",
               "key" : "cell3"
             } ],
             "table" : [ {
               "key" : 1,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "AntiFraudAnalyzeServiceImpl",
-              "cell2" : "1",
-              "cell3" : "0",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.rpc.AntiFraudAnalyzeServiceImpl"
+              "imageCode" : "module",
+              "cell1" : "antifraud",
+              "cell2" : "0",
+              "cell3" : "0"
             }, {
               "key" : 2,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "AntiFraudDataServiceImpl",
-              "cell2" : "1",
-              "cell3" : "1",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.rpc.AntiFraudDataServiceImpl"
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-api",
+              "cell2" : "0",
+              "cell3" : "0"
             }, {
               "key" : 3,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "PaymentProcessor",
-              "cell2" : "3",
-              "cell3" : "7",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.processor.payment.PaymentProcessor"
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-api.main",
+              "cell2" : "0",
+              "cell3" : "0"
             }, {
               "key" : 4,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "ProcessorResolver",
-              "cell2" : "2",
-              "cell3" : "0",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.ProcessorResolver"
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-api.test",
+              "cell2" : "0",
+              "cell3" : "0"
             }, {
               "key" : 5,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "SbpPaymentProcessor",
-              "cell2" : "3",
-              "cell3" : "6",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.processor.sbp.SbpPaymentProcessor"
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-application",
+              "cell2" : "0",
+              "cell3" : "0"
+            }, {
+              "key" : 6,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-application.main",
+              "cell2" : "0",
+              "cell3" : "0"
+            }, {
+              "key" : 7,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-application.test",
+              "cell2" : "0",
+              "cell3" : "0"
+            }, {
+              "key" : 8,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-rpc-api",
+              "cell2" : "0",
+              "cell3" : "0"
+            }, {
+              "key" : 9,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-rpc-api.main",
+              "cell2" : "0",
+              "cell3" : "0"
+            }, {
+              "key" : 10,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-rpc-api.test",
+              "cell2" : "0",
+              "cell3" : "0"
+            }, {
+              "key" : 11,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-service",
+              "cell2" : "0",
+              "cell3" : "0"
+            }, {
+              "key" : 12,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-service.main",
+              "cell2" : "0",
+              "cell3" : "0"
+            }, {
+              "key" : 13,
+              "imageCode" : "module",
+              "cell1" : "antifraud.antifraud-service.test",
+              "cell2" : "0",
+              "cell3" : "0"
+            }, {
+              "key" : 14,
+              "imageCode" : "module",
+              "cell1" : "antifraud.buildSrc",
+              "cell2" : "0",
+              "cell3" : "0"
+            }, {
+              "key" : 15,
+              "imageCode" : "module",
+              "cell1" : "antifraud.buildSrc.main",
+              "cell2" : "0",
+              "cell3" : "0"
+            }, {
+              "key" : 16,
+              "imageCode" : "module",
+              "cell1" : "antifraud.buildSrc.test",
+              "cell2" : "0",
+              "cell3" : "0"
+            }, {
+              "key" : 17,
+              "imageCode" : "module",
+              "cell1" : "antifraud.docs",
+              "cell2" : "0",
+              "cell3" : "0"
+            }, {
+              "key" : 18,
+              "imageCode" : "module",
+              "cell1" : "antifraud.docs.main",
+              "cell2" : "0",
+              "cell3" : "0"
+            }, {
+              "key" : 19,
+              "imageCode" : "module",
+              "cell1" : "antifraud.docs.test",
+              "cell2" : "0",
+              "cell3" : "0"
+            }, {
+              "key" : 20,
+              "imageCode" : "module",
+              "cell1" : "antifraud.main",
+              "cell2" : "0",
+              "cell3" : "0"
+            }, {
+              "key" : 21,
+              "imageCode" : "module",
+              "cell1" : "antifraud.test",
+              "cell2" : "0",
+              "cell3" : "0"
             } ],
             "showHeader" : true
           }
         }, {
-          "title" : "list_service_integration",
+          "title" : "list_bug",
           "key" : 4,
           "element" : {
             "type" : "DataTable",
-            "title" : "Сервисы интеграционного уровня или доступа к данным",
-            "hint" : "Содержит список интеграционных сервисов и их технологические характеристики.",
+            "title" : "Найденные ошибки в модулях",
+            "hint" : "Содержит статистику по составу и значимости найденных ошибок в разрезе модулей.",
             "uid" : "139",
             "imageLink" : "",
             "columns" : [ {
@@ -1252,24 +2210,35 @@
               "dataIndex" : "cell1",
               "key" : "cell1"
             }, {
-              "title" : "Фасадных методов",
+              "title" : "Error",
               "dataIndex" : "cell2",
               "key" : "cell2"
             }, {
-              "title" : "Data-типов",
+              "title" : "Warning",
               "dataIndex" : "cell3",
               "key" : "cell3"
+            }, {
+              "title" : "Info",
+              "dataIndex" : "cell4",
+              "key" : "cell4"
             } ],
-            "table" : [ ],
+            "table" : [ {
+              "key" : 1,
+              "imageCode" : "module",
+              "cell1" : "All components",
+              "cell2" : "0",
+              "cell3" : "1",
+              "cell4" : "20"
+            } ],
             "showHeader" : true
           }
         }, {
-          "title" : "list_data",
+          "title" : "list_threat",
           "key" : 5,
           "element" : {
             "type" : "DataTable",
-            "title" : "Список доменных типов",
-            "hint" : "Содержит список классов, имеющих роль Value Object",
+            "title" : "Найденные угрозы в модулях",
+            "hint" : "Содержит статистику по составу и значимости найденных угроз в разрезе модулей.",
             "uid" : "140",
             "imageLink" : "",
             "columns" : [ {
@@ -1277,257 +2246,19 @@
               "dataIndex" : "cell1",
               "key" : "cell1"
             }, {
-              "title" : "Параметров",
+              "title" : "Error",
               "dataIndex" : "cell2",
               "key" : "cell2"
             }, {
-              "title" : "Data-типов",
+              "title" : "Warning",
               "dataIndex" : "cell3",
               "key" : "cell3"
+            }, {
+              "title" : "Info",
+              "dataIndex" : "cell4",
+              "key" : "cell4"
             } ],
-            "table" : [ {
-              "key" : 1,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "Payer",
-              "cell2" : "2",
-              "cell3" : "1",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.common.Payer"
-            }, {
-              "key" : 2,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "PaymentAnalyzeResponse",
-              "cell2" : "5",
-              "cell3" : "2",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.PaymentAnalyzeResponse"
-            }, {
-              "key" : 3,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "PaymentDocument",
-              "cell2" : "6",
-              "cell3" : "7",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentDocument"
-            }, {
-              "key" : 4,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "PaymentOperation",
-              "cell2" : "1",
-              "cell3" : "9",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation"
-            }, {
-              "key" : 5,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "PaymentOperation",
-              "cell2" : "180",
-              "cell3" : "9",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.jpa.PaymentOperation"
-            }, {
-              "key" : 6,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "PaymentOperation",
-              "cell2" : "0",
-              "cell3" : "0",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.jpa.PaymentOperation"
-            }, {
-              "key" : 7,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "PaymentOperationApiCall",
-              "cell2" : "14",
-              "cell3" : "10",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.jpa.PaymentOperationApiCall"
-            }, {
-              "key" : 8,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "PaymentOperationApiCall",
-              "cell2" : "0",
-              "cell3" : "0",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.jpa.PaymentOperationApiCall"
-            }, {
-              "key" : 9,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "PaymentReceiver",
-              "cell2" : "2",
-              "cell3" : "1",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentReceiver"
-            }, {
-              "key" : 10,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "PaymentSendRequest",
-              "cell2" : "0",
-              "cell3" : "1",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.PaymentSendRequest"
-            }, {
-              "key" : 11,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "RequestId",
-              "cell2" : "0",
-              "cell3" : "1",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId"
-            }, {
-              "key" : 12,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "SbpDocument",
-              "cell2" : "3",
-              "cell3" : "7",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.sbp.SbpDocument"
-            }, {
-              "key" : 13,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "SbpPayer",
-              "cell2" : "9",
-              "cell3" : "2",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.sbp.SbpPayer"
-            }, {
-              "key" : 14,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "SbpPaymentOperation",
-              "cell2" : "1",
-              "cell3" : "9",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.sbp.SbpPaymentOperation"
-            }, {
-              "key" : 15,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "SbpPaymentOperation",
-              "cell2" : "152",
-              "cell3" : "9",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.jpa.SbpPaymentOperation"
-            }, {
-              "key" : 16,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "SbpPaymentOperation",
-              "cell2" : "0",
-              "cell3" : "0",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.jpa.SbpPaymentOperation"
-            }, {
-              "key" : 17,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "SbpPaymentOperationApiCall",
-              "cell2" : "14",
-              "cell3" : "10",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.jpa.SbpPaymentOperationApiCall"
-            }, {
-              "key" : 18,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "SbpPaymentOperationApiCall",
-              "cell2" : "0",
-              "cell3" : "0",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.jpa.SbpPaymentOperationApiCall"
-            }, {
-              "key" : 19,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "SbpPaymentSendRequest",
-              "cell2" : "0",
-              "cell3" : "1",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.sbp.SbpPaymentSendRequest"
-            }, {
-              "key" : 20,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "SbpReceiver",
-              "cell2" : "8",
-              "cell3" : "1",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.sbp.SbpReceiver"
-            }, {
-              "key" : 21,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "SysGetCurrentTime",
-              "cell2" : "0",
-              "cell3" : "1",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.jpa.history.SysGetCurrentTime"
-            }, {
-              "key" : 22,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "SysGetCurrentTime",
-              "cell2" : "0",
-              "cell3" : "0",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.jpa.history.SysGetCurrentTime"
-            } ],
-            "showHeader" : true
-          }
-        }, {
-          "title" : "list_bean",
-          "key" : 6,
-          "element" : {
-            "type" : "DataTable",
-            "title" : "Список бинов",
-            "hint" : "Содержит список классов, подключаемых как бины",
-            "uid" : "141",
-            "imageLink" : "",
-            "columns" : [ {
-              "title" : "Наименование",
-              "dataIndex" : "cell1",
-              "key" : "cell1"
-            }, {
-              "title" : "Входящих зависимосей",
-              "dataIndex" : "cell2",
-              "key" : "cell2"
-            }, {
-              "title" : "Исходящих зависимостей",
-              "dataIndex" : "cell3",
-              "key" : "cell3"
-            } ],
-            "table" : [ {
-              "key" : 1,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "AntiFraudAnalyzeServiceImpl",
-              "cell2" : "0",
-              "cell3" : "0",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.rpc.AntiFraudAnalyzeServiceImpl"
-            }, {
-              "key" : 2,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "AntiFraudDataServiceImpl",
-              "cell2" : "0",
-              "cell3" : "0",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.rpc.AntiFraudDataServiceImpl"
-            }, {
-              "key" : 3,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "DataSpaceCoreIndicator",
-              "cell2" : "0",
-              "cell3" : "0",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.healthindicator.DataSpaceCoreIndicator"
-            }, {
-              "key" : 4,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "DataspaceCoreSearchClient",
-              "cell2" : "0",
-              "cell3" : "0",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.grasp.DataspaceCoreSearchClient"
-            }, {
-              "key" : 5,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "Exception",
-              "cell2" : "0",
-              "cell3" : "0",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/exception.Exception"
-            }, {
-              "key" : 6,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "PaymentProcessor",
-              "cell2" : "0",
-              "cell3" : "0",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.processor.payment.PaymentProcessor"
-            }, {
-              "key" : 7,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "ProcessorResolver",
-              "cell2" : "0",
-              "cell3" : "0",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.ProcessorResolver"
-            }, {
-              "key" : 8,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "SbpPaymentProcessor",
-              "cell2" : "0",
-              "cell3" : "0",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.service.processor.sbp.SbpPaymentProcessor"
-            }, {
-              "key" : 9,
-              "imageCode" : "type_service_exchange",
-              "cell1" : "SdkJsonRpcClientException",
-              "cell2" : "0",
-              "cell3" : "0",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/exception.SdkJsonRpcClientException"
-            } ],
+            "table" : [ ],
             "showHeader" : true
           }
         } ]
@@ -1536,33 +2267,21 @@
     "Domain" : {
       "sectionMetadata" : {
         "code" : "Domain",
-        "name" : "Домен SbpPaymentOperation",
-        "order" : 3,
+        "name" : "Домен ReceiptSign",
+        "order" : 2,
         "imageCode" : "entity",
         "hasOptions" : false
       },
       "viewElementList" : [ ],
       "tabbedList" : [ {
         "tabPaneList" : [ {
-          "title" : "entity",
-          "key" : 1,
-          "element" : {
-            "type" : "PlantUmlChart",
-            "title" : "Диаграмма классов домена",
-            "hint" : "Отображает связи между основными типами домена.",
-            "uid" : "148",
-            "imageLink" : "",
-            "uml" : "@startuml\nskinparam class {\n BackgroundColor #F4F5F7\n}\n@enduml",
-            "isImageShort" : false
-          }
-        }, {
           "title" : "entity_data",
-          "key" : 2,
+          "key" : 1,
           "element" : {
             "type" : "DataTable",
             "title" : "Классы данных",
             "hint" : "Содержит список основных типов домена.",
-            "uid" : "149",
+            "uid" : "124",
             "imageLink" : "",
             "columns" : [ {
               "title" : "Класс",
@@ -1580,40 +2299,157 @@
             "table" : [ {
               "key" : 1,
               "imageCode" : "entity_data",
-              "cell1" : "PaymentOperation",
-              "cell2" : "0",
-              "cell3" : "0",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.jpa.PaymentOperation"
+              "cell1" : "AnalyzeResponse",
+              "cell2" : "5",
+              "cell3" : "2",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse"
             }, {
               "key" : 2,
               "imageCode" : "entity_data",
-              "cell1" : "PaymentOperationApiCall",
-              "cell2" : "0",
-              "cell3" : "0",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.jpa.PaymentOperationApiCall"
+              "cell1" : "ElectronicReceiptOperation",
+              "cell2" : "6",
+              "cell3" : "12",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ElectronicReceiptOperation"
             }, {
               "key" : 3,
               "imageCode" : "entity_data",
-              "cell1" : "SbpPaymentOperation",
-              "cell2" : "0",
-              "cell3" : "0",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.jpa.SbpPaymentOperation"
+              "cell1" : "FastPaymentDocument",
+              "cell2" : "8",
+              "cell3" : "7",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentDocument"
             }, {
               "key" : 4,
               "imageCode" : "entity_data",
-              "cell1" : "SbpPaymentOperationApiCall",
-              "cell2" : "0",
-              "cell3" : "0",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.jpa.SbpPaymentOperationApiCall"
+              "cell1" : "FastPaymentOperation",
+              "cell2" : "5",
+              "cell3" : "9",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentOperation"
             }, {
               "key" : 5,
               "imageCode" : "entity_data",
-              "cell1" : "SysGetCurrentTime",
+              "cell1" : "FastPaymentPayer",
+              "cell2" : "11",
+              "cell3" : "2",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentPayer"
+            }, {
+              "key" : 6,
+              "imageCode" : "entity_data",
+              "cell1" : "FastPaymentReceiver",
+              "cell2" : "11",
+              "cell3" : "1",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentReceiver"
+            }, {
+              "key" : 7,
+              "imageCode" : "entity_data",
+              "cell1" : "FastPaymentSendRequest",
               "cell2" : "0",
-              "cell3" : "0",
-              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.jpa.history.SysGetCurrentTime"
+              "cell3" : "1",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.analyze.fastpayment.FastPaymentSendRequest"
+            }, {
+              "key" : 8,
+              "imageCode" : "entity_data",
+              "cell1" : "PaymentDocument",
+              "cell2" : "11",
+              "cell3" : "7",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentDocument"
+            }, {
+              "key" : 9,
+              "imageCode" : "entity_data",
+              "cell1" : "PaymentOperation",
+              "cell2" : "5",
+              "cell3" : "9",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation"
+            }, {
+              "key" : 10,
+              "imageCode" : "entity_data",
+              "cell1" : "PaymentPayer",
+              "cell2" : "2",
+              "cell3" : "1",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentPayer"
+            }, {
+              "key" : 11,
+              "imageCode" : "entity_data",
+              "cell1" : "PaymentReceiver",
+              "cell2" : "5",
+              "cell3" : "1",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentReceiver"
+            }, {
+              "key" : 12,
+              "imageCode" : "entity_data",
+              "cell1" : "PaymentSendRequest",
+              "cell2" : "0",
+              "cell3" : "1",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.PaymentSendRequest"
+            }, {
+              "key" : 13,
+              "imageCode" : "entity_data",
+              "cell1" : "Receipt",
+              "cell2" : "6",
+              "cell3" : "2",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.Receipt"
+            }, {
+              "key" : 14,
+              "imageCode" : "entity_data",
+              "cell1" : "ReceiptDeviceRequest",
+              "cell2" : "8",
+              "cell3" : "1",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ReceiptDeviceRequest"
+            }, {
+              "key" : 15,
+              "imageCode" : "entity_data",
+              "cell1" : "ReceiptDocument",
+              "cell2" : "8",
+              "cell3" : "8",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ReceiptDocument"
+            }, {
+              "key" : 16,
+              "imageCode" : "entity_data",
+              "cell1" : "ReceiptPayer",
+              "cell2" : "5",
+              "cell3" : "1",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ReceiptPayer"
+            }, {
+              "key" : 17,
+              "imageCode" : "entity_data",
+              "cell1" : "ReceiptReceiver",
+              "cell2" : "9",
+              "cell3" : "2",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ReceiptReceiver"
+            }, {
+              "key" : 18,
+              "imageCode" : "entity_data",
+              "cell1" : "ReceiptSign",
+              "cell2" : "13",
+              "cell3" : "4",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ReceiptSign"
+            }, {
+              "key" : 19,
+              "imageCode" : "entity_data",
+              "cell1" : "RequestId",
+              "cell2" : "1",
+              "cell3" : "1",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId"
+            }, {
+              "key" : 20,
+              "imageCode" : "entity_data",
+              "cell1" : "SendToAnalyzeRequest",
+              "cell2" : "0",
+              "cell3" : "1",
+              "link" : "ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git/ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest"
             } ],
             "showHeader" : true
+          }
+        }, {
+          "title" : "entity",
+          "key" : 2,
+          "element" : {
+            "type" : "PlantUmlChart",
+            "title" : "Диаграмма классов домена",
+            "hint" : "Отображает связи между основными типами домена.",
+            "uid" : "125",
+            "imageLink" : "",
+            "uml" : "@startuml\nskinparam class {\n BackgroundColor #F4F5F7\n}\nReceiptDocument *-- ReceiptPayer\nReceiptDocument *-- ReceiptReceiver\nReceiptDocument *-- Receipt\nElectronicReceiptOperation *-- ReceiptDocument\nElectronicReceiptOperation *-- ReceiptDeviceRequest\nElectronicReceiptOperation *-- ReceiptSign\nFastPaymentDocument *-- FastPaymentPayer\nFastPaymentDocument *-- FastPaymentReceiver\nFastPaymentOperation *-- FastPaymentDocument\nPaymentOperation *-- PaymentDocument\nPaymentDocument *-- PaymentPayer\nPaymentDocument *-- PaymentReceiver\n@enduml",
+            "isImageShort" : false
           }
         }, {
           "title" : "list_classifier",
@@ -1622,7 +2458,7 @@
             "type" : "DataTable",
             "title" : "Справочники, используемые в домене",
             "hint" : "Содержит список справочников, которые используются типами домена.",
-            "uid" : "150",
+            "uid" : "126",
             "imageLink" : "",
             "columns" : [ {
               "title" : "Наименование",
@@ -1647,7 +2483,7 @@
             "type" : "DataTable",
             "title" : "Перечисления, используемые в домене",
             "hint" : "Содержит список перечислений, которые используются типами домена.",
-            "uid" : "151",
+            "uid" : "127",
             "imageLink" : "",
             "columns" : [ {
               "title" : "Наименование",
@@ -1672,7 +2508,7 @@
             "type" : "DataTable",
             "title" : "Найденные ошибки",
             "hint" : "Содержит список ошибок по типам домена",
-            "uid" : "152",
+            "uid" : "128",
             "imageLink" : "",
             "columns" : [ {
               "title" : "Описание",
@@ -1689,321 +2525,12 @@
             "type" : "DataTable",
             "title" : "Найденные угрозы",
             "hint" : "Содержит список угроз по типам домена.",
-            "uid" : "153",
+            "uid" : "129",
             "imageLink" : "",
             "columns" : [ {
               "title" : "Описание",
               "dataIndex" : "cell1",
               "key" : "cell1"
-            } ],
-            "table" : [ ],
-            "showHeader" : true
-          }
-        } ]
-      } ]
-    },
-    "Component" : {
-      "sectionMetadata" : {
-        "code" : "Component",
-        "name" : "Компоненты",
-        "order" : 5,
-        "imageCode" : "component",
-        "hasOptions" : false
-      },
-      "viewElementList" : [ ],
-      "tabbedList" : [ {
-        "tabPaneList" : [ {
-          "title" : "list",
-          "key" : 1,
-          "element" : {
-            "type" : "DataTable",
-            "title" : "Распределение функционала по модулям",
-            "hint" : "Содержит статистику по составу типов модулей, доли распознанных и выявленной роли модулей.",
-            "uid" : "160",
-            "imageLink" : "",
-            "columns" : [ {
-              "title" : "Наименование",
-              "dataIndex" : "cell1",
-              "key" : "cell1"
-            }, {
-              "title" : "Типов",
-              "dataIndex" : "cell2",
-              "key" : "cell2"
-            }, {
-              "title" : "Распознано",
-              "dataIndex" : "cell3",
-              "key" : "cell3"
-            }, {
-              "title" : "Роль",
-              "dataIndex" : "cell4",
-              "key" : "cell4"
-            } ],
-            "table" : [ {
-              "key" : 1,
-              "imageCode" : "module",
-              "cell1" : "antifraud",
-              "cell2" : "1",
-              "cell3" : "1.00",
-              "cell4" : "Sys"
-            }, {
-              "key" : 2,
-              "imageCode" : "module",
-              "cell1" : "antifraud-api",
-              "cell2" : "41",
-              "cell3" : "0.76",
-              "cell4" : "App"
-            }, {
-              "key" : 3,
-              "imageCode" : "module",
-              "cell1" : "antifraud-application",
-              "cell2" : "13",
-              "cell3" : "0.23",
-              "cell4" : "Sys"
-            }, {
-              "key" : 4,
-              "imageCode" : "module",
-              "cell1" : "antifraud-model-jpa",
-              "cell2" : "7",
-              "cell3" : "1.00",
-              "cell4" : "App"
-            }, {
-              "key" : 5,
-              "imageCode" : "module",
-              "cell1" : "antifraud-model-sdk",
-              "cell2" : "94",
-              "cell3" : "0.29",
-              "cell4" : "App"
-            }, {
-              "key" : 6,
-              "imageCode" : "module",
-              "cell1" : "antifraud-rpc-api",
-              "cell2" : "3",
-              "cell3" : "0.33",
-              "cell4" : "Sys"
-            }, {
-              "key" : 7,
-              "imageCode" : "module",
-              "cell1" : "antifraud-service",
-              "cell2" : "13",
-              "cell3" : "0.46",
-              "cell4" : "App"
-            }, {
-              "key" : 8,
-              "imageCode" : "module",
-              "cell1" : "dataspace-antifraud",
-              "cell2" : "1",
-              "cell3" : "1.00",
-              "cell4" : "Sys"
-            } ],
-            "showHeader" : true
-          }
-        }, {
-          "title" : "list_bean",
-          "key" : 2,
-          "element" : {
-            "type" : "DataTable",
-            "title" : "Использование функционала платформы в разрезе модулей",
-            "hint" : "Содержит статистику по составу используемых сервисов в разрезе модулей.",
-            "uid" : "161",
-            "imageLink" : "",
-            "columns" : [ {
-              "title" : "Наименование",
-              "dataIndex" : "cell1",
-              "key" : "cell1"
-            }, {
-              "title" : "Точек использования",
-              "dataIndex" : "cell2",
-              "key" : "cell2"
-            }, {
-              "title" : "Состав сервисов",
-              "dataIndex" : "cell3",
-              "key" : "cell3"
-            } ],
-            "table" : [ {
-              "key" : 1,
-              "imageCode" : "module",
-              "cell1" : "antifraud",
-              "cell2" : "0",
-              "cell3" : ""
-            }, {
-              "key" : 2,
-              "imageCode" : "module",
-              "cell1" : "antifraud-api",
-              "cell2" : "0",
-              "cell3" : ""
-            }, {
-              "key" : 3,
-              "imageCode" : "module",
-              "cell1" : "antifraud-application",
-              "cell2" : "0",
-              "cell3" : ""
-            }, {
-              "key" : 4,
-              "imageCode" : "module",
-              "cell1" : "antifraud-model-jpa",
-              "cell2" : "0",
-              "cell3" : ""
-            }, {
-              "key" : 5,
-              "imageCode" : "module",
-              "cell1" : "antifraud-model-sdk",
-              "cell2" : "0",
-              "cell3" : ""
-            }, {
-              "key" : 6,
-              "imageCode" : "module",
-              "cell1" : "antifraud-rpc-api",
-              "cell2" : "0",
-              "cell3" : ""
-            }, {
-              "key" : 7,
-              "imageCode" : "module",
-              "cell1" : "antifraud-service",
-              "cell2" : "0",
-              "cell3" : ""
-            }, {
-              "key" : 8,
-              "imageCode" : "module",
-              "cell1" : "dataspace-antifraud",
-              "cell2" : "0",
-              "cell3" : ""
-            } ],
-            "showHeader" : true
-          }
-        }, {
-          "title" : "list_module",
-          "key" : 3,
-          "element" : {
-            "type" : "DataTable",
-            "title" : "Межмодульные зависимости",
-            "hint" : "Содержит статистику по составу и направлению зависимостей в разрезе модулей.",
-            "uid" : "162",
-            "imageLink" : "",
-            "columns" : [ {
-              "title" : "Наименование",
-              "dataIndex" : "cell1",
-              "key" : "cell1"
-            }, {
-              "title" : "Внутренних",
-              "dataIndex" : "cell2",
-              "key" : "cell2"
-            }, {
-              "title" : "Внешних",
-              "dataIndex" : "cell3",
-              "key" : "cell3"
-            } ],
-            "table" : [ {
-              "key" : 1,
-              "imageCode" : "module",
-              "cell1" : "antifraud",
-              "cell2" : "0",
-              "cell3" : "0"
-            }, {
-              "key" : 2,
-              "imageCode" : "module",
-              "cell1" : "antifraud-api",
-              "cell2" : "0",
-              "cell3" : "0"
-            }, {
-              "key" : 3,
-              "imageCode" : "module",
-              "cell1" : "antifraud-application",
-              "cell2" : "0",
-              "cell3" : "0"
-            }, {
-              "key" : 4,
-              "imageCode" : "module",
-              "cell1" : "antifraud-model-jpa",
-              "cell2" : "0",
-              "cell3" : "0"
-            }, {
-              "key" : 5,
-              "imageCode" : "module",
-              "cell1" : "antifraud-model-sdk",
-              "cell2" : "0",
-              "cell3" : "0"
-            }, {
-              "key" : 6,
-              "imageCode" : "module",
-              "cell1" : "antifraud-rpc-api",
-              "cell2" : "0",
-              "cell3" : "0"
-            }, {
-              "key" : 7,
-              "imageCode" : "module",
-              "cell1" : "antifraud-service",
-              "cell2" : "1",
-              "cell3" : "0"
-            }, {
-              "key" : 8,
-              "imageCode" : "module",
-              "cell1" : "dataspace-antifraud",
-              "cell2" : "0",
-              "cell3" : "0"
-            } ],
-            "showHeader" : true
-          }
-        }, {
-          "title" : "list_bug",
-          "key" : 4,
-          "element" : {
-            "type" : "DataTable",
-            "title" : "Найденные ошибки в модулях",
-            "hint" : "Содержит статистику по составу и значимости найденных ошибок в разрезе модулей.",
-            "uid" : "163",
-            "imageLink" : "",
-            "columns" : [ {
-              "title" : "Наименование",
-              "dataIndex" : "cell1",
-              "key" : "cell1"
-            }, {
-              "title" : "Error",
-              "dataIndex" : "cell2",
-              "key" : "cell2"
-            }, {
-              "title" : "Warning",
-              "dataIndex" : "cell3",
-              "key" : "cell3"
-            }, {
-              "title" : "Info",
-              "dataIndex" : "cell4",
-              "key" : "cell4"
-            } ],
-            "table" : [ {
-              "key" : 1,
-              "imageCode" : "module",
-              "cell1" : "pprb",
-              "cell2" : "0",
-              "cell3" : "1",
-              "cell4" : "18"
-            } ],
-            "showHeader" : true
-          }
-        }, {
-          "title" : "list_threat",
-          "key" : 5,
-          "element" : {
-            "type" : "DataTable",
-            "title" : "Найденные угрозы в модулях",
-            "hint" : "Содержит статистику по составу и значимости найденных угроз в разрезе модулей.",
-            "uid" : "164",
-            "imageLink" : "",
-            "columns" : [ {
-              "title" : "Наименование",
-              "dataIndex" : "cell1",
-              "key" : "cell1"
-            }, {
-              "title" : "Error",
-              "dataIndex" : "cell2",
-              "key" : "cell2"
-            }, {
-              "title" : "Warning",
-              "dataIndex" : "cell3",
-              "key" : "cell3"
-            }, {
-              "title" : "Info",
-              "dataIndex" : "cell4",
-              "key" : "cell4"
             } ],
             "table" : [ ],
             "showHeader" : true
