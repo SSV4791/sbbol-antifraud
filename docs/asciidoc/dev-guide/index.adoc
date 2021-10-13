@@ -2,6 +2,27 @@
 
 == Сборка и запуск проекта
 
+=== Установка сертификатов
+
+Для сборки проекта необходимо установить корневой сертификат и сертификат удостоверяющего центра.
+Скачать их можно тут: https://cert.sberbank.ru/pfx/
+
+Для установки надо перейти в папку ~/.gradle (~ это домашняя дирректория) и выполнить команды
+
+[source]
+----
+keytool -import -trustcacerts -alias sber-root -file путь_до/root.crt -keystore cacerts -storepass changeit
+keytool -import -trustcacerts -alias sber-ca2 -file путь_до/ca2.crt -keystore cacerts -storepass changeit
+----
+
+В файле `~/.gradle/gradle.properties` (если файла нет необходимо его создать) добавить две строки
+
+[source]
+----
+systemProp.javax.net.ssl.trustStore=/Users/<ваша пользовательская директория, например, a16689666>/.gradle/cacerts
+systemProp.javax.net.ssl.trustStorePassword=changeit
+----
+
 === Сборка проекта
 
 Необходимо добавить креды для gradle (при первом запуске с `-p buildSrc`)

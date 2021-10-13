@@ -7,7 +7,7 @@ pluginManagement {
         }
 
         maven {
-            url = uri("http://sbtatlas.sigma.sbrf.ru/nexus/service/local/repositories/thirdparty/content/")
+            url = uri("https://nexus.sigma.sbrf.ru/nexus/service/local/repositories/thirdparty/content/")
             isAllowInsecureProtocol = true
         }
     }

@@ -11,12 +11,12 @@ val nexusPasswordValue = (project.properties["nexusPassword"] ?: credentials.get
 
 repositories {
     maven {
-        url = uri("http://sbtatlas.sigma.sbrf.ru/nexus/content/groups/public/")
+        url = uri("https://nexus.sigma.sbrf.ru/nexus/content/groups/public/")
         isAllowInsecureProtocol = true
     }
 
     maven {
-        url = uri("http://sbtatlas.sigma.sbrf.ru/nexus/content/groups/internal/")
+        url = uri("https://nexus.sigma.sbrf.ru/nexus/content/groups/internal/")
         isAllowInsecureProtocol = true
         credentials {
             username = nexusLoginValue

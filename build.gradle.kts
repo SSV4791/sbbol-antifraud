@@ -30,7 +30,7 @@ allprojects {
             }
 
             maven {
-                url = uri("http://sbtatlas.sigma.sbrf.ru/nexus/content/groups/internal")
+                url = uri("https://nexus.sigma.sbrf.ru/nexus/content/groups/internal")
                 credentials {
                     username = nexusLoginValue
                     password = nexusPasswordValue
