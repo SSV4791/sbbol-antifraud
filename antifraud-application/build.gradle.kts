@@ -5,7 +5,12 @@ dependencies {
     implementation(project(":antifraud-service"))
 
     implementation("com.github.briandilley.jsonrpc4j:jsonrpc4j:1.6")
-    implementation("com.sun.xml.ws:jaxws-rt:2.3.3")
+    // решает ошибку при старте приложения: java.lang.ClassNotFoundException: javax.jws.WebParam
+    implementation("com.sun.xml.ws:jaxws-rt:2.3.3") {
+        // решает ошибку: Could not find ha-api-3.1.12.hk2-jar (org.glassfish.ha:ha-api:3.1.12)
+        exclude("org.glassfish.ha", "ha-api")
+    }
+    implementation("org.glassfish.ha:ha-api:3.1.12@jar")
     implementation("net.logstash.logback:logstash-logback-encoder:6.3")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")
