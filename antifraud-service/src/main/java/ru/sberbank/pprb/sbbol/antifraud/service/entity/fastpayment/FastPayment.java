@@ -29,6 +29,7 @@ public class FastPayment extends BaseEntity {
     /**
      * Дата и время формирования события
      */
+    @Column(name = "timestamp_")
     private LocalDateTime eventTime;
 
     /**
