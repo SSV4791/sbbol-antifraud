@@ -38,6 +38,11 @@ public class ReceiptPayer implements Serializable {
     @NotBlank(message = "The document.payer.inn attribute must be filled")
     private String inn;
 
+    /**
+     * КПП клиента/организации
+     */
+    private String kpp;
+
     public String getTbCode() {
         return tbCode;
     }
@@ -78,6 +83,14 @@ public class ReceiptPayer implements Serializable {
         this.inn = inn;
     }
 
+    public String getKpp() {
+        return kpp;
+    }
+
+    public void setKpp(String kpp) {
+        this.kpp = kpp;
+    }
+
     @Override
     public String toString() {
         return "{" +
@@ -86,6 +99,7 @@ public class ReceiptPayer implements Serializable {
                 ", codeBic='" + codeBic + '\'' +
                 ", name='" + name + '\'' +
                 ", inn='" + inn + '\'' +
+                ", kpp='" + kpp + '\'' +
                 '}';
     }
 

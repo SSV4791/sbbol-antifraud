@@ -167,6 +167,12 @@ public class ElectronicReceipt extends BaseEntity {
     private String payerInn;
 
     /**
+     * КПП клиента/организации
+     */
+    @Column(length = 9)
+    private String payerKpp;
+
+    /**
      * Имя
      */
     @Column(length = 100)
@@ -691,6 +697,14 @@ public class ElectronicReceipt extends BaseEntity {
 
     public void setPayerInn(String payerInn) {
         this.payerInn = payerInn;
+    }
+
+    public String getPayerKpp() {
+        return payerKpp;
+    }
+
+    public void setPayerKpp(String payerKpp) {
+        this.payerKpp = payerKpp;
     }
 
     public String getFirstName() {
