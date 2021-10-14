@@ -83,7 +83,7 @@ public abstract class ElectronicReceiptMapper implements CommonMapper<Electronic
 
     private static final Map<String, Function<ElectronicReceipt, Object>> CRITERIA_MAP;
     private static final Map<String, String> DESCRIPTION_MAP;
-    public static final int CAPACITY = 61;
+    public static final int CAPACITY = 62;
 
     static {
         Map<String, Function<ElectronicReceipt, Object>> criteriaMap = new HashMap<>(CAPACITY);
@@ -97,6 +97,7 @@ public abstract class ElectronicReceiptMapper implements CommonMapper<Electronic
         criteriaMap.put(DESTINATION, ElectronicReceipt::getDestination);
         criteriaMap.put(PAYER_NAME, ElectronicReceipt::getPayerName);
         criteriaMap.put(PAYER_INN, ElectronicReceipt::getPayerInn);
+        criteriaMap.put(PAYER_KPP, ElectronicReceipt::getPayerKpp);
         criteriaMap.put(FIRST_NAME, ElectronicReceipt::getFirstName);
         criteriaMap.put(SECOND_NAME, ElectronicReceipt::getSecondName);
         criteriaMap.put(MIDDLE_NAME, ElectronicReceipt::getMiddleName);
@@ -153,24 +154,25 @@ public abstract class ElectronicReceiptMapper implements CommonMapper<Electronic
         Map<String, String> descriptionMap = new HashMap<>(CAPACITY);
         descriptionMap.put(EPK_ID, "ЕПК.id");
         descriptionMap.put(DIGITAL_ID, "Личный кабинет");
-        descriptionMap.put(PRIVATE_IP_ADDRESS, "Локальный IP адрес сервера");
+        descriptionMap.put(PRIVATE_IP_ADDRESS, "Локальный IP адрес");
         descriptionMap.put(USER_GUID, "Уникальный идентификатор пользователя");
         descriptionMap.put(DOC_NUMBER, "Номер платежного документа");
         descriptionMap.put(DOC_DATE, "Дата документа");
-        descriptionMap.put(CODE_BIC, "БИК банка");
+        descriptionMap.put(CODE_BIC, "БИК");
         descriptionMap.put(DESTINATION, "Назначение платежа");
-        descriptionMap.put(PAYER_NAME, "Наименование клиента отправителя");
+        descriptionMap.put(PAYER_NAME, "Наименование клиента");
         descriptionMap.put(PAYER_INN, "ИНН отправителя");
+        descriptionMap.put(PAYER_KPP, "КПП");
         descriptionMap.put(FIRST_NAME, "Имя");
         descriptionMap.put(SECOND_NAME, "Фамилия");
         descriptionMap.put(MIDDLE_NAME, "Отчество");
         descriptionMap.put(BIRTH_DAY, "Дата рождения");
-        descriptionMap.put(DUL_TYPE, "Тип ДУЛ документа");
-        descriptionMap.put(DUL_SERIE_NUMBER, "Серия и номер");
-        descriptionMap.put(DUL_WHO_ISSUE, "Кем выдан");
-        descriptionMap.put(DUL_DATE_ISSUE, "Дата выдачи");
+        descriptionMap.put(DUL_TYPE, "Тип ДУЛ");
+        descriptionMap.put(DUL_SERIE_NUMBER, "Серия и номер ДУЛ");
+        descriptionMap.put(DUL_WHO_ISSUE, "Кем выдан ДУЛ");
+        descriptionMap.put(DUL_DATE_ISSUE, "Дата выдачи ДУЛ");
         descriptionMap.put(DUL_CODE_ISSUE, "Код подразделения");
-        descriptionMap.put(RECEIPT_DATE, "Дата получения ДС");
+        descriptionMap.put(RECEIPT_DATE, "Дата получения");
         descriptionMap.put(RECEIPT_TB_CODE, "Код ТБ");
         descriptionMap.put(RECEIPT_OSB_NUMBER, "Номер ОСБ");
         descriptionMap.put(RECEIPT_VSP_NUMBER, "Номер ВСП");
@@ -243,6 +245,7 @@ public abstract class ElectronicReceiptMapper implements CommonMapper<Electronic
     @Mapping(source = "document.destination", target = "destination")
     @Mapping(source = "document.payer.name", target = "payerName")
     @Mapping(source = "document.payer.inn", target = "payerInn")
+    @Mapping(source = "document.payer.kpp", target = "payerKpp")
     @Mapping(source = "document.receiver.firstName", target = "firstName")
     @Mapping(source = "document.receiver.secondName", target = "secondName")
     @Mapping(source = "document.receiver.middleName", target = "middleName")
@@ -322,6 +325,7 @@ public abstract class ElectronicReceiptMapper implements CommonMapper<Electronic
     @Mapping(source = "document.destination", target = "destination")
     @Mapping(source = "document.payer.name", target = "payerName")
     @Mapping(source = "document.payer.inn", target = "payerInn")
+    @Mapping(source = "document.payer.kpp", target = "payerKpp")
     @Mapping(source = "document.receiver.firstName", target = "firstName")
     @Mapping(source = "document.receiver.secondName", target = "secondName")
     @Mapping(source = "document.receiver.middleName", target = "middleName")
@@ -397,6 +401,7 @@ public abstract class ElectronicReceiptMapper implements CommonMapper<Electronic
     @Mapping(target = "document.destination", source = "destination")
     @Mapping(target = "document.payer.name", source = "payerName")
     @Mapping(target = "document.payer.inn", source = "payerInn")
+    @Mapping(target = "document.payer.kpp", source = "payerKpp")
     @Mapping(target = "document.receiver.firstName", source = "firstName")
     @Mapping(target = "document.receiver.secondName", source = "secondName")
     @Mapping(target = "document.receiver.middleName", source = "middleName")

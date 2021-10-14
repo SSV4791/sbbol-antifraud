@@ -184,6 +184,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
         assertEquals(expected.getDocument().getDestination(), actual.getDestination());
         assertEquals(expected.getDocument().getPayer().getName(), actual.getPayerName());
         assertEquals(expected.getDocument().getPayer().getInn(), actual.getPayerInn());
+        assertEquals(expected.getDocument().getPayer().getKpp(), actual.getPayerKpp());
         assertEquals(expected.getDocument().getReceiver().getFirstName(), actual.getFirstName());
         assertEquals(expected.getDocument().getReceiver().getSecondName(), actual.getSecondName());
         assertEquals(expected.getDocument().getReceiver().getMiddleName(), actual.getMiddleName());
