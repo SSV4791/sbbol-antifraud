@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: sql/01.000.00/changelog.xml
+      relativeToChangelogFile: true
+  - include:
+      file: sql/01.001.00/changelog.yaml
+      relativeToChangelogFile: true

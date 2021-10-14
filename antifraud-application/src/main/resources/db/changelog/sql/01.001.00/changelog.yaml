@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: 1633072940006_drop_dataspace_constraint.sql
+      relativeToChangelogFile: true
+  - include:
+      file: 1633077459535_create_em_tables_and_add_colums.sql
+      relativeToChangelogFile: true

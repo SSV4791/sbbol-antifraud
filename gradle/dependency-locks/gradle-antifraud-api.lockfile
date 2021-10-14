@@ -1,0 +1,18 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.fasterxml.jackson.core:jackson-annotations:2.11.4=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.fasterxml.jackson.core:jackson-core:2.11.4=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.fasterxml.jackson.core:jackson-databind:2.11.4=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.4=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+jakarta.validation:jakarta.validation-api:2.0.2=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.jacoco:org.jacoco.agent:0.8.7=jacocoAgent,jacocoAnt
+org.jacoco:org.jacoco.ant:0.8.7=jacocoAnt
+org.jacoco:org.jacoco.core:0.8.7=jacocoAnt
+org.jacoco:org.jacoco.report:0.8.7=jacocoAnt
+org.ow2.asm:asm-analysis:9.1=jacocoAnt
+org.ow2.asm:asm-commons:9.1=jacocoAnt
+org.ow2.asm:asm-tree:9.1=jacocoAnt
+org.ow2.asm:asm:9.1=jacocoAnt
+org.springframework.boot:spring-boot-dependencies:2.4.4=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+empty=annotationProcessor,archives,testAnnotationProcessor

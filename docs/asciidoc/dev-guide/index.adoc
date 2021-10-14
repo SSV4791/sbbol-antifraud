@@ -1,0 +1,85 @@
+= Документация разработчика
+
+== Сборка и запуск проекта
+
+=== Установка сертификатов
+
+Для сборки проекта необходимо установить корневой сертификат и сертификат удостоверяющего центра.
+Скачать их можно тут: https://cert.sberbank.ru/pfx/
+
+Для установки надо перейти в папку ~/.gradle (~ это домашняя дирректория) и выполнить команды
+
+[source]
+----
+keytool -import -trustcacerts -alias sber-root -file путь_до/root.crt -keystore cacerts -storepass changeit
+keytool -import -trustcacerts -alias sber-ca2 -file путь_до/ca2.crt -keystore cacerts -storepass changeit
+----
+
+В файле `~/.gradle/gradle.properties` (если файла нет необходимо его создать) добавить две строки
+
+[source]
+----
+systemProp.javax.net.ssl.trustStore=/Users/<ваша пользовательская директория, например, a16689666>/.gradle/cacerts
+systemProp.javax.net.ssl.trustStorePassword=changeit
+----
+
+=== Сборка проекта
+
+Необходимо добавить креды для gradle (при первом запуске с `-p buildSrc`)
+```
+./gradlew addCredentials --no-scan --key nexusLogin --value OUT-Pupkin-VV -p buildSrc
+./gradlew addCredentials --no-scan --key nexusPassword --value 123456Zx -p buildSrc
+```
+
+Проект собирается через gradlew командой
+```
+./gradlew build
+```
+
+=== Запуск проекта
+
+Проект является Spring Boot приложением и запускается командой +
+```
+./gradlew :antifraud-application:bootRun --args='--spring.profiles.active=dev'
+```
+или через Idea с указанием профиля dev.
+
+=== Создание файлов dependency-lock
+
+Для создания dependency-lock файлов для gradle необходимо запустить таску +
+```
+./gradlew resolveAndLockAll --write-locks
+```
+
+=== Публикация API в META
+
+Для публикации API в META необходимо использовать версию JAVA до 16, например, 13
+```
+export JAVA_HOME=`/usr/libexec/java_home -v13`
+```
+
+Перед публикацией в файле gradle.properties необходимо указать целевую версию API (не снапшотную).
+
+Публикация вызывается командой
+```
+./gradlew clean build reverseAndPublish -x test
+```
+
+На данный момент в настройках плагина meta указан null для nexusUrl
+```
+meta {
+    nexusUrl = null
+    // ...
+}
+```
+
+Правильно было бы указать там `http://sbtatlas.sigma.sbrf.ru/nexus/content/repositories/internal/`, но на версии Gradle >= 7 такой конфиг ругается на протокол http и отсутствие флага `allowInsecureProtocol`
+
+```
+* What went wrong:
+Execution failed for task ':reverseAndPublish'.
+> Could not resolve all dependencies for configuration ':metaPlugin'.
+   > Using insecure protocols with repositories, without explicit opt-in, is unsupported. Switch Maven repository 'meta_internal_1626099067157(http://sbtatlas.sigma.sbrf.ru/nexus/content/repositories/internal/)' to redirect to a secure protocol (like HTTPS) or allow insecure protocols. See https://docs.gradle.org/7.0.2/dsl/org.gradle.api.artifacts.repositories.UrlArtifactRepository.html#org.gradle.api.artifacts.repositories.UrlArtifactRepository:allowInsecureProtocol for more details.
+```
+
+Учитывая, что с null плагин продолжает работать и публиковать, принято решение на данный момент оставить null.

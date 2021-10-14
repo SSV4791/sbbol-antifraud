@@ -1,418 +1,314 @@
-import groovy.json.JsonOutput
 import ru.sbrf.ufs.pipeline.Const
 
 @Library(['ufs-jobs@master']) _
 
+def latestCommitHash = ''
 
 pipeline {
     agent {
         label 'ufs-release'
     }
     options {
-        timeout(time: 180, unit: 'MINUTES')
+        timeout(time: 15, unit: 'MINUTES')
         timestamps()
     }
     parameters {
-        choice(name: 'versionIncrement', choices: ['BUILD', 'RC', 'MINOR', 'MAJOR'],
-                description: 'Стратегия увеличения нумерации сборки (формат {MAJOR}.{MINOR}.{RC}-build.{BUILD}). Не используется в случае указания forceVersion')
-        string(name: 'forceVersion', defaultValue: null, description: 'Версия сборки (для простановки явно)')
-        booleanParam(name: 'fullBuild', defaultValue: true, description: 'Полная сборка с вызовом CustomerBuilder (обязательно для релизной сборки)')
-        string(name: 'dataspaceDistrib', defaultValue: '', description: 'Ссылка на дистрибутив dataspace (если не проставлен флаг fullBuild)')
-        string(name: 'customerDistrib', defaultValue: '', description: 'Ссылка на дистрибутив фабрики (если не проставлен флаг fullBuild)')
-        booleanParam(name: 'release', defaultValue: false, description: 'Выпуск релизной сборки')
+    string(name: 'branch', defaultValue: 'release/01.001.00', description: 'Ветка для сборки образа')
+        string(name: 'image_name', defaultValue: 'registry.sigma.sbrf.ru/pprb/ci02473994/ci03045533_sbbol_antifraud/antifraud', description: 'Имя docker образа')
+        booleanParam(name: 'checkmarx', defaultValue: false)
     }
     environment {
         GIT_PROJECT = 'CIBPPRB'
         GIT_REPOSITORY = 'sbbol-antifraud'
-        GIT_LINK = 'ssh://git@10.56.5.65:8878/cibpprb/sbbol-antifraud.git'
+        GIT_REPOSITORY_LINK = "${Const.BITBUCKET_SERVER_INSTANCE_URL}/scm/${GIT_PROJECT}/${GIT_REPOSITORY}.git"
+        BUILD_JAVA_DOCKER_IMAGE = 'registry.sigma.sbrf.ru/ci00149046/ci00405008_sbbolufs/bellsoft/liberica-openjdk-alpine:15.0.1-9-with-certs'
         GROUP_ID = 'Nexus_PROD.CI03045533_sbbol-antifraud'
-        CUSTOMER_ARTIFACT_ID = 'antifraud'
-        DATASPACE_ARTIFACT_ID = 'dataspace-apps-antifraud'
-        ARTIFACT_NAME_OS = ''
-        CUSTOMER_ARCHIVE_NAME = 'customer-distrib.zip'
-        DATASPACE_ARCHIVE_NAME = 'dataspace-distrib.zip'
-        VERSION = ''
-        VERSION_PATTERN = /\d+\.\d+\.\d+(\-build\.\d+)?/
-        DATASPACE_CONFIGS = './config/default.yml,./config/sigma/devgen2_eip.yml'
+        ARTIFACT_ID = 'antifraud'
+        VERSION_PATTERN = /01\.001\.\d{2}_\d{4}/
+        // Паттерн, по которому выбираются версии для инкремента последней при сборке
+        INITIAL_VERSION = '01.001.00_0000'
+        // Дефолтная версия. Будет использована в случае, когда с указанным паттерном еще нет ни одной сборки
         NEXUSSBRF_RELEASE_REPOSITORY = 'https://sbrf-nexus.sigma.sbrf.ru/nexus/service/local/artifact/maven/content'
-        DEV_REPOSITORY = 'https://nexus.sigma.sbrf.ru/nexus/service/local/artifact/maven/content'
+        // Ссылка для публикации артефактов
         PROJECT_URL = "https://sbtatlas.sigma.sbrf.ru/stashdbo/projects/${GIT_PROJECT}/repos/${GIT_REPOSITORY}/"
-        DOCS_PATH = "${GIT_REPOSITORY}/${env.BRANCH_NAME}"
-
-        CUSTOMER_DISTRIB_URL = ''
-        DATASPACE_DISTRIB_URL = ''
+        // Ссылка на страницу git репозитория
+        DOCS_PATH = "${GIT_REPOSITORY}/${env.BRANCH_NAME}" // путь для публикации документации
+        // internal envs
+        IMAGE_NAME = ''
+        ARTIFACT_NAME_OS = ''
+        ARTIFACT_NAME_UFS = ''
+        ARTIFACT_NAME_SOWA = ''
+        ARTIFACT_NAME_STATIC = ''
+        ARTIFACT_NAME_DOCS = ''
+        ARTIFACT_NAME_LOCK = ''
+        VERSION = ''
+        LAST_VERSION = ''
+        PATH_VERSION = ''
 
         CREDENTIAL_ID = "TUZ_DCBMSC5"
-        CREDENTIAL_ID_SBT = "TUZ_DCBMSC5_SBT"
+        NEXUS_CREDS = credentials("TUZ_DCBMSC5")
+        SONAR_TOKEN = credentials('sonar-token')
     }
 
     stages {
-
-        stage('Input params validation') {
+        /**
+         * Клонирует указанный git branch
+         */
+        stage('Checkout git') {
             steps {
                 script {
-                    if (!params.forceVersion && !params.versionIncrement) {
-                        error("Version increment or forceVersion are required")
-                    }
-                    if (!params.fullBuild) {
-                        if (!params.customerDistrib) {
-                            error("customerDistrib is required (flag fullBuild is not set)")
-                        }
-                        if (!params.dataspaceDistrib) {
-                            error("dataspaceDistrib is required (flag fullBuild is not set)")
-                        }
-                        if (params.release && params.forceVersion) {
-                            error("forceVersion should be empty to make release from provided distributives")
+                    latestCommitHash = git.checkoutRef('bitbucket-dbo-key', GIT_PROJECT, GIT_REPOSITORY, branch)
+                }
+            }
+        }
+
+        /**
+         * Вычисляет версию текущей сборки
+         */
+        stage('Evaluate version') {
+            steps {
+                script {
+                    // Ищем список всех тэгов, удовлетворяющих нашему паттерну версий
+                    List versionTags = git.tags().findAll { it.matches(VERSION_PATTERN) }.sort()
+                    LAST_VERSION = versionTags.isEmpty() ? '' : versionTags.last()
+
+                    // Инкрементируем последнюю версию и устанавливаем ее, как текущую версию сборки
+                    def versions = (LAST_VERSION ?: INITIAL_VERSION).split("_")
+                    def nextBuildNumber = (versions[1].toInteger() + 1).toString().padLeft(4, '0')
+                    VERSION = "${versions[0]}_${nextBuildNumber}"
+                    PATH_VERSION = "${(VERSION =~ /\d+\.\d+/)[0]}"
+                }
+            }
+        }
+
+        /**
+         * Собираем проект
+         */
+        stage('Build') {
+            failFast true
+            parallel {
+                /**
+                 * Собираем gradle проект
+                 */
+                stage('Build Java') {
+                    steps {
+                        script {
+                            docker.withRegistry(Const.OPENSHIFT_REGISTRY, CREDENTIAL_ID) {
+                                sh 'docker run --rm ' +
+                                        "-v ${WORKSPACE}:/build " +
+                                        '-w /build ' +
+                                        "-e PATH_VERSION=${PATH_VERSION} " +
+                                        "${BUILD_JAVA_DOCKER_IMAGE} " +
+                                        './gradlew ' +
+                                        "-PnexusLogin=${NEXUS_CREDS_USR} " +
+                                        "-PnexusPassword=${NEXUS_CREDS_PSW} " +
+                                        "-Pversion=${VERSION} " +
+                                        "-Dsonar.host.url=https://sbt-sonarqube.sigma.sbrf.ru/ " +
+                                        "-Dsonar.login=${SONAR_TOKEN} " +
+                                        "-Dsonar.projectKey=ru.sberbank.pprb.sbbol.antifraud " +
+                                        "-Dsonar.branch.name=${params.branch} " +
+                                        'build sonarqube --parallel'
+                            }
                         }
                     }
                 }
             }
         }
 
-        stage('Trigger CustomerBuilder') {
-            when {
-                expression { params.fullBuild }
-            }
+        /**
+         * Устанавливает в описание jenkins job собираемую версию
+         */
+        stage('Set display') {
             steps {
                 script {
-                    def deployerParams = "";
-                    if (params.release) {
-                        if (params.forceVersion) {
-                            deployerParams += "-Dversion.forceVersion=${params.forceVersion}"
-                        } else if (params.versionIncrement) {
-                            deployerParams += "-Dversion.incrementType=${params.versionIncrement}"
-                        }
-                        deployerParams += " -Dgit.commitComment=\"deployer release\""
-                    }
-                    def parameters = [
-                            "isRelease" : params.release,
-                            "jobMode" : "Deployer",
-                            "gitModel" : GIT_LINK,
-                            "branch" : GIT_BRANCH,
-                            "pathToConfigFile" : DATASPACE_CONFIGS,
-                            "isIncludeCoreWithSearch" : true,
-                            "isIncludeOnlyCore" : false,
-                            "isIncludeOnlySearch" : false,
-                            "isIncludeGigabas" : true,
-                            "isIncludeStateMachine" : false,
-                            "isIncludeDuplication" : false,
-                            "buildClient" : true,
-                            "needInstallToOS" : false,
-                            "needQG" : true, // обязательное требование
-                            "clientDeployerOptions" : deployerParams
-                    ]
-                    def paramString = new StringBuilder()
-                    for (param in parameters) {
-                        if (paramString.length() != 0) {
-                            paramString.append('&')
-                        }
-                        paramString.append(param.key)
-                                .append('=')
-                                .append(URLEncoder.encode(param.value as String, "UTF-8"))
-                    }
-                    def triggerBuildResponse = httpRequest(
-                            httpMode: 'POST',
-                            authentication: CREDENTIAL_ID_SBT,
-                            ignoreSslErrors: true,
-                            quiet: true,
-                            consoleLogResponseBody: false,
-                            url: "https://sbt-jenkins.sigma.sbrf.ru/job/SBBOL/job/DataSpace/job/CustomerBuilder/buildWithParameters?${paramString}"
-                    )
-                    def queueLink = triggerBuildResponse.headers["Location"][0]
-                    log.info("CustomerBuild submitted. Queue link: ${queueLink}")
+                    currentBuild.displayName += " $VERSION"
+                    rtp stableText: "<h1>Build number: $VERSION</h1>"
+                }
+            }
+        }
 
-                    def timeoutSeconds = 1
-                    String buildLink = null
-                    while (!buildLink) {
-                        def queueResponse = httpRequest(
-                                authentication: CREDENTIAL_ID_SBT,
-                                ignoreSslErrors: true,
-                                quiet: true,
-                                consoleLogResponseBody: false,
-                                url: "${queueLink}api/json")
-                        def queue = readJSON(text: queueResponse.content)
-                        buildLink = queue?.executable?.url
-                        if (!buildLink) {
-                            log.info("Waiting for build to start...")
-                            sleep(timeoutSeconds)
-                            timeoutSeconds++
-                        }
-                    }
-                    log.info("CustomerBuilder started: ${buildLink}")
-
-                    def finished = false
-                    def result = null
-                    while (!finished) {
-                        def buildResponse = httpRequest(
-                                authentication: CREDENTIAL_ID_SBT,
-                                ignoreSslErrors: true,
-                                quiet: true,
-                                consoleLogResponseBody: false,
-                                url: "${buildLink}api/json")
-                        def buildInfo = readJSON(text: buildResponse.content)
-                        finished = !buildInfo?.building
-                        if (!finished) {
-                            log.info("Waiting for build to complete...")
-                            log.info("Build link: ${buildLink}")
-                            sleep(60)
-                        } else {
-                            result = buildInfo
-                        }
-                    }
-                    log.info("CustomerBuilder finished. Result ${result?.result}")
-
-                    if ("SUCCESS" == result.result) {
-                        def description = result.description
-
-                        def regex = /.*<br> jobResult = ([^\r^\n]*).*/
-                        def jobResultText = (description =~ regex)[0][1]
-                        log.info("Job result: ${jobResultText}")
-                        def jobResult = readJSON(text: jobResultText)
-
-                        log.info("DataSpace distrib link: ${jobResult.rootKey.dataSpaceDistribution}")
-                        log.info("Customer distrib link: ${jobResult.rootKey.customerDistribution}")
-                        CUSTOMER_DISTRIB_URL = jobResult.rootKey.customerDistribution
-                        DATASPACE_DISTRIB_URL = jobResult.rootKey.dataSpaceDistribution
-                    } else {
-                        error("Unsuccessfull build. Check logs of CustomerBuilder ${buildLink}")
+        /**
+         * Собирает и публикует docker образ в registry
+         */
+        stage('Build and Push docker image') {
+            steps {
+                script {
+                    IMAGE_NAME = "${params.image_name}:${VERSION}"
+                    docker.withRegistry(Const.OPENSHIFT_REGISTRY, CREDENTIAL_ID) {
+                        docker.build(IMAGE_NAME, "--force-rm .").push()
                     }
                 }
             }
         }
 
-        stage('Detect distrib links and build version') {
+        /**
+         * Собирает артефакт с шаблонами OpenShift
+         */
+        stage('Prepare Openshift manifest') {
             steps {
                 script {
-                    if (!params.fullBuild) {
-                        CUSTOMER_DISTRIB_URL = params.customerDistrib
-                        DATASPACE_DISTRIB_URL = params.dataspaceDistrib
-                    }
-                    if (params.forceVersion) {
-                        VERSION = params.forceVersion
-                    } else {
-                        def regex = /.*v=([^&]*).*/
-                        def result = (DATASPACE_DISTRIB_URL =~ regex)[0][1]
-                        VERSION = result
-                    }
-                    log.info('Build version: ' + VERSION)
-                    if (!VERSION) {
-                        error("Can not determine build version")
-                    }
-                }
-            }
-        }
-
-        stage('Download distribs') {
-            steps {
-                script {
-                    log.info("Downloading customer distrib ${CUSTOMER_DISTRIB_URL}")
-                    httpRequest authentication: CREDENTIAL_ID,
-                            outputFile: CUSTOMER_ARCHIVE_NAME,
-                            responseHandle: 'NONE',
-                            url: "${CUSTOMER_DISTRIB_URL}"
-                    log.info("Downloading dataspace distrib ${DATASPACE_DISTRIB_URL}")
-                    httpRequest authentication: CREDENTIAL_ID,
-                            outputFile: DATASPACE_ARCHIVE_NAME,
-                            responseHandle: 'NONE',
-                            url: "${DATASPACE_DISTRIB_URL}"
-                }
-            }
-        }
-
-        stage('Prepare install_eip archive') {
-            steps {
-                script {
-                    dir('distrib') {
-                        sh "unzip ../${CUSTOMER_ARCHIVE_NAME}"
-                        sh "unzip ../${DATASPACE_ARCHIVE_NAME} -d ./dataspace"
-
-                        // extract version
-                        def dataspaceVersion = sh(
-                                script: "cat dataspace/configs/dataspace-core-template.yaml" +
-                                        " | sed -n 's/^.*version: \\(.*\\).*\$/\\1/p'" +
-                                        " | head -1",
-                                returnStdout: true).trim()
-                        sh "echo \"Dataspace version: ${dataspaceVersion}\""
-
-                        // remove version from resources names
-                        sh "sed -i 's/\${MODULE_NAME}-${dataspaceVersion}/\${MODULE_NAME}/' dataspace/configs/dataspace-core-template.yaml"
-                        sh "sed -i 's/\${MODULE_NAME}-${dataspaceVersion}/\${MODULE_NAME}/' dataspace/configs/dataspace-gigabas-template.yaml"
-
-                        // package archive
-                        ARTIFACT_NAME_OS = "antifraud-${VERSION}.zip"
+                    dir('openshift') {
+                        def repoDigest = sh(script: "docker inspect ${IMAGE_NAME} --format='{{index .RepoDigests 0}}'", returnStdout: true).trim()
+                        def imageHash = repoDigest.split('@').last()
+                        log.info('Docker image hash: ' + imageHash)
+                        sh "sed -i 's/\${imageNameWithDigest}/antifraud@${imageHash}/' configs/antifraud/deployment-antifraud.yml"
+                        sh "sed -i 's/\${imageVersion}/${VERSION}/' configs/antifraud/deployment-antifraud.yml"
+                        ARTIFACT_NAME_OS = "antifraud_os-${VERSION}.zip"
+                        // copy liquibase
+                        sh "cp -r ../antifraud-application/src/main/resources/db/changelog db"
+                        sh "mkdir ${WORKSPACE}/distrib"
                         sh "zip -rq ${WORKSPACE}/distrib/${ARTIFACT_NAME_OS} *"
                     }
                 }
             }
         }
 
+        /**
+         * Собирает артефакт с документацией
+         */
+        stage('Prepare docs') {
+            steps {
+                script {
+                    ARTIFACT_NAME_DOCS = "antifraud_docs-${VERSION}.zip"
+                    dir('docs/build') {
+                        sh "zip -rq ${WORKSPACE}/distrib/$ARTIFACT_NAME_DOCS docs"
+                    }
+                }
+            }
+        }
+
+        /**
+         * Собирает артефакт с lock файлами
+         */
+        stage('Prepare locks') {
+            steps {
+                script {
+                    ARTIFACT_NAME_LOCK = "antifraud_locks-${VERSION}.zip"
+                    dir('gradle') {
+                        sh "zip -rq ${WORKSPACE}/distrib/$ARTIFACT_NAME_LOCK dependency-locks"
+                        dir('wrapper') {
+                            sh "zip -rq ${WORKSPACE}/distrib/$ARTIFACT_NAME_LOCK gradle-wrapper.properties"
+                        }
+                    }
+                }
+            }
+        }
+
+        /**
+         * Собирает release notes
+         */
+        stage('Create release notes') {
+            steps {
+                script {
+                    def projectLog = sh(
+                            returnStdout: true,
+                            script: "git log --oneline --no-merges --pretty=tformat:'%s' " +
+                                    "${LAST_VERSION ? LAST_VERSION + '..HEAD' : ''}"
+                    )
+                    dir('distrib') {
+                        releaseNotes = createReleaseNotes(projectLog, latestCommitHash, PROJECT_URL)
+                        sh "zip -q release_notes-${VERSION}.zip release-notes"
+                    }
+                }
+            }
+        }
+
+        /**
+         * Публикует собранные выше артефакты в nexus
+         */
         stage('Publish') {
             steps {
                 script {
                     dir('distrib') {
-                        log.info("Publishing artifact to ${DEV_REPOSITORY}")
                         publishDev(
                                 credentialId: CREDENTIAL_ID,
                                 repository: "corp-releases",
                                 groupId: "ru.sberbank.pprb.sbbol.antifraud",
-                                artifactId: CUSTOMER_ARTIFACT_ID,
+                                artifactId: ARTIFACT_ID,
                                 version: "D-${VERSION}",
                                 extension: 'zip',
                                 packaging: 'zip',
                                 classifier: "distrib",
                                 file: ARTIFACT_NAME_OS
                         )
-                        log.info("Successfully published to https://nexus.sigma.sbrf.ru/nexus/content/repositories/corp-releases/ru/sberbank/pprb/sbbol/antifraud/antifraud/D-${VERSION}/")
                         log.info("Distrib url: http://nexus.sigma.sbrf.ru:8099/nexus/service/local/repositories/corp-releases/content/ru/sberbank/pprb/sbbol/antifraud/antifraud/D-${VERSION}/antifraud-D-${VERSION}-distrib.zip")
-                        if (params.release) {
-                            log.info("Uploading CustomerBuilder distribs to sbrf-nexus")
 
-                            nexus.publishZip(GROUP_ID, DATASPACE_ARTIFACT_ID, "distrib", "../${DATASPACE_ARCHIVE_NAME}", VERSION, CREDENTIAL_ID)
-                            log.info("Successfully published to ${getSbrfNexusLink(DATASPACE_ARTIFACT_ID, "D-${VERSION}")}")
-                            nexus.publishZip(GROUP_ID, CUSTOMER_ARTIFACT_ID, "distrib", "../${CUSTOMER_ARCHIVE_NAME}", VERSION, CREDENTIAL_ID)
-                            log.info("Successfully published to ${getSbrfNexusLink(CUSTOMER_ARTIFACT_ID, "D-${VERSION}")}")
+                        qgm.publishReleaseNotes(GROUP_ID, ARTIFACT_ID, VERSION, releaseNotes, CREDENTIAL_ID)
+                        nexus.publishZip(GROUP_ID, ARTIFACT_ID, "distrib.openshift", ARTIFACT_NAME_OS, VERSION, CREDENTIAL_ID)
+                        nexus.publishZip(GROUP_ID, ARTIFACT_ID, "distrib.docs", ARTIFACT_NAME_DOCS, VERSION, CREDENTIAL_ID)
+                        nexus.publishZip(GROUP_ID, ARTIFACT_ID, "distrib.lock", ARTIFACT_NAME_LOCK, VERSION, CREDENTIAL_ID)
 
-                            log.info("Publishing artifact to ${NEXUSSBRF_RELEASE_REPOSITORY}")
-                            nexus.publishZip(GROUP_ID, CUSTOMER_ARTIFACT_ID, "distrib", ARTIFACT_NAME_OS, "${VERSION}-eip", CREDENTIAL_ID)
-                            log.info("Successfully published to ${getSbrfNexusLink(CUSTOMER_ARTIFACT_ID, "D-${VERSION}-eip")}")
-                        }
+                        log.info("Sbrf-nexus distrib url: https://sbrf-nexus.sigma.sbrf.ru/nexus/content/repositories/Nexus_PROD/Nexus_PROD/CI03045533_sbbol-antifraud/antifraud/D-${VERSION}/antifraud-D-${VERSION}-distrib.openshift.zip")
+
                         archiveArtifacts artifacts: "*.zip"
                     }
                 }
             }
         }
 
+        /**
+         * Публикует документацию на сервер с документацией
+         */
         stage('Publish documentation') {
             steps {
                 script {
-                    withCredentials([usernamePassword(
-                            credentialsId: CREDENTIAL_ID,
-                            usernameVariable: 'USERNAME',
-                            passwordVariable: 'PASSWORD'
-                    )]) {
-                        docker.withRegistry(Const.OPENSHIFT_REGISTRY, CREDENTIAL_ID) {
-                            sh 'docker run --rm ' +
-                                    '-v "$(pwd)":/build ' +
-                                    '-v "$(pwd)"/../.m2:/root/.m2 ' +
-                                    '-w /build ' +
-                                    '-e "M2_HOME=/root/.m2" ' +
-                                    '-e "MVNW_REPOURL=http://sbtatlas.sigma.sbrf.ru/nexus/content/groups/public/" ' +
-                                    '-e "MVNW_VERBOSE=true" ' +
-                                    "-e \"REPO_USER=${USERNAME}\" " +
-                                    "-e \"REPO_PASSWORD=${PASSWORD}\" " +
-                                    'registry.sigma.sbrf.ru/ci00149046/ci00405008_sbbolufs/openjdk:11-with-certs ' +
-                                    './mvnw -P asciidoc clean org.asciidoctor:asciidoctor-maven-plugin:process-asciidoc -X -s /build/jenkins/settings.xml'
-                        }
-                    }
-
-                    sh 'ls admin-guide/target/generated-docs'
-
-                    docs.publish('documentation-publisher', 'admin-guide/target/generated-docs', DOCS_PATH)
+                    docs.publish('documentation-publisher', 'docs/build/docs/', DOCS_PATH)
                 }
             }
         }
 
-        stage('Push ReleaseNotes') {
-            when {
-                expression { params.release }
-            }
+        /**
+         * Анализ кода checkmarx
+         */
+        stage('Checkmarx code analyze') {
+            when { expression { params.checkmarx } }
             steps {
                 script {
-                    def latestCommitHash = checkoutRef('bitbucket-dbo-key', GIT_PROJECT, GIT_REPOSITORY, GIT_BRANCH)
-                    List versionTags = git.tags().findAll { it.matches(VERSION_PATTERN) }.sort()
-                    def lastVersion = versionTags.isEmpty() ? '' : versionTags.last()
-                    log.info("Last version: ${lastVersion}")
-                    def projectLog = sh(
-                            returnStdout: true,
-                            script: "git log --oneline --no-merges --pretty=tformat:'%s' " +
-                                    "${lastVersion ? lastVersion + '..HEAD' : ''}"
-                    )
-                    dir('distrib') {
-                        def sbrfNexusCustomerLink = getSbrfNexusLink(CUSTOMER_ARTIFACT_ID, VERSION)
-                        def sbrfNexusDataspaceLink = getSbrfNexusLink(DATASPACE_ARTIFACT_ID, VERSION)
-                        releaseNotes = createReleaseNotesWithDescription(projectLog, latestCommitHash, PROJECT_URL, sbrfNexusCustomerLink, sbrfNexusDataspaceLink)
-                        qgm.publishReleaseNotes(GROUP_ID, CUSTOMER_ARTIFACT_ID, "${VERSION}-eip", releaseNotes, CREDENTIAL_ID)
-                        archiveArtifacts artifacts: "release-notes"
-                    }
+                    def devsecopsConfig = readYaml(file: 'jenkins/resources/devsecops-config.yml')
+                    String repoUrl = "${Const.BITBUCKET_SERVER_INSTANCE_URL}/scm/${GIT_PROJECT.toLowerCase()}/${GIT_REPOSITORY}.git"
+                    library('ru.sbrf.devsecops@master')
+                    runOSS(devsecopsConfig, repoUrl, "${params.branch}/${GIT_REPOSITORY}", latestCommitHash)
+                    runSastCx(devsecopsConfig, repoUrl, "${params.branch}/${GIT_REPOSITORY}", latestCommitHash)
+
+                    /**
+                     * В функции checkStatus четвертым параметром можно выставить максимальное время ожидания ответа (в секундах)
+                     * Если не дождаться ответа, то будет добавлен флаг о непрохождении этой проверки
+                     * Этот параметр индивидуален и зависит от размера вашего приложения(кода)
+                     * По умолчанию стоит 5 минут
+                     * В примере ниже выставляем ожидание 2 минуты
+                     *   checkmarx.checkStatus(Const.SAST_QG_URL, latestCommitHash, VERSION, 120)
+                     */
+                    checkmarx.checkStatus(Const.SAST_QG_URL, latestCommitHash, VERSION)
+                    def QGstatus = getOSSQGFlag(latestCommitHash)
+                    log.info("OSS_RUN:${QGstatus.OSS_RUN} OSS_PASS:${QGstatus.OSS_PASS} OSS_HIGH_PASS:${QGstatus.OSS_HIGH_PASS} OSS_MEDIUM_PASS:${QGstatus.OSS_MEDIUM_PASS}")
                 }
             }
         }
 
+        /**
+         * Публикует технические флаги о сборке
+         */
         stage('Push technical flags') {
-            when {
-                expression { params.release }
-            }
             steps {
                 script {
-                    boolean qgPassed = true
-                    for (String artifactId in [DATASPACE_ARTIFACT_ID, CUSTOMER_ARTIFACT_ID]) {
-                        def response = qgm.getFlagMap(
-                                repositoryId: 'Nexus_PROD',
-                                groupId: "Nexus_PROD/CI03045533_sbbol-antifraud",
-                                artifactId: DATASPACE_ARTIFACT_ID,
-                                version: VERSION
-                        )
-                        log.info("QGM result for ${artifactId}: ${response}")
-                        def success = true;
-                        def flags = ["ci", "sast", "oss", "meta"]
-                        for (def flag : flags) {
-                            if (response[flag] != "ok") {
-                                success = false
-                                break
-                            }
-                        }
-                        if (!success) {
-                            qgPassed = false
-                            log.warn("QG unsuccessful for artifact ${artifactId}. Flags won't be published for current artifact")
-                            break
-                        }
-                    }
-                    log.info("QG result: ${qgPassed}")
-                    if (qgPassed) {
-                        dpm.publishFlags("${VERSION}-eip", CUSTOMER_ARTIFACT_ID, GROUP_ID, ["ci", "sast", "oss", "meta"], CREDENTIAL_ID)
-                    }
-                }
-            }
-        }
-
-        stage('Tag current version') {
-            when {
-                expression { params.release }
-            }
-            steps {
-                script {
-                    git.tag('bitbucket-dbo-key', VERSION)
+                    dpm.publishFlags(VERSION, ARTIFACT_ID, GROUP_ID, ["bvt", "ci", "smart_regress_ift", "smart_regress_st", "smoke_ift", "smoke_st"], CREDENTIAL_ID)
                 }
             }
         }
     }
     post {
+        always {
+            script {
+                // Ставим git tag с версией сборки на текущий commit
+                git.tag('bitbucket-dbo-key', VERSION)
+            }
+        }
+        /**
+         * Обязательно подчищаем за собой
+         */
         cleanup {
             cleanWs()
-        }
-    }
-}
-
-static String getSbrfNexusLink(String artifactId, String version) {
-    return "https://sbrf-nexus.sigma.sbrf.ru/nexus/content/repositories/Nexus_PROD/Nexus_PROD/CI03045533_sbbol-antifraud/${artifactId}/${version}/${artifactId}-${version}-distrib.zip"
-}
-
-def checkoutRef(String credentialsId, String project, String slug, String ref) {
-    sh 'git init'
-    sh 'git reset --hard --quiet'
-    sh 'git clean -xfd --quiet'
-    withSSH(credentialsId) {
-        sh "git fetch --quiet --tags ${Const.BITBUCKET_SERVER_URL}/${project}/${slug}.git $ref"
-    }
-    sh "git checkout SBP-antifraud-${VERSION}"
-    sh 'git prune -v'
-    sh (script: 'git rev-parse HEAD', returnStdout: true).trim()
-}
-
-def withSSH(String credential, Closure body) {
-    withEnv(["GIT_SSH_COMMAND=ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"]) {
-        sshagent(credentials: [credential]) {
-            body.call()
+            sh "docker rmi -f ${IMAGE_NAME}"
         }
     }
 }
@@ -447,7 +343,7 @@ def publishDev(Map params) {
                 " -F e=${params.extension}" +
                 " -F file=@${params.file}" +
                 " -F hasPom=false" +
-                " ${DEV_REPOSITORY}"
+                " https://nexus.sigma.sbrf.ru/nexus/service/local/artifact/maven/content"
 
         response = sh(returnStdout: true, script: request)
         log.info("Response: ${response}")
@@ -459,51 +355,4 @@ def publishDev(Map params) {
     if (code.trim() == '' || arr.length == 0 || arr[arr.length-1].trim() != '201') {
         error ("Failed publish to Nexus")
     }
-}
-
-/**
- * Функция по формированию ReleaseNotes. Видоизмененная копия
- * https://sbtatlas.sigma.sbrf.ru/stashdbo/projects/CIBUFS/repos/ufs-jobs/browse/vars/createReleaseNotes.groovy
- * </br>
- * Отличается дополнительным блоком <pre>desc</pre> в ReleaseNotes с ссылками на артефакты,
- * полученные через CustomerBuilder.
- *
- * @param releaseNotes изменения, которые необходимо добавить в release-notes
- * @param latestCommit хеш последнего коммита
- * @param projectUrl ссылка на проект в BitBucket
- * @param customerDistribUrl ссылка на артефакт фабрики в sbrf-nexus (из CustomerBuilder)
- * @param dataspaceDistribUrl ссылка на артефакт dataspace в sbrf-nexus (из CustomerBuilder)
- */
-def createReleaseNotesWithDescription(String releaseNotes, String latestCommit, String projectUrl,
-                                      String customerDistribUrl, String dataspaceDistribUrl) {
-    def data = [
-            releaseNotes: [
-
-            ],
-            codeNotes: [[
-                    'commit': latestCommit,
-                    'repository': projectUrl
-            ]],
-            desc: [
-                    'customerDistribUrl': customerDistribUrl,
-                    'dataspaceDistribUrl': dataspaceDistribUrl
-            ]
-    ]
-
-    def jiraIssues = [] as Set
-    releaseNotes.trim().split('\n').each { releaseNote ->
-        def jiraIssue = (releaseNote =~ /[A-Za-z0-9]+-+[0-9]+/)
-        if (jiraIssue.find()) {
-            jiraIssues << jiraIssue.group(0)
-        }
-    }
-
-    jiraIssues.each { issue ->
-        data.releaseNotes << [issue: issue]
-    }
-
-    def json = JsonOutput.toJson(data)
-    log.info("ReleaseNotes: ${json}")
-    writeFile file: 'release-notes', text: json
-    return data
 }
