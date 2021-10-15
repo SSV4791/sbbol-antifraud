@@ -4,6 +4,7 @@ import com.sbt.pprb.integration.hibernate.standin.StandinPlugin;
 import com.sbt.pprb.integration.replication.OrderingControlStrategy;
 import com.sbt.pprb.integration.replication.PartitionLockMode;
 import com.sbt.pprb.integration.replication.PartitionMultiplyingMode;
+import com.sbt.pprb.integration.replication.transport.JournalSubscriptionImpl;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import ru.sbrf.journal.client.JournalCreatorClientApi;
 import ru.sbrf.journal.standin.StandinConfiguration;
+import ru.sbrf.journal.standin.consumer.api.SubscriptionService;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -18,6 +20,11 @@ import javax.sql.DataSource;
 @Configuration
 @Import({StandinConfiguration.class})
 public class AppJournalConfiguration {
+
+    @Bean
+    public SubscriptionService subscriptionService(@Value("${standin.cloud.client.zoneId}") String zoneId) {
+        return new JournalSubscriptionImpl(zoneId);
+    }
 
     @Bean
     public StandinPlugin standinPlugin(
