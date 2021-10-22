@@ -16,11 +16,15 @@ registryUrl=registry.sigma.sbrf.ru/pprb
 # ссылка на проект в registry
 registryProject=ci02473994/ci03045533_sbbol_antifraud
 # имя CP Istio
-ISTIO_CONTROL_PLANE=ci01994970-edevgen2-control-panel
+ISTIO_CONTROL_PLANE=ci01994970-edevgen2-synapse-control-panel
 # ссылка на образ fluentbit
 FLUENTBIT_IMAGE=registry.sigma.sbrf.ru/pprb/ci00641491/ci02469991_logger/fluent-bit:1.4.5
 # ссылка на образ envoy
-PROXY_IMAGE=registry.sigma.sbrf.ru/dev/ci01563053/ocp4_dev/operatorhub/openshift-service-mesh/proxyv2-rhel8:1.1.9-1
+PROXY_IMAGE=registry.sigma.sbrf.ru/registry_redhat_io/openshift-service-mesh/proxyv2-rhel8@sha256:51d82b560e467ec59a3b6625b04c31b86df5b4c10070a351d547cb6cf3f26591
+# стендозависимое значение, указывается перед наименованием control plane для параметров CA_ADDR и discoveryAddress
+MESH_DISCOVERY_ADDRESS=istiod-basic
+# имя проекта в openshift
+PROJECT_NAME=ci02642164-edevgen2-pprb-kib-dev-sbbol-antifraud
 
 #INGRESS
 
