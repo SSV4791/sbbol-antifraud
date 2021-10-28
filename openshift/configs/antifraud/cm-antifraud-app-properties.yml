@@ -45,7 +45,7 @@ data:
     standin.plugin.configuration.serializerType=BINARY_KRYO
 
     # Application Journal
-    appjournal.moduleId=pprb4-digital-antifraud
+    appjournal.moduleId=${MODULE_NAME}
     standin.cloud.client.zoneId=FRAUD
     standin.cloud.client.mmtCallTimeout=30
     standin.cloud.client.stub=false

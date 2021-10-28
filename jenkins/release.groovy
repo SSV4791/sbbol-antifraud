@@ -24,9 +24,9 @@ pipeline {
         BUILD_JAVA_DOCKER_IMAGE = 'registry.sigma.sbrf.ru/ci00149046/ci00405008_sbbolufs/bellsoft/liberica-openjdk-alpine:15.0.1-9-with-certs'
         GROUP_ID = 'Nexus_PROD.CI03045533_sbbol-antifraud'
         ARTIFACT_ID = 'antifraud'
-        VERSION_PATTERN = /01\.001\.\d{2}_\d{4}/
+        VERSION_PATTERN = /02\.000\.\d{2}_\d{4}/
         // Паттерн, по которому выбираются версии для инкремента последней при сборке
-        INITIAL_VERSION = '01.001.00_0000'
+        INITIAL_VERSION = '02.000.00_0000'
         // Дефолтная версия. Будет использована в случае, когда с указанным паттерном еще нет ни одной сборки
         NEXUSSBRF_RELEASE_REPOSITORY = 'https://sbrf-nexus.sigma.sbrf.ru/nexus/service/local/artifact/maven/content'
         // Ссылка для публикации артефактов

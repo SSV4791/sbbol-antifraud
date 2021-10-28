@@ -3,9 +3,9 @@ apiVersion: apps/v1
 metadata:
   annotations:
     app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"egressgateway-${NAMESPACE}"}]'
-  name: antifraud
+  name: ${MODULE_NAME}
   labels:
-    app: antifraud
+    app: ${MODULE_NAME}
     app.kubernetes.io/part-of: istio
     version: ${imageVersion}
 spec:
@@ -16,7 +16,7 @@ spec:
       maxUnavailable: 1
   selector:
     matchLabels:
-      app: antifraud
+      app: ${MODULE_NAME}
       version: ${imageVersion}
   template:
     metadata:
@@ -27,11 +27,11 @@ spec:
         sidecar.istio.io/proxyCPU: 500m
         sidecar.istio.io/proxyMemory: 1Gi
       labels:
-        app: antifraud
+        app: ${MODULE_NAME}
         version: ${imageVersion}
     spec:
       containers:
-        - name: antifraud
+        - name: ${MODULE_NAME}
           image: ${registryUrl}/${registryProject}/${imageNameWithDigest}
           env:
             - name: NODE_NAME       #добавление имени ноды в переменные среды пода
@@ -47,7 +47,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: NODEID
-              value: antifraud
+              value: ${MODULE_NAME}
             - name: RUN_DEBUG
               value: 'false'
           ports:
@@ -118,15 +118,15 @@ spec:
               ephemeral-storage: ${fluentBitRequestEphemeralStorage}
           env:
             - name: service
-              value: antifraud
+              value: ${MODULE_NAME}
             - name: cluster
               value: ${fluentBitEnvCluster}
             - name: moduleId
-              value: antifraud
+              value: ${MODULE_NAME}
             - name: moduleVersion
               value: latest
             - name: nodeId
-              value: antifraud
+              value: ${MODULE_NAME}
             - name: standId
               value: ${fluentBitEnvStandId}
             - name: zoneId
