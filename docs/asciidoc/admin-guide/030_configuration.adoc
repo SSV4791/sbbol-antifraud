@@ -269,7 +269,7 @@ AUDIT_HOST_PORT=443
 # ANTIFRAUD CONFIGS
 
 # Имя модуля
-MODULE_NAME=antifraud
+MODULE_NAME=pprb4-digital-fraud
 # Количество реплик в deployment
 REPLICAS_COUNT_APP=1
 # Лимиты пода по cpu
