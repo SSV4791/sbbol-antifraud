@@ -371,4 +371,51 @@ class PaymentDataTest extends PaymentIntegrationTest {
         assertNotNull(requestId);
     }
 
+    @ParameterizedTest
+    @MethodSource("createRpcClientProvider")
+    //DCBEFSMSC5-T183 antifraud/savedata РПП (минимум полей)
+    void savePaymentWithMinimumFields (JsonRpcRestClient createRpcClient) throws Throwable {
+        UUID docId = UUID.randomUUID();
+        Integer docNumber = Math.abs(new Random().nextInt());
+        PaymentOperation dto = PaymentBuilder.getInstance()
+                .withDocId(docId)
+                .withDocNumber(docNumber)
+                .build();
+        dto.setDigitalId(null);
+        RequestId requestId = saveOrUpdateData(createRpcClient, dto);
+        dto.setMappedSigns(PaymentSignMapper.convertSigns(dto.getSigns()));
+        assertNotNull(requestId);
+
+        Payment entity = searchPayment(docId);
+        assertOperation(dto, requestId.getId(), entity);
+        assertDoc(dto.getDocument(), entity);
+        assertFirstSign(dto.getMappedSigns().get(0), entity);
+        assertSecondSign(dto.getMappedSigns().get(1), entity);
+        assertThirdSign(dto.getMappedSigns().get(2), entity);
+        assertSenderSign(dto.getMappedSigns().get(3), entity);
+    }
+
+    @ParameterizedTest
+    @MethodSource("createRpcClientProvider")
+        //DCBEFSMSC5-T134 antifraud/savedata РПП (все поля)
+    void savePaymentWithAllFields (JsonRpcRestClient createRpcClient) throws Throwable {
+        UUID docId = UUID.randomUUID();
+        Integer docNumber = Math.abs(new Random().nextInt());
+        PaymentOperation dto = PaymentBuilder.getInstance()
+                .withDocId(docId)
+                .withDocNumber(docNumber)
+                .build();
+        RequestId requestId = saveOrUpdateData(createRpcClient, dto);
+        dto.setMappedSigns(PaymentSignMapper.convertSigns(dto.getSigns()));
+        assertNotNull(requestId);
+
+        Payment entity = searchPayment(docId);
+        assertOperation(dto, requestId.getId(), entity);
+        assertDoc(dto.getDocument(), entity);
+        assertFirstSign(dto.getMappedSigns().get(0), entity);
+        assertSecondSign(dto.getMappedSigns().get(1), entity);
+        assertThirdSign(dto.getMappedSigns().get(2), entity);
+        assertSenderSign(dto.getMappedSigns().get(3), entity);
+    }
+
 }

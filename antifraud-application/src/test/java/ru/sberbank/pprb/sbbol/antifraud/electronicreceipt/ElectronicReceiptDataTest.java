@@ -13,13 +13,13 @@ import ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ReceiptReceiv
 import ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ReceiptSign;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.electronicreceipt.ElectronicReceipt;
-
 import java.util.UUID;
-
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
 
@@ -203,6 +203,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
         if (expected.getSign().getSignNumber() == 1) {
             assertEquals(expected.getSign().getSignTime(), actual.getTimeOfOccurrence());
             assertEquals(expected.getSign().getSignTime(), actual.getFirstSignTime());
+            assertEquals(expected.getSign().getSignTime(), actual.getEventTime());
             assertEquals(expected.getSign().getSignIpAddress(), actual.getFirstSignIp());
             assertEquals(expected.getSign().getSignLogin(), actual.getFirstSignLogin());
             assertEquals(expected.getSign().getSignCryptoprofile(), actual.getFirstSignCryptoprofile());
@@ -216,7 +217,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
             assertEquals(expected.getSign().getSignEmail(), actual.getFirstSignEmail());
         }
         if (expected.getSign().getSignNumber() == 2) {
-            assertNotNull(actual.getTimeOfOccurrence());
+            assertNotEquals(expected.getSign().getSignTime()    , actual.getTimeOfOccurrence());
             assertEquals(expected.getSign().getSignTime(), actual.getSecondSignTime());
             assertEquals(expected.getSign().getSignIpAddress(), actual.getSecondSignIp());
             assertEquals(expected.getSign().getSignLogin(), actual.getSecondSignLogin());
@@ -244,4 +245,80 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
         assertEquals(expected.getSign().getSignEmail(), actual.getSenderEmail());
     }
 
+    @Test
+    //DCBEFSMSC5-T270  savedata -электронные чеки (минимум полей, sms, signNumber=1)
+    void saveAndUpdateElectronicReceiptMinimumFieldsWithSignNumberOne() throws Throwable {
+        final UUID docId = UUID.randomUUID();
+        // create
+        ElectronicReceiptOperation expectedCreate = ElectronicReceiptBuilder.getInstance()
+                .withDocId(docId)
+                .build();
+        expectedCreate.setDigitalId(null);
+        expectedCreate.getDocument().getPayer().setKpp(null);
+        expectedCreate.getDocument().getReceiver().setMiddleName(null);
+        expectedCreate.getDocument().getReceiver().setDulCodeIssue(null);
+        expectedCreate.getSign().setSignNumber(1);
+        expectedCreate.getSign().setSignChannel("SMS");
+        RequestId requestIdCreate = saveOrUpdateData(expectedCreate);
+        assertNotNull(requestIdCreate);
+        assertNotNull(requestIdCreate.getId());
+        ElectronicReceipt actualCreate = searchElectronicReceipt(docId);
+        verify(requestIdCreate.getId(), docId, expectedCreate, actualCreate);
+        // update
+        ElectronicReceiptOperation expectedUpdate = ElectronicReceiptBuilder.getInstance()
+                .withDocId(docId)
+                .build();
+        expectedUpdate.setPrivateIpAddress(null);
+        expectedUpdate.getSign().setSignNumber(1);
+        expectedUpdate.getSign().setSignChannel("SMS");
+        RequestId requestIdUpdate = saveOrUpdateData(expectedUpdate);
+        assertNotNull(requestIdUpdate);
+        assertNotNull(requestIdUpdate.getId());
+        assertEquals(requestIdCreate.getId(), requestIdUpdate.getId());
+        ElectronicReceipt actualUpdate = searchElectronicReceipt(docId);
+        verify(requestIdUpdate.getId(), docId, expectedUpdate, actualUpdate);
+    }
+
+    @Test
+        //DCBEFSMSC5-T271  savedata -электронные чеки (все поля, token, signNumber=2)
+    void saveAndUpdateElectronicReceiptAllFieldsWithSignNumberTwo() throws Throwable {
+        final UUID docId = UUID.randomUUID();
+        // create
+        ElectronicReceiptOperation expectedCreate = ElectronicReceiptBuilder.getInstance()
+                .withDocId(docId)
+                .build();
+        expectedCreate.getSign().setSignNumber(2);
+        expectedCreate.getSign().setSignChannel("TOKEN");
+        RequestId requestIdCreate = saveOrUpdateData(expectedCreate);
+        assertNotNull(requestIdCreate);
+        assertNotNull(requestIdCreate.getId());
+        ElectronicReceipt actualCreate = searchElectronicReceipt(docId);
+        verify(requestIdCreate.getId(), docId, expectedCreate, actualCreate);
+        // update
+        ElectronicReceiptOperation expectedUpdate = ElectronicReceiptBuilder.getInstance()
+                .withDocId(docId)
+                .build();
+        expectedUpdate.getSign().setSignNumber(2);
+        expectedUpdate.getSign().setSignChannel("TOKEN");
+        RequestId requestIdUpdate = saveOrUpdateData(expectedUpdate);
+        assertNotNull(requestIdUpdate);
+        assertNotNull(requestIdUpdate.getId());
+        assertEquals(requestIdCreate.getId(), requestIdUpdate.getId());
+        ElectronicReceipt actualUpdate = searchElectronicReceipt(docId);
+        verify(requestIdUpdate.getId(), docId, expectedUpdate, actualUpdate);
+    }
+
+    @Test
+        //DCBEFSMSC5-T273  savedata -электронные чеки (негативный)
+    void saveAndUpdateElectronicReceiptWithError() throws Throwable {
+        final UUID docId = UUID.randomUUID();
+        ElectronicReceiptOperation expectedCreate = ElectronicReceiptBuilder.getInstance()
+                .withDocId(docId)
+                .build();
+        expectedCreate.setOrgGuid(null);
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(expectedCreate));
+        String exceptionMessage = ex.getMessage();
+        assertTrue(exceptionMessage.contains("The orgGuid attribute must be filled"),"Wrong exception message" + exceptionMessage);
+
+    }
 }
