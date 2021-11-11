@@ -354,4 +354,70 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
         assertNotNull(requestId);
     }
 
+    @ParameterizedTest
+    @MethodSource("createRpcClientProvider")
+    //DCBEFSMSC5-T184 antifraud/savedata СБП (минимум полей)
+    void saveFastPaymentWithMinimumFields(JsonRpcRestClient createRpcClient) throws Throwable {
+        UUID docId = UUID.randomUUID();
+        Integer docNumber = Math.abs(new Random().nextInt());
+        FastPaymentOperation dto = FastPaymentBuilder.getInstance()
+                .withDocId(docId)
+                .withDocNumber(docNumber)
+                .build();
+        dto.setDigitalId(null);
+        RequestId requestId = saveOrUpdateData(createRpcClient, dto);
+        dto.setMappedSigns(FastPaymentSignMapper.convertSigns(dto.getSigns()));
+        assertNotNull(requestId);
+
+        FastPayment entity = searchFastPayment(docId);
+        assertOperation(dto, requestId.getId(), entity);
+        assertDoc(dto.getDocument(), entity);
+        assertFirstSign(dto.getMappedSigns().get(0), entity);
+        assertSenderSign(dto.getMappedSigns().get(1), entity);
+    }
+
+    @ParameterizedTest
+    @MethodSource("createRpcClientProvider")
+        //DCBEFSMSC5-T135 antifraud/savedata СБП (все поля)
+    void saveFastPaymentWithAllFields(JsonRpcRestClient createRpcClient) throws Throwable {
+        UUID docId = UUID.randomUUID();
+        Integer docNumber = Math.abs(new Random().nextInt());
+        FastPaymentOperation dto = FastPaymentBuilder.getInstance()
+                .withDocId(docId)
+                .withDocNumber(docNumber)
+                .build();
+        RequestId requestId = saveOrUpdateData(createRpcClient, dto);
+        dto.setMappedSigns(FastPaymentSignMapper.convertSigns(dto.getSigns()));
+        assertNotNull(requestId);
+
+        FastPayment entity = searchFastPayment(docId);
+        assertOperation(dto, requestId.getId(), entity);
+        assertDoc(dto.getDocument(), entity);
+        assertFirstSign(dto.getMappedSigns().get(0), entity);
+        assertSenderSign(dto.getMappedSigns().get(1), entity);
+    }
+
+    @ParameterizedTest
+    @MethodSource("createRpcClientProvider")
+        //DCBEFSMSC5-T240 antifraud/savedata СБП (данные от СБП не получены)
+    void saveFastPaymentWithDontHaveData(JsonRpcRestClient createRpcClient) throws Throwable {
+        UUID docId = UUID.randomUUID();
+        Integer docNumber = Math.abs(new Random().nextInt());
+        FastPaymentOperation dto = FastPaymentBuilder.getInstance()
+                .withDocId(docId)
+                .withDocNumber(docNumber)
+                .withOtherAccName("Данные от СБП не получены")
+                .withReceiverInn("Данные от СБП не получены")
+                .withReceiverAccount("Данные от СБП не получены")
+                .build();
+        RequestId requestId = saveOrUpdateData(createRpcClient, dto);
+        dto.setMappedSigns(FastPaymentSignMapper.convertSigns(dto.getSigns()));
+        assertNotNull(requestId);
+
+        FastPayment entity = searchFastPayment(docId);
+        assertOperation(dto, requestId.getId(), entity);
+        assertDoc(dto.getDocument(), entity);
+        assertFirstSign(dto.getMappedSigns().get(0), entity);
+        assertSenderSign(dto.getMappedSigns().get(1), entity);
+    }
 }

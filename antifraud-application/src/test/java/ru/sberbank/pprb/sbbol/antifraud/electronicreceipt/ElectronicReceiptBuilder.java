@@ -108,7 +108,7 @@ class ElectronicReceiptBuilder {
         operation.getDocument().getPayer().setCodeBic(codeBic != null ? codeBic : RandomStringUtils.randomNumeric(11));
         operation.getDocument().getPayer().setName(payerName != null ? payerName : RandomStringUtils.randomAlphabetic(15));
         operation.getDocument().getPayer().setInn(payerInn != null ? payerInn : RandomStringUtils.randomNumeric(12));
-        operation.getDocument().getPayer().setInn(payerKpp != null ? payerKpp : RandomStringUtils.randomNumeric(9));
+        operation.getDocument().getPayer().setKpp(payerKpp != null ? payerKpp : RandomStringUtils.randomNumeric(9));
 
         operation.getDocument().setReceiver(new ReceiptReceiver());
         operation.getDocument().getReceiver().setFirstName(firstName != null ? firstName : RandomStringUtils.randomAlphabetic(7));
