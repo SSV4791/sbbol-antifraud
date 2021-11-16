@@ -19,30 +19,22 @@ import java.util.UUID;
 
 abstract class ElectronicReceiptIntegrationTest extends AbstractIntegrationTest {
 
-    private static JsonRpcRestClient rpcRestClient;
+    private static JsonRpcRestClient jsonRpcRestClient;
 
     @Autowired
     private ElectronicReceiptRepository repository;
 
     @BeforeAll
     void setup() throws MalformedURLException {
-        rpcRestClient = new JsonRpcRestClient(new URL(HOST + port + "/v2/electronicreceipt"), Collections.emptyMap());
+        jsonRpcRestClient = new JsonRpcRestClient(new URL(HOST + port + "/v2/electronicreceipt"), Collections.emptyMap());
     }
 
-    protected static RequestId saveOrUpdateData(ElectronicReceiptOperation operation) throws Throwable {
-        return rpcRestClient.invoke(
-                "saveOrUpdateData",
-                Collections.singletonMap("dataparams", operation),
-                RequestId.class
-        );
+    protected static RequestId saveOrUpdate(ElectronicReceiptOperation operation) throws Throwable {
+        return saveOrUpdateData(jsonRpcRestClient, operation);
     }
 
-    protected static AnalyzeResponse sendData(SendToAnalyzeRequest request) throws Throwable {
-        return rpcRestClient.invoke(
-                "analyzeOperation",
-                Collections.singletonMap("analyzeparams", request),
-                AnalyzeResponse.class
-        );
+    protected static AnalyzeResponse send(SendToAnalyzeRequest request) throws Throwable {
+        return sendData(jsonRpcRestClient, request);
     }
 
     protected ElectronicReceipt searchElectronicReceipt(UUID docId) {

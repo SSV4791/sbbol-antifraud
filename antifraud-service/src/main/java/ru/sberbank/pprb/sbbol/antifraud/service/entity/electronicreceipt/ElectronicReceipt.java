@@ -30,7 +30,7 @@ public class ElectronicReceipt extends BaseEntity {
      * Дата и время формирования события
      */
     @Column(name = "timestamp_")
-    private LocalDateTime eventTime;
+    private LocalDateTime timeStamp;
 
     /**
      * ЕПК.Id
@@ -506,12 +506,12 @@ public class ElectronicReceipt extends BaseEntity {
         this.requestId = requestId;
     }
 
-    public LocalDateTime getEventTime() {
-        return eventTime;
+    public LocalDateTime getTimeStamp() {
+        return timeStamp;
     }
 
-    public void setEventTime(LocalDateTime timeStamp) {
-        this.eventTime = timeStamp;
+    public void setTimeStamp(LocalDateTime timeStamp) {
+        this.timeStamp = timeStamp;
     }
 
     @Override

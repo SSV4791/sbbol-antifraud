@@ -6,7 +6,7 @@ import com.googlecode.jsonrpc4j.JsonRpcError;
 import com.googlecode.jsonrpc4j.JsonRpcErrors;
 import com.googlecode.jsonrpc4j.JsonRpcParam;
 import com.googlecode.jsonrpc4j.JsonRpcService;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.fastpayment.FastPaymentSendRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentOperation;
@@ -47,6 +47,6 @@ public interface FastPaymentService {
             @JsonRpcError(exception = ApplicationException.class, code = -32001),
             @JsonRpcError(exception = AnalyzeException.class, code = -32001),
     })
-    AnalyzeResponse analyzeOperation(@JsonRpcParam(value = "analyzeparams") FastPaymentSendRequest request);
+    AnalyzeResponse analyzeOperation(@JsonRpcParam(value = "analyzeparams") SendToAnalyzeRequest request);
 
 }

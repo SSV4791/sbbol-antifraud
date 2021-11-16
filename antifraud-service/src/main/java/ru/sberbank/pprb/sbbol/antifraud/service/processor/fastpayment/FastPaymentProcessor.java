@@ -10,8 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
-import ru.sberbank.pprb.sbbol.antifraud.api.DboOperation;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.fastpayment.FastPaymentSendRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
@@ -34,8 +33,8 @@ import java.util.UUID;
  * Обработчик платежных поручений СБП. Добавляет запись в таблицу T_SBPPAYMENTOPERATION.
  * Осуществляет отправку данных в ФП ИС.
  */
-@Service("fastPaymentProcessor")
-public class FastPaymentProcessor implements Processor<FastPaymentOperation, FastPaymentSendRequest> {
+@Service
+public class FastPaymentProcessor implements Processor<FastPaymentOperation> {
 
     private static final Logger logger = LoggerFactory.getLogger(FastPaymentProcessor.class);
 
@@ -79,7 +78,7 @@ public class FastPaymentProcessor implements Processor<FastPaymentOperation, Fas
     }
 
     @Override
-    public AnalyzeResponse send(@Valid FastPaymentSendRequest request) {
+    public AnalyzeResponse send(@Valid SendToAnalyzeRequest request) {
         logger.info("Sending fast payment operation to analyze. FastPaymentOperation docId: {}", request.getDocId());
         AnalyzeRequest paymentAnalyzeRequest = createFastPaymentAnalyzeRequest(request.getDocId());
         try {
@@ -107,11 +106,6 @@ public class FastPaymentProcessor implements Processor<FastPaymentOperation, Fas
             throw new ApplicationException("FastPaymentOperation with docId=" + docId + " not found");
         }
         return mapper.toAnalyzeRequest(searchResult.get());
-    }
-
-    @Override
-    public DboOperation supportedDboOperation() {
-        return DboOperation.SBP_B2C;
     }
 
 }

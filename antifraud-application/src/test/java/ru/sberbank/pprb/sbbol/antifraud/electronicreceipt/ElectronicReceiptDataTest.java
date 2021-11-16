@@ -30,7 +30,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
         ElectronicReceiptOperation expectedCreate = ElectronicReceiptBuilder.getInstance()
                 .withDocId(docId)
                 .build();
-        RequestId requestIdCreate = saveOrUpdateData(expectedCreate);
+        RequestId requestIdCreate = saveOrUpdate(expectedCreate);
         assertNotNull(requestIdCreate);
         assertNotNull(requestIdCreate.getId());
         ElectronicReceipt actualCreate = searchElectronicReceipt(docId);
@@ -41,7 +41,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
                 .withSignNumber(2)
                 .build();
         expectedUpdate.setPrivateIpAddress(null);
-        RequestId requestIdUpdate = saveOrUpdateData(expectedUpdate);
+        RequestId requestIdUpdate = saveOrUpdate(expectedUpdate);
         assertNotNull(requestIdUpdate);
         assertNotNull(requestIdUpdate.getId());
         assertEquals(requestIdCreate.getId(), requestIdUpdate.getId());
@@ -55,7 +55,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
         ElectronicReceiptOperation operation = ElectronicReceiptBuilder.getInstance()
                 .withSignNumber(signNumber)
                 .build();
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
         String exceptionMessage = ex.getMessage();
         assertTrue(exceptionMessage.contains("sign.signNumber"), "Should contain 'sign.signNumber' in message. Message: " + exceptionMessage);
     }
@@ -63,7 +63,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
     @Test
     void validateElectronicReceiptOperationRequiredParamsTest() {
         ElectronicReceiptOperation operation = new ElectronicReceiptOperation();
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
         String exceptionMessage = ex.getMessage();
         assertTrue(exceptionMessage.contains("orgGuid"), "Should contain 'orgGuid' in message. Message: " + exceptionMessage);
         assertTrue(exceptionMessage.contains("document"), "Should contain 'document' in message. Message: " + exceptionMessage);
@@ -75,7 +75,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
     void validateReceiptDocumentRequiredParamsTest() {
         ElectronicReceiptOperation operation = ElectronicReceiptBuilder.getInstance().build();
         operation.setDocument(new ReceiptDocument());
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
         String exceptionMessage = ex.getMessage();
         assertTrue(exceptionMessage.contains("document.id"), "Should contain 'document.id' in message. Message: " + exceptionMessage);
         assertTrue(exceptionMessage.contains("document.number"), "Should contain 'document.number' in message. Message: " + exceptionMessage);
@@ -92,7 +92,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
     void validateReceiptPayerRequiredParamsTest() {
         ElectronicReceiptOperation operation = ElectronicReceiptBuilder.getInstance().build();
         operation.getDocument().setPayer(new ReceiptPayer());
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
         String exceptionMessage = ex.getMessage();
         assertTrue(exceptionMessage.contains("document.payer.tbCode"), "Should contain 'document.payer.tbCode' in message. Message: " + exceptionMessage);
         assertTrue(exceptionMessage.contains("document.payer.accountNumber"), "Should contain 'document.payer.accountNumber' in message. Message: " + exceptionMessage);
@@ -105,7 +105,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
     void validateReceiptReceiverRequiredParamsTest() {
         ElectronicReceiptOperation operation = ElectronicReceiptBuilder.getInstance().build();
         operation.getDocument().setReceiver(new ReceiptReceiver());
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
         String exceptionMessage = ex.getMessage();
         assertTrue(exceptionMessage.contains("document.receiver.firstName"), "Should contain 'document.receiver.firstName' in message. Message: " + exceptionMessage);
         assertTrue(exceptionMessage.contains("document.receiver.secondName"), "Should contain 'document.receiver.secondName' in message. Message: " + exceptionMessage);
@@ -120,7 +120,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
     void validateReceiptRequiredParamsTest() {
         ElectronicReceiptOperation operation = ElectronicReceiptBuilder.getInstance().build();
         operation.getDocument().setReceipt(new Receipt());
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
         String exceptionMessage = ex.getMessage();
         assertTrue(exceptionMessage.contains("document.receipt.receiptDate"), "Should contain 'document.receipt.receiptDate' in message. Message: " + exceptionMessage);
         assertTrue(exceptionMessage.contains("document.receipt.receiptTbCode"), "Should contain 'document.receipt.receiptTbCode' in message. Message: " + exceptionMessage);
@@ -134,7 +134,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
     void validateReceiptDeviceRequestRequiredParamsTest() {
         ElectronicReceiptOperation operation = ElectronicReceiptBuilder.getInstance().build();
         operation.setDeviceRequest(new ReceiptDeviceRequest());
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
         String exceptionMessage = ex.getMessage();
         assertTrue(exceptionMessage.contains("deviceRequest.devicePrint"), "Should contain 'deviceRequest.devicePrint' in message. Message: " + exceptionMessage);
         assertTrue(exceptionMessage.contains("deviceRequest.ipAddress"), "Should contain 'deviceRequest.ipAddress' in message. Message: " + exceptionMessage);
@@ -145,7 +145,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
     void validateReceiptSignRequestRequiredParamsTest() {
         ElectronicReceiptOperation operation = ElectronicReceiptBuilder.getInstance().build();
         operation.setSign(new ReceiptSign());
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
         String exceptionMessage = ex.getMessage();
         assertTrue(exceptionMessage.contains("sign.signNumber"), "Should contain 'sign.signNumber' in message. Message: " + exceptionMessage);
         assertTrue(exceptionMessage.contains("sign.signIpAddress"), "Should contain 'sign.signIpAddress' in message. Message: " + exceptionMessage);
@@ -160,7 +160,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
     private void verify(String requestId, UUID docId, ElectronicReceiptOperation expected, ElectronicReceipt actual) {
         assertNotNull(actual);
         assertEquals(requestId, actual.getRequestId());
-        assertEquals(expected.getSign().getSignTime(), actual.getEventTime());
+        assertEquals(expected.getSign().getSignTime(), actual.getTimeStamp());
         assertEquals(expected.getOrgGuid(), actual.getEpkId());
         assertEquals(expected.getDigitalId(), actual.getDigitalId());
         assertEquals(expected.getPrivateIpAddress(), actual.getPrivateIpAddress());
@@ -203,7 +203,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
         if (expected.getSign().getSignNumber() == 1) {
             assertEquals(expected.getSign().getSignTime(), actual.getTimeOfOccurrence());
             assertEquals(expected.getSign().getSignTime(), actual.getFirstSignTime());
-            assertEquals(expected.getSign().getSignTime(), actual.getEventTime());
+            assertEquals(expected.getSign().getSignTime(), actual.getTimeStamp());
             assertEquals(expected.getSign().getSignIpAddress(), actual.getFirstSignIp());
             assertEquals(expected.getSign().getSignLogin(), actual.getFirstSignLogin());
             assertEquals(expected.getSign().getSignCryptoprofile(), actual.getFirstSignCryptoprofile());
@@ -245,8 +245,8 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
         assertEquals(expected.getSign().getSignEmail(), actual.getSenderEmail());
     }
 
-    @Test
     //DCBEFSMSC5-T270  savedata -электронные чеки (минимум полей, sms, signNumber=1)
+    @Test
     void saveAndUpdateElectronicReceiptMinimumFieldsWithSignNumberOne() throws Throwable {
         final UUID docId = UUID.randomUUID();
         // create
@@ -259,7 +259,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
         expectedCreate.getDocument().getReceiver().setDulCodeIssue(null);
         expectedCreate.getSign().setSignNumber(1);
         expectedCreate.getSign().setSignChannel("SMS");
-        RequestId requestIdCreate = saveOrUpdateData(expectedCreate);
+        RequestId requestIdCreate = saveOrUpdate(expectedCreate);
         assertNotNull(requestIdCreate);
         assertNotNull(requestIdCreate.getId());
         ElectronicReceipt actualCreate = searchElectronicReceipt(docId);
@@ -271,7 +271,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
         expectedUpdate.setPrivateIpAddress(null);
         expectedUpdate.getSign().setSignNumber(1);
         expectedUpdate.getSign().setSignChannel("SMS");
-        RequestId requestIdUpdate = saveOrUpdateData(expectedUpdate);
+        RequestId requestIdUpdate = saveOrUpdate(expectedUpdate);
         assertNotNull(requestIdUpdate);
         assertNotNull(requestIdUpdate.getId());
         assertEquals(requestIdCreate.getId(), requestIdUpdate.getId());
@@ -279,8 +279,8 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
         verify(requestIdUpdate.getId(), docId, expectedUpdate, actualUpdate);
     }
 
+    //DCBEFSMSC5-T271  savedata -электронные чеки (все поля, token, signNumber=2)
     @Test
-        //DCBEFSMSC5-T271  savedata -электронные чеки (все поля, token, signNumber=2)
     void saveAndUpdateElectronicReceiptAllFieldsWithSignNumberTwo() throws Throwable {
         final UUID docId = UUID.randomUUID();
         // create
@@ -289,7 +289,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
                 .build();
         expectedCreate.getSign().setSignNumber(2);
         expectedCreate.getSign().setSignChannel("TOKEN");
-        RequestId requestIdCreate = saveOrUpdateData(expectedCreate);
+        RequestId requestIdCreate = saveOrUpdate(expectedCreate);
         assertNotNull(requestIdCreate);
         assertNotNull(requestIdCreate.getId());
         ElectronicReceipt actualCreate = searchElectronicReceipt(docId);
@@ -300,7 +300,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
                 .build();
         expectedUpdate.getSign().setSignNumber(2);
         expectedUpdate.getSign().setSignChannel("TOKEN");
-        RequestId requestIdUpdate = saveOrUpdateData(expectedUpdate);
+        RequestId requestIdUpdate = saveOrUpdate(expectedUpdate);
         assertNotNull(requestIdUpdate);
         assertNotNull(requestIdUpdate.getId());
         assertEquals(requestIdCreate.getId(), requestIdUpdate.getId());
@@ -308,17 +308,18 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
         verify(requestIdUpdate.getId(), docId, expectedUpdate, actualUpdate);
     }
 
+    //DCBEFSMSC5-T273  savedata -электронные чеки (негативный)
     @Test
-        //DCBEFSMSC5-T273  savedata -электронные чеки (негативный)
-    void saveAndUpdateElectronicReceiptWithError() throws Throwable {
+    void saveAndUpdateElectronicReceiptWithError() {
         final UUID docId = UUID.randomUUID();
         ElectronicReceiptOperation expectedCreate = ElectronicReceiptBuilder.getInstance()
                 .withDocId(docId)
                 .build();
         expectedCreate.setOrgGuid(null);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(expectedCreate));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(expectedCreate));
         String exceptionMessage = ex.getMessage();
         assertTrue(exceptionMessage.contains("The orgGuid attribute must be filled"),"Wrong exception message" + exceptionMessage);
 
     }
+
 }

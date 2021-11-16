@@ -3,6 +3,8 @@ package ru.sberbank.pprb.sbbol.antifraud.fastpayment;
 import com.googlecode.jsonrpc4j.spring.rest.JsonRpcRestClient;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentOperation;
 import ru.sberbank.pprb.sbbol.antifraud.common.AbstractIntegrationTest;
@@ -14,7 +16,6 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 abstract class FastPaymentIntegrationTest extends AbstractIntegrationTest {
 
@@ -23,18 +24,14 @@ abstract class FastPaymentIntegrationTest extends AbstractIntegrationTest {
 
     protected static String requestId;
 
-    private static JsonRpcRestClient createRpcClientV1;
-    private static JsonRpcRestClient searchRpcClientV1;
-    private static JsonRpcRestClient rpcRestClientV2;
+    private static JsonRpcRestClient jsonRpcRestClient;
 
     @Autowired
     private FastPaymentRepository repository;
 
     @BeforeAll
     void setup() throws Throwable {
-        createRpcClientV1 = new JsonRpcRestClient(new URL(HOST + port + "/v1/savedata"), Collections.emptyMap());
-        searchRpcClientV1 = new JsonRpcRestClient(new URL(HOST + port + "/v1/analyzeoperation"), Collections.emptyMap());
-        rpcRestClientV2 = new JsonRpcRestClient(new URL(HOST + port + "/v2/fastpayment"), Collections.emptyMap());
+        jsonRpcRestClient = new JsonRpcRestClient(new URL(HOST + port + "/v2/fastpayment"), Collections.emptyMap());
         fillDatabase();
     }
 
@@ -43,12 +40,12 @@ abstract class FastPaymentIntegrationTest extends AbstractIntegrationTest {
         generateFastPayment(null, null);
     }
 
-    protected static Stream<JsonRpcRestClient> createRpcClientProvider() {
-        return Stream.of(createRpcClientV1, rpcRestClientV2);
+    protected RequestId saveOrUpdate(FastPaymentOperation operation) throws Throwable {
+        return saveOrUpdateData(jsonRpcRestClient, operation);
     }
 
-    protected static Stream<JsonRpcRestClient> searchRpcClientProvider() {
-        return Stream.of(searchRpcClientV1, rpcRestClientV2);
+    protected AnalyzeResponse send(SendToAnalyzeRequest request) throws Throwable {
+        return sendData(jsonRpcRestClient, request);
     }
 
     protected RequestId generateFastPayment(UUID docId, Integer docNumber) throws Throwable {
@@ -56,7 +53,7 @@ abstract class FastPaymentIntegrationTest extends AbstractIntegrationTest {
                 .withDocId(docId)
                 .withDocNumber(docNumber)
                 .build();
-        return saveOrUpdateData(createRpcClientV1, operation);
+        return saveOrUpdateData(jsonRpcRestClient, operation);
     }
 
     protected FastPaymentOperation createRandomSbpPayment() {

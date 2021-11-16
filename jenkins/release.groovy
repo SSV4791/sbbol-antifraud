@@ -13,7 +13,7 @@ pipeline {
         timestamps()
     }
     parameters {
-    string(name: 'branch', defaultValue: 'release/01.001.00', description: 'Ветка для сборки образа')
+    string(name: 'branch', defaultValue: 'release/02.000.00', description: 'Ветка для сборки образа')
         string(name: 'image_name', defaultValue: 'registry.sigma.sbrf.ru/pprb/ci02473994/ci03045533_sbbol_antifraud/antifraud', description: 'Имя docker образа')
         booleanParam(name: 'checkmarx', defaultValue: false)
     }

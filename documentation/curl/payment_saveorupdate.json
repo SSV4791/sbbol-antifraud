@@ -4,7 +4,6 @@
   "id": 1,
   "params": {
     "dataparams": {
-      "dboOperation": "PAYMENT_DT_0401060",
       "timeStamp": "2020-03-23T12:34:33",
       "orgGuid": "5899acd3-dba7-41d4-83e4-ea17525d0d39",
       "digitalId": "1111",

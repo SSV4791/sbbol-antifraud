@@ -1,7 +1,5 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import ru.sberbank.pprb.sbbol.antifraud.api.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.Operation;
 
 import javax.validation.Valid;
@@ -11,7 +9,6 @@ import javax.validation.constraints.NotNull;
 /**
  * Модель электронного чека
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 public class ElectronicReceiptOperation implements Operation {
 
     /**
@@ -50,11 +47,6 @@ public class ElectronicReceiptOperation implements Operation {
     @Valid
     @NotNull(message = "The sign attribute cannot be null")
     private ReceiptSign sign;
-
-    @Override
-    public DboOperation getDboOperation() {
-        return DboOperation.ELECTRONIC_CHEQUE;
-    }
 
     public String getOrgGuid() {
         return orgGuid;
