@@ -11,16 +11,7 @@ public enum DboOperation {
     PAYMENT_DT_0401060("PAYMENT", "Платежное поручение") {
         @Override
         public String getClientDefinedEventType(String channelIndicator) {
-            switch (channelIndicator) {
-                case "WEB":
-                    return "BROWSER_PAYDOCRU";
-                case "MOBILE":
-                    return "MOBSBBOL_PAYDOCRU";
-                case "BRANCH":
-                    return "BRANCH_PAYDOCRU";
-                default:
-                    throw new IllegalArgumentException("Unknown type of channel indicator: " + channelIndicator);
-            }
+            return PaymentChannelIndicator.valueOf(channelIndicator).getClientDefinedEventType();
         }
     },
 
@@ -60,10 +51,10 @@ public enum DboOperation {
     }
 
     /**
-     * Получить тип устройства через которое работает пользователь
+     * Получить тип устройства, через которое работает пользователь
      *
      * @param channelIndicator тип канала связи, через который осуществляется связь клиента с банком
-     * @return тип устройства через которое работает пользователь
+     * @return тип устройства, через которое работает пользователь
      */
     public abstract String getClientDefinedEventType(String channelIndicator);
 
@@ -73,6 +64,30 @@ public enum DboOperation {
 
     public String getEventDescription() {
         return eventDescription;
+    }
+
+    /**
+     * Тип канала связи для РПП, через который осуществляется связь клиента с банком
+     */
+    public enum PaymentChannelIndicator {
+
+        WEB("BROWSER_PAYDOCRU"),
+        MOBILE("MOBSBBOL_PAYDOCRU"),
+        BRANCH("BRANCH_PAYDOCRU");
+
+        /**
+         * Тип устройства, через которое работает пользователь
+         */
+        private final String clientDefinedEventType;
+
+        PaymentChannelIndicator(String clientDefinedEventType) {
+            this.clientDefinedEventType = clientDefinedEventType;
+        }
+
+        public String getClientDefinedEventType() {
+            return clientDefinedEventType;
+        }
+
     }
 
 }

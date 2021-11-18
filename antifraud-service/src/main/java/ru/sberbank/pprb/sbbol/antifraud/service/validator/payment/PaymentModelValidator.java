@@ -1,8 +1,11 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.validator.payment;
 
+import org.apache.commons.lang3.EnumUtils;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentDocument;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentSign;
+import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.service.validator.ModelValidator;
 
 import java.util.List;
@@ -21,19 +24,19 @@ public final class PaymentModelValidator extends ModelValidator {
      * @param payment модель РПП для валидации
      */
     public static void validate(PaymentOperation payment) {
-        logError(payment.getTimeStamp(), "timeStamp");
-        logError(payment.getTimeOfOccurrence(), "timeOfOccurrence");
+        logWarn(payment.getTimeStamp(), "timeStamp");
+        logWarn(payment.getTimeOfOccurrence(), "timeOfOccurrence");
         validateDocument(payment.getDocument());
         validateSigns(payment.getMappedSigns());
     }
 
     private static void validateDocument(PaymentDocument document) {
-        logError(document.getNumber(), "document.number");
-        logError(document.getExecutionSpeed(), "document.executionSpeed");
-        logError(document.getOtherAccBankType(), "document.otherAccBankType");
-        logError(document.getOtherAccOwnershipType(), "document.otherAccOwnershipType");
-        logError(document.getTransferMediumType(), "document.transferMediumType");
-        logError(document.getReceiver().getOtherAccType(), "document.receiver.otherAccType");
+        logWarn(document.getNumber(), "document.number");
+        logWarn(document.getExecutionSpeed(), "document.executionSpeed");
+        logWarn(document.getOtherAccBankType(), "document.otherAccBankType");
+        logWarn(document.getOtherAccOwnershipType(), "document.otherAccOwnershipType");
+        logWarn(document.getTransferMediumType(), "document.transferMediumType");
+        logWarn(document.getReceiver().getOtherAccType(), "document.receiver.otherAccType");
     }
 
     private static void validateSigns(List<PaymentSign> signs) {
@@ -48,18 +51,22 @@ public final class PaymentModelValidator extends ModelValidator {
     }
 
     private static void validateFirstSignUserData(PaymentSign sign) {
-        logError(sign.getHttpAccept(), "httpAccept");
-        logError(sign.getHttpReferer(), "httpReferer");
-        logError(sign.getHttpAcceptChars(), "httpAcceptChars");
-        logError(sign.getHttpAcceptEncoding(), "httpAcceptEncoding");
-        logError(sign.getHttpAcceptLanguage(), "httpAcceptLanguage");
+        logWarn(sign.getHttpAccept(), "httpAccept");
+        logWarn(sign.getHttpReferer(), "httpReferer");
+        logWarn(sign.getHttpAcceptChars(), "httpAcceptChars");
+        logWarn(sign.getHttpAcceptEncoding(), "httpAcceptEncoding");
+        logWarn(sign.getHttpAcceptLanguage(), "httpAcceptLanguage");
         validateRequiredParam(sign.getIpAddress(), "ipAddress");
-        logError(sign.getPrivateIpAddress(), "privateIpAddress");
+        logWarn(sign.getPrivateIpAddress(), "privateIpAddress");
         validateRequiredParam(sign.getTbCode(), "tbCode");
-        logError(sign.getUserAgent(), "userAgent");
-        logError(sign.getDevicePrint(), "devicePrint");
-        logError(sign.getMobSdkData(), "mobSdkData");
+        logWarn(sign.getUserAgent(), "userAgent");
+        if (sign.getDevicePrint() == null && sign.getMobSdkData() == null) {
+            logWarn(sign.getDevicePrint(), "devicePrint or mobSdkData");
+        }
         validateRequiredParam(sign.getChannelIndicator(), "channelIndicator");
+        if (!EnumUtils.isValidEnum(DboOperation.PaymentChannelIndicator.class, sign.getChannelIndicator())) {
+            throw new ModelArgumentException("Unknown type of channelIndicator: " + sign.getChannelIndicator());
+        }
         validateRequiredParam(sign.getUserGuid(), "userGuid");
         validateRequiredParam(sign.getClientDefinedChannelIndicator(), "clientDefinedChannelIndicator");
     }
@@ -82,19 +89,19 @@ public final class PaymentModelValidator extends ModelValidator {
     }
 
     private static void validateSign(PaymentSign sign, String signName) {
-        logErrorSign(sign.getSignTime(), signName, "Time");
-        logErrorSign(sign.getIpAddress(), signName, "Ip");
-        logErrorSign(sign.getSignLogin(), signName, "Login");
-        logErrorSign(sign.getSignCryptoprofile(), signName, "Cryptoprofile");
-        logErrorSign(sign.getSignCryptoprofileType(), signName, "CryptoprofileType");
-        logErrorSign(sign.getChannelIndicator(), signName, "Channel");
-        logErrorSign(sign.getSignToken(), signName, "Token");
-        logErrorSign(sign.getSignType(), signName, "Type");
-        logErrorSign(sign.getSignImsi(), signName, "Imsi");
-        logErrorSign(sign.getSignCertId(), signName, "CertId");
-        logErrorSign(sign.getSignPhone(), signName, "Phone");
-        logErrorSign(sign.getSignEmail(), signName, "Email");
-        logErrorSign(sign.getSignSource(), signName, "Source");
+        logWarnSign(sign.getSignTime(), signName, "Time");
+        logWarnSign(sign.getIpAddress(), signName, "Ip");
+        logWarnSign(sign.getSignLogin(), signName, "Login");
+        logWarnSign(sign.getSignCryptoprofile(), signName, "Cryptoprofile");
+        logWarnSign(sign.getSignCryptoprofileType(), signName, "CryptoprofileType");
+        logWarnSign(sign.getChannelIndicator(), signName, "Channel");
+        logWarnSign(sign.getSignToken(), signName, "Token");
+        logWarnSign(sign.getSignType(), signName, "Type");
+        logWarnSign(sign.getSignImsi(), signName, "Imsi");
+        logWarnSign(sign.getSignCertId(), signName, "CertId");
+        logWarnSign(sign.getSignPhone(), signName, "Phone");
+        logWarnSign(sign.getSignEmail(), signName, "Email");
+        logWarnSign(sign.getSignSource(), signName, "Source");
     }
 
 }
