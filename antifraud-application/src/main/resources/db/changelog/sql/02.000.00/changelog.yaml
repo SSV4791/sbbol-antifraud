@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: 1635682801336_drop_dataspace_tables_and_columns.sql
+      relativeToChangelogFile: true

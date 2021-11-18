@@ -10,8 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
-import ru.sberbank.pprb.sbbol.antifraud.api.DboOperation;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.PaymentSendRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
@@ -34,8 +33,8 @@ import java.util.UUID;
  * Обработчик платежных поручений. Добавляет запись в таблицу T_PAYMENTOPERATION.
  * Осуществляет отправку данных в ФП ИС.
  */
-@Service("paymentProcessor")
-public class PaymentProcessor implements Processor<PaymentOperation, PaymentSendRequest> {
+@Service
+public class PaymentProcessor implements Processor<PaymentOperation> {
 
     private static final Logger logger = LoggerFactory.getLogger(PaymentProcessor.class);
 
@@ -79,7 +78,7 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
     }
 
     @Override
-    public AnalyzeResponse send(@Valid PaymentSendRequest request) {
+    public AnalyzeResponse send(@Valid SendToAnalyzeRequest request) {
         logger.info("Sending payment operation to analyze. PaymentOperation docId: {}", request.getDocId());
         AnalyzeRequest paymentAnalyzeRequest = createPaymentAnalyzeRequest(request.getDocId());
         try {
@@ -107,11 +106,6 @@ public class PaymentProcessor implements Processor<PaymentOperation, PaymentSend
             throw new ApplicationException("PaymentOperation with docId=" + docId + " not found");
         }
         return mapper.toAnalyzeRequest(searchResult.get());
-    }
-
-    @Override
-    public DboOperation supportedDboOperation() {
-        return DboOperation.PAYMENT_DT_0401060;
     }
 
 }

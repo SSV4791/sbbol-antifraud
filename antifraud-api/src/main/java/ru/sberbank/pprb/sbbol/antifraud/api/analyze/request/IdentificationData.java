@@ -1,6 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.analyze.request;
 
-import ru.sberbank.pprb.sbbol.antifraud.api.DboOperation;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
 
 import java.io.Serializable;
 import java.util.UUID;

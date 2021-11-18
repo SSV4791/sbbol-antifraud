@@ -1,9 +1,7 @@
 package ru.sberbank.pprb.sbbol.antifraud.fastpayment;
 
-import com.googlecode.jsonrpc4j.spring.rest.JsonRpcRestClient;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.api.Test;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentDocument;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentOperation;
@@ -23,16 +21,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FastPaymentDataTest extends FastPaymentIntegrationTest {
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
-    void createData(JsonRpcRestClient createRpcClient) throws Throwable {
+    @Test
+    void createData() throws Throwable {
         UUID docId = UUID.randomUUID();
         Integer docNumber = Math.abs(new Random().nextInt());
         FastPaymentOperation dto = FastPaymentBuilder.getInstance()
                 .withDocId(docId)
                 .withDocNumber(docNumber)
                 .build();
-        RequestId requestId = saveOrUpdateData(createRpcClient, dto);
+        RequestId requestId = saveOrUpdate(dto);
         dto.setMappedSigns(FastPaymentSignMapper.convertSigns(dto.getSigns()));
         assertNotNull(requestId);
 
@@ -43,14 +40,13 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
         assertSenderSign(dto.getMappedSigns().get(1), entity);
     }
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
-    void updateData(JsonRpcRestClient createRpcClient) throws Throwable {
+    @Test
+    void updateData() throws Throwable {
         FastPaymentOperation dto = FastPaymentBuilder.getInstance()
                 .withDocId(DOC_ID)
                 .withDocNumber(1)
                 .build();
-        RequestId actual = saveOrUpdateData(createRpcClient, dto);
+        RequestId actual = saveOrUpdate(dto);
         dto.setMappedSigns(FastPaymentSignMapper.convertSigns(dto.getSigns()));
         assertEquals(requestId, actual.getId());
 
@@ -63,7 +59,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
 
     private void assertOperation(FastPaymentOperation dto, String requestId, FastPayment entity) {
         assertEquals(requestId, entity.getRequestId());
-        assertEquals(dto.getTimeStamp(), entity.getEventTime());
+        assertEquals(dto.getTimeStamp(), entity.getTimeStamp());
         assertEquals(dto.getOrgGuid(), entity.getEpkId());
         assertEquals(dto.getDigitalId(), entity.getDigitalId());
         assertEquals(dto.getMappedSigns().get(0).getUserGuid().toString(), entity.getUserGuid());
@@ -156,29 +152,26 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
         assertEquals(senderSign.getSignSource(), entity.getSenderSource());
     }
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
-    void validateModelRequiredParamOrgGuid(JsonRpcRestClient createRpcClient) {
+    @Test
+    void validateModelRequiredParamOrgGuid() {
         FastPaymentOperation operation = createRandomSbpPayment();
         operation.setOrgGuid(null);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(createRpcClient, operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("orgGuid"), "Should contain orgGuid in message. Message: " + exceptionMessage);
     }
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
-    void validateModelRequiredParamEmptySigns(JsonRpcRestClient createRpcClient) {
+    @Test
+    void validateModelRequiredParamEmptySigns() {
         FastPaymentOperation operation = createRandomSbpPayment();
         operation.setSigns(null);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(createRpcClient, operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("signs"), "Should contain signs in message. Message: " + exceptionMessage);
     }
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
-    void validateModelRequiredParamFirstSignUserGuid(JsonRpcRestClient createRpcClient) {
+    @Test
+    void validateModelRequiredParamFirstSignUserGuid() {
         FastPaymentOperation operation = createRandomSbpPayment();
         String sign1 = "{" +
                 "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
@@ -208,14 +201,13 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
                 "\"clientDefinedChannelIndicator\": \"WEB\"" +
                 "}";
         operation.getSigns().set(1, sign1);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(createRpcClient, operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("userGuid"), "Should contain userGuid in message. Message: " + exceptionMessage);
     }
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
-    void validateModelRequiredParamSenderSignLogin(JsonRpcRestClient createRpcClient) {
+    @Test
+    void validateModelRequiredParamSenderSignLogin() {
         FastPaymentOperation operation = createRandomSbpPayment();
         String sign = "{" +
                 "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
@@ -244,14 +236,13 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
                 "\"clientDefinedChannelIndicator\": \"WEB\"" +
                 "}";
         operation.getSigns().set(0, sign);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(createRpcClient, operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("SignLogin"), "Should contain SignLogin in message. Message: " + exceptionMessage);
     }
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
-    void validateModelRequiredParamFirstSignChannel(JsonRpcRestClient createRpcClient) {
+    @Test
+    void validateModelRequiredParamFirstSignChannel() {
         FastPaymentOperation operation = createRandomSbpPayment();
         String sign1 = "{" +
                 "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
@@ -280,14 +271,13 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
                 "\"clientDefinedChannelIndicator\": \"WEB\"" +
                 "}";
         operation.getSigns().set(1, sign1);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(createRpcClient, operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("firstSignChannel"), "Should contain firstSignChannel in message. Message: " + exceptionMessage);
     }
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
-    void validateModelRequiredParamSenderSignChannel(JsonRpcRestClient createRpcClient) {
+    @Test
+    void validateModelRequiredParamSenderSignChannel() {
         FastPaymentOperation operation = createRandomSbpPayment();
         String sign = "{" +
                 "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
@@ -316,14 +306,13 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
                 "\"clientDefinedChannelIndicator\": \"WEB\"" +
                 "}";
         operation.getSigns().set(0, sign);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(createRpcClient, operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("senderSignChannel"), "Should contain senderSignChannel in message. Message: " + exceptionMessage);
     }
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
-    void createDataOnlyWithRequiredSignParams(JsonRpcRestClient createRpcClient) throws Throwable {
+    @Test
+    void createDataOnlyWithRequiredSignParams() throws Throwable {
         FastPaymentOperation paymentOperation = createRandomSbpPayment();
         paymentOperation.setDigitalId(null);
         String firstSign = "{" +
@@ -350,14 +339,13 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
         paymentOperation.getSigns().clear();
         paymentOperation.getSigns().add(firstSign);
         paymentOperation.getSigns().add(senderSign);
-        RequestId requestId = saveOrUpdateData(createRpcClient, paymentOperation);
+        RequestId requestId = saveOrUpdate(paymentOperation);
         assertNotNull(requestId);
     }
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
     //DCBEFSMSC5-T184 antifraud/savedata СБП (минимум полей)
-    void saveFastPaymentWithMinimumFields(JsonRpcRestClient createRpcClient) throws Throwable {
+    @Test
+    void saveFastPaymentWithMinimumFields() throws Throwable {
         UUID docId = UUID.randomUUID();
         Integer docNumber = Math.abs(new Random().nextInt());
         FastPaymentOperation dto = FastPaymentBuilder.getInstance()
@@ -365,7 +353,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
                 .withDocNumber(docNumber)
                 .build();
         dto.setDigitalId(null);
-        RequestId requestId = saveOrUpdateData(createRpcClient, dto);
+        RequestId requestId = saveOrUpdate(dto);
         dto.setMappedSigns(FastPaymentSignMapper.convertSigns(dto.getSigns()));
         assertNotNull(requestId);
 
@@ -376,17 +364,16 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
         assertSenderSign(dto.getMappedSigns().get(1), entity);
     }
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
-        //DCBEFSMSC5-T135 antifraud/savedata СБП (все поля)
-    void saveFastPaymentWithAllFields(JsonRpcRestClient createRpcClient) throws Throwable {
+    //DCBEFSMSC5-T135 antifraud/savedata СБП (все поля)
+    @Test
+    void saveFastPaymentWithAllFields() throws Throwable {
         UUID docId = UUID.randomUUID();
         Integer docNumber = Math.abs(new Random().nextInt());
         FastPaymentOperation dto = FastPaymentBuilder.getInstance()
                 .withDocId(docId)
                 .withDocNumber(docNumber)
                 .build();
-        RequestId requestId = saveOrUpdateData(createRpcClient, dto);
+        RequestId requestId = saveOrUpdate(dto);
         dto.setMappedSigns(FastPaymentSignMapper.convertSigns(dto.getSigns()));
         assertNotNull(requestId);
 
@@ -397,10 +384,9 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
         assertSenderSign(dto.getMappedSigns().get(1), entity);
     }
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
-        //DCBEFSMSC5-T240 antifraud/savedata СБП (данные от СБП не получены)
-    void saveFastPaymentWithDontHaveData(JsonRpcRestClient createRpcClient) throws Throwable {
+    //DCBEFSMSC5-T240 antifraud/savedata СБП (данные от СБП не получены)
+    @Test
+    void saveFastPaymentWithDontHaveData() throws Throwable {
         UUID docId = UUID.randomUUID();
         Integer docNumber = Math.abs(new Random().nextInt());
         FastPaymentOperation dto = FastPaymentBuilder.getInstance()
@@ -410,7 +396,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
                 .withReceiverInn("Данные от СБП не получены")
                 .withReceiverAccount("Данные от СБП не получены")
                 .build();
-        RequestId requestId = saveOrUpdateData(createRpcClient, dto);
+        RequestId requestId = saveOrUpdate(dto);
         dto.setMappedSigns(FastPaymentSignMapper.convertSigns(dto.getSigns()));
         assertNotNull(requestId);
 
@@ -420,4 +406,5 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
         assertFirstSign(dto.getMappedSigns().get(0), entity);
         assertSenderSign(dto.getMappedSigns().get(1), entity);
     }
+
 }

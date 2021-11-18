@@ -16,7 +16,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static ru.sberbank.pprb.sbbol.antifraud.api.DboOperation.PAYMENT_DT_0401060;
+import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation.PAYMENT_DT_0401060;
 
 class PaymentMapperTest extends MapperTest {
 
@@ -63,7 +63,7 @@ class PaymentMapperTest extends MapperTest {
         assertNotNull(analyzeRequest);
 
         assertNotNull(analyzeRequest.getMessageHeader());
-        assertEquals(payment.getEventTime(), analyzeRequest.getMessageHeader().getTimeStamp());
+        assertEquals(payment.getTimeStamp(), analyzeRequest.getMessageHeader().getTimeStamp());
 
         assertNotNull(analyzeRequest.getIdentificationData());
         assertEquals(payment.getDocId(), analyzeRequest.getIdentificationData().getClientTransactionId());

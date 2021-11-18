@@ -1,9 +1,7 @@
 package ru.sberbank.pprb.sbbol.antifraud.payment;
 
-import com.googlecode.jsonrpc4j.spring.rest.JsonRpcRestClient;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.api.Test;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentDocument;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
@@ -21,16 +19,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PaymentDataTest extends PaymentIntegrationTest {
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
-    void createData(JsonRpcRestClient createRpcClient) throws Throwable {
+    @Test
+    void createData() throws Throwable {
         UUID docId = UUID.randomUUID();
         Integer docNumber = Math.abs(new Random().nextInt());
         PaymentOperation dto = PaymentBuilder.getInstance()
                 .withDocId(docId)
                 .withDocNumber(docNumber)
                 .build();
-        RequestId requestId = saveOrUpdateData(createRpcClient, dto);
+        RequestId requestId = saveOrUpdate(dto);
         dto.setMappedSigns(PaymentSignMapper.convertSigns(dto.getSigns()));
         assertNotNull(requestId);
 
@@ -43,14 +40,13 @@ class PaymentDataTest extends PaymentIntegrationTest {
         assertSenderSign(dto.getMappedSigns().get(3), entity);
     }
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
-    void updateData(JsonRpcRestClient createRpcClient) throws Throwable {
+    @Test
+    void updateData() throws Throwable {
         PaymentOperation dto = PaymentBuilder.getInstance()
                 .withDocId(DOC_ID)
                 .withDocNumber(1)
                 .build();
-        RequestId actual = saveOrUpdateData(createRpcClient, dto);
+        RequestId actual = saveOrUpdate(dto);
         dto.setMappedSigns(PaymentSignMapper.convertSigns(dto.getSigns()));
         assertEquals(requestId, actual.getId());
 
@@ -67,7 +63,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
 
     private void assertOperation(PaymentOperation dto, String requestId, Payment entity) {
         assertEquals(requestId, entity.getRequestId());
-        assertEquals(dto.getTimeStamp(), entity.getEventTime());
+        assertEquals(dto.getTimeStamp(), entity.getTimeStamp());
         assertEquals(dto.getOrgGuid(), entity.getEpkId());
         assertEquals(dto.getDigitalId(), entity.getDigitalId());
         assertEquals(dto.getMappedSigns().get(0).getUserGuid().toString(), entity.getUserGuid());
@@ -155,7 +151,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
         assertEquals(thirdSign.getSignEmail(), entity.getThirdSignEmail());
         assertEquals(thirdSign.getSignSource(), entity.getThirdSignSource());
     }
-    
+
     private void assertSenderSign(PaymentSign senderSign, Payment entity) {
         assertEquals(senderSign.getSignTime(), entity.getSenderSignTime());
         assertEquals(senderSign.getIpAddress(), entity.getSenderIp());
@@ -172,29 +168,26 @@ class PaymentDataTest extends PaymentIntegrationTest {
         assertEquals(senderSign.getSignSource(), entity.getSenderSource());
     }
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
-    void validateModelRequiredParamOrgGuid(JsonRpcRestClient createRpcClient) {
+    @Test
+    void validateModelRequiredParamOrgGuid() {
         PaymentOperation operation = createRandomPayment();
         operation.setOrgGuid(null);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(createRpcClient, operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("orgGuid"), "Should contain orgGuid in message. Message: " + exceptionMessage);
     }
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
-    void validateModelRequiredParamEmptySigns(JsonRpcRestClient createRpcClient) {
+    @Test
+    void validateModelRequiredParamEmptySigns() {
         PaymentOperation operation = createRandomPayment();
         operation.setSigns(null);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(createRpcClient, operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("signs"), "Should contain signs in message. Message: " + exceptionMessage);
     }
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
-    void validateModelRequiredParamFirstSignUserGuid(JsonRpcRestClient createRpcClient) {
+    @Test
+    void validateModelRequiredParamFirstSignUserGuid() {
         PaymentOperation operation = createRandomPayment();
         String sign1 = "{" +
                 "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
@@ -224,14 +217,13 @@ class PaymentDataTest extends PaymentIntegrationTest {
                 "\"clientDefinedChannelIndicator\": \"WEB\"" +
                 "}";
         operation.getSigns().set(1, sign1);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(createRpcClient, operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("userGuid"), "Should contain userGuid in message. Message: " + exceptionMessage);
     }
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
-    void validateModelRequiredParamSenderSignLogin(JsonRpcRestClient createRpcClient) {
+    @Test
+    void validateModelRequiredParamSenderSignLogin() {
         PaymentOperation operation = createRandomPayment();
         String sign = "{" +
                 "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
@@ -260,14 +252,13 @@ class PaymentDataTest extends PaymentIntegrationTest {
                 "\"clientDefinedChannelIndicator\": \"WEB\"" +
                 "}";
         operation.getSigns().set(3, sign);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(createRpcClient, operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("senderSignLogin"), "Should contain senderSignLogin in message. Message: " + exceptionMessage);
     }
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
-    void validateModelRequiredParamFirstSignChannel(JsonRpcRestClient createRpcClient) {
+    @Test
+    void validateModelRequiredParamFirstSignChannel() {
         PaymentOperation operation = createRandomPayment();
         String sign1 = "{" +
                 "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
@@ -296,14 +287,13 @@ class PaymentDataTest extends PaymentIntegrationTest {
                 "\"clientDefinedChannelIndicator\": \"WEB\"" +
                 "}";
         operation.getSigns().set(1, sign1);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(createRpcClient, operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("firstSignChannel"), "Should contain firstSignChannel in message. Message: " + exceptionMessage);
     }
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
-    void validateModelRequiredParamSenderSignChannel(JsonRpcRestClient createRpcClient) {
+    @Test
+    void validateModelRequiredParamSenderSignChannel() {
         PaymentOperation operation = createRandomPayment();
         String sign = "{" +
                 "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
@@ -332,14 +322,13 @@ class PaymentDataTest extends PaymentIntegrationTest {
                 "\"clientDefinedChannelIndicator\": \"WEB\"" +
                 "}";
         operation.getSigns().set(3, sign);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdateData(createRpcClient, operation));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("senderSignChannel"), "Should contain senderSignChannel in message. Message: " + exceptionMessage);
     }
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
-    void createDataOnlyWithRequiredSignParams(JsonRpcRestClient createRpcClient) throws Throwable {
+    @Test
+    void createDataOnlyWithRequiredSignParams() throws Throwable {
         PaymentOperation paymentOperation = createRandomPayment();
         String firstSign = "{" +
                 "\"ipAddress\": \"78.245.9.87\", " +
@@ -367,14 +356,13 @@ class PaymentDataTest extends PaymentIntegrationTest {
         paymentOperation.getSigns().clear();
         paymentOperation.getSigns().add(firstSign);
         paymentOperation.getSigns().add(senderSign);
-        RequestId requestId = saveOrUpdateData(createRpcClient, paymentOperation);
+        RequestId requestId = saveOrUpdate(paymentOperation);
         assertNotNull(requestId);
     }
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
     //DCBEFSMSC5-T183 antifraud/savedata РПП (минимум полей)
-    void savePaymentWithMinimumFields (JsonRpcRestClient createRpcClient) throws Throwable {
+    @Test
+    void savePaymentWithMinimumFields () throws Throwable {
         UUID docId = UUID.randomUUID();
         Integer docNumber = Math.abs(new Random().nextInt());
         PaymentOperation dto = PaymentBuilder.getInstance()
@@ -382,7 +370,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
                 .withDocNumber(docNumber)
                 .build();
         dto.setDigitalId(null);
-        RequestId requestId = saveOrUpdateData(createRpcClient, dto);
+        RequestId requestId = saveOrUpdate(dto);
         dto.setMappedSigns(PaymentSignMapper.convertSigns(dto.getSigns()));
         assertNotNull(requestId);
 
@@ -395,17 +383,16 @@ class PaymentDataTest extends PaymentIntegrationTest {
         assertSenderSign(dto.getMappedSigns().get(3), entity);
     }
 
-    @ParameterizedTest
-    @MethodSource("createRpcClientProvider")
-        //DCBEFSMSC5-T134 antifraud/savedata РПП (все поля)
-    void savePaymentWithAllFields (JsonRpcRestClient createRpcClient) throws Throwable {
+    //DCBEFSMSC5-T134 antifraud/savedata РПП (все поля)
+    @Test
+    void savePaymentWithAllFields () throws Throwable {
         UUID docId = UUID.randomUUID();
         Integer docNumber = Math.abs(new Random().nextInt());
         PaymentOperation dto = PaymentBuilder.getInstance()
                 .withDocId(docId)
                 .withDocNumber(docNumber)
                 .build();
-        RequestId requestId = saveOrUpdateData(createRpcClient, dto);
+        RequestId requestId = saveOrUpdate(dto);
         dto.setMappedSigns(PaymentSignMapper.convertSigns(dto.getSigns()));
         assertNotNull(requestId);
 

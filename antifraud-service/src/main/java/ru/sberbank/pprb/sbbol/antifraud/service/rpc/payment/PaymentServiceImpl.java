@@ -1,9 +1,8 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.rpc.payment;
 
 import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImpl;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.payment.PaymentSendRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
@@ -14,11 +13,11 @@ import ru.sberbank.pprb.sbbol.antifraud.service.rpc.AbstractService;
 
 @Service
 @AutoJsonRpcServiceImpl
-public class PaymentServiceImpl extends AbstractService implements PaymentService {
+public class PaymentServiceImpl extends AbstractService<PaymentOperation> implements PaymentService {
 
-    private final Processor<PaymentOperation, PaymentSendRequest> processor;
+    private final Processor<PaymentOperation> processor;
 
-    public PaymentServiceImpl(@Qualifier("paymentProcessor") Processor<PaymentOperation, PaymentSendRequest> processor) {
+    public PaymentServiceImpl(Processor<PaymentOperation> processor) {
         this.processor = processor;
     }
 
@@ -30,7 +29,7 @@ public class PaymentServiceImpl extends AbstractService implements PaymentServic
 
     @Logged(printRequestResponse = true)
     @Override
-    public AnalyzeResponse analyzeOperation(PaymentSendRequest request) {
+    public AnalyzeResponse analyzeOperation(SendToAnalyzeRequest request) {
         return analyze(processor, request);
     }
 

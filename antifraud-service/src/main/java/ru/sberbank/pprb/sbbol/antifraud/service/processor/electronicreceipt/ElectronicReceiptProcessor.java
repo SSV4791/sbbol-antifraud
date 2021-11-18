@@ -10,7 +10,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
-import ru.sberbank.pprb.sbbol.antifraud.api.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
@@ -32,8 +31,8 @@ import java.util.UUID;
  * Обработчик электронных чеков. Добавляет запись в таблицу T_ELECTRONICRECEIPTOPERATION.
  * Осуществляет отправку данных в ФП ИС.
  */
-@Service("electronicReceiptProcessor")
-public class ElectronicReceiptProcessor implements Processor<ElectronicReceiptOperation, SendToAnalyzeRequest> {
+@Service
+public class ElectronicReceiptProcessor implements Processor<ElectronicReceiptOperation> {
 
     private static final Logger logger = LoggerFactory.getLogger(ElectronicReceiptProcessor.class);
 
@@ -103,11 +102,6 @@ public class ElectronicReceiptProcessor implements Processor<ElectronicReceiptOp
             throw new ApplicationException("ElectronicReceiptOperation with docId=" + docId + " not found");
         }
         return mapper.toAnalyzeRequest(searchResult.get());
-    }
-
-    @Override
-    public DboOperation supportedDboOperation() {
-        return DboOperation.ELECTRONIC_CHEQUE;
     }
 
 }

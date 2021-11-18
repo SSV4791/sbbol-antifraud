@@ -4,7 +4,6 @@
   "id": 1,
   "params": {
     "dataparams": {
-      "dboOperation": "SBP_B2C",
       "timeStamp": "2020-03-23T12:34:33",
       "orgGuid": "5899acd3-dba7-41d4-83e4-ea17525d0d38",
       "digitalId": "1111",

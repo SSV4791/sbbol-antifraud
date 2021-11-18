@@ -4,7 +4,7 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ru.sberbank.pprb.sbbol.antifraud.api.DboOperation;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
@@ -29,7 +29,7 @@ class ElectronicReceiptMapperTest extends MapperTest {
         ElectronicReceiptOperation expected = podamFactory.populatePojo(new ElectronicReceiptOperation());
         ElectronicReceipt entity = MAPPER.toEntity(expected);
         assertNotNull(entity.getRequestId());
-        assertEquals(expected.getSign().getSignTime(), entity.getEventTime());
+        assertEquals(expected.getSign().getSignTime(), entity.getTimeStamp());
         assertEquals(expected.getSign().getSignTime(), entity.getTimeOfOccurrence());
         ElectronicReceiptOperation actual = MAPPER.toDto(entity);
         actual.getSign().setSignNumber(1);
@@ -63,7 +63,7 @@ class ElectronicReceiptMapperTest extends MapperTest {
         AnalyzeRequest analyzeRequest = MAPPER.toAnalyzeRequest(electronicReceipt);
         assertNotNull(analyzeRequest);
         assertNotNull(analyzeRequest.getMessageHeader());
-        assertEquals(electronicReceipt.getEventTime(), analyzeRequest.getMessageHeader().getTimeStamp());
+        assertEquals(electronicReceipt.getTimeStamp(), analyzeRequest.getMessageHeader().getTimeStamp());
 
         assertNotNull(analyzeRequest.getIdentificationData());
         assertEquals(electronicReceipt.getDocId(), analyzeRequest.getIdentificationData().getClientTransactionId());

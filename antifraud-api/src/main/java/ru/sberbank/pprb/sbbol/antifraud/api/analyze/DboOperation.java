@@ -1,4 +1,4 @@
-package ru.sberbank.pprb.sbbol.antifraud.api;
+package ru.sberbank.pprb.sbbol.antifraud.api.analyze;
 
 /**
  * Тип операции

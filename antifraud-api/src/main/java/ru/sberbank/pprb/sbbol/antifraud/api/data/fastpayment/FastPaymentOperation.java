@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import ru.sberbank.pprb.sbbol.antifraud.api.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.Operation;
 
 import javax.validation.Valid;
@@ -61,11 +60,6 @@ public class FastPaymentOperation implements Operation {
      * Список данных по подписям, приведенных к модели подписи
      */
     private List<FastPaymentSign> mappedSigns;
-
-    @Override
-    public DboOperation getDboOperation() {
-        return DboOperation.SBP_B2C;
-    }
 
     public LocalDateTime getTimeStamp() {
         return timeStamp;

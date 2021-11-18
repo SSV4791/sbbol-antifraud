@@ -50,7 +50,7 @@ class ElectronicReceiptAnalyzeTest extends ElectronicReceiptIntegrationTest {
 
     @BeforeEach
     void init() throws Throwable {
-        saveOrUpdateData(ElectronicReceiptBuilder.getInstance().withDocId(DOC_ID).build());
+        saveOrUpdate(ElectronicReceiptBuilder.getInstance().withDocId(DOC_ID).build());
         mockServer = MockRestServiceServer.createServer(restTemplate);
     }
 
@@ -62,7 +62,7 @@ class ElectronicReceiptAnalyzeTest extends ElectronicReceiptIntegrationTest {
                 .andRespond(withStatus(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(objectMapper.writeValueAsString(expected)));
-        AnalyzeResponse actual = sendData(new SendToAnalyzeRequest(DOC_ID));
+        AnalyzeResponse actual = send(new SendToAnalyzeRequest(DOC_ID));
         mockServer.verify();
         assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId());
         assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode());
@@ -74,7 +74,7 @@ class ElectronicReceiptAnalyzeTest extends ElectronicReceiptIntegrationTest {
     @Test
     void validateModelRequiredParamDocIdTest() {
         SendToAnalyzeRequest request = new SendToAnalyzeRequest(null);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> sendData(request));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> send(request));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("docId"), "Should contain 'docId' in message. Message: " + exceptionMessage);
     }
@@ -82,7 +82,7 @@ class ElectronicReceiptAnalyzeTest extends ElectronicReceiptIntegrationTest {
     @Test
     void operationNotFoundTest() {
         SendToAnalyzeRequest request = new SendToAnalyzeRequest(UUID.randomUUID());
-        ApplicationException ex = assertThrows(ApplicationException.class, () -> sendData(request));
+        ApplicationException ex = assertThrows(ApplicationException.class, () -> send(request));
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("ElectronicReceiptOperation with docId=" + request.getDocId() + " not found"),
                 "Should contain " + "'ElectronicReceiptOperation with docId=" + request.getDocId() + " not found'" + " in message. Message: " + exceptionMessage);
@@ -94,7 +94,7 @@ class ElectronicReceiptAnalyzeTest extends ElectronicReceiptIntegrationTest {
                 .andExpect(method(HttpMethod.POST))
                 .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
         SendToAnalyzeRequest request = new SendToAnalyzeRequest(DOC_ID);
-        AnalyzeException ex = assertThrows(AnalyzeException.class, () -> sendData(request));
+        AnalyzeException ex = assertThrows(AnalyzeException.class, () -> send(request));
         mockServer.verify();
         String exceptionMessage = ex.getMessage();
         Assertions.assertTrue(exceptionMessage.contains("statusCodeValue=500"), "Should contain 'statusCodeValue=500' in message. Message: " + exceptionMessage);
