@@ -23,34 +23,34 @@ public final class FastPaymentModelValidator extends ModelValidator {
      * @param payment модель РПП для валидации
      */
     public static void validate(FastPaymentOperation payment) {
-        logError(payment.getTimeStamp(), "timeStamp");
-        logError(payment.getTimeOfOccurrence(), "timeOfOccurrence");
+        logWarn(payment.getTimeStamp(), "timeStamp");
+        logWarn(payment.getTimeOfOccurrence(), "timeOfOccurrence");
         validateDocument(payment.getDocument());
         validateSigns(payment.getMappedSigns());
     }
 
     private static void validateDocument(FastPaymentDocument document) {
-        logError(document.getNumber(), "document.number");
+        logWarn(document.getNumber(), "document.number");
         validateRequiredParam(document.getIdOperationOPKC(), "document.idOperationOPKC");
-        logError(document.getDestination(), "document.destination");
+        logWarn(document.getDestination(), "document.destination");
         validatePayer(document.getPayer());
         validateReceiver(document.getReceiver());
     }
 
     private static void validatePayer(FastPaymentPayer payer) {
-        logError(payer.getAccBalance(), "document.payer.accBalance");
-        logError(payer.getAccCreateDate(), "document.payer.accCreateDate");
-        logError(payer.getDocumentNumber(), "document.payer.documentNumber");
-        logError(payer.getDocumentType(), "document.payer.documentType");
-        logError(payer.getSegment(), "document.payer.segment");
+        logWarn(payer.getAccBalance(), "document.payer.accBalance");
+        logWarn(payer.getAccCreateDate(), "document.payer.accCreateDate");
+        logWarn(payer.getDocumentNumber(), "document.payer.documentNumber");
+        logWarn(payer.getDocumentType(), "document.payer.documentType");
+        logWarn(payer.getSegment(), "document.payer.segment");
     }
 
     private static void validateReceiver(FastPaymentReceiver receiver) {
-        logError(receiver.getBankName(), "document.receiver.bankName");
-        logError(receiver.getBankCountryCode(), "document.receiver.bankCountryCode");
-        logError(receiver.getBankCorrAcc(), "document.receiver.bankCorrAcc");
-        logError(receiver.getDocument(), "document.receiver.document");
-        logError(receiver.getDocumentType(), "document.receiver.documentType");
+        logWarn(receiver.getBankName(), "document.receiver.bankName");
+        logWarn(receiver.getBankCountryCode(), "document.receiver.bankCountryCode");
+        logWarn(receiver.getBankCorrAcc(), "document.receiver.bankCorrAcc");
+        logWarn(receiver.getDocument(), "document.receiver.document");
+        logWarn(receiver.getDocumentType(), "document.receiver.documentType");
     }
 
     private static void validateSigns(List<FastPaymentSign> signs) {
@@ -65,17 +65,18 @@ public final class FastPaymentModelValidator extends ModelValidator {
         validateRequiredParam(sign.getClientDefinedChannelIndicator(), "clientDefinedChannelIndicator");
         validateRequiredParam(sign.getUserGuid(), "userGuid");
         validateRequiredParam(sign.getChannelIndicator(), "channelIndicator");
-        logError(sign.getMobSdkData(), "mobSdkData");
-        logError(sign.getDevicePrint(), "devicePrint");
-        logError(sign.getUserAgent(), "userAgent");
+        if (sign.getDevicePrint() == null && sign.getMobSdkData() == null) {
+            logWarn(sign.getDevicePrint(), "devicePrint or mobSdkData");
+        }
+        logWarn(sign.getUserAgent(), "userAgent");
         validateRequiredParam(sign.getTbCode(), "tbCode");
-        logError(sign.getPrivateIpAddress(), "privateIpAddress");
-        logError(sign.getIpAddress(), "ipAddress");
-        logError(sign.getHttpAcceptLanguage(), "httpAcceptLanguage");
-        logError(sign.getHttpAcceptEncoding(), "httpAcceptEncoding");
-        logError(sign.getHttpAcceptChars(), "httpAcceptChars");
-        logError(sign.getHttpReferer(), "httpReferer");
-        logError(sign.getHttpAccept(), "httpAccept");
+        logWarn(sign.getPrivateIpAddress(), "privateIpAddress");
+        logWarn(sign.getIpAddress(), "ipAddress");
+        logWarn(sign.getHttpAcceptLanguage(), "httpAcceptLanguage");
+        logWarn(sign.getHttpAcceptEncoding(), "httpAcceptEncoding");
+        logWarn(sign.getHttpAcceptChars(), "httpAcceptChars");
+        logWarn(sign.getHttpReferer(), "httpReferer");
+        logWarn(sign.getHttpAccept(), "httpAccept");
     }
 
     private static void validateFirstSign(FastPaymentSign sign) {
@@ -96,19 +97,19 @@ public final class FastPaymentModelValidator extends ModelValidator {
     }
 
     private static void validateSign(FastPaymentSign sign, String signName) {
-        logErrorSign(sign.getSignSource(), signName, "Source");
-        logErrorSign(sign.getSignEmail(), signName, "Email");
-        logErrorSign(sign.getSignPhone(), signName, "Phone");
-        logErrorSign(sign.getSignCertId(), signName, "CertId");
-        logErrorSign(sign.getSignImsi(), signName, "Imsi");
-        logErrorSign(sign.getSignType(), signName, "Type");
-        logErrorSign(sign.getSignToken(), signName, "Token");
-        logErrorSign(sign.getChannelIndicator(), signName, "Channel");
-        logErrorSign(sign.getSignCryptoprofileType(), signName, "CryptoprofileType");
-        logErrorSign(sign.getSignCryptoprofile(), signName, "Cryptoprofile");
-        logErrorSign(sign.getSignLogin(), signName, "Login");
-        logErrorSign(sign.getIpAddress(), signName, "Ip");
-        logErrorSign(sign.getSignTime(), signName, "Time");
+        logWarnSign(sign.getSignSource(), signName, "Source");
+        logWarnSign(sign.getSignEmail(), signName, "Email");
+        logWarnSign(sign.getSignPhone(), signName, "Phone");
+        logWarnSign(sign.getSignCertId(), signName, "CertId");
+        logWarnSign(sign.getSignImsi(), signName, "Imsi");
+        logWarnSign(sign.getSignType(), signName, "Type");
+        logWarnSign(sign.getSignToken(), signName, "Token");
+        logWarnSign(sign.getChannelIndicator(), signName, "Channel");
+        logWarnSign(sign.getSignCryptoprofileType(), signName, "CryptoprofileType");
+        logWarnSign(sign.getSignCryptoprofile(), signName, "Cryptoprofile");
+        logWarnSign(sign.getSignLogin(), signName, "Login");
+        logWarnSign(sign.getIpAddress(), signName, "Ip");
+        logWarnSign(sign.getSignTime(), signName, "Time");
     }
 
 }

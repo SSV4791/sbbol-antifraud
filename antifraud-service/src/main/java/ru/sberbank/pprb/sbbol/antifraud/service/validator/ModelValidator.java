@@ -14,15 +14,15 @@ public abstract class ModelValidator {
     protected ModelValidator() {
     }
 
-    protected static void logError(Object param, String name) {
+    protected static void logWarn(Object param, String name) {
         if (param == null) {
-            logger.error(MESSAGE, name);
+            logger.warn(MESSAGE, name);
         }
     }
 
-    protected static void logErrorSign(Object param, String signName, String paramName) {
+    protected static void logWarnSign(Object param, String signName, String paramName) {
         if (param == null) {
-            logger.error(SIGN_MESSAGE, signName, paramName);
+            logger.warn(SIGN_MESSAGE, signName, paramName);
         }
     }
 

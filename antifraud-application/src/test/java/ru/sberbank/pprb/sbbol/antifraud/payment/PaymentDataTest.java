@@ -360,6 +360,27 @@ class PaymentDataTest extends PaymentIntegrationTest {
         assertNotNull(requestId);
     }
 
+    @Test
+    void channelIndicatorUnknownTypeTest() {
+        PaymentOperation paymentOperation = createRandomPayment();
+        String sign = "{" +
+                "\"ipAddress\": \"78.245.9.87\", " +
+                "\"tbCode\": \"546738\", " +
+                "\"channelIndicator\": \"UNKNOWN\", " +
+                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
+                "\"signTime\": \"2020-03-23T15:01:15\", " +
+                "\"signLogin\": \"novikova01\", " +
+                "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
+                "\"signPhone\": \"915 168-67-32\", " +
+                "\"signChannel\": \"TOKEN\", " +
+                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
+                "}";
+        paymentOperation.getSigns().add(1, sign);
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(paymentOperation));
+        String exceptionMessage = ex.getMessage();
+        Assertions.assertTrue(exceptionMessage.contains("channelIndicator"), "Should contain channelIndicator in message. Message: " + exceptionMessage);
+    }
+
     //DCBEFSMSC5-T183 antifraud/savedata РПП (минимум полей)
     @Test
     void savePaymentWithMinimumFields () throws Throwable {
