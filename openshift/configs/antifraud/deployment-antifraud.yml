@@ -30,6 +30,20 @@ spec:
         app: ${MODULE_NAME}
         version: ${imageVersion}
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - ${MODULE_NAME}
+                  - key: version
+                    operator: In
+                    values:
+                      - ${imageVersion}
+              topologyKey: kubernetes.io/hostname
       containers:
         - name: ${MODULE_NAME}
           image: ${registryUrl}/${registryProject}/${imageNameWithDigest}
