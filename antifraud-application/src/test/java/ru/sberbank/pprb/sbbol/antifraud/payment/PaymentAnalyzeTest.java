@@ -1,6 +1,7 @@
 package ru.sberbank.pprb.sbbol.antifraud.payment;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
+import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.IdentificationData;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.RiskResult;
@@ -29,6 +31,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 
+@ApiTestLayer
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PaymentAnalyzeTest extends PaymentIntegrationTest {
 
@@ -46,6 +49,7 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("19653")
     void sendRequest() throws Throwable {
         FullAnalyzeResponse expected = createAnalyzeResponse();
         mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
@@ -64,6 +68,7 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("19655")
     void validateModelRequiredParamDocId() {
         SendToAnalyzeRequest request = new SendToAnalyzeRequest(null);
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> send(request));
@@ -72,6 +77,7 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("20358")
     void analyzeErrorTest() {
         mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
                 .andExpect(method(HttpMethod.POST))
@@ -84,6 +90,7 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("20379")
     void clientDefinedEventTypeTest() {
         String web = DboOperation.PAYMENT_DT_0401060.getClientDefinedEventType("WEB");
         assertEquals("BROWSER_PAYDOCRU", web);

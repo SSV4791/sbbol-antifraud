@@ -1,9 +1,11 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.mapper.fastpayment;
 
+import io.qameta.allure.AllureId;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import ru.dcbqa.allureee.annotations.layers.UnitTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
@@ -18,11 +20,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation.SBP_B2C;
 
+@UnitTestLayer
 class FastPaymentMapperTest extends MapperTest {
 
     private static final FastPaymentMapper MAPPER = new FastPaymentMapperImpl();
 
     @Test
+    @AllureId("25635")
     void toEntityTest() {
         PodamFactory podamFactory = podamFactory();
         addExcludedFields(podamFactory, FastPaymentOperation.class, "signs", "mappedSigns");
@@ -37,6 +41,7 @@ class FastPaymentMapperTest extends MapperTest {
     }
 
     @Test
+    @AllureId("25634")
     void updateFromDtoTest() {
         PodamFactory podamFactory = podamFactory();
         addExcludedFields(podamFactory, FastPaymentOperation.class, "signs", "mappedSigns");
@@ -51,6 +56,7 @@ class FastPaymentMapperTest extends MapperTest {
     }
 
     @Test
+    @AllureId("25629")
     void fastPaymentOperationToAnalyzeRequestTest() {
         PodamFactory podamFactory = podamFactory();
         FastPayment fastPayment = podamFactory.populatePojo(new FastPayment());
@@ -112,6 +118,7 @@ class FastPaymentMapperTest extends MapperTest {
     }
 
     @Test
+    @AllureId("25628")
     void fullAnalyzeResponseToAnalyzeResponseTest() {
         PodamFactory podamFactory = podamFactory();
         FullAnalyzeResponse fullAnalyzeResponse = podamFactory.populatePojo(new FullAnalyzeResponse());

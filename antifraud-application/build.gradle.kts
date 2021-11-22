@@ -32,6 +32,7 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    systemProperty ("allure.results.directory", "${rootProject.buildDir}/allure-results")
     testLogging {
         events("passed", "skipped", "failed")
     }

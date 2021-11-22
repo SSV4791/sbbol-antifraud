@@ -2,6 +2,8 @@ package ru.sberbank.pprb.sbbol.antifraud.fastpayment;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import io.qameta.allure.AllureId;
+import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentDocument;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentOperation;
@@ -19,9 +21,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@ApiTestLayer
 class FastPaymentDataTest extends FastPaymentIntegrationTest {
 
     @Test
+    @AllureId("25614")
     void createData() throws Throwable {
         UUID docId = UUID.randomUUID();
         Integer docNumber = Math.abs(new Random().nextInt());
@@ -41,6 +45,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("25611")
     void updateData() throws Throwable {
         FastPaymentOperation dto = FastPaymentBuilder.getInstance()
                 .withDocId(DOC_ID)
@@ -153,6 +158,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("25613")
     void validateModelRequiredParamOrgGuid() {
         FastPaymentOperation operation = createRandomSbpPayment();
         operation.setOrgGuid(null);
@@ -162,6 +168,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("25617")
     void validateModelRequiredParamEmptySigns() {
         FastPaymentOperation operation = createRandomSbpPayment();
         operation.setSigns(null);
@@ -171,6 +178,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("25616")
     void validateModelRequiredParamFirstSignUserGuid() {
         FastPaymentOperation operation = createRandomSbpPayment();
         String sign1 = "{" +
@@ -207,6 +215,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("25612")
     void validateModelRequiredParamSenderSignLogin() {
         FastPaymentOperation operation = createRandomSbpPayment();
         String sign = "{" +
@@ -242,6 +251,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("22323")
     void validateModelRequiredParamFirstSignChannel() {
         FastPaymentOperation operation = createRandomSbpPayment();
         String sign1 = "{" +
@@ -277,6 +287,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("22325")
     void validateModelRequiredParamSenderSignChannel() {
         FastPaymentOperation operation = createRandomSbpPayment();
         String sign = "{" +
@@ -312,6 +323,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("22324")
     void createDataOnlyWithRequiredSignParams() throws Throwable {
         FastPaymentOperation paymentOperation = createRandomSbpPayment();
         paymentOperation.setDigitalId(null);
@@ -352,6 +364,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
 
     //DCBEFSMSC5-T184 antifraud/savedata СБП (минимум полей)
     @Test
+    @AllureId("25610")
     void saveFastPaymentWithMinimumFields() throws Throwable {
         UUID docId = UUID.randomUUID();
         Integer docNumber = Math.abs(new Random().nextInt());
@@ -373,6 +386,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
 
     //DCBEFSMSC5-T135 antifraud/savedata СБП (все поля)
     @Test
+    @AllureId("25618")
     void saveFastPaymentWithAllFields() throws Throwable {
         UUID docId = UUID.randomUUID();
         Integer docNumber = Math.abs(new Random().nextInt());
@@ -393,6 +407,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
 
     //DCBEFSMSC5-T240 antifraud/savedata СБП (данные от СБП не получены)
     @Test
+    @AllureId("25615")
     void saveFastPaymentWithDontHaveData() throws Throwable {
         UUID docId = UUID.randomUUID();
         Integer docNumber = Math.abs(new Random().nextInt());

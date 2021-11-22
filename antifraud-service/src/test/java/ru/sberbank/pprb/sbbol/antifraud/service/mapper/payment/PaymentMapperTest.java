@@ -1,9 +1,11 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.mapper.payment;
 
+import io.qameta.allure.AllureId;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import ru.dcbqa.allureee.annotations.layers.UnitTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
@@ -18,11 +20,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation.PAYMENT_DT_0401060;
 
+@UnitTestLayer
 class PaymentMapperTest extends MapperTest {
 
     private static final PaymentMapper MAPPER = new PaymentMapperImpl();
 
     @Test
+    @AllureId("25624")
     void toEntityTest() {
         PodamFactory podamFactory = podamFactory();
         addExcludedFields(podamFactory, PaymentOperation.class, "signs", "mappedSigns");
@@ -37,6 +41,7 @@ class PaymentMapperTest extends MapperTest {
     }
 
     @Test
+    @AllureId("25630")
     void updateFromDtoTest() {
         PodamFactory podamFactory = podamFactory();
         addExcludedFields(podamFactory, PaymentOperation.class, "signs", "mappedSigns");
@@ -51,6 +56,7 @@ class PaymentMapperTest extends MapperTest {
     }
 
     @Test
+    @AllureId("25632")
     void paymentOperationToAnalyzeRequestTest() {
         PodamFactory podamFactory = podamFactory();
         Payment payment = podamFactory.populatePojo(new Payment());
@@ -118,6 +124,7 @@ class PaymentMapperTest extends MapperTest {
     }
 
     @Test
+    @AllureId("25626")
     void fullAnalyzeResponseToAnalyzeResponseTest() {
         PodamFactory podamFactory = podamFactory();
         FullAnalyzeResponse fullAnalyzeResponse = podamFactory.populatePojo(new FullAnalyzeResponse());

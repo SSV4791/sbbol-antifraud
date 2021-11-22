@@ -29,6 +29,8 @@ pipeline {
         CREDENTIALS_ID = 'TUZ_DCBMSC5'
         NEXUS_CREDS = credentials('TUZ_DCBMSC5')
         SONAR_TOKEN = credentials('sonar-token')
+        ALLURE_PROJECT_ID = '37'
+        BUILD_JAVA_DOCKER_IMAGE = 'registry.sigma.sbrf.ru/ci00149046/ci00405008_sbbolufs/bellsoft/liberica-openjdk-alpine:15.0.1-9-with-certs'
     }
     stages {
         stage('Init') {
@@ -50,29 +52,40 @@ pipeline {
                 }
             }
         }
-        stage('Compile and Check') {
+        stage('Compile Check and tests') {
             steps {
                 script {
-                    new DockerRunBuilder(this)
-                            .registry(Const.OPENSHIFT_REGISTRY, CREDENTIALS_ID)
-                            .env("PATH_VERSION", "00.000")
-                            .volume("${WORKSPACE}", "/build")
-                            .extra("-w /build")
-                            .cpu(2)
-                            .memory("2g")
-                            .image('registry.sigma.sbrf.ru/ci00149046/ci00405008_sbbolufs/bellsoft/liberica-openjdk-alpine:15.0.1-9-with-certs')
-                            .cmd('./gradlew ' +
-                                    "-PnexusLogin=${NEXUS_CREDS_USR} " +
-                                    "-PnexusPassword=${NEXUS_CREDS_PSW} " +
-                                    "-Dsonar.host.url=https://sbt-sonarqube.sigma.sbrf.ru/ " +
-                                    "-Dsonar.login=${SONAR_TOKEN} " +
-                                    "-Dsonar.projectKey=ru.sberbank.pprb.sbbol.antifraud " +
-                                    "-Dsonar.pullrequest.key=${params.pullRequestId} " +
-                                    "-Dsonar.pullrequest.branch=${pullRequest.fromRef.displayId} " +
-                                    "-Dsonar.pullrequest.base=${pullRequest.toRef.displayId} " +
-                                    "clean build sonarqube --parallel"
-                            )
-                            .run()
+                    allureEe.run([
+                            projectId   : ALLURE_PROJECT_ID,
+                            allureResult: ["build/allure-results"],
+                            silent      : true
+                    ]) { launch ->
+                        new DockerRunBuilder(this)
+                                .registry(Const.OPENSHIFT_REGISTRY, CREDENTIALS_ID)
+                                .env("PATH_VERSION", "00.000")
+                                .volume("${WORKSPACE}", "/build")
+                                .extra("-w /build")
+                                .cpu(2)
+                                .memory("2g")
+                                .image(BUILD_JAVA_DOCKER_IMAGE)
+                                .cmd('./gradlew ' +
+                                        "-PnexusLogin=${NEXUS_CREDS_USR} " +
+                                        "-PnexusPassword='${NEXUS_CREDS_PSW}' " +
+                                        "-Dtest-layer=unit,api,web,cdcConsumer,configuration " +
+                                        "-Dbuild.link=${env.BUILD_URL} " +
+                                        "-Dbuild.type=prCheck " +
+                                        "-Dallure.jobrunId=${launch.jobRunId} " +
+                                        "-Dsonar.host.url=https://sbt-sonarqube.sigma.sbrf.ru/ " +
+                                        "-Dsonar.login=${SONAR_TOKEN} " +
+                                        "-Dsonar.projectKey=ru.sberbank.pprb.sbbol.antifraud " +
+                                        "-Dsonar.projectVersion=${pullRequest.fromRef.displayId} " +
+                                        "-Dsonar.pullrequest.key=${params.pullRequestId} " +
+                                        "-Dsonar.pullrequest.branch=${pullRequest.fromRef.displayId} " +
+                                        "-Dsonar.pullrequest.base=${pullRequest.toRef.displayId} " +
+                                        "portalUpload sonarqube"
+                                )
+                                .run()
+                    }
                 }
             }
         }

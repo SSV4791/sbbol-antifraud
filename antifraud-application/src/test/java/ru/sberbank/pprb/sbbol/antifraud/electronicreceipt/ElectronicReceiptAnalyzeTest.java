@@ -1,6 +1,7 @@
 package ru.sberbank.pprb.sbbol.antifraud.electronicreceipt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.qameta.allure.AllureId;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
+import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
@@ -33,6 +35,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 
+@ApiTestLayer
 class ElectronicReceiptAnalyzeTest extends ElectronicReceiptIntegrationTest {
 
     private static final UUID DOC_ID = UUID.randomUUID();
@@ -55,6 +58,7 @@ class ElectronicReceiptAnalyzeTest extends ElectronicReceiptIntegrationTest {
     }
 
     @Test
+    @AllureId("21602")
     void sendOperationToAnalyzeTest() throws Throwable {
         FullAnalyzeResponse expected = createFullAnalyzeResponse();
         mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
@@ -72,6 +76,7 @@ class ElectronicReceiptAnalyzeTest extends ElectronicReceiptIntegrationTest {
     }
 
     @Test
+    @AllureId("21596")
     void validateModelRequiredParamDocIdTest() {
         SendToAnalyzeRequest request = new SendToAnalyzeRequest(null);
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> send(request));
@@ -80,6 +85,7 @@ class ElectronicReceiptAnalyzeTest extends ElectronicReceiptIntegrationTest {
     }
 
     @Test
+    @AllureId("21599")
     void operationNotFoundTest() {
         SendToAnalyzeRequest request = new SendToAnalyzeRequest(UUID.randomUUID());
         ApplicationException ex = assertThrows(ApplicationException.class, () -> send(request));
@@ -89,6 +95,7 @@ class ElectronicReceiptAnalyzeTest extends ElectronicReceiptIntegrationTest {
     }
 
     @Test
+    @AllureId("21594")
     void analyzeErrorTest() {
         mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
                 .andExpect(method(HttpMethod.POST))

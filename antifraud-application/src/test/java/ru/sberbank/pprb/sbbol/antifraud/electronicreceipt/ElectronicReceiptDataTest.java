@@ -1,8 +1,10 @@
 package ru.sberbank.pprb.sbbol.antifraud.electronicreceipt;
 
+import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ElectronicReceiptOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.Receipt;
@@ -20,10 +22,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
+@ApiTestLayer
 class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
 
     @Test
+    @AllureId("21601")
     void saveAndUpdateDataTest() throws Throwable {
         final UUID docId = UUID.randomUUID();
         // create
@@ -50,6 +53,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
     }
 
     @ParameterizedTest
+    @AllureId("21595")
     @ValueSource(ints = {0, 3})
     void validateSignNumberTest(Integer signNumber) {
         ElectronicReceiptOperation operation = ElectronicReceiptBuilder.getInstance()
@@ -61,6 +65,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
     }
 
     @Test
+    @AllureId("21598")
     void validateElectronicReceiptOperationRequiredParamsTest() {
         ElectronicReceiptOperation operation = new ElectronicReceiptOperation();
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
@@ -72,6 +77,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
     }
 
     @Test
+    @AllureId("21597")
     void validateReceiptDocumentRequiredParamsTest() {
         ElectronicReceiptOperation operation = ElectronicReceiptBuilder.getInstance().build();
         operation.setDocument(new ReceiptDocument());
@@ -89,6 +95,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
     }
 
     @Test
+    @AllureId("21593")
     void validateReceiptPayerRequiredParamsTest() {
         ElectronicReceiptOperation operation = ElectronicReceiptBuilder.getInstance().build();
         operation.getDocument().setPayer(new ReceiptPayer());
@@ -102,6 +109,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
     }
 
     @Test
+    @AllureId("21600")
     void validateReceiptReceiverRequiredParamsTest() {
         ElectronicReceiptOperation operation = ElectronicReceiptBuilder.getInstance().build();
         operation.getDocument().setReceiver(new ReceiptReceiver());
@@ -117,6 +125,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
     }
 
     @Test
+    @AllureId("21603")
     void validateReceiptRequiredParamsTest() {
         ElectronicReceiptOperation operation = ElectronicReceiptBuilder.getInstance().build();
         operation.getDocument().setReceipt(new Receipt());
@@ -131,6 +140,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
     }
 
     @Test
+    @AllureId("21605")
     void validateReceiptDeviceRequestRequiredParamsTest() {
         ElectronicReceiptOperation operation = ElectronicReceiptBuilder.getInstance().build();
         operation.setDeviceRequest(new ReceiptDeviceRequest());
@@ -142,6 +152,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
     }
 
     @Test
+    @AllureId("21604")
     void validateReceiptSignRequestRequiredParamsTest() {
         ElectronicReceiptOperation operation = ElectronicReceiptBuilder.getInstance().build();
         operation.setSign(new ReceiptSign());
@@ -247,6 +258,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
 
     //DCBEFSMSC5-T270  savedata -электронные чеки (минимум полей, sms, signNumber=1)
     @Test
+    @AllureId("25621")
     void saveAndUpdateElectronicReceiptMinimumFieldsWithSignNumberOne() throws Throwable {
         final UUID docId = UUID.randomUUID();
         // create
@@ -281,6 +293,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
 
     //DCBEFSMSC5-T271  savedata -электронные чеки (все поля, token, signNumber=2)
     @Test
+    @AllureId("25623")
     void saveAndUpdateElectronicReceiptAllFieldsWithSignNumberTwo() throws Throwable {
         final UUID docId = UUID.randomUUID();
         // create
@@ -310,7 +323,8 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
 
     //DCBEFSMSC5-T273  savedata -электронные чеки (негативный)
     @Test
-    void saveAndUpdateElectronicReceiptWithError() {
+    @AllureId("25622")
+    void saveAndUpdateElectronicReceiptWithError() throws Throwable {
         final UUID docId = UUID.randomUUID();
         ElectronicReceiptOperation expectedCreate = ElectronicReceiptBuilder.getInstance()
                 .withDocId(docId)

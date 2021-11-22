@@ -13,6 +13,8 @@ pluginManagement {
     }
 }
 
+enableFeaturePreview("ONE_LOCKFILE_PER_PROJECT")
+
 rootProject.name = "antifraud"
 
 include(":antifraud-api")
