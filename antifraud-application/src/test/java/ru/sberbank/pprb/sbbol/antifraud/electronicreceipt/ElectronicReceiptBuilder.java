@@ -25,7 +25,7 @@ class ElectronicReceiptBuilder {
 
     // document
     private UUID docId;
-    private Integer docNumber;
+    private String docNumber;
     private LocalDate docDate;
     private Long amount;
     private String currency;
@@ -96,7 +96,7 @@ class ElectronicReceiptBuilder {
 
         operation.setDocument(new ReceiptDocument());
         operation.getDocument().setId(docId != null ? docId : UUID.randomUUID());
-        operation.getDocument().setNumber(docNumber != null ? docNumber : Math.abs(RandomUtils.nextInt()));
+        operation.getDocument().setNumber(docNumber != null ? docNumber : RandomStringUtils.randomNumeric(10));
         operation.getDocument().setDate(docDate != null ? docDate : LocalDate.now().minusDays(3));
         operation.getDocument().setAmount(amount != null ? amount : Math.abs(RandomUtils.nextLong()));
         operation.getDocument().setCurrency(currency != null ? currency : "RUB");

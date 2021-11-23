@@ -118,7 +118,8 @@ public class ElectronicReceipt extends BaseEntity {
     /**
      * Номер платежного документа
      */
-    private Integer docNumber;
+    @Column(length = 10)
+    private String docNumber;
 
     /**
      * Дата документа
@@ -627,11 +628,11 @@ public class ElectronicReceipt extends BaseEntity {
         this.docId = docId;
     }
 
-    public Integer getDocNumber() {
+    public String getDocNumber() {
         return docNumber;
     }
 
-    public void setDocNumber(Integer docNumber) {
+    public void setDocNumber(String docNumber) {
         this.docNumber = docNumber;
     }
 

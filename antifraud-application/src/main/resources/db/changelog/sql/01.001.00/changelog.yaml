@@ -8,3 +8,6 @@ databaseChangeLog:
   - include:
       file: 1633510710667_add_column_payerkpp_in_t_electronicreceipt.sql
       relativeToChangelogFile: true
+  - include:
+      file: 1637675657025_change_type_electronicreceipt_docnumber.sql
+      relativeToChangelogFile: true

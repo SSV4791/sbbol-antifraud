@@ -26,8 +26,8 @@ public class ReceiptDocument implements Serializable {
     /**
      * Номер документа
      */
-    @NotNull(message = "The document.number attribute must be filled")
-    private Integer number;
+    @NotBlank(message = "The document.number attribute must be filled")
+    private String number;
 
     /**
      * Дата документа
@@ -84,11 +84,11 @@ public class ReceiptDocument implements Serializable {
         this.id = id;
     }
 
-    public Integer getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Integer number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
