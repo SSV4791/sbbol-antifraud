@@ -269,18 +269,6 @@ pipeline {
                     library('ru.sbrf.devsecops@master')
                     runOSS(devsecopsConfig, repoUrl, "${params.branch}/${GIT_REPOSITORY}", latestCommitHash)
                     runSastCx(devsecopsConfig, repoUrl, "${params.branch}/${GIT_REPOSITORY}", latestCommitHash)
-
-                    /**
-                     * В функции checkStatus четвертым параметром можно выставить максимальное время ожидания ответа (в секундах)
-                     * Если не дождаться ответа, то будет добавлен флаг о непрохождении этой проверки
-                     * Этот параметр индивидуален и зависит от размера вашего приложения(кода)
-                     * По умолчанию стоит 5 минут
-                     * В примере ниже выставляем ожидание 2 минуты
-                     *   checkmarx.checkStatus(Const.SAST_QG_URL, latestCommitHash, VERSION, 120)
-                     */
-                    checkmarx.checkStatus(Const.SAST_QG_URL, latestCommitHash, VERSION, 900)
-                    def QGstatus = getOSSQGFlag(latestCommitHash)
-                    log.info("OSS_RUN:${QGstatus.OSS_RUN} OSS_PASS:${QGstatus.OSS_PASS} OSS_HIGH_PASS:${QGstatus.OSS_HIGH_PASS} OSS_MEDIUM_PASS:${QGstatus.OSS_MEDIUM_PASS}")
                 }
             }
         }
