@@ -23,6 +23,7 @@ public class FastPaymentOperation implements Operation {
      */
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @NotNull(message = "The timeStamp attribute must be filled")
     private LocalDateTime timeStamp;
 
     /**
@@ -41,6 +42,7 @@ public class FastPaymentOperation implements Operation {
      */
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @NotNull(message = "The timeOfOccurrence attribute must be filled")
     private LocalDateTime timeOfOccurrence;
 
     /**

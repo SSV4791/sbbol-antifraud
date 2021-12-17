@@ -20,18 +20,16 @@ public final class FastPaymentModelValidator extends ModelValidator {
     /**
      * Валидация наличия полей в запросе на сохранение или обновление данных
      *
-     * @param payment модель РПП для валидации
+     * @param payment модель СБП для валидации
      */
     public static void validate(FastPaymentOperation payment) {
-        logWarn(payment.getTimeStamp(), "timeStamp");
-        logWarn(payment.getTimeOfOccurrence(), "timeOfOccurrence");
+        logWarn(payment.getDigitalId(), "digitalId");
         validateDocument(payment.getDocument());
         validateSigns(payment.getMappedSigns());
     }
 
     private static void validateDocument(FastPaymentDocument document) {
         logWarn(document.getNumber(), "document.number");
-        validateRequiredParam(document.getIdOperationOPKC(), "document.idOperationOPKC");
         logWarn(document.getDestination(), "document.destination");
         validatePayer(document.getPayer());
         validateReceiver(document.getReceiver());
@@ -68,10 +66,10 @@ public final class FastPaymentModelValidator extends ModelValidator {
         if (sign.getDevicePrint() == null && sign.getMobSdkData() == null) {
             logWarn(sign.getDevicePrint(), "devicePrint or mobSdkData");
         }
-        logWarn(sign.getUserAgent(), "userAgent");
+        validateRequiredParam(sign.getUserAgent(), "userAgent");
         validateRequiredParam(sign.getTbCode(), "tbCode");
         logWarn(sign.getPrivateIpAddress(), "privateIpAddress");
-        logWarn(sign.getIpAddress(), "ipAddress");
+        validateRequiredParam(sign.getIpAddress(), "ipAddress");
         logWarn(sign.getHttpAcceptLanguage(), "httpAcceptLanguage");
         logWarn(sign.getHttpAcceptEncoding(), "httpAcceptEncoding");
         logWarn(sign.getHttpAcceptChars(), "httpAcceptChars");
@@ -93,6 +91,8 @@ public final class FastPaymentModelValidator extends ModelValidator {
         validateRequiredParam(sign.getSignLogin(), signName + "Login");
         validateRequiredParam(sign.getSignChannel(), signName + "Channel");
         validateRequiredParam(sign.getSignPhone(), signName + "Phone");
+        validateRequiredParam(sign.getSignType(), signName + "Type");
+        validateRequiredParam(sign.getSignSource(), signName + "Source");
         validateSign(sign, signName);
     }
 
