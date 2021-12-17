@@ -315,7 +315,10 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
     void createDataOnlyWithRequiredSignParams() throws Throwable {
         FastPaymentOperation paymentOperation = createRandomSbpPayment();
         paymentOperation.setDigitalId(null);
+        paymentOperation.getDocument().setDestination(null);
         String firstSign = "{" +
+                "\"ipAddress\": \"78.245.9.88\", " +
+                "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
                 "\"tbCode\": \"546738\", " +
                 "\"channelIndicator\": \"WEB\", " +
                 "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
@@ -324,6 +327,8 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
                 "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
                 "\"signPhone\": \"915 168-67-32\", " +
                 "\"signChannel\": \"TOKEN\", " +
+                "\"signType\": \"Единственная подпись\", " +
+                "\"signSource\": \"SMS\", " +
                 "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
                 "}";
         String senderSign = "{" +
@@ -334,6 +339,8 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
                 "\"signLogin\": \"novikova01\", " +
                 "\"signPhone\": \"915 168-67-32\", " +
                 "\"signChannel\": \"TOKEN\", " +
+                "\"signType\": \"Единственная подпись\", " +
+                "\"signSource\": \"SMS\", " +
                 "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
                 "}";
         paymentOperation.getSigns().clear();

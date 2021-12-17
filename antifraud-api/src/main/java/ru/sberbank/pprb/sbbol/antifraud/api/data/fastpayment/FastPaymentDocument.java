@@ -51,12 +51,12 @@ public class FastPaymentDocument implements Serializable {
     /**
      * Назначение платежа
      */
-    @NotBlank(message = "The document.destination attribute must be filled")
     private String destination;
 
     /**
      * Идентификатор Операции ОПКЦ СБП
      */
+    @NotBlank(message = "The document.idOperationOPKC attribute must be filled")
     private String idOperationOPKC;
 
     /**
