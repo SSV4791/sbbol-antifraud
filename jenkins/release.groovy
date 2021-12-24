@@ -1,4 +1,5 @@
 import ru.sbrf.ufs.pipeline.Const
+import ru.sbrf.ufs.pipeline.docker.DockerRunBuilder
 
 @Library(['ufs-jobs@master']) _
 
@@ -48,6 +49,8 @@ pipeline {
         CREDENTIAL_ID = "TUZ_DCBMSC5"
         NEXUS_CREDS = credentials("TUZ_DCBMSC5")
         SONAR_TOKEN = credentials('sonar-token')
+        ALLURE_PROJECT_ID = '37'
+        PACT_CREDS = credentials('pact_ci_meta') // Креды для публикации контрактов в Пакт Брокер
     }
 
     stages {
@@ -90,24 +93,41 @@ pipeline {
                 /**
                  * Собираем gradle проект
                  */
-                stage('Build Java') {
+                stage('Build Java and Pact tests check') {
                     steps {
                         script {
-                            docker.withRegistry(Const.OPENSHIFT_REGISTRY, CREDENTIAL_ID) {
-                                sh 'docker run --rm ' +
-                                        "-v ${WORKSPACE}:/build " +
-                                        '-w /build ' +
-                                        "-e PATH_VERSION=${PATH_VERSION} " +
-                                        "${BUILD_JAVA_DOCKER_IMAGE} " +
-                                        './gradlew ' +
-                                        "-PnexusLogin=${NEXUS_CREDS_USR} " +
-                                        "-PnexusPassword=${NEXUS_CREDS_PSW} " +
-                                        "-Pversion=${VERSION} " +
-                                        "-Dsonar.host.url=https://sbt-sonarqube.sigma.sbrf.ru/ " +
-                                        "-Dsonar.login=${SONAR_TOKEN} " +
-                                        "-Dsonar.projectKey=ru.sberbank.pprb.sbbol.antifraud " +
-                                        "-Dsonar.branch.name=${params.branch} " +
-                                        'build sonarqube --parallel'
+                            allureEe.run([
+                                    projectId   : ALLURE_PROJECT_ID,
+                                    allureResult: ["build/allure-results"],
+                                    silent      : true
+                            ]) { launch ->
+                                new DockerRunBuilder(this)
+                                        .registry(Const.OPENSHIFT_REGISTRY, CREDENTIAL_ID)
+                                        .volume("${WORKSPACE}", "/build")
+                                        .extra("-w /build")
+                                        .cpu(2)
+                                        .memory("2g")
+                                        .image(BUILD_JAVA_DOCKER_IMAGE)
+                                        .cmd('./gradlew ' +
+                                                "-PnexusLogin=${NEXUS_CREDS_USR} " +
+                                                "-PnexusPassword='${NEXUS_CREDS_PSW}' " +
+                                                "-Pversion=${VERSION} " +
+                                                "-Dtest-layer=cdcProvider,unit,api,web,cdcConsumer " +
+                                                "-Dpactbroker.url=${Const.PACT_BROKER_URL} " +
+                                                "-Dpactbroker.auth.username=${PACT_CREDS_USR} " +
+                                                "-Dpactbroker.auth.password='${PACT_CREDS_PSW}' " +
+                                                "-Dpact.pacticipant.version=${VERSION} " +
+                                                "-Dpact.pacticipant.tag=${params.branch} " +
+                                                "-Dbuild.link=${env.BUILD_URL} " +
+                                                "-Dbuild.type=release " +
+                                                "-Dallure.jobrunId=${launch.jobRunId} " +
+                                                "-Dsonar.host.url=https://sbt-sonarqube.sigma.sbrf.ru/ " +
+                                                "-Dsonar.login=${SONAR_TOKEN} " +
+                                                "-Dsonar.projectKey=ru.sberbank.pprb.sbbol.antifraud " +
+                                                "-Dsonar.branch.name=${params.branch} " +
+                                                "build portalUpload sonarqube"
+                                        )
+                                        .run()
                             }
                         }
                     }

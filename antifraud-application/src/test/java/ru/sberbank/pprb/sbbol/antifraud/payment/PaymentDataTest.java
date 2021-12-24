@@ -2,6 +2,8 @@ package ru.sberbank.pprb.sbbol.antifraud.payment;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import io.qameta.allure.AllureId;
+import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentDocument;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
@@ -17,9 +19,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@ApiTestLayer
 class PaymentDataTest extends PaymentIntegrationTest {
 
     @Test
+    @AllureId("19651")
     void createData() throws Throwable {
         UUID docId = UUID.randomUUID();
         Integer docNumber = Math.abs(new Random().nextInt());
@@ -41,6 +45,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("19646")
     void updateData() throws Throwable {
         PaymentOperation dto = PaymentBuilder.getInstance()
                 .withDocId(DOC_ID)
@@ -169,6 +174,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("19656")
     void validateModelRequiredParamOrgGuid() {
         PaymentOperation operation = createRandomPayment();
         operation.setOrgGuid(null);
@@ -178,6 +184,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("19641")
     void validateModelRequiredParamEmptySigns() {
         PaymentOperation operation = createRandomPayment();
         operation.setSigns(null);
@@ -187,6 +194,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("19652")
     void validateModelRequiredParamFirstSignUserGuid() {
         PaymentOperation operation = createRandomPayment();
         String sign1 = "{" +
@@ -223,6 +231,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("19649")
     void validateModelRequiredParamSenderSignLogin() {
         PaymentOperation operation = createRandomPayment();
         String sign = "{" +
@@ -258,6 +267,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("21798")
     void validateModelRequiredParamFirstSignChannel() {
         PaymentOperation operation = createRandomPayment();
         String sign1 = "{" +
@@ -293,6 +303,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("21799")
     void validateModelRequiredParamSenderSignChannel() {
         PaymentOperation operation = createRandomPayment();
         String sign = "{" +
@@ -328,6 +339,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("19954")
     void createDataOnlyWithRequiredSignParams() throws Throwable {
         PaymentOperation paymentOperation = createRandomPayment();
         String firstSign = "{" +
@@ -361,6 +373,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
     }
 
     @Test
+    @AllureId("28211")
     void channelIndicatorUnknownTypeTest() {
         PaymentOperation paymentOperation = createRandomPayment();
         String sign = "{" +
@@ -383,6 +396,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
 
     //DCBEFSMSC5-T183 antifraud/savedata РПП (минимум полей)
     @Test
+    @AllureId("25619")
     void savePaymentWithMinimumFields () throws Throwable {
         UUID docId = UUID.randomUUID();
         Integer docNumber = Math.abs(new Random().nextInt());
@@ -406,6 +420,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
 
     //DCBEFSMSC5-T134 antifraud/savedata РПП (все поля)
     @Test
+    @AllureId("25620")
     void savePaymentWithAllFields () throws Throwable {
         UUID docId = UUID.randomUUID();
         Integer docNumber = Math.abs(new Random().nextInt());

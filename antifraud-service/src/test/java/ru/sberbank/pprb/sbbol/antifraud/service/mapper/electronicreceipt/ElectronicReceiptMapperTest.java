@@ -1,10 +1,12 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.mapper.electronicreceipt;
 
+import io.qameta.allure.AllureId;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
+import ru.dcbqa.allureee.annotations.layers.UnitTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
@@ -19,11 +21,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+@UnitTestLayer
 class ElectronicReceiptMapperTest extends MapperTest {
 
     private static final ElectronicReceiptMapper MAPPER = new ElectronicReceiptMapperImpl();
 
     @Test
+    @AllureId("25631")
     void toEntityTest() {
         PodamFactory podamFactory = podamFactory();
         ElectronicReceiptOperation expected = podamFactory.populatePojo(new ElectronicReceiptOperation());
@@ -40,6 +44,7 @@ class ElectronicReceiptMapperTest extends MapperTest {
     }
 
     @Test
+    @AllureId("25627")
     void updateFromDtoTest() {
         PodamFactory podamFactory = podamFactory();
         ElectronicReceiptOperation expectedDto = podamFactory.populatePojo(new ElectronicReceiptOperation());
@@ -54,6 +59,7 @@ class ElectronicReceiptMapperTest extends MapperTest {
     }
 
     @Test
+    @AllureId("25625")
     void toAnalyzeRequestTest() {
         PodamFactory podamFactory = podamFactory();
         ElectronicReceipt electronicReceipt = podamFactory.populatePojo(new ElectronicReceipt());
@@ -106,6 +112,7 @@ class ElectronicReceiptMapperTest extends MapperTest {
     }
 
     @Test
+    @AllureId("25633")
     void toAnalyzeResponseTest() {
         PodamFactory podamFactory = podamFactory();
         FullAnalyzeResponse fullAnalyzeResponse = podamFactory.populatePojo(new FullAnalyzeResponse());
