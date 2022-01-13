@@ -1,0 +1,92 @@
+---
+int:
+  pprb:
+    db_main:
+      v1_0:
+        - name: db-main
+          host: tkled-pprb00137.vm.esrt.cloud.sbrf.ru
+          ip: 10.53.223.31
+          port: '5433'
+          egress_port: '1526'
+          ott: false
+          mtls: false
+          protocol: TCP
+
+    db_si:
+      v1_0:
+        - name: db-si
+          host: tkled-pprb00137-fake.vm.esrt.cloud.sbrf.ru
+          ip: 10.53.223.31
+          port: '5433'
+          egress_port: '1527'
+          ott: false
+          mtls: false
+          protocol: TCP
+          resolution: STATIC
+
+    fluentbit:
+      v1_0:
+        - name: fluent-bit-ott
+          host: sbtatlas.sigma.sbrf.ru
+          port: '443'
+          istio_mesh_port: '80'
+          protocol: TLS
+          mtls: true
+          ott: true
+
+    appjournal:
+      v1_0:
+        - name: appjournal1
+          ip: 10.128.11.11
+          port: '9092'
+          egress_port: '9991'
+          ott: false
+          mtls: false
+          protocol: TCP
+          url: dummy
+          resolution: STATIC
+
+        - name: appjournal6
+          host: 6sbtatlas.sigma.sbrf.ru
+          ip: 10.128.11.11
+          port: '9092'
+          egress_port: '9996'
+          ott: false
+          mtls: false
+          protocol: TCP
+          url: dummy
+          resolution: STATIC
+
+    CI1099171_antifraud_integration_service:
+      v1_0:
+        name: antifraud_integration_service # ФП ИС: Антифрод ФЛ. Интеграционный сервис(1099171)
+        host: fake-host.sigma.sbrf.ru
+        port: '443'
+        ott: true
+        mtls: true
+        protocol: TLS
+        subjectAltNames: []
+
+  ott:
+    hosts:
+      - 10.53.99.178
+      - 10.53.96.30
+    port: 8443
+    protocol: https
+    v1_0:
+      - host: 10.53.99.178
+        port: 8443
+      - host: 10.53.96.30
+        port: 8443
+
+  dynatrace:
+    latest:
+      servers:
+        - host: tkles-mvp000199.vm.esrt.cloud.sbrf.ru
+          ip: 10.53.90.60
+          port: 9999
+          egress_port: 9999
+        - host: tkles-mvp000228.vm.esrt.cloud.sbrf.ru
+          ip: 10.53.90.149
+          port: 9999
+          egress_port: 9999

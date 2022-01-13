@@ -26,7 +26,7 @@ abstract class ElectronicReceiptIntegrationTest extends AbstractIntegrationTest 
 
     @BeforeAll
     void setup() throws MalformedURLException {
-        jsonRpcRestClient = new JsonRpcRestClient(new URL(HOST + port + "/v2/electronicreceipt"), Collections.emptyMap());
+        jsonRpcRestClient = new JsonRpcRestClient(new URL(HOST + port + "/antifraud/v2/electronicreceipt"), Collections.emptyMap());
     }
 
     protected static RequestId saveOrUpdate(ElectronicReceiptOperation operation) throws Throwable {

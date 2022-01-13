@@ -1,0 +1,11 @@
+---
+integration_entries:
+  - "{{ int.pprb.appjournal.v1_0 }}"
+  - "{{ int.pprb.db_main.v1_0 }}"
+  - "{{ int.pprb.db_si.v1_0 }}"
+  - "{{ int.pprb.fluentbit.v1_0 }}"
+  - "{{ int.pprb.CI1099171_antifraud_integration_service.v1_0 }}"
+
+int_entry:
+  antifraud:
+    fpis: "{{ int.pprb.CI1099171_antifraud_integration_service.v1_0 }}"

@@ -17,7 +17,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 /**
  * Сервис сохранения, обновления и отправки данных электронных чеков в ФП ИС для последующего анализа
  */
-@JsonRpcService("/v2/electronicreceipt")
+@JsonRpcService("/antifraud/v2/electronicreceipt")
 public interface ElectronicReceiptService {
 
     /**

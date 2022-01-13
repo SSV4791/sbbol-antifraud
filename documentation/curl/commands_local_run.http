@@ -1,39 +1,39 @@
-POST http://127.0.0.1:8080/v2/payment
+POST http://127.0.0.1:8080/antifraud/v2/payment
 Content-Type: application/json-rpc
 
 < payment_saveorupdate.json
 
 ###
 
-POST http://127.0.0.1:8080/v2/payment
+POST http://127.0.0.1:8080/antifraud/v2/payment
 Content-Type: application/json-rpc
 
 < payment_send.json
 
 ###
 
-POST http://127.0.0.1:8080/v2/fastpayment
+POST http://127.0.0.1:8080/antifraud/v2/fastpayment
 Content-Type: application/json-rpc
 
 < fastpayment_saveorupdate.json
 
 ###
 
-POST http://127.0.0.1:8080/v2/fastpayment
+POST http://127.0.0.1:8080/antifraud/v2/fastpayment
 Content-Type: application/json-rpc
 
 < fastpayment_send.json
 
 ###
 
-POST http://127.0.0.1:8080/v2/electronicreceipt
+POST http://127.0.0.1:8080/antifraud/v2/electronicreceipt
 Content-Type: application/json-rpc
 
 < electronicreceipt_saveorupdate.json
 
 ###
 
-POST http://127.0.0.1:8080/v2/electronicreceipt
+POST http://127.0.0.1:8080/antifraud/v2/electronicreceipt
 Content-Type: application/json-rpc
 
 < electronicreceipt_send.json
