@@ -6,6 +6,7 @@ import ru.sbrf.ufs.pipeline.docker.DockerRunBuilder
 def pullRequest = null
 def latestCommitHash = ""
 def ufsCredential = 'TUZ_DCBMSC5'
+String jobAllureServerUrl = ''
 
 pipeline {
     agent {
@@ -60,6 +61,9 @@ pipeline {
                             allureResult: ["build/allure-results"],
                             silent      : true
                     ]) { launch ->
+                        jobAllureServerUrl = "${Const.ALLURE_ENTRYPOINT_URL}jobrun/${launch.jobRunId}"
+                        bitbucket.updateBitbucketHistoryBuild(ufsCredential, GIT_PROJECT, GIT_REPOSITORY, params.pullRequestId, PR_CHECK_LABEL, stage_name, "running", jobAllureServerUrl)
+
                         new DockerRunBuilder(this)
                                 .registry(Const.OPENSHIFT_REGISTRY, ufsCredential)
                                 .volume("${WORKSPACE}", "/build")
@@ -67,22 +71,24 @@ pipeline {
                                 .cpu(2)
                                 .memory("2g")
                                 .image(BUILD_JAVA_DOCKER_IMAGE)
-                                .cmd('./gradlew ' +
-                                        "-PnexusLogin=${NEXUS_CREDS_USR} " +
-                                        "-PnexusPassword=${NEXUS_CREDS_PSW} " +
-                                        "-Dtest-layer=unit,api,web,cdcConsumer,configuration " +
-                                        "-Dbuild.link=${env.BUILD_URL} " +
-                                        "-Dbuild.type=prCheck " +
-                                        "-Dallure.jobrunId=${launch.jobRunId} " +
-                                        "-Dsonar.host.url=https://sbt-sonarqube.sigma.sbrf.ru/ " +
-                                        "-Dsonar.login=${SONAR_TOKEN} " +
-                                        "-Dsonar.projectKey=ru.sberbank.pprb.sbbol.antifraud " +
-                                        "-Dsonar.projectVersion=${pullRequest.fromRef.displayId} " +
-                                        "-Dsonar.pullrequest.key=${params.pullRequestId} " +
-                                        "-Dsonar.pullrequest.branch=${pullRequest.fromRef.displayId} " +
-                                        "-Dsonar.pullrequest.base=${pullRequest.toRef.displayId} " +
-                                        "portalUpload sonarqube"
-                                )
+                                .cmd([
+                                        "./gradlew",
+                                        "-PnexusLogin=${NEXUS_CREDS_USR}",
+                                        "-PnexusPassword='${NEXUS_CREDS_PSW}'",
+                                        "-Dtest.results.enabled=true",
+                                        "-Dtest-layer=unit,api,web,cdcConsumer,configuration",
+                                        "-Dbuild.link=${env.BUILD_URL}",
+                                        "-Dbuild.type=prCheck",
+                                        "-Dallure.jobrunId=${launch.jobRunId}",
+                                        "-Dsonar.host.url=https://sbt-sonarqube.sigma.sbrf.ru/",
+                                        "-Dsonar.login=${SONAR_TOKEN}",
+                                        "-Dsonar.projectKey=ru.sberbank.pprb.sbbol.antifraud",
+                                        "-Dsonar.projectVersion=${pullRequest.fromRef.displayId}",
+                                        "-Dsonar.pullrequest.key=${params.pullRequestId}",
+                                        "-Dsonar.pullrequest.branch=${pullRequest.fromRef.displayId}",
+                                        "-Dsonar.pullrequest.base=${pullRequest.toRef.displayId}",
+                                        "qaReporterUpload sonarqube --parallel"
+                                ].join(' '))
                                 .run()
                     }
                 }
@@ -94,12 +100,12 @@ pipeline {
         success {
             script {
                 bitbucket.setJenkinsLabelStatus(ufsCredential, GIT_PROJECT, GIT_REPOSITORY, params.pullRequestId, PR_CHECK_LABEL, true)
-                bitbucket.updateBitbucketHistoryBuild(ufsCredential, GIT_PROJECT, GIT_REPOSITORY, params.pullRequestId, PR_CHECK_LABEL, "success", "successful")
+                bitbucket.updateBitbucketHistoryBuild(ufsCredential, GIT_PROJECT, GIT_REPOSITORY, params.pullRequestId, PR_CHECK_LABEL, "success", "successful", jobAllureServerUrl)
             }
         }
         failure {
             script {
-                bitbucket.updateBitbucketHistoryBuild(ufsCredential, GIT_PROJECT, GIT_REPOSITORY, params.pullRequestId, PR_CHECK_LABEL, "failure", "failed")
+                bitbucket.updateBitbucketHistoryBuild(ufsCredential, GIT_PROJECT, GIT_REPOSITORY, params.pullRequestId, PR_CHECK_LABEL, "failure", "failed", jobAllureServerUrl)
             }
         }
         cleanup {

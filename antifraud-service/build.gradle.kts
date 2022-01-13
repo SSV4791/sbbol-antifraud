@@ -1,3 +1,5 @@
+val pactVersion: String by rootProject
+
 dependencies {
     implementation(project(":antifraud-api"))
     implementation(project(":antifraud-rpc-api"))
@@ -23,6 +25,16 @@ dependencies {
     testImplementation("org.hibernate:hibernate-core")
 
     annotationProcessor("org.mapstruct:mapstruct-processor:1.4.2.Final")
+
+    testImplementation("ru.dcbqa.allureee.annotations:dcb-allure-annotations:1.2.+")
+    testImplementation("io.qameta.allure:allure-junit5:2.16.1")
+
+    testImplementation(group = "au.com.dius.pact.consumer", name = "junit5", version = pactVersion)
+    testImplementation(group = "au.com.dius.pact.consumer", name = "java8", version = pactVersion)
+
+    testImplementation(group = "au.com.dius.pact.provider", name = "spring", version = pactVersion)
+    testImplementation(group = "au.com.dius.pact.provider", name = "junit5", version = pactVersion)
+    testImplementation(group = "au.com.dius.pact.provider", name = "junit5spring", version = pactVersion)
 }
 
 tasks.test {
