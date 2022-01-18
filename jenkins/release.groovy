@@ -144,7 +144,7 @@ pipeline {
                                                 "-Dsonar.login=${SONAR_TOKEN} " +
                                                 "-Dsonar.projectKey=ru.sberbank.pprb.sbbol.antifraud " +
                                                 "-Dsonar.branch.name=${params.branch} " +
-                                                "build portalUpload sonarqube"
+                                                'build portalUpload sonarqube --parallel'
                                         )
                                         .run()
                             }
@@ -223,7 +223,7 @@ pipeline {
             when { expression { params.type == 'release' } }
             steps {
                 script {
-                    ARTIFACT_NAME_LOCK = "antifraud_locks-${VERSION}.zip"
+                    ARTIFACT_NAME_LOCK = "${ARTIFACT_ID}_locks-${VERSION}.zip"
                     sh 'mkdir -p distrib'
                     dir('gradle') {
                         sh "zip -rq ${WORKSPACE}/distrib/$ARTIFACT_NAME_LOCK dependency-locks"
@@ -270,7 +270,7 @@ pipeline {
                 script {
                     dir('distrib') {
                         qgm.publishReleaseNotes(GROUP_ID, ARTIFACT_ID, "D-$VERSION", releaseNotes, credential)
-                        log.info("Sbrf-nexus distrib url: https://sbrf-nexus.sigma.sbrf.ru/nexus/content/repositories/Nexus_PROD/Nexus_PROD/CI03045533_sbbol-antifraud/${ARTIFACT_ID}/D-${VERSION}/${ARTIFACT_ID}-D-${VERSION}-distrib.openshift.zip")
+                        log.info("Sbrf-nexus distrib url: https://sbrf-nexus.sigma.sbrf.ru/nexus/content/repositories/Nexus_PROD/Nexus_PROD/CI03045533_sbbol-antifraud/${ARTIFACT_ID}/D-${VERSION}/${ARTIFACT_ID}-D-${VERSION}-distrib.configs.zip")
                         nexus.publishZip(GROUP_ID, ARTIFACT_ID, "distrib.lock", ARTIFACT_NAME_LOCK, "D-$VERSION", credential)
                     }
                 }
