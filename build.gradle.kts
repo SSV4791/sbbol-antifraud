@@ -202,7 +202,7 @@ publishing {
         ).forEach {
             create<MavenPublication>(it.first()) {
                 groupId = it.last()
-                artifactId = "pprb4-digital-fraud"
+                artifactId = "antifraud"
                 artifact(tasks["fullDistrib"]) {
                     classifier = "distrib.configs"
                 }
