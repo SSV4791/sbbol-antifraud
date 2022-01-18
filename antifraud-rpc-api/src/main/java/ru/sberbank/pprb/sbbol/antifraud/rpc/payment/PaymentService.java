@@ -17,7 +17,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 /**
  * Сервис сохранения, обновления и отправки данных РПП в ФП ИС для последующего анализа
  */
-@JsonRpcService("/v2/payment")
+@JsonRpcService("/antifraud/v2/payment")
 public interface PaymentService {
 
     /**

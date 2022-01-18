@@ -31,7 +31,7 @@ abstract class FastPaymentIntegrationTest extends AbstractIntegrationTest {
 
     @BeforeAll
     void setup() throws Throwable {
-        jsonRpcRestClient = new JsonRpcRestClient(new URL(HOST + port + "/v2/fastpayment"), Collections.emptyMap());
+        jsonRpcRestClient = new JsonRpcRestClient(new URL(HOST + port + "/antifraud/v2/fastpayment"), Collections.emptyMap());
         fillDatabase();
     }
 

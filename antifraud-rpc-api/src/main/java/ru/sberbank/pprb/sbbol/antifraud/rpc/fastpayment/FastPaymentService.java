@@ -17,7 +17,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 /**
  * Сервис сохранения, обновления и отправки данных СБП в ФП ИС для последующего анализа
  */
-@JsonRpcService("/v2/fastpayment")
+@JsonRpcService("/antifraud/v2/fastpayment")
 public interface FastPaymentService {
 
     /**
