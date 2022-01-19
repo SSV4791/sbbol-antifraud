@@ -12,7 +12,7 @@ plugins {
     id("nu.studer.credentials") version "2.1"
     id("org.sonarqube") version "3.2.0"
     id("ru.sbt.meta.meta-gradle-plugin")
-    id("ru.sbrf.build.gradle.qa.reporter") version "3.0.4"
+    id("ru.sbrf.build.gradle.qa.reporter") version "3.1.3"
     id("io.qameta.allure") version "2.8.1"
     `maven-publish`
 }
@@ -50,8 +50,6 @@ allprojects {
             }
         }
     }
-
-    val pactVersion: String by rootProject
 
     dependencies {
         dependencyLocking {
@@ -102,12 +100,6 @@ subprojects {
     apply(plugin = "io.spring.dependency-management")
     dependencies {
         implementation(platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES))
-
-        testImplementation("ru.dcbqa.allureee.annotations:dcb-allure-annotations:1.+")
-        testImplementation("io.qameta.allure:allure-junit5:2.13.5")
-
-        testImplementation(group = "au.com.dius.pact.consumer", name = "junit5", version = "${property("pactVersion")}")
-        testImplementation(group = "au.com.dius.pact.provider", name = "junit5", version = "${property("pactVersion")}")
     }
 }
 
@@ -231,7 +223,7 @@ publishing {
 
 tasks {
 
-    portalUpload {
+    qaReporterUpload {
         /**
          * Добавляем фильтры для классов или целых пакетов, которые не должны учитываться в покрытии Jacoco
          */
@@ -264,7 +256,7 @@ sonarqube {
     }
 }
 
-project.tasks["sonarqube"].dependsOn("portalUpload")
+project.tasks["sonarqube"].dependsOn("qaReporterUpload")
 
 tasks.getByName<BootJar>("bootJar") {
     enabled = false
@@ -274,6 +266,6 @@ tasks.getByName<Jar>("jar") {
     enabled = true
 }
 
-qaPortal {
+qaReporter {
     projectKey.set("sbbol-antifraud")
 }

@@ -127,25 +127,29 @@ pipeline {
                                         .cpu(2)
                                         .memory("2g")
                                         .image(BUILD_JAVA_DOCKER_IMAGE)
-                                        .cmd('./gradlew ' +
-                                                "-PnexusLogin=${NEXUS_CREDS_USR} " +
-                                                "-PnexusPassword=${NEXUS_CREDS_PSW} " +
-                                                "-Pversion=${VERSION} " +
-                                                "-Dtest-layer=cdcProvider,unit,api,web,cdcConsumer " +
-                                                "-Dpactbroker.url=${Const.PACT_BROKER_URL} " +
-                                                "-Dpactbroker.auth.username=${PACT_CREDS_USR} " +
-                                                "-Dpactbroker.auth.password='${PACT_CREDS_PSW}' " +
-                                                "-Dpact.pacticipant.version=${VERSION} " +
-                                                "-Dpact.pacticipant.tag=${params.branch} " +
-                                                "-Dbuild.link=${env.BUILD_URL} " +
-                                                "-Dbuild.type=release " +
-                                                "-Dallure.jobrunId=${launch.jobRunId} " +
-                                                "-Dsonar.host.url=https://sbt-sonarqube.sigma.sbrf.ru/ " +
-                                                "-Dsonar.login=${SONAR_TOKEN} " +
-                                                "-Dsonar.projectKey=ru.sberbank.pprb.sbbol.antifraud " +
-                                                "-Dsonar.branch.name=${params.branch} " +
-                                                'build portalUpload sonarqube --parallel'
-                                        )
+                                        .cmd([
+                                                "./gradlew",
+                                                "-PnexusLogin=${NEXUS_CREDS_USR}",
+                                                "-PnexusPassword='${NEXUS_CREDS_PSW}'",
+                                                "-Pversion=${VERSION}",
+                                                "-Dtest.results.enabled=true",
+                                                "-Dtest-layer=cdcProvider,unit,api,web,cdcConsumer",
+                                                "-Dpactbroker.url=${Const.PACT_BROKER_URL}",
+                                                "-Dpactbroker.auth.username=${PACT_CREDS_USR}",
+                                                "-Dpactbroker.auth.password='${PACT_CREDS_PSW}'",
+                                                "-Dpact.pacticipant.version=${VERSION}",
+                                                "-Dpact.pacticipant.tag=${params.branch}",
+                                                "-Dpact.consumer.tag=${params.branch}",
+                                                "-Dpactbroker.consumerversionselectors.tags=${ARTIFACT_ID}:${params.branch}",
+                                                "-Dbuild.link=${env.BUILD_URL}",
+                                                "-Dbuild.type=release",
+                                                "-Dallure.jobrunId=${launch.jobRunId}",
+                                                "-Dsonar.host.url=https://sbt-sonarqube.sigma.sbrf.ru/",
+                                                "-Dsonar.login=${SONAR_TOKEN}",
+                                                "-Dsonar.projectKey=ru.sberbank.pprb.sbbol.antifraud",
+                                                "-Dsonar.branch.name=${params.branch}",
+                                                "build qaReporterUpload sonarqube --parallel"
+                                        ].join(' '))
                                         .run()
                             }
                         }

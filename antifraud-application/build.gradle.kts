@@ -1,5 +1,7 @@
 apply(plugin = "org.springframework.boot")
 
+val pactVersion: String by rootProject
+
 dependencies {
     implementation(project(":antifraud-api"))
     implementation(project(":antifraud-service"))
@@ -24,10 +26,23 @@ dependencies {
     runtimeOnly("com.h2database:h2:1.4.200")
     runtimeOnly("org.postgresql:postgresql:42.2.19")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude("junit:junit")
+        exclude(group= "com.vaadin.external.google", module="android-json")
+    }
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
     // заглушка для тестирования репликации между БД
     testImplementation("sbp.integration.orm:orm-tests-common:4.1.14")
+
+    testImplementation("ru.dcbqa.allureee.annotations:dcb-allure-annotations:1.2.+")
+    testImplementation("io.qameta.allure:allure-junit5:2.16.1")
+
+    testImplementation(group = "au.com.dius.pact.consumer", name = "junit5", version = pactVersion)
+    testImplementation(group = "au.com.dius.pact.consumer", name = "java8", version = pactVersion)
+
+    testImplementation(group = "au.com.dius.pact.provider", name = "spring", version = pactVersion)
+    testImplementation(group = "au.com.dius.pact.provider", name = "junit5", version = pactVersion)
+    testImplementation(group = "au.com.dius.pact.provider", name = "junit5spring", version = pactVersion)
 }
 
 tasks.test {
