@@ -155,7 +155,7 @@ tasks.register<Zip>("fullDistrib") {
     from("${rootDir}/docs/build/docs") {
         into("docs")
     }
-    from("${rootDir}/src/main/resources/db/changelog/") {
+    from("${rootDir}/antifraud-application/src/main/resources/db/changelog/") {
         into("liquibase")
     }
 }
