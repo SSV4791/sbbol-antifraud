@@ -95,11 +95,9 @@ pipeline {
                                     "--password=${POSTGRES_DB_PASSWORD} " +
                                     "--changeLogFile=antifraud-application/src/main/resources/db/changelog/changelog.yaml " +
                                     "--driver=org.postgresql.Driver " +
-                                    "--defaultSchemaName=public " +
                                     'update ' +
                                     "-Dtablespace_t=pg_default " +
                                     "-Dtablespace_i=pg_default " +
-                                    "-Dschemaname=public " +
                                     "-DdefaultSchemaName=public"
                             )
                             .run()
