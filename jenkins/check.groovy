@@ -4,7 +4,8 @@ def ufsCredential = 'TUZ_DCBMSC5'
 
 def labels = [
         build: [
-                entries: ['src/', 'build.gradle.kts', 'gradle.properties', 'settings.gradle.kts', 'jenkins/build.groovy']
+                entries: ['antifraud-api/', 'antifraud-application/', 'antifraud-rpc-api/', 'antifraud-service/',
+                          'buildSrc/', 'build.gradle.kts', 'gradle.properties', 'settings.gradle.kts', 'jenkins/build.groovy']
         ],
         openshift: [
                 entries: ['openshift/', 'jenkins/resources/openshift/', 'jenkins/openshift.groovy']
