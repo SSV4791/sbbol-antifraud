@@ -69,3 +69,7 @@ app_journal:
   secret: secret-appjournalstubsettings
 
 context_prefix: /antifraud/
+
+fraud:
+  adapter:
+    context: /asfm/v1.0/pprb_bhb_hist_b2b_aful/notify
