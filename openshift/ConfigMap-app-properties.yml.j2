@@ -8,7 +8,7 @@ data:
     server.port=8080
     server.shutdown=graceful
 
-    fpis.endpoint={{ int_entry.antifraud.fpis }}
+    fpis.endpoint=http://{{ int_entry.antifraud.fpis.host }}/{{ fraud.adapter.context }}
 
     spring.jpa.properties.hibernate.jdbc.time_zone=UTC
     spring.jpa.properties.hibernate.cache.use_second_level_cache=true
@@ -29,6 +29,7 @@ data:
     management.metrics.export.prometheus.enabled=true
 
     management.endpoints.enabled-by-default=true
+    management.endpoints.web.base-path={{ context_prefix }}actuator
     management.endpoints.web.exposure.include=health,prometheus
     management.endpoints.jmx.exposure.include=*
     management.endpoint.metrics.enabled=true

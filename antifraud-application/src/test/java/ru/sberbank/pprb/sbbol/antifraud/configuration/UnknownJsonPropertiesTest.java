@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.dcbqa.allureee.annotations.layers.ConfigurationTestLayer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @DirtiesContext
 @ActiveProfiles("test")
 @ConfigurationTestLayer
+@ApiTestLayer
 class UnknownJsonPropertiesTest {
 
     @Autowired
