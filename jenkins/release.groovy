@@ -3,12 +3,16 @@ import ru.sbrf.ufs.pipeline.docker.DockerRunBuilder
 
 @Library(['ufs-jobs@master']) _
 
-def credential = 'TUZ_DCBMSC5'
+//secman.makeCredMap работает только для кредов из вашей папки в SecMan. Функция принимает идентификатор креда
+def credential = secman.makeCredMap('TUZ_DCBMSC5')
+def bitbucketCredential = Const.BITBUCKET_DBO_KEY_SECMAN
+def sonarCredential = secman.makeCredMap('sonar-token')
+def pactCredential = Const.PACT_CI_META_SECMAN
 def projectLog = ''
 
 pipeline {
     agent {
-        label 'ufs-release'
+        label 'clearAgent'
     }
     options {
         timeout(time: 15, unit: 'MINUTES')
@@ -39,9 +43,7 @@ pipeline {
         PROJECT_URL = "https://sbtatlas.sigma.sbrf.ru/stashdbo/projects/${GIT_PROJECT}/repos/${GIT_REPOSITORY}/"
         // Ссылка на страницу git репозитория
         DOCS_PATH = "${ARTIFACT_ID}/${env.BRANCH_NAME}" // путь для публикации документации
-        NEXUS_CREDS = credentials("${credential}")
         GRADLE_CACHE_DIR = "${WORKSPACE}/.gradle"
-        // код(GUID) компонента из ARIS, для каждой БП/БПС свой
         // internal envs
         DOCKER_REGISTRY = 'registry.sigma.sbrf.ru'
         DOCKER_IMAGE_REPOSITORY_PROD = 'pprb/ci02473994/ci03045533_sbbol_antifraud'
@@ -53,10 +55,8 @@ pipeline {
         VERSION = ''
         LAST_VERSION = ''
         ARTIFACT_NAME = ''
-        SONAR_TOKEN = credentials('sonar-token')
         LATEST_COMMIT_HASH = ''
         ALLURE_PROJECT_ID = '37'
-        PACT_CREDS = credentials('pact_ci_meta')
     }
 
     stages {
@@ -66,7 +66,7 @@ pipeline {
         stage('Checkout git') {
             steps {
                 script {
-                    LATEST_COMMIT_HASH = git.checkoutRef('bitbucket-dbo-key', GIT_PROJECT, GIT_REPOSITORY, branch)
+                    LATEST_COMMIT_HASH = git.checkoutRef(bitbucketCredential, GIT_PROJECT, GIT_REPOSITORY, branch)
                 }
             }
         }
@@ -96,7 +96,7 @@ pipeline {
             steps {
                 script {
                     // Ставим git tag с версией сборки на текущий commit
-                    git.tag('bitbucket-dbo-key', VERSION)
+                    git.tag(bitbucketCredential, VERSION)
                     currentBuild.displayName += " D-$VERSION"
                     rtp stableText: "<h1>Build number: D-$VERSION</h1>"
                 }
@@ -115,49 +115,58 @@ pipeline {
                 stage('Build Java and Pact tests check') {
                     steps {
                         script {
-                            allureEe.run([
-                                    projectId   : ALLURE_PROJECT_ID,
-                                    allureResult: ["build/allure-results"],
-                                    silent      : true
-                            ]) { launch ->
-                                new DockerRunBuilder(this)
-                                        .registry(Const.OPENSHIFT_REGISTRY, credential)
-                                        .volume("${WORKSPACE}", "/build")
-                                        .extra("-w /build")
-                                        .cpu(2)
-                                        .memory("2g")
-                                        .image(BUILD_JAVA_DOCKER_IMAGE)
-                                        .cmd([
-                                                "./gradlew",
-                                                "-PnexusLogin=${NEXUS_CREDS_USR}",
-                                                "-PnexusPassword='${NEXUS_CREDS_PSW}'",
-                                                "-Pversion=${VERSION}",
-                                                "-Dtest.results.enabled=true",
-                                                "-Dtest-layer=cdcProvider,unit,api,web,cdcConsumer",
-                                                "-Dpactbroker.url=${Const.PACT_BROKER_URL}",
-                                                "-Dpactbroker.auth.username=${PACT_CREDS_USR}",
-                                                "-Dpactbroker.auth.password='${PACT_CREDS_PSW}'",
-                                                "-Dpact.pacticipant.version=${VERSION}",
-                                                "-Dpact.pacticipant.tag=${params.branch}",
-                                                "-Dpact.consumer.tag=${params.branch}",
-                                                "-Dpactbroker.consumerversionselectors.tags=${ARTIFACT_ID}:${params.branch}",
-                                                "-Dbuild.link=${env.BUILD_URL}",
-                                                "-Dbuild.type=release",
-                                                "-Dallure.jobrunId=${launch.jobRunId}",
-                                                "-Dsonar.host.url=https://sbt-sonarqube.sigma.sbrf.ru/",
-                                                "-Dsonar.login=${SONAR_TOKEN}",
-                                                "-Dsonar.projectKey=ru.sberbank.pprb.sbbol.antifraud",
-                                                "-Dsonar.branch.name=${params.branch}",
-                                                "build qaReporterUpload sonarqube --parallel"
-                                        ].join(' '))
-                                        .run()
-                                httpRequest(
-                                        httpMode: 'GET',
-                                        contentType: 'APPLICATION_JSON',
-                                        quiet: true,
-                                        consoleLogResponseBody: false,
-                                        url: "http://10.53.120.222:8080/api/export/trigger/${launch.jobRunId}"
-                                )
+                            vault.withUserPass([path: credential.path, userVar: "NEXUS_USER", passVar: "NEXUS_PASSWORD"]) {
+                                vault.withSecretKey([path: sonarCredential.path, secretKeyVar: "SONAR_TOKEN"]) {
+                                    vault.withUserPass([path: pactCredential.path, userVar: "PACT_USER", passVar: "PACT_PASSWORD"]) {
+                                        allureEe.run([
+                                                projectId   : ALLURE_PROJECT_ID,
+                                                allureResult: ["build/allure-results"],
+                                                silent      : true
+                                        ]) { launch ->
+                                            new DockerRunBuilder(this)
+                                                    .registry(Const.OPENSHIFT_REGISTRY, credential)
+                                                    .env("GRADLE_USER_HOME", '/build/.gradle')
+                                                    .env("SONAR_USER_HOME", "/build/.sonar")
+                                                    .volume("${WORKSPACE}", "/build")
+                                                    .extra("-w /build")
+                                                    .extra("-u \$(id -u)")
+                                                    .cpu(2)
+                                                    .memory("2g")
+                                                    .image(BUILD_JAVA_DOCKER_IMAGE)
+                                                    .cmd([
+                                                            "./gradlew ",
+                                                            "-PnexusLogin=${NEXUS_USER} ",
+                                                            "-PnexusPassword='${NEXUS_PASSWORD}' ",
+                                                            "-Pversion=${VERSION} ",
+                                                            "-Dtest.results.enabled=true ",
+                                                            "-Dtest-layer=cdcProvider,unit,api,web,cdcConsumer ",
+                                                            "-Dpactbroker.url=${Const.PACT_BROKER_URL} ",
+                                                            "-Dpactbroker.auth.username=${PACT_USER} ",
+                                                            "-Dpactbroker.auth.password='${PACT_PASSWORD}' ",
+                                                            "-Dpact.pacticipant.version=${VERSION} ",
+                                                            "-Dpact.pacticipant.tag=${params.branch} ",
+                                                            "-Dpact.consumer.tag=${params.branch} ",
+                                                            "-Dpactbroker.consumerversionselectors.tags=${ARTIFACT_ID}:${params.branch} ",
+                                                            "-Dbuild.link=${env.BUILD_URL} ",
+                                                            "-Dbuild.type=release ",
+                                                            "-Dallure.jobrunId=${launch.jobRunId} ",
+                                                            "-Dsonar.host.url=https://sbt-sonarqube.sigma.sbrf.ru/ ",
+                                                            "-Dsonar.login=${SONAR_TOKEN} ",
+                                                            "-Dsonar.projectKey=ru.sberbank.pprb.sbbol.antifraud ",
+                                                            "-Dsonar.branch.name=${params.branch} ",
+                                                            "build qaReporterUpload sonarqube --parallel"
+                                                    ].join(' '))
+                                                    .run()
+                                            httpRequest(
+                                                    httpMode: 'GET',
+                                                    contentType: 'APPLICATION_JSON',
+                                                    quiet: true,
+                                                    consoleLogResponseBody: false,
+                                                    url: "http://10.53.120.222:8080/api/export/trigger/${launch.jobRunId}"
+                                            )
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -174,8 +183,9 @@ pipeline {
                         DOCKER_IMAGE_REPOSITORY = DOCKER_IMAGE_REPOSITORY_DEV
                     }
                     DOCKER_IMAGE_NAME = "${DOCKER_REGISTRY}/${DOCKER_IMAGE_REPOSITORY}/${ARTIFACT_ID}:${VERSION}"
-                    docker.withRegistry(Const.OPENSHIFT_REGISTRY, credential) {
-                        docker.build(DOCKER_IMAGE_NAME, "--force-rm .").push()
+                    vault.withRegistry(Const.OPENSHIFT_REGISTRY, credential) {
+                        docker.build(DOCKER_IMAGE_NAME, "--force-rm .")
+                        sh "docker push ${DOCKER_IMAGE_NAME}"
                     }
                 }
             }
@@ -189,7 +199,7 @@ pipeline {
                 script {
                     dir('openshift') {
 
-                        istio.getOSTemplates('bitbucket-dbo-key', 'istio', 'openshift', params.istio_tag, './istio')
+                        istio.getOSTemplates(bitbucketCredential, 'istio', 'openshift', params.istio_tag, './istio')
 
                         git.raw(credential, 'cibufs', 'sbbol-params', params.branchParams, "${ARTIFACT_ID}/${params.branch}/params.yml")
                         def repoDigest = sh(script: "docker inspect ${DOCKER_IMAGE_NAME} --format='{{index .RepoDigests 0}}'", returnStdout: true).trim()
@@ -206,23 +216,26 @@ pipeline {
         stage('Publish artifacts') {
             steps {
                 script {
-                    new DockerRunBuilder(this)
-                            .registry(Const.OPENSHIFT_REGISTRY, credential)
-                            .env("GRADLE_USER_HOME", '/build/.gradle')
-                            .volume("${WORKSPACE}", "/build")
-                            .extra("-w /build")
-                            .cpu(1)
-                            .memory("1g")
-                            .image(BUILD_JAVA_DOCKER_IMAGE)
-                            .cmd('./gradlew ' +
-                                    "-PnexusLogin=${NEXUS_CREDS_USR} " +
-                                    "-PnexusPassword='${NEXUS_CREDS_PSW}' " +
-                                    "-Pversion=D-${VERSION} " +
-                                    "-PdockerImage='${DOCKER_IMAGE_REPOSITORY}/${ARTIFACT_ID}@${DOCKER_IMAGE_HASH}' " +
-                                    "${params.type} " +
-                                    "${params.reverseAndPublish ? 'reverseAndPublish' : ''}"
-                            )
-                            .run()
+                    vault.withUserPass([path: credential.path, userVar: "NEXUS_USER", passVar: "NEXUS_PASSWORD"]) {
+                        new DockerRunBuilder(this)
+                                .registry(Const.OPENSHIFT_REGISTRY, credential)
+                                .env("GRADLE_USER_HOME", '/build/.gradle')
+                                .volume("${WORKSPACE}", "/build")
+                                .extra("-w /build")
+                                .extra("-u \$(id -u)")
+                                .cpu(1)
+                                .memory("1g")
+                                .image(BUILD_JAVA_DOCKER_IMAGE)
+                                .cmd('./gradlew ' +
+                                        "-PnexusLogin=${NEXUS_USER} " +
+                                        "-PnexusPassword='${NEXUS_PASSWORD}' " +
+                                        "-Pversion=D-${VERSION} " +
+                                        "-PdockerImage='${DOCKER_IMAGE_REPOSITORY}/${ARTIFACT_ID}@${DOCKER_IMAGE_HASH}' " +
+                                        "${params.type} " +
+                                        "${params.reverseAndPublish?'reverseAndPublish':''}"
+                                )
+                                .run()
+                    }
                 }
             }
         }
@@ -294,7 +307,7 @@ pipeline {
         stage('Publish documentation') {
             steps {
                 script {
-                    docs.publish('documentation-publisher', 'docs/build/docs/', DOCS_PATH)
+                    docs.publish(Const.DOCS_PUBLISHER_SECMAN, 'docs/build/docs/', DOCS_PATH)
                 }
             }
         }
@@ -322,7 +335,7 @@ pipeline {
         stage('Push technical flags') {
             steps {
                 script {
-                    dpm.publishFlags("D-$VERSION", ARTIFACT_ID, GROUP_ID, ["bvt", "ci", "smart_regress_ift", "smart_regress_st", "smoke_ift", "smoke_st"], credential)
+                    qgm.publishFlags("D-$VERSION", ARTIFACT_ID, GROUP_ID, ['bvt':'ok', 'ci':'ok', 'smart_regress_ift':'ok', 'smart_regress_st':'ok', 'smoke_ift':'ok', 'smoke_st':'ok'], credential)
                 }
             }
         }
