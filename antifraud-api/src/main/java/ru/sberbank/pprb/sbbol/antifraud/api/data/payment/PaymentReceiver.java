@@ -23,7 +23,6 @@ public class PaymentReceiver implements Serializable {
     /**
      * ИНН получателя
      */
-    @NotBlank(message = "The document.receiver.inn attribute must be filled")
     private String inn;
 
     /**
