@@ -21,7 +21,7 @@ pipeline {
     parameters {
         string(name: 'branch', defaultValue: 'release/02.000.00', description: 'Ветка для сборки образа')
         string(name: 'branchParams', defaultValue: 'master', description: 'Ветка для params.yml')
-        string(name: 'istio_tag', defaultValue: '01.000.03', description: 'Тег для шаблонов istio')
+        string(name: 'istio_tag', defaultValue: '1.4', description: 'Тег для шаблонов istio')
         string(name: 'commitOrTag', description: 'Хэш коммита или тэг от которого формируется release-notes')
         booleanParam(name: 'checkmarx', defaultValue: false)
         booleanParam(name: 'reverseAndPublish', defaultValue: false)
