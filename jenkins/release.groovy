@@ -31,7 +31,7 @@ pipeline {
         GIT_PROJECT = 'CIBPPRB'
         GIT_REPOSITORY = 'sbbol-antifraud'
         GIT_REPOSITORY_LINK = "${Const.BITBUCKET_SERVER_INSTANCE_URL}/scm/${GIT_PROJECT}/${GIT_REPOSITORY}.git"
-        BUILD_JAVA_DOCKER_IMAGE = 'registry.sigma.sbrf.ru/ci00149046/ci00405008_sbbolufs/bellsoft/liberica-openjdk-alpine:15.0.1-9-with-certs'
+        BUILD_JAVA_DOCKER_IMAGE = 'registry.sigma.sbrf.ru/ci00149046/ci00405008_sbbolufs/bellsoft/liberica-openjdk-alpine:15.0.1-9-sber-certs'
         GROUP_ID = 'Nexus_PROD.CI03045533_sbbol-antifraud'
         ARTIFACT_ID = 'antifraud'
         VERSION_PATTERN = /02\.000\.\d{2}_\d{4}/
