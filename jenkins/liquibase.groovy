@@ -26,7 +26,7 @@ pipeline {
         GIT_PROJECT = 'CIBPPRB'
         GIT_REPOSITORY = 'sbbol-antifraud'
         PR_CHECK_LABEL = 'liquibase'
-        BUILD_JAVA_DOCKER_IMAGE = 'registry.sigma.sbrf.ru/ci00149046/ci00405008_sbbolufs/bellsoft/liberica-openjdk-alpine:15.0.1-9-with-certs'
+        BUILD_JAVA_DOCKER_IMAGE = 'registry.sigma.sbrf.ru/ci00149046/ci00405008_sbbolufs/bellsoft/liberica-openjdk-alpine:15.0.1-9-sber-certs'
         POSTGRES_DOCKER_IMAGE = 'registry.sigma.sbrf.ru/ci00149046/ci00405008_sbbolufs/postgres:13-alpine'
         NETWORK_ALIAS = 'postgres'
         POSTGRES_DB_NAME = 'db'
