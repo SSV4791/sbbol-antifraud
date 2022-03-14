@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
+import ru.sberbank.pprb.sbbol.antifraud.logging.LoggedInvocationListener;
 
 @Configuration
 public class AntiFraudConfiguration {
@@ -39,6 +40,8 @@ public class AntiFraudConfiguration {
     public static AutoJsonRpcServiceImplExporter autoJsonRpcServiceImplExporter() {
         AutoJsonRpcServiceImplExporter exporter = new AutoJsonRpcServiceImplExporter();
         exporter.setContentType("application/json-rpc; charset=utf-8");
+        exporter.setShouldLogInvocationErrors(false);
+        exporter.setInvocationListener(new LoggedInvocationListener());
         return exporter;
     }
 
