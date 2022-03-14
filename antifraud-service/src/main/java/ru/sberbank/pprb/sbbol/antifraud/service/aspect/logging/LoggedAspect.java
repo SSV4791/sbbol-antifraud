@@ -2,7 +2,6 @@ package ru.sberbank.pprb.sbbol.antifraud.service.aspect.logging;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
-import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
@@ -26,11 +25,6 @@ public final class LoggedAspect {
         Object result = joinPoint.proceed();
         logResult(logged, joinPoint.getSignature(), result);
         return result;
-    }
-
-    @AfterThrowing(pointcut = "within(ru.sberbank.pprb.sbbol.antifraud.service.rpc..*) && @annotation(ru.sberbank.pprb.sbbol.antifraud.service.aspect.logging.Logged)", throwing = "ex")
-    public void logError(Exception ex) {
-        logger.error("Error: ", ex);
     }
 
     private void logInvocation(Logged logged, Signature signature, Object[] args) {

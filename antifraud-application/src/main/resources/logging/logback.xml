@@ -92,4 +92,5 @@
         <appender-ref ref="FILE"/>
         <appender-ref ref="JSON"/>
     </root>
+    <logger name="org.springframework.remoting.support.RemoteInvocationTraceInterceptor" level="error"/>
 </configuration>

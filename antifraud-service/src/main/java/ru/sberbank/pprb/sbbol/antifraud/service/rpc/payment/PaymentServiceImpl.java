@@ -7,7 +7,6 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
 import ru.sberbank.pprb.sbbol.antifraud.rpc.payment.PaymentService;
-import ru.sberbank.pprb.sbbol.antifraud.service.aspect.logging.Logged;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.Processor;
 import ru.sberbank.pprb.sbbol.antifraud.service.rpc.AbstractService;
 
@@ -21,13 +20,11 @@ public class PaymentServiceImpl extends AbstractService<PaymentOperation> implem
         this.processor = processor;
     }
 
-    @Logged(printRequestResponse = true)
     @Override
     public RequestId saveOrUpdateData(PaymentOperation request) {
         return saveOrUpdate(processor, request);
     }
 
-    @Logged(printRequestResponse = true)
     @Override
     public AnalyzeResponse analyzeOperation(SendToAnalyzeRequest request) {
         return analyze(processor, request);

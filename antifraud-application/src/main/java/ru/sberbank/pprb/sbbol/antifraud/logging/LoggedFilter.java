@@ -1,4 +1,4 @@
-package ru.sberbank.pprb.sbbol.antifraud.filter.logging;
+package ru.sberbank.pprb.sbbol.antifraud.logging;
 
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
