@@ -10,6 +10,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.payment.Payment;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.CommonMapper;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -78,10 +79,11 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
     public static final String SENDER_PHONE = "senderPhone";
     public static final String SENDER_EMAIL = "senderEmail";
     public static final String SENDER_SOURCE = "senderSource";
+    public static final String LOGIN_ID = "loginId";
 
     private static final Map<String, Function<Payment, Object>> CRITERIA_MAP;
     private static final Map<String, String> DESCRIPTION_MAP;
-    public static final int CAPACITY = 60;
+    public static final int CAPACITY = 61;
 
     static {
         Map<String, Function<Payment, Object>> criteriaMap = new HashMap<>(CAPACITY);
@@ -145,6 +147,7 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
         criteriaMap.put(SENDER_PHONE, Payment::getSenderPhone);
         criteriaMap.put(SENDER_EMAIL, Payment::getSenderEmail);
         criteriaMap.put(SENDER_SOURCE, Payment::getSenderSource);
+        criteriaMap.put(LOGIN_ID, Payment::getSenderLogin);
         CRITERIA_MAP = Collections.unmodifiableMap(criteriaMap);
 
         Map<String, String> descriptionMap = new HashMap<>(CAPACITY);
@@ -208,6 +211,7 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
         descriptionMap.put(SENDER_PHONE, "Отправивший Номер телефона");
         descriptionMap.put(SENDER_EMAIL, "Отправивший Адрес электронной почты");
         descriptionMap.put(SENDER_SOURCE, "Отправивший Канал");
+        descriptionMap.put(LOGIN_ID, "Идентификатор Логина");
         DESCRIPTION_MAP = Collections.unmodifiableMap(descriptionMap);
     }
 
@@ -528,6 +532,15 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
     @AfterMapping
     protected void createClientDefinedAttributeList(@MappingTarget AnalyzeRequest analyzeRequest, Payment entity) {
         CommonMapper.super.createClientDefinedAttributeList(analyzeRequest, entity, CRITERIA_MAP, DESCRIPTION_MAP);
+    }
+
+    // Требование ФП ИС прибавлять 3 часа для приведения времени к МСК. По согласованию данные атрибуты приходят в 0 тайм зоне
+    @AfterMapping
+    protected void add3HoursToTime(@MappingTarget AnalyzeRequest analyzeRequest) {
+        LocalDateTime timeStamp = analyzeRequest.getMessageHeader().getTimeStamp().plusHours(3);
+        LocalDateTime timeOfOccurrence = analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence().plusHours(3);
+        analyzeRequest.getMessageHeader().setTimeStamp(timeStamp);
+        analyzeRequest.getEventDataList().getEventDataHeader().setTimeOfOccurrence(timeOfOccurrence);
     }
 
 }

@@ -69,7 +69,7 @@ class PaymentMapperTest extends MapperTest {
         assertNotNull(analyzeRequest);
 
         assertNotNull(analyzeRequest.getMessageHeader());
-        assertEquals(payment.getTimeStamp(), analyzeRequest.getMessageHeader().getTimeStamp());
+        assertEquals(payment.getTimeStamp().plusHours(3), analyzeRequest.getMessageHeader().getTimeStamp());
 
         assertNotNull(analyzeRequest.getIdentificationData());
         assertEquals(payment.getDocId(), analyzeRequest.getIdentificationData().getClientTransactionId());
@@ -98,7 +98,7 @@ class PaymentMapperTest extends MapperTest {
         assertEquals(PAYMENT_DT_0401060.getEventType(), analyzeRequest.getEventDataList().getEventDataHeader().getEventType());
         assertEquals(PAYMENT_DT_0401060.getEventDescription(), analyzeRequest.getEventDataList().getEventDataHeader().getEventDescription());
         assertEquals(PAYMENT_DT_0401060.getClientDefinedEventType(payment.getChannelIndicator()), analyzeRequest.getEventDataList().getEventDataHeader().getClientDefinedEventType());
-        assertEquals(payment.getTimeOfOccurrence(), analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence());
+        assertEquals(payment.getTimeOfOccurrence().plusHours(3), analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence());
 
         assertNotNull(analyzeRequest.getEventDataList().getTransactionData());
 
