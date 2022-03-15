@@ -10,6 +10,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentOperatio
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.fastpayment.FastPayment;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.CommonMapper;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -68,10 +69,11 @@ public abstract class FastPaymentMapper implements CommonMapper<FastPayment> {
     public static final String SENDER_PHONE = "senderPhone";
     public static final String SENDER_EMAIL = "senderEmail";
     public static final String SENDER_SOURCE = "senderSource";
+    public static final String LOGIN_ID = "loginId";
 
     private static final Map<String, Function<FastPayment, Object>> CRITERIA_MAP;
     private static final Map<String, String> DESCRIPTION_MAP;
-    public static final int CAPACITY = 50;
+    public static final int CAPACITY = 51;
 
     static {
         Map<String, Function<FastPayment, Object>> criteriaMap = new HashMap<>(CAPACITY);
@@ -125,6 +127,7 @@ public abstract class FastPaymentMapper implements CommonMapper<FastPayment> {
         criteriaMap.put(SENDER_PHONE, FastPayment::getSenderPhone);
         criteriaMap.put(SENDER_EMAIL, FastPayment::getSenderEmail);
         criteriaMap.put(SENDER_SOURCE, FastPayment::getSenderSource);
+        criteriaMap.put(LOGIN_ID, FastPayment::getSenderLogin);
         CRITERIA_MAP = Collections.unmodifiableMap(criteriaMap);
 
         Map<String, String> descriptionMap = new HashMap<>(CAPACITY);
@@ -178,6 +181,7 @@ public abstract class FastPaymentMapper implements CommonMapper<FastPayment> {
         descriptionMap.put(SENDER_PHONE, "Отправивший Номер телефона");
         descriptionMap.put(SENDER_EMAIL, "Отправивший Адрес электронной почты");
         descriptionMap.put(SENDER_SOURCE, "Отправивший Канал");
+        descriptionMap.put(LOGIN_ID, "Идентификатор Логина");
         DESCRIPTION_MAP = Collections.unmodifiableMap(descriptionMap);
     }
 
@@ -445,6 +449,15 @@ public abstract class FastPaymentMapper implements CommonMapper<FastPayment> {
     @AfterMapping
     protected void createClientDefinedAttributeList(@MappingTarget AnalyzeRequest analyzeRequest, FastPayment entity) {
         CommonMapper.super.createClientDefinedAttributeList(analyzeRequest, entity, CRITERIA_MAP, DESCRIPTION_MAP);
+    }
+
+    // Требование ФП ИС прибавлять 3 часа для приведения времени к МСК. По согласованию данные атрибуты приходят в 0 тайм зоне
+    @AfterMapping
+    protected void add3HoursToTime(@MappingTarget AnalyzeRequest analyzeRequest) {
+        LocalDateTime timeStamp = analyzeRequest.getMessageHeader().getTimeStamp().plusHours(3);
+        LocalDateTime timeOfOccurrence = analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence().plusHours(3);
+        analyzeRequest.getMessageHeader().setTimeStamp(timeStamp);
+        analyzeRequest.getEventDataList().getEventDataHeader().setTimeOfOccurrence(timeOfOccurrence);
     }
 
 }
