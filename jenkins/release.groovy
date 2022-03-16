@@ -157,13 +157,7 @@ pipeline {
                                                             "build qaReporterUpload sonarqube --parallel"
                                                     ].join(' '))
                                                     .run()
-                                            httpRequest(
-                                                    httpMode: 'GET',
-                                                    contentType: 'APPLICATION_JSON',
-                                                    quiet: true,
-                                                    consoleLogResponseBody: false,
-                                                    url: "http://10.53.120.222:8080/api/export/trigger/${launch.jobRunId}"
-                                            )
+                                            portal.triggerAllureTestsExportToJira(launch.jobRunId)
                                         }
                                     }
                                 }
