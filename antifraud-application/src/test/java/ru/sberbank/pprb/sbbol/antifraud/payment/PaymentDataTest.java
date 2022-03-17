@@ -1,6 +1,7 @@
 package ru.sberbank.pprb.sbbol.antifraud.payment;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import io.qameta.allure.AllureId;
 import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
@@ -396,6 +397,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
 
     //DCBEFSMSC5-T183 antifraud/savedata РПП (минимум полей)
     @Test
+    @DisplayName("Сохранение РПП с минимальным набором полей")
     @AllureId("25619")
     void savePaymentWithMinimumFields () throws Throwable {
         UUID docId = UUID.randomUUID();
@@ -405,6 +407,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
                 .withDocNumber(docNumber)
                 .build();
         dto.setDigitalId(null);
+        dto.getDocument().getReceiver().setInn(null);
         RequestId requestId = saveOrUpdate(dto);
         dto.setMappedSigns(PaymentSignMapper.convertSigns(dto.getSigns()));
         assertNotNull(requestId);

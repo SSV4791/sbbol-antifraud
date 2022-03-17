@@ -1,6 +1,8 @@
 package ru.sberbank.pprb.sbbol.antifraud.fastpayment;
 
+import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import io.qameta.allure.AllureId;
 import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
@@ -364,6 +366,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
 
     //DCBEFSMSC5-T184 antifraud/savedata СБП (минимум полей)
     @Test
+    @DisplayName("Сохранение СБП с минимальным набором полей")
     @AllureId("25610")
     void saveFastPaymentWithMinimumFields() throws Throwable {
         UUID docId = UUID.randomUUID();
@@ -372,7 +375,8 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
                 .withDocId(docId)
                 .withDocNumber(docNumber)
                 .build();
-        dto.setDigitalId(null);
+        dto.setDigitalId(null);                                         //Сделано необязательным
+        dto.getDocument().getReceiver().setInn(null);                   //Сделано необязательным
         RequestId requestId = saveOrUpdate(dto);
         dto.setMappedSigns(FastPaymentSignMapper.convertSigns(dto.getSigns()));
         assertNotNull(requestId);
