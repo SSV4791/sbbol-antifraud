@@ -1,383 +1,413 @@
 ==	Параметры конфигурации
 
 === Стендозависимые параметры деплоя
+Описание основных параметров: http://dev-sbbol2.sigma.sbrf.ru/docs/openshift-environments/master/
 
-Описание всех переменных в install_eip
+Описание переменных в openshift-environmets
 
-.os_props.conf
+.openshift.yml
 [%collapsible]
 ====
 [source,properties]
 ----
-# OPENSHIFT CONFIGS
+openshift:
+  os_host: "dev-gen2.sigma.sbrf.ru"
+  io_control_panel: ci01994970-edevgen2-synapse-control-panel
+  mesh_discovery_address: istiod-basic.ci01994970-edevgen2-synapse-control-panel.svc
 
-# ссылка на registry
-registryUrl=registry.sigma.sbrf.ru/pprb
-# ссылка на проект в registry
-registryProject=ci02473994/ci03045533_sbbol_antifraud
-# имя CP Istio
-ISTIO_CONTROL_PLANE=ci01994970-edevgen2-synapse-control-panel
-# ссылка на образ fluentbit
-FLUENTBIT_IMAGE=registry.sigma.sbrf.ru/pprb/ci00641491/ci02469991_logger/fluent-bit:1.4.5
-# ссылка на образ envoy
-PROXY_IMAGE=registry.sigma.sbrf.ru/registry_redhat_io/openshift-service-mesh/proxyv2-rhel8@sha256:51d82b560e467ec59a3b6625b04c31b86df5b4c10070a351d547cb6cf3f26591
-# стендозависимое значение, указывается перед наименованием control plane для параметров CA_ADDR и discoveryAddress
-MESH_DISCOVERY_ADDRESS=istiod-basic
-# имя проекта в openshift
-PROJECT_NAME=ci02642164-edevgen2-pprb-kib-dev-sbbol-antifraud
+os_project:
+  host: "https://api.dev-gen2.sigma.sbrf.ru:6443"
+  pods: 1
+  project: ci02642164-edevgen2-pprb-kib-dev-sbbol-antifraud
+  name: antifraud
+  type: factory
+  health_check: false
+  istio:
+    ingress:
+      routes:
+        - host: ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru
+          port: 5443
+          containerPort: 8080
+          name: mtls
+          certificates:
+            ca: "{{ secrets['istio-ingressgateway-ca-certs'].volume.mount }}"
+            cert: "{{ secrets['istio-ingressgateway-certs'].volume.mount }}"
+        - host: ingress-ci03045533-sbbol-antifraud-geo-tls.apps.dev-gen2.sigma.sbrf.ru
+          port: 5441
+          containerPort: 8080
+          name: mtls-geo
+          certificates:
+            ca: "{{ secrets['istio-ingressgateway-ca-geo-certs'].volume.mount }}"
+            cert: "{{ secrets['istio-ingressgateway-geo-certs'].volume.mount }}"
+        - host: ingress-ci03045533-sbbol-antifraud-ott.apps.dev-gen2.sigma.sbrf.ru
+          port: 5444
+          containerPort: 8080
+          name: ott
+          certificates:
+            ca: "{{ secrets['istio-ingressgateway-ca-certs'].volume.mount }}"
+            cert: "{{ secrets['istio-ingressgateway-certs'].volume.mount }}"
+        - host: ingress-ci03045533-sbbol-antifraud-geo-ott.apps.dev-gen2.sigma.sbrf.ru
+          port: 5442
+          containerPort: 8080
+          name: ott-geo
+          certificates:
+            ca: "{{ secrets['istio-ingressgateway-ca-ott-geo-certs'].volume.mount }}"
+            cert: "{{ secrets['istio-ingressgateway-ott-geo-certs'].volume.mount }}"
+        - host: ingress-ci03045533-sbbol-antifraud-geo-hc.apps.dev-gen2.sigma.sbrf.ru
+          port: 5446
+          containerPort: 8080
+          name: healthcheck
+          certificates:
+            ca: "{{ secrets['istio-ingressgateway-ca-hc-certs'].volume.mount }}"
+            cert: "{{ secrets['istio-ingressgateway-hc-certs'].volume.mount }}"
+      ott:
+        key_store: dev-antifraud.p12
+        trust_store: sigma_ott_trust.p12
+        OTT_MODULE_ID: dev-antifraud
+      pods: 1
+      fluentbit: &fluentbit_resources
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+            ephemeral_storage: 128Mi
+          limits:
+            cpu: 100m
+            memory: 256Mi
+            ephemeral_storage: 256Mi
+      proxy: &proxy_resources
+        resources:
+          requests:
+            cpu: 200m
+            memory: 500Mi
+            ephemeral_storage: 32Mi
+          limits:
+            cpu: 200m
+            memory: 500Mi
+            ephemeral_storage: 64Mi
+    egress:
+      pods: 1
+      http:
+        port: 8080
+      mtls:
+        port: 8443
+      fluentbit: *fluentbit_resources
+      proxy: *proxy_resources
+      ott:
+        port: 5443
+        key_store: dev-antifraud.p12
+        trust_store: sigma_ott_trust.p12
+        OTT_MODULE_ID: dev-antifraud
 
-#INGRESS
+registry_area: registry.sigma.sbrf.ru
+nexus_area: Nexus_PROD/CI03045533_sbbol-antifraud
+versionMask: "D-\\d{2}\\.\\d{3}\\.\\d{2}_\\d{4}"
 
-# адрес TLS-роута для геобалансировки
-INGRESS_HOST_GEO_TLS=ingress-ci03045533-sbbol-antifraud-geo-tls.apps.dev-gen2.sigma.sbrf.ru
-# порт TLS-роута для геобалансировки
-INGRESS_HOST_GEO_TLS_PORT=5441
-# адрес OTT-роута для геобалансировки
-INGRESS_HOST_GEO_OTT=ingress-ci03045533-sbbol-antifraud-geo-ott.apps.dev-gen2.sigma.sbrf.ru
-# порт OTT-роута для геобалансировки
-INGRESS_HOST_GEO_OTT_PORT=5442
-# адрес роута для HealhCheck через геобалансировщик (не закрыт SAN, доступ только к /actuator/health)
-INGRESS_HOST_HEALTHCHECK=ingress-ci03045533-sbbol-antifraud-geo-hc.apps.dev-gen2.sigma.sbrf.ru
-# порт роута для HealhCheck через геобалансировщик (не закрыт SAN, доступ только к /actuator/health)
-INGRESS_HOST_HEALTHCHECK_PORT=5446
-# адрес прямого TLS-роута
-INGRESS_HOST_TLS=ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru
-# порт прямого TLS-роута
-INGRESS_HOST_TLS_PORT=5443
-# адрес прямого OTT-роута
-INGRESS_HOST_OTT=ingress-ci03045533-sbbol-antifraud-ott.apps.dev-gen2.sigma.sbrf.ru
-# хост прямого OTT-роута
-INGRESS_HOST_OTT_PORT=5444
-# лимиты ингресса по CPU
-INGRESS_LIMIT_CPU=1200m
-# лимиты ингресса по памяти
-INGRESS_LIMIT_MEMORY=700Mi
-# запросы ингресса по CPU
-INGRESS_REQUEST_CPU=1200m
-# запросы ингресса по памяти
-INGRESS_REQUEST_MEMORY=700Mi
-# имя SAN для TLS-роутов (для внутренних HealthCheck)
-SBBOL_SAN=https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru
-# имя SAN для HealthCheck через Osiris
-OSIRIS_SAN=http://osiris.sbrf.ru
-# количество реплик ingress
-INGRESS_REPLICAS_COUNT=1
-# лимиты ephemeral storage для ингресса
-INGRESS_PROXY_LIMIT_EPHEMERAL_STORAGE=2Gi
-# запросы ephemeral storage для ингресса
-INGRESS_PROXY_REQUEST_EPHEMERAL_STORAGE=2Gi
-# лимиты ephemeral storage для сайдкара OTT на игрессе
-INGRESS_OTT_LIMIT_EPHEMERAL_STORAGE=2Gi
-# запросы ephemeral storage для сайдкара OTT на игрессе
-INGRESS_OTT_REQUEST_EPHEMERAL_STORAGE=2Gi
+fluentbit:
+  module_id: pprb4-digital-fraud
 
-#CERTS
+app_journal:
+  secret: secret-appjournalstubsettings
 
-# название файла (ключа в секрете) с цепочкой корневых сертификатов
-CHAIN_PEM_TLS=chain.pem
-# название файла (ключа в секрете) с приватным ключом
-CERT_KEY_TLS=tls.key
-# название файла (ключа в секрете) с сертификатом
-CERT_TLS=tls.crt
-# название файла (ключа в секрете) с цепочкой корневых сертификатов для геобалансировщика
-CHAIN_PEM_GEO_TLS=chain.pem
-# название файла (ключа в секрете) с приватным ключом для геобалансировщика
-CERT_KEY_GEO_TLS=tls.key
-# название файла (ключа в секрете) с сертификатом для геобалансировщика
-CERT_GEO_TLS=tls.crt
-# название файла (ключа в секрете) с цепочкой корневых сертификатов для доступа по OTT
-CHAIN_PEM_OTT=chain.pem
-# название файла (ключа в секрете) с приватным ключом для доступа по OTT
-CERT_KEY_OTT=tls.key
-# название файла (ключа в секрете) с сертификатом для доступа по OTT
-CERT_OTT=tls.crt
-# название файла (ключа в секрете) с цепочкой корневых сертификатов для доступа по OTT через геобалансировщик
-CHAIN_PEM_GEO_OTT=chain.pem
-# название файла (ключа в секрете) с приватным ключом для доступа по OTT через геобалансировщик
-CERT_KEY_GEO_OTT=tls.key
-# название файла (ключа в секрете) с сертификатом для доступа по OTT через геобалансировщик
-CERT_GEO_OTT=tls.crt
+context_prefix: /antifraud/
 
-#EGRESS
-
-# OTT-порт на егрессе (для вызова внешних API, закрытых OTT)
-EGRESS_OTT_PORT=8443
-# HTTPS-порт на егрессе
-EGRESS_HTTPS_PORT=5443
-# лимиты егресса по CPU
-EGRESS_LIMIT_CPU=400m
-# лимиты егресса по памяти
-EGRESS_LIMIT_MEMORY=700Mi
-# запросы егресса по CPU
-EGRESS_REQUEST_CPU=400m
-# запросы егресса по памяти
-EGRESS_REQUEST_MEMORY=700Mi
-# название цепочки сертификатов для егресса
-CA_CERT_CHAIN_PEM=chain.pem
-# количество реплик egress
-EGRESS_REPLICAS_COUNT=1
-# лимиты ephemeral storage для егресса
-EGRESS_PROXY_LIMIT_EPHEMERAL_STORAGE=2Gi
-# запросы ephemeral storage для егресса
-EGRESS_PROXY_REQUEST_EPHEMERAL_STORAGE=2Gi
-# лимиты ephemeral storage для сайдкара OTT на егрессе
-EGRESS_OTT_LIMIT_EPHEMERAL_STORAGE=2Gi
-# запросы ephemeral storage для сайдкара OTT на егрессе
-EGRESS_OTT_REQUEST_EPHEMERAL_STORAGE=2Gi
-
-# DATABASE
-
-# Хост основной БД (MAIN)
-MAIN_DB_HOST=tkled-pprb00137.vm.esrt.cloud.sbrf.ru
-# Хост БД StandIn
-SI_DB_HOST=tkled-pprb00137-fake.vm.esrt.cloud.sbrf.ru
-# Порт БД
-DB_PORT=5433
-# Внутренний порт основной БД для маршрутизиации в istio
-DB_MAIN_TCP_PORT=1526
-# Внутренний порт БД StandIn для маршрутизиации в istio
-DB_SI_TCP_PORT=1527
-# IP первой БД в кластере MAIN
-DB_MAIN_IP_1=10.53.223.31
-# IP второй БД в кластере MAIN
-DB_MAIN_IP_2=1.1.1.1
-# IP первой БД в кластере SI
-DB_SI_IP_1=10.53.223.31
-# IP второй БД в кластере SI
-DB_SI_IP_2=1.1.1.1
-
-#FRAUD ADAPTER
-
-# HTTPS-хост адаптера ФП ИС
-FRAUD_ADAPTER_HOST=fmaas-ift-adapter-oz.ingress.apps.dev-gen2.ca.sbrf.ru
-# Путь URL к сервису анализа ФП ИС
-FRAUD_ADAPTER_CONTEXT=/asfm/v1.0/pprb_bhb_hist_b2b_aful/notify
-# HTTPS-порт адаптера ФП ИС
-FRAUD_ADAPTER_PORT=443
-
-# FLUENTBIT CONFIGS
-
-# Хост FluentBit
-FLUENT_BIT_HTTPS_HOST=sbtatlas.sigma.sbrf.ru
-# Лимиты FluentBit по CPU
-fluentBitLimitCPU=50m
-# Лимиты FluentBit по памяти
-fluentBitLimitMemory=32Mi
-# Запросы FluentBit по CPU
-fluentBitRequestCPU=10m
-# Запросы FluentBit по памяти
-fluentBitRequestMemory=16Mi
-# Переменная среды FluentBit с названием стенда
-fluentBitEnvStandId=dev
-# Переменная среды FluentBit с названием кластера
-fluentBitEnvCluster=dev-gen2.ca.sbrf.ru
-# Переменная среды FluentBit с названием зоны
-fluentBitEnvZoneId=default
-# лимиты ephemeral storage для fluenbit
-fluentBitLimitEphemeralStorage=2Gi
-# запросы ephemeral storage для fluenbit
-fluentBitRequestEphemeralStorage=2Gi
-
-# APP JOURNAL CONFIGS
-
-# Хост 1 для kafka прикладного журнала
-APPJOURNAL_HOST_1=tkled-pprb00059.vm.esrt.cloud.sbrf.ru
-# Хост 2 для kafka прикладного журнала
-APPJOURNAL_HOST_2=2sbtatlas.sigma.sbrf.ru
-# Хост 3 для kafka прикладного журнала
-APPJOURNAL_HOST_3=3sbtatlas.sigma.sbrf.ru
-# Хост 4 для kafka прикладного журнала
-APPJOURNAL_HOST_4=4sbtatlas.sigma.sbrf.ru
-# Хост 5 для kafka прикладного журнала
-APPJOURNAL_HOST_5=5sbtatlas.sigma.sbrf.ru
-# Хост 6 для kafka прикладного журнала
-APPJOURNAL_HOST_6=6sbtatlas.sigma.sbrf.ru
-# IP 1 для kafka прикладного журнала
-APPJOURNAL_IP_1=10.53.117.139
-# IP 2 для kafka прикладного журнала
-APPJOURNAL_IP_2=10.128.11.11
-# IP 3 для kafka прикладного журнала
-APPJOURNAL_IP_3=10.128.11.11
-# IP 4 для kafka прикладного журнала
-APPJOURNAL_IP_4=10.128.11.11
-# IP 5 для kafka прикладного журнала
-APPJOURNAL_IP_5=10.128.11.11
-# IP 6 для kafka прикладного журнала
-APPJOURNAL_IP_6=10.128.11.11
-# Порт для kafka прикладного журнала
-APPJOURNAL_PORT=9092
-# Порт 1 для kafka прикладного журнала (порт для выхода через egress)
-APPJOURNAL_PORT_LISTENER_1=8081
-# Порт 2 для kafka прикладного журнала (порт для выхода через egress)
-APPJOURNAL_PORT_LISTENER_2=8082
-# Порт 3 для kafka прикладного журнала (порт для выхода через egress)
-APPJOURNAL_PORT_LISTENER_3=8083
-# Порт 4 для kafka прикладного журнала (порт для выхода через egress)
-APPJOURNAL_PORT_LISTENER_4=8084
-# Порт 5 для kafka прикладного журнала (порт для выхода через egress)
-APPJOURNAL_PORT_LISTENER_5=8085
-# Порт 6 для kafka прикладного журнала (порт для выхода через egress)
-APPJOURNAL_PORT_LISTENER_6=8086
-# Порт 1 для kafka прикладного журнала (внутренняя маршрутизация в istio)
-APPJOURNAL_PORT_PROXY_1=9991
-# Порт 2 для kafka прикладного журнала (внутренняя маршрутизация в istio)
-APPJOURNAL_PORT_PROXY_2=9992
-# Порт 3 для kafka прикладного журнала (внутренняя маршрутизация в istio)
-APPJOURNAL_PORT_PROXY_3=9993
-# Порт 4 для kafka прикладного журнала (внутренняя маршрутизация в istio)
-APPJOURNAL_PORT_PROXY_4=9994
-# Порт 5 для kafka прикладного журнала (внутренняя маршрутизация в istio)
-APPJOURNAL_PORT_PROXY_5=9995
-# Порт 6 для kafka прикладного журнала (внутренняя маршрутизация в istio)
-APPJOURNAL_PORT_PROXY_6=9996
-
-#OTT
-
-# Ссылка на образ с контейнером OTT
-OTT_REGISTRY_URL=registry.sigma.sbrf.ru/pprb/ci00641491/ci01125613_ott/ott-client-api-v2:4.0.4
-# Имя модуля в OTT
-OTT_ENTITY_PROFILE=dev-antifraud
-# основной хост OTT
-OTT_SERVICE_HOST_1=10.53.99.178
-# SI хост OTT
-OTT_SERVICE_SI_HOST_1=10.53.99.178
-# второй основной хост OTT
-OTT_SERVICE_HOST_2=10.53.96.30
-# второй SI хост OTT
-OTT_SERVICE_SI_HOST_2=10.53.96.30
-# порт сервиса OTT
-OTT_SERVICE_PORT=8443
-# ссылка на сервис OTT
-OTT_SERVICE_URL=https://10.53.99.178:8443/ott-service/rest/token
-# имя ключа в секрете ott-secret с доверенными сертификатами
-OTT_TRUST_STORE_PATH=sigma_ott_trust
-
-# Monitoring (prometheus)
-
-# хост Prometheus
-APPMON_HOST=appmon-service.apps.dev-gen.sigma.sbrf.ru
-# порт Prometheus
-APPMON_HOST_PORT=443
-
-#AUDIT Параметры шифта
-
-# хост аудита
-AUDIT_HOST=audit.ru
-# порт аудита
-AUDIT_HOST_PORT=443
-
-# ANTIFRAUD CONFIGS
-
-# Имя модуля
-MODULE_NAME=pprb4-digital-fraud
-# Количество реплик в deployment
-REPLICAS_COUNT_APP=1
-# Лимиты пода по cpu
-LIMIT_CPU=1200m
-# Лимиты пода по памяти
-LIMIT_MEMORY=2Gi
-# Запросы пода по cpu
-REQUEST_CPU=1200m
-# Запросы пода по памяти
-REQUEST_MEMORY=2Gi
-# имя секрета с подключением к основной БД
-mainDataBaseSecretId=pgdb-main-secret
-# имя секрета с подключением к БД SI
-standinDataBaseSecretId=pgdb-si-secret
-# имя секрета с параметрами подключения к kafka прикладного журнала
-appJournalSettings=secret-appjournalstubsettings
-# имя секрета с конфигурацией SSL для подключения к kafka прикладного журнала
-kafkaSslSecret=kafka-ssl-secret
-# лимиты ephemeral storage
-LIMIT_EPHEMERAL_STORAGE=2Gi
-# запросы ephemeral storage
-REQUEST_EPHEMERAL_STORAGE=2Gi
+fraud:
+  adapter:
+    context: /asfm/v1.0/pprb_bhb_hist_b2b_aful/notify
 ----
 ====
 
-Перечень папок в поставке для раскатки в OpenShift
+Пример конфигурации для обновления БД
 
-.os_yaml_dirs.conf
+.liquibase.yml
 [%collapsible]
 ====
 [source]
 ----
-/configs/antifraud
-/configs/appjournal
-/configs/audit
-/configs/db
-/configs/egress
-/configs/fluentbit
-/configs/fraud
-/configs/ingress
-/configs/ingress/route
-/configs/prometheus
-/configs/serviceentry
+liquibase_download_uri: https://nexus.sigma.sbrf.ru/nexus/service/local/repositories/SBT_CI_distr_repo/content/SBBOL_UFS/liquibase/3.10.3-postgres/liquibase-3.10.3-postgres.tgz
+# имя файла со скриптами БД, не менять
+liquibase_changelog_file: changelog.yaml
+# Может разойтись с точками интеграций и не может ссылаться на них из-за отсутствия params.yml в момент обновления базы
+liquibase_databases:
+  - name: "{{ db_main_name }}"
+    schema: sbbol_antifraud
+    default_schema: sbbol_antifraud
+    user: "{{ db_main_user }}"
+    password: "{{ db_main_password }}"
+    driver_class: org.postgresql.Driver
+    connection_string: "jdbc:postgresql://{% for address in db_main_addresses %}{{ address.host }}:{{ address.port }}{% if not loop.last %},{% endif %}{% endfor %}/{{ db_main_name }}?prepareThreshold=0&currentSchema=sbbol_antifraud"
+# Кастомные параметры, необходимые для проливки БД
+custom_parameters:
+  tablespace_t: pg_default
+  tablespace_i: pg_default
+  defaultSchemaName: sbbol_antifraud
 ----
 ====
 
-Конфигурация dataspace в os_namespaces.yml
-
-.os_namespaces.yml
-[%collapsible]
-====
-[source,yaml]
-----
-projects:
-- name: "dev-gen2-pprb"
-  openShiftNamespace: "ci02642164-edevgen2-pprb-kib-dev-sbbol-antifraud"
-  openShiftURL: api.dev-gen2.sigma.sbrf.ru:6443
-  oc_token: antifraud_dev_token_pprb
-  os_props: "os_props.conf"
-  backupResources: false
-  deleteResources: false
-  validateDeploy: false
-  rollback:
-    - needToRollback: false
-      healthCheckTimeout: 360    # Таймаут ожидания успешного завершения хелсчека.
-      healthCheckDelay: 30       # Периодичность проверки хелсчека.
-----
-====
-
-Пример конфигурации Install_EIP для обновления БД
-
-.liquibase.conf
+.database.yml
 [%collapsible]
 ====
 [source]
 ----
-liquibase_log: changelog.yaml
-liquibase_basedir: "distrib/db"
-liquibase_user: sbbol_antifraud
-liquibase_pass: "{{ db_ora_password }}"
-liquibase_version: "3.7.0"
-liquibase_params: "--url=jdbc:postgresql://10.53.223.31:5433/sbbol_antifraud?currentSchema=sbbol_antifraud --changeLogFile={{ liquibase_log }} --driver=org.postgresql.Driver --logLevel=info update -Dtablespace_t=pg_default -Dtablespace_i=pg_default -Dschemaname=sbbol_antifraud -DdefaultSchemaName=sbbol_antifraud"
+# параметры подключения к MAIN БД
+db_main_addresses:
+  - host: 10.53.223.31
+    port: 5433
+db_main_name: sbbol_antifraud # имя БД
+db_main_user: sbbol_antifraud # логин пользователя
+db_main_password: !vault | # волтованный пароль пользователя БД
+  $ANSIBLE_VAULT;1.1;AES256
+  66373939303336363234383165313862646561313865373135616330623466653239343337633038
+  3539373239353139313934623337643333363262633434310a356235633263633061356638633331
+  61646137366566353034336531656430396137393330613338343238656337363936333364633661
+  3433323533313864640a343538386332303539313939653337343838353465356637343965356636
+  65346431303939643561313836633131616235656362643063303065666133353838
+
+# параметры подключения к SI БД
+db_si_addresses:
+  - host: 10.53.223.31
+    port: 5433
+db_si_name: fake
+db_si_user: fake
+db_si_password: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  66373939303336363234383165313862646561313865373135616330623466653239343337633038
+  3539373239353139313934623337643333363262633434310a356235633263633061356638633331
+  61646137366566353034336531656430396137393330613338343238656337363936333364633661
+  3433323533313864640a343538386332303539313939653337343838353465356637343965356636
+  65346431303939643561313836633131616235656362643063303065666133353838
 ----
 ====
 
+=== Точки интеграции
+
+Используются следующие точки интеграции:
+
+* Прикладной журнал
+* База данных фабрики Main
+* База данных фабрики SI
+* Системный журнал
+* Сервера АС Рефлекс (ORM dynatrace)
+* Взаимодействие через OTT
+* Антифрод ФЛ.Интеграционный сервис(1099171)
+
+.params.yml
+[%collapsible]
+====
+[source]
+----
+integration_entries:
+  - "{{ int.pprb.appjournal.v1_0 }}"
+  - "{{ int.pprb.db_main.v1_0 }}"
+  - "{{ int.pprb.db_si.v1_0 }}"
+  - "{{ int.pprb.fluentbit.v1_0 }}"
+  - "{{ int.dynatrace.latest.servers }}"
+  - "{{ int.ott.v2_0 }}"
+  - "{{ int.pprb.CI1099171_antifraud_integration_service.v1_0 }}"
+
+int_entry:
+  antifraud:
+    fpis: "{{ int.pprb.CI1099171_antifraud_integration_service.v1_0 }}"
+----
+====
+
+.integration.yml
+[%collapsible]
+====
+[source]
+----
+int:
+  pprb:
+    appjournal:
+      v1_0:
+        - name: appjournal1
+          host: 1sbtatlas.sigma.sbrf.ru
+          ip: 10.128.11.11
+          port: '9092'
+          egress_port: '9991'
+          ott: false
+          mtls: false
+          protocol: TCP
+          url: dummy
+          resolution: STATIC
+        - name: appjournal6
+          host: 6sbtatlas.sigma.sbrf.ru
+          ip: 10.128.11.11
+          port: '9092'
+          egress_port: '9996'
+          ott: false
+          mtls: false
+          protocol: TCP
+          url: dummy
+          resolution: STATIC
+    db_main:
+      v1_0:
+        - name: db-main
+          host: tkled-pprb00137.vm.esrt.cloud.sbrf.ru
+          ip: 10.53.223.31
+          port: '5433'
+          egress_port: '1526'
+          ott: false
+          mtls: false
+          protocol: TCP
+          resolution: STATIC
+    db_si:
+      v1_0:
+        - name: db-si
+          host: tkled-pprb00137-fake.vm.esrt.cloud.sbrf.ru
+          ip: 10.53.223.31
+          port: '5433'
+          egress_port: '1527'
+          ott: false
+          mtls: false
+          protocol: TCP
+          resolution: STATIC
+    fluentbit:
+      v1_0:
+        - name: fluent-bit-ott
+          host: sbtatlas.sigma.sbrf.ru
+          port: '443'
+          istio_mesh_port: '80'
+          protocol: HTTP
+          mtls: true
+          ott: true
+    CI1099171_antifraud_integration_service:
+      v1_0:
+        name: antifraud-integration-service
+        host: fake-host.sigma.sbrf.ru
+        port: '443'
+        ott: true
+        mtls: true
+        protocol: HTTP
+        subjectAltNames: []
+  dynatrace:
+    latest:
+      servers:
+        - name: dynatrace
+          resolution: STATIC
+          url: http://10.53.90.60
+          host: tkles-mvp000199.vm.esrt.cloud.sbrf.ru
+          ip: 10.53.90.60
+          port: 9999
+          egress_port: 9990
+          istio_mesh_port: 9990
+          protocol: TCP
+          ott: false
+          mtls: false
+  ott:
+    v2_0:
+      - name: ott-1
+        protocol: TCP
+        resolution: STATIC
+        ott: false
+        mtls: false
+        host: se-sbbol.dev.draft.ott1
+        ip: 10.53.99.178
+        port: 8443
+        via_egress: false
+      - name: ott-2
+        protocol: TCP
+        resolution: STATIC
+        ott: false
+        mtls: false
+        host: se-sbbol.dev.draft.ott2
+        ip: 10.53.96.30
+        port: 8443
+        via_egress: false
+----
+====
 
 === Секреты OSE
 
 Стандартные для фабрик секреты
 
-Сертификаты для Istio:
+==== Сертификаты для Istio
 
-* istio-egressgateway-ca-certs
-* istio-egressgateway-certs
-* istio-ingressgateway-ca-certs
-* istio-ingressgateway-certs
+.secrets.yml
+[%collapsible]
+====
+[source,properties]
+----
+secrets:
+  istio-ingressgateway-ca-geo-certs:
+    source: file
+    files:
+      chain.pem: files/test-ca-chain.pem
+    deployment: ingress-gateway
+    volume:
+      mount: /etc/istio/istio-ingressgateway-ca-geo-certs
+  istio-ingressgateway-geo-certs:
+    source: encrypted-file
+    files:
+      tls.crt: files/wildcard-apps-dev-gen.pem
+      tls.key: files/wildcard-apps-dev-gen.key
+    deployment: ingress-gateway
+    volume:
+      mount: /etc/istio/istio-ingressgateway-geo-certs
+  istio-ingressgateway-ca-ott-geo-certs:
+    source: file
+    files:
+      chain.pem: files/test-ca-chain.pem
+    deployment: ingress-gateway
+    volume:
+      mount: /etc/istio/istio-ingressgateway-ca-ott-geo-certs
+  istio-ingressgateway-ott-geo-certs:
+    source: encrypted-file
+    files:
+      tls.crt: files/wildcard-apps-dev-gen.pem
+      tls.key: files/wildcard-apps-dev-gen.key
+    deployment: ingress-gateway
+    volume:
+      mount: /etc/istio/istio-ingressgateway-ott-geo-certs
+  istio-ingressgateway-ca-hc-certs:
+    source: file
+    files:
+      chain.pem: files/test-ca-chain.pem
+    deployment: ingress-gateway
+    volume:
+      mount: /etc/istio/istio-ingressgateway-ca-hc-certs
+  istio-ingressgateway-hc-certs:
+    source: encrypted-file
+    files:
+      tls.crt: files/antifraud.pem
+      tls.key: files/antifraud.key
+    deployment: ingress-gateway
+    volume:
+      mount: /etc/istio/istio-ingressgateway-hc-certs
+  istio-egressgateway-ca-certs:
+    source: file
+    files:
+      chain.pem: files/test-ca-chain.pem
+    deployment: istio-egressgateway
+  istio-egressgateway-certs:
+    source: encrypted-file
+    files:
+      tls.crt: files/antifraud/ci03045533-sbbol-antifraud-egress.pem
+      tls.key: files/antifraud/ci03045533-sbbol-antifraud-egress.key
+    deployment: istio-egressgateway
+----
+====
 
-Секрет для подключения ПЖ
+==== Секреты БД
 
-* secret-appjournal-settings
-* kafka-ssl-secret
-
-Секреты для OTT
-
-* ott-ingress-passwords
-* ott-secret
-
-Секреты для подключения к БД
+.secrets.yml
+[%collapsible]
+====
+[source,properties]
+----
+secrets:
+  pgdb-si-secret:
+    source: template
+    files:
+      secret.properties: templates/sbbol_pprb_draft/secret-db-si.j2
+    deployment: app
+  pgdb-main-secret:
+    source: template
+    files:
+      secret.properties: templates/sbbol_pprb_draft/secret-db-main.j2
+    deployment: app
+----
+====
 
 .pgdb-main-secret (ключ secret.properties)
 [%collapsible]
@@ -402,6 +432,30 @@ standin.datasource.password=password
 standin.datasource.url=jdbc:postgresql://1.1.1.1:1526/schema
 standin.datasource.driver-class-name=org.postgresql.Driver
 standin.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+----
+====
+
+==== Секреты для OTT
+
+.secrets.yml
+[%collapsible]
+====
+[source,properties]
+----
+secrets:
+  ott-secrets:
+    source: file
+    files:
+      sigma_ott_trust.p12: files/ott/sigma_ott_trust.p12
+      dev-antifraud.p12: files/ott/dev-antifraud.p12
+    deployment: app
+  ott-passwords:
+    source: property
+    properties:
+      OTT_CERTSTORE_PRIVATE_KEY_PWD: "{{ OTT_CERTSTORE_PRIVATE_KEY_PWD }}"
+      OTT_CERTSTORE_PWD: "{{ OTT_CERTSTORE_PWD }}"
+      OTT_TRUST_STORE_PWD: "{{ OTT_TRUST_STORE_PWD }}"
+    deployment: app
 ----
 ====
 

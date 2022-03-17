@@ -1,5 +1,5 @@
-:Author:    Дмитрий Сморжок
-:Email:     Smorzhok.D.Ale@sberbank.ru
+:Author:    Филипп Писарев
+:Email:     fmpisarev@sberbank.ru
 
 = ППРБ ЮЛ История операций B2B. События антифрода
 :sectnums:
