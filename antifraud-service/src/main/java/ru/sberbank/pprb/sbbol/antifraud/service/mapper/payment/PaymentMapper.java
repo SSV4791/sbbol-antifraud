@@ -79,10 +79,11 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
     public static final String SENDER_PHONE = "senderPhone";
     public static final String SENDER_EMAIL = "senderEmail";
     public static final String SENDER_SOURCE = "senderSource";
+    public static final String OTHER_ACC_NAME = "otherAccName";
 
     private static final Map<String, Function<Payment, Object>> CRITERIA_MAP;
     private static final Map<String, String> DESCRIPTION_MAP;
-    public static final int CAPACITY = 60;
+    public static final int CAPACITY = 61;
 
     static {
         Map<String, Function<Payment, Object>> criteriaMap = new HashMap<>(CAPACITY);
@@ -146,13 +147,14 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
         criteriaMap.put(SENDER_PHONE, Payment::getSenderPhone);
         criteriaMap.put(SENDER_EMAIL, Payment::getSenderEmail);
         criteriaMap.put(SENDER_SOURCE, Payment::getSenderSource);
+        criteriaMap.put(OTHER_ACC_NAME, Payment::getOtherAccName);
         CRITERIA_MAP = Collections.unmodifiableMap(criteriaMap);
 
         Map<String, String> descriptionMap = new HashMap<>(CAPACITY);
         descriptionMap.put(EPK_ID, "ЕПК.id");
         descriptionMap.put(DIGITAL_ID, "Личный кабинет");
         descriptionMap.put(DOC_NUMBER, "Номер платежного документа");
-        descriptionMap.put(DOC_DATE, "Дата документа");
+        descriptionMap.put(DOC_DATE, "Дата платежного документа");
         descriptionMap.put(RECEIVER_INN, "ИНН получателя");
         descriptionMap.put(DESTINATION, "Назначение платежа");
         descriptionMap.put(PAYER_INN, "ИНН отправителя");
@@ -209,6 +211,7 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
         descriptionMap.put(SENDER_PHONE, "Отправивший Номер телефона");
         descriptionMap.put(SENDER_EMAIL, "Отправивший Адрес электронной почты");
         descriptionMap.put(SENDER_SOURCE, "Отправивший Канал");
+        descriptionMap.put(OTHER_ACC_NAME, "Наименование получателя");
         DESCRIPTION_MAP = Collections.unmodifiableMap(descriptionMap);
     }
 
