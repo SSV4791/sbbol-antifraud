@@ -77,6 +77,7 @@ class PaymentMapperTest extends MapperTest {
         assertEquals("", analyzeRequest.getIdentificationData().getUserName());
         assertEquals(PAYMENT_DT_0401060, analyzeRequest.getIdentificationData().getDboOperation());
         assertEquals(payment.getRequestId(), analyzeRequest.getIdentificationData().getRequestId().toString());
+        assertEquals(payment.getSenderLogin(), analyzeRequest.getIdentificationData().getUserLoginName());
 
         assertNotNull(analyzeRequest.getDeviceRequest());
         assertEquals(payment.getDevicePrint(), analyzeRequest.getDeviceRequest().getDevicePrint());

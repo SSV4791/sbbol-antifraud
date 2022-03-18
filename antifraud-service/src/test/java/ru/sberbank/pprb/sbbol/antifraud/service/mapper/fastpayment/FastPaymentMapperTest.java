@@ -76,6 +76,7 @@ class FastPaymentMapperTest extends MapperTest {
         assertEquals("", analyzeRequest.getIdentificationData().getUserName());
         assertEquals(SBP_B2C, analyzeRequest.getIdentificationData().getDboOperation());
         assertEquals(fastPayment.getRequestId(), analyzeRequest.getIdentificationData().getRequestId().toString());
+        assertEquals(fastPayment.getSenderLogin(), analyzeRequest.getIdentificationData().getUserLoginName());
 
         assertNotNull(analyzeRequest.getDeviceRequest());
         assertEquals(fastPayment.getDevicePrint(), analyzeRequest.getDeviceRequest().getDevicePrint());

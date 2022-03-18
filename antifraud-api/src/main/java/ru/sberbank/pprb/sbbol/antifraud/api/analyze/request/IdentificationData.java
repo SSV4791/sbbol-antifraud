@@ -35,6 +35,11 @@ public class IdentificationData implements Serializable {
      */
     private UUID requestId;
 
+    /**
+     * Идентификатор Логина
+     */
+    private String userLoginName;
+
     public String getClientTransactionId() {
         return clientTransactionId;
     }
@@ -75,6 +80,14 @@ public class IdentificationData implements Serializable {
         this.requestId = requestId;
     }
 
+    public String getUserLoginName() {
+        return userLoginName;
+    }
+
+    public void setUserLoginName(String userLoginName) {
+        this.userLoginName = userLoginName;
+    }
+
     @Override
     public String toString() {
         return "{" +
@@ -83,6 +96,8 @@ public class IdentificationData implements Serializable {
                 ", userName='" + userName + '\'' +
                 ", dboOperation=" + dboOperation +
                 ", requestId=" + requestId +
+                ", userLoginName='" + userLoginName + '\'' +
                 '}';
     }
+
 }
