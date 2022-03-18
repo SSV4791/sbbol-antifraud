@@ -69,10 +69,11 @@ public abstract class FastPaymentMapper implements CommonMapper<FastPayment> {
     public static final String SENDER_PHONE = "senderPhone";
     public static final String SENDER_EMAIL = "senderEmail";
     public static final String SENDER_SOURCE = "senderSource";
+    public static final String OTHER_ACC_NAME = "otherAccName";
 
     private static final Map<String, Function<FastPayment, Object>> CRITERIA_MAP;
     private static final Map<String, String> DESCRIPTION_MAP;
-    public static final int CAPACITY = 50;
+    public static final int CAPACITY = 51;
 
     static {
         Map<String, Function<FastPayment, Object>> criteriaMap = new HashMap<>(CAPACITY);
@@ -126,15 +127,16 @@ public abstract class FastPaymentMapper implements CommonMapper<FastPayment> {
         criteriaMap.put(SENDER_PHONE, FastPayment::getSenderPhone);
         criteriaMap.put(SENDER_EMAIL, FastPayment::getSenderEmail);
         criteriaMap.put(SENDER_SOURCE, FastPayment::getSenderSource);
+        criteriaMap.put(OTHER_ACC_NAME, FastPayment::getOtherAccName);
         CRITERIA_MAP = Collections.unmodifiableMap(criteriaMap);
 
         Map<String, String> descriptionMap = new HashMap<>(CAPACITY);
         descriptionMap.put(EPK_ID, "ЕПК.id");
         descriptionMap.put(DIGITAL_ID, "Личный кабинет");
         descriptionMap.put(DOC_NUMBER, "Номер платежного документа");
-        descriptionMap.put(DOC_DATE, "Дата документа");
+        descriptionMap.put(DOC_DATE, "Дата платежного документа");
         descriptionMap.put(DESTINATION, "Назначение платежа");
-        descriptionMap.put(PAYER_FINANCIAL_NAME, "Полное наименование организации");
+        descriptionMap.put(PAYER_FINANCIAL_NAME, "Наименование клиента");
         descriptionMap.put(PAYER_OSB_NUM, "Номер ОСБ");
         descriptionMap.put(PAYER_VSP_NUM, "Номер ВСП");
         descriptionMap.put(PAYER_ACC_BALANCE, "Остаток на счете плательщика");
@@ -179,6 +181,7 @@ public abstract class FastPaymentMapper implements CommonMapper<FastPayment> {
         descriptionMap.put(SENDER_PHONE, "Отправивший Номер телефона");
         descriptionMap.put(SENDER_EMAIL, "Отправивший Адрес электронной почты");
         descriptionMap.put(SENDER_SOURCE, "Отправивший Канал");
+        descriptionMap.put(OTHER_ACC_NAME, "Наименование получателя");
         DESCRIPTION_MAP = Collections.unmodifiableMap(descriptionMap);
     }
 
