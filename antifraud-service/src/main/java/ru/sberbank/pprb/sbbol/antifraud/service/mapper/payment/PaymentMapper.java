@@ -79,11 +79,10 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
     public static final String SENDER_PHONE = "senderPhone";
     public static final String SENDER_EMAIL = "senderEmail";
     public static final String SENDER_SOURCE = "senderSource";
-    public static final String LOGIN_ID = "loginId";
 
     private static final Map<String, Function<Payment, Object>> CRITERIA_MAP;
     private static final Map<String, String> DESCRIPTION_MAP;
-    public static final int CAPACITY = 61;
+    public static final int CAPACITY = 60;
 
     static {
         Map<String, Function<Payment, Object>> criteriaMap = new HashMap<>(CAPACITY);
@@ -147,7 +146,6 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
         criteriaMap.put(SENDER_PHONE, Payment::getSenderPhone);
         criteriaMap.put(SENDER_EMAIL, Payment::getSenderEmail);
         criteriaMap.put(SENDER_SOURCE, Payment::getSenderSource);
-        criteriaMap.put(LOGIN_ID, Payment::getSenderLogin);
         CRITERIA_MAP = Collections.unmodifiableMap(criteriaMap);
 
         Map<String, String> descriptionMap = new HashMap<>(CAPACITY);
@@ -211,7 +209,6 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
         descriptionMap.put(SENDER_PHONE, "Отправивший Номер телефона");
         descriptionMap.put(SENDER_EMAIL, "Отправивший Адрес электронной почты");
         descriptionMap.put(SENDER_SOURCE, "Отправивший Канал");
-        descriptionMap.put(LOGIN_ID, "Идентификатор Логина");
         DESCRIPTION_MAP = Collections.unmodifiableMap(descriptionMap);
     }
 
@@ -524,6 +521,7 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
     @Mapping(source = "transferMediumType", target = "eventDataList.transactionData.otherAccountData.transferMediumType")
     @Mapping(target = "identificationData.userName", constant = "")
     @Mapping(target = "identificationData.dboOperation", expression = "java(DboOperation.PAYMENT_DT_0401060)")
+    @Mapping(source = "senderLogin", target = "identificationData.userLoginName")
     @Mapping(target = "eventDataList.eventDataHeader.eventType", expression = "java(DboOperation.PAYMENT_DT_0401060.getEventType())")
     @Mapping(target = "eventDataList.eventDataHeader.eventDescription", expression = "java(DboOperation.PAYMENT_DT_0401060.getEventDescription())")
     @Mapping(target = "eventDataList.eventDataHeader.clientDefinedEventType", expression = "java(DboOperation.PAYMENT_DT_0401060.getClientDefinedEventType(payment.getChannelIndicator()))")

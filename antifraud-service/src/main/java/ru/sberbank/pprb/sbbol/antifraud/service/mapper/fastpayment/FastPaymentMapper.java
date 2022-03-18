@@ -69,11 +69,10 @@ public abstract class FastPaymentMapper implements CommonMapper<FastPayment> {
     public static final String SENDER_PHONE = "senderPhone";
     public static final String SENDER_EMAIL = "senderEmail";
     public static final String SENDER_SOURCE = "senderSource";
-    public static final String LOGIN_ID = "loginId";
 
     private static final Map<String, Function<FastPayment, Object>> CRITERIA_MAP;
     private static final Map<String, String> DESCRIPTION_MAP;
-    public static final int CAPACITY = 51;
+    public static final int CAPACITY = 50;
 
     static {
         Map<String, Function<FastPayment, Object>> criteriaMap = new HashMap<>(CAPACITY);
@@ -127,7 +126,6 @@ public abstract class FastPaymentMapper implements CommonMapper<FastPayment> {
         criteriaMap.put(SENDER_PHONE, FastPayment::getSenderPhone);
         criteriaMap.put(SENDER_EMAIL, FastPayment::getSenderEmail);
         criteriaMap.put(SENDER_SOURCE, FastPayment::getSenderSource);
-        criteriaMap.put(LOGIN_ID, FastPayment::getSenderLogin);
         CRITERIA_MAP = Collections.unmodifiableMap(criteriaMap);
 
         Map<String, String> descriptionMap = new HashMap<>(CAPACITY);
@@ -181,7 +179,6 @@ public abstract class FastPaymentMapper implements CommonMapper<FastPayment> {
         descriptionMap.put(SENDER_PHONE, "Отправивший Номер телефона");
         descriptionMap.put(SENDER_EMAIL, "Отправивший Адрес электронной почты");
         descriptionMap.put(SENDER_SOURCE, "Отправивший Канал");
-        descriptionMap.put(LOGIN_ID, "Идентификатор Логина");
         DESCRIPTION_MAP = Collections.unmodifiableMap(descriptionMap);
     }
 
@@ -441,6 +438,7 @@ public abstract class FastPaymentMapper implements CommonMapper<FastPayment> {
     @Mapping(source = "otherBicCode", target = "eventDataList.transactionData.otherAccountData.routingCode")
     @Mapping(target = "identificationData.userName", constant = "")
     @Mapping(target = "identificationData.dboOperation", expression = "java(DboOperation.SBP_B2C)")
+    @Mapping(source = "senderLogin", target = "identificationData.userLoginName")
     @Mapping(target = "eventDataList.eventDataHeader.eventType", expression = "java(DboOperation.SBP_B2C.getEventType())")
     @Mapping(target = "eventDataList.eventDataHeader.eventDescription", expression = "java(DboOperation.SBP_B2C.getEventDescription())")
     @Mapping(target = "eventDataList.eventDataHeader.clientDefinedEventType", expression = "java(DboOperation.SBP_B2C.getClientDefinedEventType(null))")
