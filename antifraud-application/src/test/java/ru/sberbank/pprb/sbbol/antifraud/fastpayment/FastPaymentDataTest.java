@@ -1,6 +1,5 @@
 package ru.sberbank.pprb.sbbol.antifraud.fastpayment;
 
-import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -66,7 +65,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
 
     private void assertOperation(FastPaymentOperation dto, String requestId, FastPayment entity) {
         assertEquals(requestId, entity.getRequestId());
-        assertEquals(dto.getTimeStamp(), entity.getTimeStamp());
+        assertEquals(dto.getTimeStamp(), entity.getEventTime());
         assertEquals(dto.getOrgGuid(), entity.getEpkId());
         assertEquals(dto.getDigitalId(), entity.getDigitalId());
         assertEquals(dto.getMappedSigns().get(0).getUserGuid().toString(), entity.getUserGuid());

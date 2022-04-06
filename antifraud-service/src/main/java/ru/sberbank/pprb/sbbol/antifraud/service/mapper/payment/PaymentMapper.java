@@ -218,6 +218,7 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "version", ignore = true)
     @Mapping(target = "requestId", ignore = true)
+    @Mapping(source = "timeStamp", target = "eventTime")
     @Mapping(source = "orgGuid", target = "epkId")
     @Mapping(source = "document.id", target = "docId")
     @Mapping(source = "document.number", target = "docNumber")
@@ -307,6 +308,7 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "version", ignore = true)
     @Mapping(target = "requestId", expression = "java(generateRequestId())")
+    @Mapping(source = "timeStamp", target = "eventTime")
     @Mapping(source = "orgGuid", target = "epkId")
     @Mapping(source = "document.id", target = "docId")
     @Mapping(source = "document.number", target = "docNumber")
@@ -393,6 +395,7 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
     @Mapping(target = "clientDefinedChannelIndicator", ignore = true)
     public abstract Payment toEntity(PaymentOperation dto);
 
+    @Mapping(target = "timeStamp", source = "eventTime")
     @Mapping(target = "orgGuid", source = "epkId")
     @Mapping(target = "document.id", source = "docId")
     @Mapping(target = "document.number", source = "docNumber")
@@ -497,7 +500,7 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
         }
     }
 
-    @Mapping(source = "timeStamp", target = "messageHeader.timeStamp")
+    @Mapping(source = "eventTime", target = "messageHeader.timeStamp")
     @Mapping(source = "docId", target = "identificationData.clientTransactionId")
     @Mapping(source = "tbCode", target = "identificationData.orgName")
     @Mapping(source = "requestId", target = "identificationData.requestId")

@@ -171,7 +171,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
     private void verify(String requestId, UUID docId, ElectronicReceiptOperation expected, ElectronicReceipt actual) {
         assertNotNull(actual);
         assertEquals(requestId, actual.getRequestId());
-        assertEquals(expected.getSign().getSignTime(), actual.getTimeStamp());
+        assertEquals(expected.getSign().getSignTime(), actual.getEventTime());
         assertEquals(expected.getOrgGuid(), actual.getEpkId());
         assertEquals(expected.getDigitalId(), actual.getDigitalId());
         assertEquals(expected.getPrivateIpAddress(), actual.getPrivateIpAddress());
@@ -214,7 +214,7 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
         if (expected.getSign().getSignNumber() == 1) {
             assertEquals(expected.getSign().getSignTime(), actual.getTimeOfOccurrence());
             assertEquals(expected.getSign().getSignTime(), actual.getFirstSignTime());
-            assertEquals(expected.getSign().getSignTime(), actual.getTimeStamp());
+            assertEquals(expected.getSign().getSignTime(), actual.getEventTime());
             assertEquals(expected.getSign().getSignIpAddress(), actual.getFirstSignIp());
             assertEquals(expected.getSign().getSignLogin(), actual.getFirstSignLogin());
             assertEquals(expected.getSign().getSignCryptoprofile(), actual.getFirstSignCryptoprofile());

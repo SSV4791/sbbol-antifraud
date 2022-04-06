@@ -69,7 +69,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
 
     private void assertOperation(PaymentOperation dto, String requestId, Payment entity) {
         assertEquals(requestId, entity.getRequestId());
-        assertEquals(dto.getTimeStamp(), entity.getTimeStamp());
+        assertEquals(dto.getTimeStamp(), entity.getEventTime());
         assertEquals(dto.getOrgGuid(), entity.getEpkId());
         assertEquals(dto.getDigitalId(), entity.getDigitalId());
         assertEquals(dto.getMappedSigns().get(0).getUserGuid().toString(), entity.getUserGuid());
