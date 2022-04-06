@@ -68,7 +68,7 @@ class FastPaymentMapperTest extends MapperTest {
         assertNotNull(analyzeRequest);
 
         assertNotNull(analyzeRequest.getMessageHeader());
-        assertEquals(fastPayment.getTimeStamp().plusHours(3), analyzeRequest.getMessageHeader().getTimeStamp());
+        assertEquals(fastPayment.getEventTime().plusHours(3), analyzeRequest.getMessageHeader().getTimeStamp());
 
         assertNotNull(analyzeRequest.getIdentificationData());
         assertEquals(fastPayment.getDocId(), analyzeRequest.getIdentificationData().getClientTransactionId());
