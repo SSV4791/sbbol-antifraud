@@ -135,6 +135,7 @@ liquibase_databases:
     user: "{{ db_main_user }}"
     password: "{{ db_main_password }}"
     driver_class: org.postgresql.Driver
+    defaults_file: liquibase.properties
     connection_string: "jdbc:postgresql://{% for address in db_main_addresses %}{{ address.host }}:{{ address.port }}{% if not loop.last %},{% endif %}{% endfor %}/{{ db_main_name }}?prepareThreshold=0&currentSchema=sbbol_antifraud"
 # Кастомные параметры, необходимые для проливки БД
 custom_parameters:
@@ -275,8 +276,8 @@ int:
       v1_0:
         name: antifraud-integration-service
         host: fake-host.sigma.sbrf.ru
-        port: '443'
-        ott: true
+        port: '8443'
+        ott: false
         mtls: true
         protocol: HTTP
         subjectAltNames: []
