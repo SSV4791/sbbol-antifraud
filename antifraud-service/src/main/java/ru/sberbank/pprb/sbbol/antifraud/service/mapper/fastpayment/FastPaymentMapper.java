@@ -21,9 +21,11 @@ public abstract class FastPaymentMapper implements CommonMapper<FastPayment> {
 
     public static final String EPK_ID = "epkId";
     public static final String DIGITAL_ID = "digitalId";
+    public static final String USER_GUID = "userGuid";
     public static final String DOC_NUMBER = "docNumber";
     public static final String DOC_DATE = "docDate";
     public static final String DESTINATION = "destination";
+    public static final String ID_OPERATION_OPKC = "idOperationOPKC";
     public static final String PAYER_FINANCIAL_NAME = "payerFinancialName";
     public static final String PAYER_OSB_NUM = "payerOsbNum";
     public static final String PAYER_VSP_NUM = "payerVspNum";
@@ -73,15 +75,17 @@ public abstract class FastPaymentMapper implements CommonMapper<FastPayment> {
 
     private static final Map<String, Function<FastPayment, Object>> CRITERIA_MAP;
     private static final Map<String, String> DESCRIPTION_MAP;
-    public static final int CAPACITY = 51;
+    public static final int CAPACITY = 53;
 
     static {
         Map<String, Function<FastPayment, Object>> criteriaMap = new HashMap<>(CAPACITY);
         criteriaMap.put(EPK_ID, FastPayment::getEpkId);
         criteriaMap.put(DIGITAL_ID, FastPayment::getDigitalId);
+        criteriaMap.put(USER_GUID, FastPayment::getUserGuid);
         criteriaMap.put(DOC_NUMBER, FastPayment::getDocNumber);
         criteriaMap.put(DOC_DATE, FastPayment::getDocDate);
         criteriaMap.put(DESTINATION, FastPayment::getDestination);
+        criteriaMap.put(ID_OPERATION_OPKC, FastPayment::getIdOperationOPKC);
         criteriaMap.put(PAYER_FINANCIAL_NAME, FastPayment::getPayerFinancialName);
         criteriaMap.put(PAYER_OSB_NUM, FastPayment::getPayerOsbNum);
         criteriaMap.put(PAYER_VSP_NUM, FastPayment::getPayerVspNum);
@@ -133,9 +137,11 @@ public abstract class FastPaymentMapper implements CommonMapper<FastPayment> {
         Map<String, String> descriptionMap = new HashMap<>(CAPACITY);
         descriptionMap.put(EPK_ID, "ЕПК.id");
         descriptionMap.put(DIGITAL_ID, "Личный кабинет");
+        descriptionMap.put(USER_GUID, "Уникальный идентификатор пользователя");
         descriptionMap.put(DOC_NUMBER, "Номер платежного документа");
         descriptionMap.put(DOC_DATE, "Дата платежного документа");
         descriptionMap.put(DESTINATION, "Назначение платежа");
+        descriptionMap.put(ID_OPERATION_OPKC, "Идентификатор Операции ОПКЦ СБП");
         descriptionMap.put(PAYER_FINANCIAL_NAME, "Наименование клиента");
         descriptionMap.put(PAYER_OSB_NUM, "Номер ОСБ");
         descriptionMap.put(PAYER_VSP_NUM, "Номер ВСП");
