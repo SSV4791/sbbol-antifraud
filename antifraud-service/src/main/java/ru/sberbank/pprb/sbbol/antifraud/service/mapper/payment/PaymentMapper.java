@@ -21,6 +21,7 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
 
     public static final String EPK_ID = "epkId";
     public static final String DIGITAL_ID = "digitalId";
+    public static final String USER_GUID = "userGuid";
     public static final String DOC_NUMBER = "docNumber";
     public static final String DOC_DATE = "docDate";
     public static final String RECEIVER_INN = "receiverInn";
@@ -83,12 +84,13 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
 
     private static final Map<String, Function<Payment, Object>> CRITERIA_MAP;
     private static final Map<String, String> DESCRIPTION_MAP;
-    public static final int CAPACITY = 61;
+    public static final int CAPACITY = 62;
 
     static {
         Map<String, Function<Payment, Object>> criteriaMap = new HashMap<>(CAPACITY);
         criteriaMap.put(EPK_ID, Payment::getEpkId);
         criteriaMap.put(DIGITAL_ID, Payment::getDigitalId);
+        criteriaMap.put(USER_GUID, Payment::getUserGuid);
         criteriaMap.put(DOC_NUMBER, Payment::getDocNumber);
         criteriaMap.put(DOC_DATE, Payment::getDocDate);
         criteriaMap.put(RECEIVER_INN, Payment::getReceiverInn);
@@ -153,6 +155,7 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
         Map<String, String> descriptionMap = new HashMap<>(CAPACITY);
         descriptionMap.put(EPK_ID, "ЕПК.id");
         descriptionMap.put(DIGITAL_ID, "Личный кабинет");
+        descriptionMap.put(USER_GUID, "Уникальный идентификатор пользователя");
         descriptionMap.put(DOC_NUMBER, "Номер платежного документа");
         descriptionMap.put(DOC_DATE, "Дата платежного документа");
         descriptionMap.put(RECEIVER_INN, "ИНН получателя");
