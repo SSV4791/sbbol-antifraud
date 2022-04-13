@@ -77,6 +77,7 @@ class ElectronicReceiptMapperTest extends MapperTest {
         assertNull(analyzeRequest.getIdentificationData().getUserName());
         assertEquals(DboOperation.ELECTRONIC_CHEQUE, analyzeRequest.getIdentificationData().getDboOperation());
         assertEquals(electronicReceipt.getRequestId(), analyzeRequest.getIdentificationData().getRequestId().toString());
+        assertEquals(electronicReceipt.getSenderLogin(), analyzeRequest.getIdentificationData().getUserLoginName());
 
         assertNotNull(analyzeRequest.getDeviceRequest());
         assertEquals(electronicReceipt.getDevicePrint(), analyzeRequest.getDeviceRequest().getDevicePrint());

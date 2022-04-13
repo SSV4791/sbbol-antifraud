@@ -506,7 +506,10 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
     @Mapping(source = "eventTime", target = "messageHeader.timeStamp")
     @Mapping(source = "docId", target = "identificationData.clientTransactionId")
     @Mapping(source = "tbCode", target = "identificationData.orgName")
+    @Mapping(source = "senderLogin", target = "identificationData.userLoginName")
     @Mapping(source = "requestId", target = "identificationData.requestId")
+    @Mapping(target = "identificationData.userName", constant = "")
+    @Mapping(target = "identificationData.dboOperation", expression = "java(DboOperation.PAYMENT_DT_0401060)")
     @Mapping(source = "devicePrint", target = "deviceRequest.devicePrint")
     @Mapping(source = "mobSdkData", target = "deviceRequest.mobSdkData")
     @Mapping(source = "httpAccept", target = "deviceRequest.httpAccept")
@@ -517,6 +520,9 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
     @Mapping(source = "ipAddress", target = "deviceRequest.ipAddress")
     @Mapping(source = "userAgent", target = "deviceRequest.userAgent")
     @Mapping(source = "timeOfOccurrence", target = "eventDataList.eventDataHeader.timeOfOccurrence")
+    @Mapping(target = "eventDataList.eventDataHeader.eventType", expression = "java(DboOperation.PAYMENT_DT_0401060.getEventType())")
+    @Mapping(target = "eventDataList.eventDataHeader.eventDescription", expression = "java(DboOperation.PAYMENT_DT_0401060.getEventDescription())")
+    @Mapping(target = "eventDataList.eventDataHeader.clientDefinedEventType", expression = "java(DboOperation.PAYMENT_DT_0401060.getClientDefinedEventType(payment.getChannelIndicator()))")
     @Mapping(source = "amount", target = "eventDataList.transactionData.amount.sum")
     @Mapping(source = "currency", target = "eventDataList.transactionData.amount.currency")
     @Mapping(source = "executionSpeed", target = "eventDataList.transactionData.executionSpeed")
@@ -528,12 +534,6 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
     @Mapping(source = "otherAccOwnershipType", target = "eventDataList.transactionData.otherAccountData.otherAccountOwnershipType")
     @Mapping(source = "otherAccType", target = "eventDataList.transactionData.otherAccountData.otherAccountType")
     @Mapping(source = "transferMediumType", target = "eventDataList.transactionData.otherAccountData.transferMediumType")
-    @Mapping(target = "identificationData.userName", constant = "")
-    @Mapping(target = "identificationData.dboOperation", expression = "java(DboOperation.PAYMENT_DT_0401060)")
-    @Mapping(source = "senderLogin", target = "identificationData.userLoginName")
-    @Mapping(target = "eventDataList.eventDataHeader.eventType", expression = "java(DboOperation.PAYMENT_DT_0401060.getEventType())")
-    @Mapping(target = "eventDataList.eventDataHeader.eventDescription", expression = "java(DboOperation.PAYMENT_DT_0401060.getEventDescription())")
-    @Mapping(target = "eventDataList.eventDataHeader.clientDefinedEventType", expression = "java(DboOperation.PAYMENT_DT_0401060.getClientDefinedEventType(payment.getChannelIndicator()))")
     public abstract AnalyzeRequest toAnalyzeRequest(Payment entity);
 
     @AfterMapping
@@ -548,6 +548,12 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
         LocalDateTime timeOfOccurrence = analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence().plusHours(3);
         analyzeRequest.getMessageHeader().setTimeStamp(timeStamp);
         analyzeRequest.getEventDataList().getEventDataHeader().setTimeOfOccurrence(timeOfOccurrence);
+        analyzeRequest.getEventDataList().getClientDefinedAttributeList().getFact().stream()
+                .filter(attribute -> attribute.getName().equals(DESCRIPTION_MAP.get(FIRST_SIGN_TIME)) ||
+                        attribute.getName().equals(DESCRIPTION_MAP.get(SECOND_SIGN_TIME)) ||
+                        attribute.getName().equals(DESCRIPTION_MAP.get(THIRD_SIGN_TIME)) ||
+                        attribute.getName().equals(DESCRIPTION_MAP.get(SENDER_SIGN_TIME)))
+                .forEach(attribute -> attribute.setValue(LocalDateTime.parse(attribute.getValue()).plusHours(3).toString()));
     }
 
 }
