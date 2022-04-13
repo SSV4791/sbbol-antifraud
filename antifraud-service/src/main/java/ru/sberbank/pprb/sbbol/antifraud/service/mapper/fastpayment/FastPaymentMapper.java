@@ -431,7 +431,10 @@ public abstract class FastPaymentMapper implements CommonMapper<FastPayment> {
     @Mapping(source = "eventTime", target = "messageHeader.timeStamp")
     @Mapping(source = "docId", target = "identificationData.clientTransactionId")
     @Mapping(source = "tbCode", target = "identificationData.orgName")
+    @Mapping(source = "senderLogin", target = "identificationData.userLoginName")
     @Mapping(source = "requestId", target = "identificationData.requestId")
+    @Mapping(target = "identificationData.userName", constant = "")
+    @Mapping(target = "identificationData.dboOperation", expression = "java(DboOperation.SBP_B2C)")
     @Mapping(source = "devicePrint", target = "deviceRequest.devicePrint")
     @Mapping(source = "mobSdkData", target = "deviceRequest.mobSdkData")
     @Mapping(source = "httpAccept", target = "deviceRequest.httpAccept")
@@ -442,18 +445,15 @@ public abstract class FastPaymentMapper implements CommonMapper<FastPayment> {
     @Mapping(source = "ipAddress", target = "deviceRequest.ipAddress")
     @Mapping(source = "userAgent", target = "deviceRequest.userAgent")
     @Mapping(source = "timeOfOccurrence", target = "eventDataList.eventDataHeader.timeOfOccurrence")
+    @Mapping(target = "eventDataList.eventDataHeader.eventType", expression = "java(DboOperation.SBP_B2C.getEventType())")
+    @Mapping(target = "eventDataList.eventDataHeader.eventDescription", expression = "java(DboOperation.SBP_B2C.getEventDescription())")
+    @Mapping(target = "eventDataList.eventDataHeader.clientDefinedEventType", expression = "java(DboOperation.SBP_B2C.getClientDefinedEventType(null))")
     @Mapping(source = "amount", target = "eventDataList.transactionData.amount.sum")
     @Mapping(source = "currency", target = "eventDataList.transactionData.amount.currency")
     @Mapping(source = "accountNumber", target = "eventDataList.transactionData.myAccountData.accountNumber")
     @Mapping(source = "otherAccName", target = "eventDataList.transactionData.otherAccountData.accountName")
     @Mapping(source = "receiverAccount", target = "eventDataList.transactionData.otherAccountData.accountNumber")
     @Mapping(source = "otherBicCode", target = "eventDataList.transactionData.otherAccountData.routingCode")
-    @Mapping(target = "identificationData.userName", constant = "")
-    @Mapping(target = "identificationData.dboOperation", expression = "java(DboOperation.SBP_B2C)")
-    @Mapping(source = "senderLogin", target = "identificationData.userLoginName")
-    @Mapping(target = "eventDataList.eventDataHeader.eventType", expression = "java(DboOperation.SBP_B2C.getEventType())")
-    @Mapping(target = "eventDataList.eventDataHeader.eventDescription", expression = "java(DboOperation.SBP_B2C.getEventDescription())")
-    @Mapping(target = "eventDataList.eventDataHeader.clientDefinedEventType", expression = "java(DboOperation.SBP_B2C.getClientDefinedEventType(null))")
     public abstract AnalyzeRequest toAnalyzeRequest(FastPayment entity);
 
     @AfterMapping
@@ -468,6 +468,10 @@ public abstract class FastPaymentMapper implements CommonMapper<FastPayment> {
         LocalDateTime timeOfOccurrence = analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence().plusHours(3);
         analyzeRequest.getMessageHeader().setTimeStamp(timeStamp);
         analyzeRequest.getEventDataList().getEventDataHeader().setTimeOfOccurrence(timeOfOccurrence);
+        analyzeRequest.getEventDataList().getClientDefinedAttributeList().getFact().stream()
+                .filter(attribute -> attribute.getName().equals(DESCRIPTION_MAP.get(FIRST_SIGN_TIME)) ||
+                        attribute.getName().equals(DESCRIPTION_MAP.get(SENDER_SIGN_TIME)))
+                .forEach(attribute -> attribute.setValue(LocalDateTime.parse(attribute.getValue()).plusHours(3).toString()));
     }
 
 }
