@@ -161,7 +161,7 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
         descriptionMap.put(RECEIVER_INN, "ИНН получателя");
         descriptionMap.put(DESTINATION, "Назначение платежа");
         descriptionMap.put(PAYER_INN, "ИНН отправителя");
-        descriptionMap.put(PRIVATE_IP_ADDRESS, "Локальный IP адрес сервера");
+        descriptionMap.put(PRIVATE_IP_ADDRESS, "Локальный IP адрес");
         descriptionMap.put(FIRST_SIGN_TIME, "1-я подпись Время подписи");
         descriptionMap.put(FIRST_SIGN_IP, "1-я подпись IP адрес");
         descriptionMap.put(FIRST_SIGN_LOGIN, "1-я подпись Логин");
