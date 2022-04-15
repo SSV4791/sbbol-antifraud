@@ -160,7 +160,7 @@ public abstract class FastPaymentMapper implements CommonMapper<FastPayment> {
         descriptionMap.put(RECEIVER_DOCUMENT, "Документ Получателя");
         descriptionMap.put(RECEIVER_DOCUMENT_TYPE, "Тип документа получателя");
         descriptionMap.put(RECEIVER_PHONE_NUMBER, "Номер телефона получателя");
-        descriptionMap.put(PRIVATE_IP_ADDRESS, "Локальный IP адрес сервера");
+        descriptionMap.put(PRIVATE_IP_ADDRESS, "Локальный IP адрес");
         descriptionMap.put(FIRST_SIGN_TIME, "1-я подпись Время подписи");
         descriptionMap.put(FIRST_SIGN_IP, "1-я подпись IP адрес");
         descriptionMap.put(FIRST_SIGN_LOGIN, "1-я подпись Логин");

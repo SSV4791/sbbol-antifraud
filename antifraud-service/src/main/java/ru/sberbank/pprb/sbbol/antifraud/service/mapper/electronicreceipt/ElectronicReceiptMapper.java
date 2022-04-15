@@ -157,7 +157,7 @@ public abstract class ElectronicReceiptMapper implements CommonMapper<Electronic
         descriptionMap.put(PRIVATE_IP_ADDRESS, "Локальный IP адрес");
         descriptionMap.put(USER_GUID, "Уникальный идентификатор пользователя");
         descriptionMap.put(DOC_NUMBER, "Номер платежного документа");
-        descriptionMap.put(DOC_DATE, "Дата документа");
+        descriptionMap.put(DOC_DATE, "Дата платежного документа");
         descriptionMap.put(CODE_BIC, "БИК");
         descriptionMap.put(DESTINATION, "Назначение платежа");
         descriptionMap.put(PAYER_NAME, "Наименование клиента");
