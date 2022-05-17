@@ -1,0 +1,118 @@
+docker:
+  images:
+    java: registry.sigma.sbrf.ru/ci00149046/ci00405008_sbbolufs/bellsoft/liberica-openjdk-alpine:15.0.1-9-sber-certs
+    postgres: registry.sigma.sbrf.ru/ci00149046/ci00405008_sbbolufs/postgres:13-alpine
+
+credentials:
+  sonar: sonar-token
+  nexus: TUZ_DCBMSC5
+  checkmarx: DS_SAST_CRED
+  openshift: TUZ_DCBMSC5
+
+allure_project_id: '37'
+
+pr_check:
+  liquibase:
+    match:
+      files:
+        - 'antifraud-application/src/main/resources/db/changelog'
+        - 'jenkins/liquibase/liquibase.properties'
+    executable:
+      download_uri: https://nexus.sigma.sbrf.ru/nexus/service/local/repositories/SBT_CI_distr_repo/content/SBBOL_UFS/liquibase/3.7.0-postgres/liquibase-3.7.0-postgres-bin.tar.gz
+    changelog:
+      path: antifraud-application/src/main/resources/db/changelog/changelog.yaml
+    defaults_file:
+      path: jenkins/liquibase/liquibase.properties
+  openshift:
+    workdir: openshift
+    match:
+      files:
+        - 'openshift/'
+        - 'jenkins/resources/openshift/'
+    server: dev-gen2
+    namespace: ci02642164-edevgen2-pprb-kib-dev-sbbol-antifraud
+  build_gradle:
+    match:
+      files:
+        - 'antifraud-application/'
+        - 'antifraud-api/'
+        - 'antifraud-rpc-api/'
+        - 'antifraud-service/'
+        - 'build.gradle.kts'
+        - 'gradle.properties'
+        - 'settings.gradle.kts'
+    cpu: 2
+    memory: '2g'
+    command: >-
+      ./gradlew
+      -PnexusLogin=${env.NEXUS_USR}
+      -PnexusPassword=${env.NEXUS_PWD}
+      clean build
+  test:
+    match:
+      files:
+        - 'antifraud-application/'
+        - 'antifraud-api/'
+        - 'antifraud-rpc-api/'
+        - 'antifraud-service/'
+        - 'build.gradle.kts'
+        - 'gradle.properties'
+        - 'settings.gradle.kts'
+        - 'jenkins/settings.yml'
+    postgres: true
+    cpu: 2
+    memory: '2g'
+    command: >-
+      ./gradlew
+      -PnexusLogin=${env.NEXUS_USR}
+      -PnexusPassword='${env.NEXUS_PWD}'
+      -Dsonar.login=${env.SONAR_TOKEN}
+      -Dsonar.host.url=https://sbt-sonarqube.sigma.sbrf.ru/
+      -Dsonar.projectKey=ru.sberbank.pprb.sbbol.antifraud
+      -Dsonar.projectVersion=${pullRequest.fromRef.displayId}
+      -Dsonar.pullrequest.key=${params.pullRequestId}
+      -Dsonar.pullrequest.branch=${pullRequest.fromRef.displayId}
+      -Dsonar.pullrequest.base=${pullRequest.toRef.displayId}
+      -Dtest.results.enabled=true
+      -Dtest-layer=unit,api,web,configuration
+      -Dallure.link=${Const.ALLURE_ENTRYPOINT_URL}jobrun/${launch.jobRunId}
+      -Dbuild.link=${env.BUILD_URL}
+      -Dbuild.type=prCheck
+      qaReporterUpload sonarCoverage --info
+
+release:
+  version_pattern: '02\.001\.\d{2}_\d{4}'
+  version_init: 02.001.00_0000
+  artifact_id: antifraud
+  group_id: Nexus_PROD.CI03045533_sbbol-antifraud
+  docker_registry: registry.sigma.sbrf.ru
+  docker_prom: 'pprb/ci02473994/ci03045533_sbbol_antifraud'
+  docker_dev: 'pprb-dev/ci02473994/ci03045533_sbbol_antifraud_dev'
+  doc_path: 'docs/build/docs'
+  build_gradle:
+    cpu: 2
+    mem: '2g'
+    command: >-
+      ./gradlew
+      -PnexusLogin=${env.NEXUS_USR}
+      -PnexusPassword=${env.NEXUS_PWD}
+      -Pversion=${env.VERSION}
+      -Dtest-layer=unit,api,web,configuration,cdcConsumer,cdcProvider
+      -Dpact.url=${env.PACT_BROKER_URL}
+      -Dpactbroker.auth.username=${env.PACT_USER}
+      -Dpactbroker.auth.password='${env.PACT_PASSWORD}'
+      -Dpact.pacticipant.version=${env.VERSION}
+      -Dpact.pacticipant.tag=${params.branch}
+      -Dpactbroker.consumerversionselectors.tags=${settings.release.artifact_id}:${params.branch}
+      -Dbuild.link=${env.BUILD_URL}
+      -Dbuild.type=release
+      -Dallure.link=${Const.ALLURE_ENTRYPOINT_URL}jobrun/${launch.jobRunId}
+      -Dsonar.login=${env.SONAR_TOKEN}
+      -Dsonar.host.url=https://sbt-sonarqube.sigma.sbrf.ru/
+      -Dsonar.projectKey=ru.sberbank.pprb.sbbol.antifraud
+      -Dsonar.branch.name=${params.branch}
+      build qaReporterUpload sonarCoverage --parallel --info
+  default_values:
+    type: release
+    checkmarx: true
+    params_folder: release/02.001.00
