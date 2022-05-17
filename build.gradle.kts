@@ -12,7 +12,7 @@ plugins {
     id("nu.studer.credentials") version "2.1"
     id("org.sonarqube") version "3.2.0"
     id("ru.sbt.meta.meta-gradle-plugin")
-    id("ru.sbrf.build.gradle.qa.reporter") version "3.1.3"
+    id("ru.sbrf.build.gradle.qa.reporter") version "3.2.+"
     id("io.qameta.allure") version "2.8.1"
     `maven-publish`
 }
@@ -20,11 +20,6 @@ plugins {
 val credentials: CredentialsContainer by project.extra
 val nexusLoginValue = (project.properties["nexusLogin"] ?: credentials.getProperty("nexusLogin")) as String?
 val nexusPasswordValue = (project.properties["nexusPassword"] ?: credentials.getProperty("nexusPassword")) as String?
-
-val coverageExclusions = listOf(
-    "antifraud-api/src/main/java/ru/sberbank/pprb/sbbol/antifraud/api/**",
-    "antifraud-service/src/main/java/ru/sberbank/pprb/sbbol/antifraud/service/entity/**"
-)
 
 allprojects {
     apply(plugin = "java-library")
@@ -221,7 +216,29 @@ publishing {
     }
 }
 
+val coverageExclusions = listOf(
+    // Классы с конфигурациями
+    "antifraud-application/src/main/java/ru/sberbank/pprb/sbbol/antifraud/AntiFraudRunner.java",
+    "**/ru/sberbank/pprb/sbbol/antifraud/config/**",
+    "**/ru/sberbank/pprb/sbbol/antifraud/logging/**",
+    //POJO
+    "**/ru/sberbank/pprb/sbbol/antifraud/api/**",
+    //Классы с контроллерами и вызовами сервисов без логики, в которых происходит только вызов соответствующего сервиса
+    "**/ru/sberbank/pprb/sbbol/antifraud/rpc/**",
+    "**/ru/sberbank/pprb/sbbol/antifraud/service/rpc/**",
+    //Классы с exception
+    "**/exception/**",
+    //Инфраструктура
+    "**/*Aspect*",
+    "**/*Config*"
+)
+
 tasks {
+    register("sonarCoverage", DefaultTask::class) {
+        group = "verification"
+        dependsOn(jacocoTestReport)
+        finalizedBy(sonarqube)
+    }
 
     qaReporterUpload {
         /**
@@ -249,10 +266,25 @@ meta {
 
 sonarqube {
     properties {
-        property("sonar.coverage.jacoco.xmlReportPaths", "${rootProject.buildDir}/coverage/jacoco/jacocoTestReport.xml")
-        // исключаем из анализа на duplication все DTO и Entity
-        property("sonar.cpd.exclusions", coverageExclusions)
-        property("sonar.coverage.exclusions", coverageExclusions)
+        property(
+            "sonar.coverage.jacoco.xmlReportPaths",
+            "${rootProject.projectDir}/build/coverage/jacoco/jacocoTestReport.xml"
+        )
+        property(
+            "sonar.coverage.exclusions", """
+            **/ru/sberbank/pprb/sbbol/antifraud/service/entity/**,
+            **/ru/sberbank/pprb/sbbol/antifraud/api/**,
+            **/ru/sberbank/pprb/sbbol/antifraud/service/aspect/logging/**,
+            **/ru/sberbank/pprb/sbbol/antifraud/logging/**,
+            **/ru/sberbank/pprb/sbbol/antifraud/config/**
+        """.trimIndent()
+        )
+        property(
+            "sonar.cpd.exclusions", """
+            antifraud-api/src/main/java/ru/sberbank/pprb/sbbol/antifraud/api/**, 
+            antifraud-service/src/main/java/ru/sberbank/pprb/sbbol/antifraud/service/entity/**
+        """.trimIndent()
+        )
     }
 }
 
