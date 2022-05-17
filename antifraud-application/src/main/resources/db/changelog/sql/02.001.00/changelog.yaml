@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: 1652798771207_sys_lastchangedate.sql
+      relativeToChangelogFile: true

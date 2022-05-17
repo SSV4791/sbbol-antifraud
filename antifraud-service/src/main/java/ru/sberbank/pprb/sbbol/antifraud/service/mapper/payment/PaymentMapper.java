@@ -220,6 +220,7 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "version", ignore = true)
+    @Mapping(target = "lastChangeDate", ignore = true)
     @Mapping(target = "requestId", ignore = true)
     @Mapping(source = "timeStamp", target = "eventTime")
     @Mapping(source = "orgGuid", target = "epkId")
@@ -310,6 +311,7 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "version", ignore = true)
+    @Mapping(target = "lastChangeDate", ignore = true)
     @Mapping(target = "requestId", expression = "java(generateRequestId())")
     @Mapping(source = "timeStamp", target = "eventTime")
     @Mapping(source = "orgGuid", target = "epkId")
