@@ -62,7 +62,7 @@ public class PaymentProcessor implements Processor<PaymentOperation> {
 
     @Override
     public RequestId saveOrUpdate(@Valid PaymentOperation request) {
-        logger.info("Processing payment operation request. PaymentOperation docId: {}", request.getDocument().getId());
+        logger.info("Processing payment (docId={}) save or update request", request.getDocument().getId());
         request.setMappedSigns(PaymentSignMapper.convertSigns(request.getSigns()));
         PaymentModelValidator.validate(request);
         Optional<Payment> searchResult = repository.findFirstByDocId(request.getDocument().getId().toString());
@@ -79,31 +79,32 @@ public class PaymentProcessor implements Processor<PaymentOperation> {
 
     @Override
     public AnalyzeResponse send(@Valid SendToAnalyzeRequest request) {
-        logger.info("Sending payment operation to analyze. PaymentOperation docId: {}", request.getDocId());
+        logger.info("Sending payment (docId={}) to analyze", request.getDocId());
         AnalyzeRequest paymentAnalyzeRequest = createPaymentAnalyzeRequest(request.getDocId());
         try {
             String jsonRequest = objectMapper.writeValueAsString(paymentAnalyzeRequest);
-            logger.debug("Payment analyze request: {}", jsonRequest);
+            logger.debug("Payment (docId={}) analyze request: {}", request.getDocId(), jsonRequest);
             String jsonResponse = restTemplate.postForObject(endPoint, new HttpEntity<>(jsonRequest, httpHeaders), String.class);
-            logger.debug("Payment full analyze response: {}", jsonResponse);
+            logger.debug("Payment (docId={}) full analyze response: {}", request.getDocId(), jsonResponse);
             FullAnalyzeResponse fullAnalyzeResponse = objectMapper.readValue(jsonResponse, FullAnalyzeResponse.class);
             return mapper.toAnalyzeResponse(fullAnalyzeResponse);
         } catch (HttpStatusCodeException e) {
-            String message = "Payment analyze error: statusCodeValue=" + e.getRawStatusCode() +
-                    ", error='" + e.getResponseBodyAsString() + "'";
-            logger.error(message);
-            throw new AnalyzeException(message, e);
+            String message = "Payment (docId=" + request.getDocId() + ") analyze error";
+            logger.error(message, e);
+            throw new AnalyzeException(message);
         } catch (JsonProcessingException e) {
-            String message = "Anti fraud aggregator internal error: " + e.getMessage();
-            logger.error(message);
-            throw new ApplicationException(message, e);
+            String message = "Payment (docId=" + request.getDocId() + ") json processing error";
+            logger.error(message, e);
+            throw new ApplicationException(message);
         }
     }
 
     private AnalyzeRequest createPaymentAnalyzeRequest(UUID docId) {
         Optional<Payment> searchResult = repository.findFirstByDocId(docId.toString());
         if (searchResult.isEmpty()) {
-            throw new ApplicationException("PaymentOperation with docId=" + docId + " not found");
+            String message = "Payment (docId=" + docId + ") not found";
+            logger.error(message);
+            throw new ApplicationException(message);
         }
         return mapper.toAnalyzeRequest(searchResult.get());
     }

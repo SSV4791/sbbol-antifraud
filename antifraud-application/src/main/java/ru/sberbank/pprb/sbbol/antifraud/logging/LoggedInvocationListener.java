@@ -20,7 +20,7 @@ public class LoggedInvocationListener implements InvocationListener {
     @Override
     public void didInvoke(Method method, List<JsonNode> arguments, Object result, Throwable t, long duration) {
         if (t != null) {
-            logger.error("Error in JSON-RPC Service", t);
+            logger.error("Error in JSON-RPC service", t);
         } else {
             logger.debug("Method {} invocation result is {}", method, result);
         }
