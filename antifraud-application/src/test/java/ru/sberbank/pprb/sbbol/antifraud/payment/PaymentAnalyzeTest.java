@@ -86,7 +86,7 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
         AnalyzeException ex = assertThrows(AnalyzeException.class, () -> send(request));
         mockServer.verify();
         String exceptionMessage = ex.getMessage();
-        Assertions.assertTrue(exceptionMessage.contains("statusCodeValue=500"), "Should contain \"statusCodeValue=500\" in message. Message: " + exceptionMessage);
+        Assertions.assertTrue(exceptionMessage.contains(request.getDocId().toString()));
     }
 
     @Test

@@ -59,7 +59,7 @@ public class ElectronicReceiptProcessor implements Processor<ElectronicReceiptOp
 
     @Override
     public RequestId saveOrUpdate(ElectronicReceiptOperation request) {
-        logger.info("Processing electronic receipt operation request. ElectronicReceiptOperation docId: {}", request.getDocument().getId());
+        logger.info("Processing electronic receipt (docId={}) save or update request", request.getDocument().getId());
         ElectronicReceiptModelValidator.validate(request);
         Optional<ElectronicReceipt> searchResult = repository.findFirstByDocId(request.getDocument().getId().toString());
         ElectronicReceipt entity;
@@ -75,31 +75,32 @@ public class ElectronicReceiptProcessor implements Processor<ElectronicReceiptOp
 
     @Override
     public AnalyzeResponse send(SendToAnalyzeRequest request) {
-        logger.info("Sending electronic receipt operation to analyze. ElectronicReceiptOperation docId: {}", request.getDocId());
+        logger.info("Sending electronic receipt (docId={}) to analyze", request.getDocId());
         AnalyzeRequest analyzeRequest = createAnalyzeRequest(request.getDocId());
         try {
             String jsonRequest = objectMapper.writeValueAsString(analyzeRequest);
-            logger.debug("Electronic receipt analyze request: {}", jsonRequest);
+            logger.debug("Electronic receipt (docId={}) analyze request: {}", request.getDocId(), jsonRequest);
             String jsonResponse = restTemplate.postForObject(endPoint, new HttpEntity<>(jsonRequest, httpHeaders), String.class);
-            logger.debug("Electronic receipt full analyze response: {}", jsonResponse);
+            logger.debug("Electronic receipt (docId={}) full analyze response: {}", request.getDocId(), jsonResponse);
             FullAnalyzeResponse fullAnalyzeResponse = objectMapper.readValue(jsonResponse, FullAnalyzeResponse.class);
             return mapper.toAnalyzeResponse(fullAnalyzeResponse);
         } catch (HttpStatusCodeException e) {
-            String message = "Electronic receipt analyze error: statusCodeValue=" + e.getRawStatusCode() +
-                    ", error='" + e.getResponseBodyAsString() + "'";
-            logger.error(message);
-            throw new AnalyzeException(message, e);
+            String message = "Electronic receipt (docId=" + request.getDocId() + ") analyze error";
+            logger.error(message, e);
+            throw new AnalyzeException(message);
         } catch (JsonProcessingException e) {
-            String message = "Anti fraud aggregator internal error: " + e.getMessage();
-            logger.error(message);
-            throw new ApplicationException(message, e);
+            String message = "Electronic receipt (docId=" + request.getDocId() + ") json processing error";
+            logger.error(message, e);
+            throw new ApplicationException(message);
         }
     }
 
     private AnalyzeRequest createAnalyzeRequest(UUID docId) {
         Optional<ElectronicReceipt> searchResult = repository.findFirstByDocId(docId.toString());
         if (searchResult.isEmpty()) {
-            throw new ApplicationException("ElectronicReceiptOperation with docId=" + docId + " not found");
+            String message = "Electronic receipt (docId=" + docId + ") not found";
+            logger.error(message);
+            throw new ApplicationException(message);
         }
         return mapper.toAnalyzeRequest(searchResult.get());
     }

@@ -90,8 +90,7 @@ class ElectronicReceiptAnalyzeTest extends ElectronicReceiptIntegrationTest {
         SendToAnalyzeRequest request = new SendToAnalyzeRequest(UUID.randomUUID());
         ApplicationException ex = assertThrows(ApplicationException.class, () -> send(request));
         String exceptionMessage = ex.getMessage();
-        Assertions.assertTrue(exceptionMessage.contains("ElectronicReceiptOperation with docId=" + request.getDocId() + " not found"),
-                "Should contain " + "'ElectronicReceiptOperation with docId=" + request.getDocId() + " not found'" + " in message. Message: " + exceptionMessage);
+        Assertions.assertTrue(exceptionMessage.contains("Electronic receipt (docId=" + request.getDocId() + ") not found"));
     }
 
     @Test
@@ -104,7 +103,7 @@ class ElectronicReceiptAnalyzeTest extends ElectronicReceiptIntegrationTest {
         AnalyzeException ex = assertThrows(AnalyzeException.class, () -> send(request));
         mockServer.verify();
         String exceptionMessage = ex.getMessage();
-        Assertions.assertTrue(exceptionMessage.contains("statusCodeValue=500"), "Should contain 'statusCodeValue=500' in message. Message: " + exceptionMessage);
+        Assertions.assertTrue(exceptionMessage.contains(request.getDocId().toString()));
     }
 
     private FullAnalyzeResponse createFullAnalyzeResponse() {
