@@ -222,6 +222,7 @@ public abstract class ElectronicReceiptMapper implements CommonMapper<Electronic
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "version", ignore = true)
+    @Mapping(target = "lastChangeDate", ignore = true)
     @Mapping(target = "requestId", ignore = true)
     @Mapping(source = "sign.signTime", target = "eventTime")
     @Mapping(source = "orgGuid", target = "epkId")
@@ -302,6 +303,7 @@ public abstract class ElectronicReceiptMapper implements CommonMapper<Electronic
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "version", ignore = true)
+    @Mapping(target = "lastChangeDate", ignore = true)
     @Mapping(target = "requestId", expression = "java(generateRequestId())")
     @Mapping(source = "sign.signTime", target = "eventTime")
     @Mapping(source = "orgGuid", target = "epkId")

@@ -7,8 +7,11 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Transient;
 import javax.persistence.Version;
+import java.time.Instant;
 
 @MappedSuperclass
 public abstract class BaseEntity implements HashKeyProvider {
@@ -28,6 +31,18 @@ public abstract class BaseEntity implements HashKeyProvider {
     @Version
     private Short version;
 
+    /**
+     * Системное поле с датой и временем последнего изменения сущности, используется для сверки БД в двух контурах с помощью ПЖ
+     */
+    @Column(name = "SYS_LASTCHANGEDATE")
+    private Instant lastChangeDate;
+
+    @PreUpdate
+    @PrePersist
+    public void updateLastChangeDate() {
+        lastChangeDate = Instant.now();
+    }
+
     public String getId() {
         return id;
     }
@@ -45,6 +60,14 @@ public abstract class BaseEntity implements HashKeyProvider {
     }
 
     public abstract String getEpkId();
+
+    public Instant getLastChangeDate() {
+        return lastChangeDate;
+    }
+
+    public void setLastChangeDate(Instant lastChangeDate) {
+        this.lastChangeDate = lastChangeDate;
+    }
 
     @Transient
     @Override
