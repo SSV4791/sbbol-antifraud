@@ -1,6 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.electronicreceipt;
 
-import com.googlecode.jsonrpc4j.spring.rest.JsonRpcRestClient;
+import com.googlecode.jsonrpc4j.spring.rest.JsonRpcRestClientWithReporting;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
@@ -19,14 +19,14 @@ import java.util.UUID;
 
 abstract class ElectronicReceiptIntegrationTest extends AbstractIntegrationTest {
 
-    private static JsonRpcRestClient jsonRpcRestClient;
+    private static JsonRpcRestClientWithReporting jsonRpcRestClient;
 
     @Autowired
     private ElectronicReceiptRepository repository;
 
     @BeforeAll
     void setup() throws MalformedURLException {
-        jsonRpcRestClient = new JsonRpcRestClient(new URL(HOST + port + "/antifraud/v2/electronicreceipt"), Collections.emptyMap());
+        jsonRpcRestClient = new JsonRpcRestClientWithReporting(new URL(HOST + port + "/antifraud/v2/electronicreceipt"), Collections.emptyMap());
     }
 
     protected static RequestId saveOrUpdate(ElectronicReceiptOperation operation) throws Throwable {

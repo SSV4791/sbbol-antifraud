@@ -1,4 +1,7 @@
 val pactVersion: String by rootProject
+val allureVersion: String by rootProject
+val junitVersion: String by rootProject
+val junitPlatformVersion: String by rootProject
 
 dependencies {
     implementation(project(":antifraud-api"))
@@ -19,15 +22,25 @@ dependencies {
     runtimeOnly("org.ehcache:ehcache:3.9.2")
     runtimeOnly("org.aspectj:aspectjweaver:1.9.5")
 
-    testImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
+    annotationProcessor("org.mapstruct:mapstruct-processor:1.4.2.Final")
+
     testImplementation("uk.co.jemos.podam:podam:7.2.6.RELEASE")
     // Обход бага с локами в gradle
     testImplementation("org.hibernate:hibernate-core")
 
-    annotationProcessor("org.mapstruct:mapstruct-processor:1.4.2.Final")
+    testImplementation(group = "ru.dcbqa.allureee.annotations", name = "dcb-allure-annotations", version = "1.3.+")
 
-    testImplementation("ru.dcbqa.allureee.annotations:dcb-allure-annotations:1.2.+")
-    testImplementation("io.qameta.allure:allure-junit5:2.16.1")
+    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = junitVersion)
+    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-api", version = junitVersion)
+    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-engine", version = junitVersion)
+    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-params", version = junitVersion)
+
+    testImplementation(group = "org.junit.platform", name = "junit-platform-commons", version = junitPlatformVersion)
+    testImplementation(group = "org.junit.platform", name = "junit-platform-engine", version = junitPlatformVersion)
+    testImplementation(group = "org.junit.platform", name = "junit-platform-launcher", version = junitPlatformVersion)
+
+    testImplementation(group = "io.qameta.allure", name = "allure-junit5", version = allureVersion)
+    testImplementation(group = "io.qameta.allure", name = "allure-spring-web", version = allureVersion)
 
     testImplementation(group = "au.com.dius.pact.consumer", name = "junit5", version = pactVersion)
     testImplementation(group = "au.com.dius.pact.consumer", name = "java8", version = pactVersion)

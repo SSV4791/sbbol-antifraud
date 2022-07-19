@@ -21,6 +21,8 @@ val credentials: CredentialsContainer by project.extra
 val nexusLoginValue = (project.properties["nexusLogin"] ?: credentials.getProperty("nexusLogin")) as String?
 val nexusPasswordValue = (project.properties["nexusPassword"] ?: credentials.getProperty("nexusPassword")) as String?
 
+val allureVersion: String by rootProject
+
 allprojects {
     apply(plugin = "java-library")
     apply(plugin = "jacoco")
@@ -67,7 +69,7 @@ allprojects {
 
 allure {
     autoconfigure = true
-    version = "2.14.0"
+    version = allureVersion
 }
 
 val test by tasks.getting(Test::class) {
