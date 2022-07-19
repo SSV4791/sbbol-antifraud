@@ -1,6 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.common;
 
-import com.googlecode.jsonrpc4j.spring.rest.JsonRpcRestClient;
+import com.googlecode.jsonrpc4j.spring.rest.JsonRpcRestClientWithReporting;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -28,7 +28,7 @@ public abstract class AbstractIntegrationTest {
     @LocalServerPort
     protected int port;
 
-    protected static RequestId saveOrUpdateData(JsonRpcRestClient createRpcClient, Operation record) throws Throwable {
+    protected static RequestId saveOrUpdateData(JsonRpcRestClientWithReporting createRpcClient, Operation record) throws Throwable {
         return createRpcClient.invoke(
                 "saveOrUpdateData",
                 Collections.singletonMap("dataparams", record),
@@ -36,7 +36,7 @@ public abstract class AbstractIntegrationTest {
         );
     }
 
-    protected static AnalyzeResponse sendData(JsonRpcRestClient searchRpcClient, SendToAnalyzeRequest request) throws Throwable {
+    protected static AnalyzeResponse sendData(JsonRpcRestClientWithReporting searchRpcClient, SendToAnalyzeRequest request) throws Throwable {
         return searchRpcClient.invoke(
                 "analyzeOperation",
                 Collections.singletonMap("analyzeparams", request),

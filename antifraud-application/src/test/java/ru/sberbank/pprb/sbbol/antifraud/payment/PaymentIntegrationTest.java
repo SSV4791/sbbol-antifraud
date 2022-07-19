@@ -1,6 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.payment;
 
-import com.googlecode.jsonrpc4j.spring.rest.JsonRpcRestClient;
+import com.googlecode.jsonrpc4j.spring.rest.JsonRpcRestClientWithReporting;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
@@ -24,14 +24,14 @@ public abstract class PaymentIntegrationTest extends AbstractIntegrationTest {
 
     protected static String requestId;
 
-    private static JsonRpcRestClient jsonRpcRestClient;
+    private static JsonRpcRestClientWithReporting jsonRpcRestClient;
 
     @Autowired
     private PaymentRepository repository;
 
     @BeforeAll
     protected void setup() throws Throwable {
-        jsonRpcRestClient = new JsonRpcRestClient(new URL(HOST + port + "/antifraud/v2/payment"), Collections.emptyMap());
+        jsonRpcRestClient = new JsonRpcRestClientWithReporting(new URL(HOST + port + "/antifraud/v2/payment"), Collections.emptyMap());
         fillDatabase();
     }
 
