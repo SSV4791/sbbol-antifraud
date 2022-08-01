@@ -1,5 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.payment;
 
+import io.qameta.allure.Allure;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import ru.sberbank.pprb.sbbol.antifraud.service.mapper.payment.PaymentSignMapper
 import java.util.Random;
 import java.util.UUID;
 
+import static io.qameta.allure.Allure.step;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -47,24 +49,29 @@ class PaymentDataTest extends PaymentIntegrationTest {
 
     @Test
     @AllureId("19646")
+    @DisplayName("Изменение созданного РПП")
     void updateData() throws Throwable {
-        PaymentOperation dto = PaymentBuilder.getInstance()
-                .withDocId(DOC_ID)
-                .withDocNumber(1)
-                .build();
-        RequestId actual = saveOrUpdate(dto);
-        dto.setMappedSigns(PaymentSignMapper.convertSigns(dto.getSigns()));
-        assertEquals(requestId, actual.getId());
+        PaymentOperation dto = step("Подготовка тестовых данных", () -> PaymentBuilder.getInstance()
+                    .withDocId(DOC_ID)
+                    .withDocNumber(1)
+                    .build());
+        RequestId actual = step("Сохраняем документ", () -> saveOrUpdate(dto));
+        step("Добавляем подпись документу", () -> {
+            dto.setMappedSigns(PaymentSignMapper.convertSigns(dto.getSigns()));
+            assertEquals(requestId, actual.getId());
+        });
 
-        Payment entity = searchPayment(DOC_ID);
-        assertOperation(dto, requestId, entity);
-        assertDoc(dto.getDocument(), entity);
-        assertFirstSign(dto.getMappedSigns().get(0), entity);
-        assertSecondSign(dto.getMappedSigns().get(1), entity);
-        assertThirdSign(dto.getMappedSigns().get(2), entity);
-        assertSenderSign(dto.getMappedSigns().get(3), entity);
-        assertEquals(requestId, entity.getRequestId());
-        assertEquals(1, entity.getDocNumber());
+        Payment entity = step("Получаем документ", () -> searchPayment(DOC_ID));
+        step("Проверяем подпись", () -> {
+            assertOperation(dto, requestId, entity);
+            assertDoc(dto.getDocument(), entity);
+            assertFirstSign(dto.getMappedSigns().get(0), entity);
+            assertSecondSign(dto.getMappedSigns().get(1), entity);
+            assertThirdSign(dto.getMappedSigns().get(2), entity);
+            assertSenderSign(dto.getMappedSigns().get(3), entity);
+            assertEquals(requestId, entity.getRequestId());
+            assertEquals(1, entity.getDocNumber());
+        });
     }
 
     private void assertOperation(PaymentOperation dto, String requestId, Payment entity) {
@@ -186,12 +193,15 @@ class PaymentDataTest extends PaymentIntegrationTest {
 
     @Test
     @AllureId("19641")
+    @DisplayName("Проверка подписи РПП пустой (null) подписью")
     void validateModelRequiredParamEmptySigns() {
-        PaymentOperation operation = createRandomPayment();
-        operation.setSigns(null);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-        String exceptionMessage = ex.getMessage();
-        Assertions.assertTrue(exceptionMessage.contains("signs"), "Should contain signs in message. Message: " + exceptionMessage);
+        PaymentOperation operation = step("Создание документа", () -> createRandomPayment());
+        step("Подписание пустой подписью", () -> operation.setSigns(null));
+        step("Проверка сообщения об ошибке", () -> {
+            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
+            String exceptionMessage = ex.getMessage();
+            Assertions.assertTrue(exceptionMessage.contains("signs"), "Should contain signs in message. Message: " + exceptionMessage);
+        });
     }
 
     @Test
@@ -270,37 +280,41 @@ class PaymentDataTest extends PaymentIntegrationTest {
     @Test
     @AllureId("21798")
     void validateModelRequiredParamFirstSignChannel() {
-        PaymentOperation operation = createRandomPayment();
-        String sign1 = "{" +
-                "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
-                "\"httpReferer\": \"http://localhost:8000/reference_application/Login.do\", " +
-                "\"httpAcceptChars\": \"ISO-8859-1,utf-8;q=0.7,*;q=0.7\", " +
-                "\"httpAcceptEncoding\": \"gzip, deflate\", " +
-                "\"httpAcceptLanguage\": \"en,en-us;q=0.5\", " +
-                "\"ipAddress\": \"78.245.9.87\", " +
-                "\"privateIpAddress\": \"172.16.0.0\", " +
-                "\"tbCode\": \"546738\", " +
-                "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
-                "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
-                "\"channelIndicator\": \"WEB\", " +
-                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
-                "\"signTime\": \"2020-03-23T15:01:15\", " +
-                "\"signLogin\": \"novikova01\", " +
-                "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
-                "\"signCryptoprofileType\": \"OneTimePassword\", " +
-                "\"signToken\": \"signToken\", " +
-                "\"signType\": \"Единственная подпись\", " +
-                "\"signImsi\": \"6176CB3B83F33108E0CBD9F411CAF608\", " +
-                "\"signCertId\": \"signCertId\", " +
-                "\"signPhone\": \"915 168-67-32\", " +
-                "\"signEmail\": \"no@glavbaza36.ru\", " +
-                "\"signSource\": \"SMS\", " +
-                "\"clientDefinedChannelIndicator\": \"WEB\"" +
-                "}";
-        operation.getSigns().set(1, sign1);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-        String exceptionMessage = ex.getMessage();
-        Assertions.assertTrue(exceptionMessage.contains("firstSignChannel"), "Should contain firstSignChannel in message. Message: " + exceptionMessage);
+        PaymentOperation operation = step("Создание документа", () -> createRandomPayment());
+        step("Подписание РПП Первой подписью без signChannel", () -> {
+            String sign1 = "{" +
+                    "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
+                    "\"httpReferer\": \"http://localhost:8000/reference_application/Login.do\", " +
+                    "\"httpAcceptChars\": \"ISO-8859-1,utf-8;q=0.7,*;q=0.7\", " +
+                    "\"httpAcceptEncoding\": \"gzip, deflate\", " +
+                    "\"httpAcceptLanguage\": \"en,en-us;q=0.5\", " +
+                    "\"ipAddress\": \"78.245.9.87\", " +
+                    "\"privateIpAddress\": \"172.16.0.0\", " +
+                    "\"tbCode\": \"546738\", " +
+                    "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
+                    "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
+                    "\"channelIndicator\": \"WEB\", " +
+                    "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
+                    "\"signTime\": \"2020-03-23T15:01:15\", " +
+                    "\"signLogin\": \"novikova01\", " +
+                    "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
+                    "\"signCryptoprofileType\": \"OneTimePassword\", " +
+                    "\"signToken\": \"signToken\", " +
+                    "\"signType\": \"Единственная подпись\", " +
+                    "\"signImsi\": \"6176CB3B83F33108E0CBD9F411CAF608\", " +
+                    "\"signCertId\": \"signCertId\", " +
+                    "\"signPhone\": \"915 168-67-32\", " +
+                    "\"signEmail\": \"no@glavbaza36.ru\", " +
+                    "\"signSource\": \"SMS\", " +
+                    "\"clientDefinedChannelIndicator\": \"WEB\"" +
+                    "}";
+            operation.getSigns().set(1, sign1);
+        });
+        step("Проверка сообщения об ошибке", () -> {
+            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
+            String exceptionMessage = ex.getMessage();
+            Assertions.assertTrue(exceptionMessage.contains("firstSignChannel"), "Should contain firstSignChannel in message. Message: " + exceptionMessage);
+        });
     }
 
     @Test
@@ -423,25 +437,32 @@ class PaymentDataTest extends PaymentIntegrationTest {
 
     //DCBEFSMSC5-T134 antifraud/savedata РПП (все поля)
     @Test
+    @DisplayName("Сохранение РПП с максимальным набором полей")
     @AllureId("25620")
     void savePaymentWithAllFields () throws Throwable {
-        UUID docId = UUID.randomUUID();
-        Integer docNumber = Math.abs(new Random().nextInt());
-        PaymentOperation dto = PaymentBuilder.getInstance()
-                .withDocId(docId)
-                .withDocNumber(docNumber)
-                .build();
-        RequestId requestId = saveOrUpdate(dto);
-        dto.setMappedSigns(PaymentSignMapper.convertSigns(dto.getSigns()));
-        assertNotNull(requestId);
+        PaymentOperation dto = step("Подготовка тестовых данных", () -> {
+                    UUID docId = UUID.randomUUID();
+                    Integer docNumber = Math.abs(new Random().nextInt());
+                    return PaymentBuilder.getInstance()
+                            .withDocId(docId)
+                            .withDocNumber(docNumber)
+                            .build();
+                });
+        RequestId requestId = step("Сохраняем документ", () -> saveOrUpdate(dto));
+        step("Добавляем подпись документу", () -> {
+            dto.setMappedSigns(PaymentSignMapper.convertSigns(dto.getSigns()));
+            assertNotNull(requestId);
+        });
 
-        Payment entity = searchPayment(docId);
-        assertOperation(dto, requestId.getId(), entity);
-        assertDoc(dto.getDocument(), entity);
-        assertFirstSign(dto.getMappedSigns().get(0), entity);
-        assertSecondSign(dto.getMappedSigns().get(1), entity);
-        assertThirdSign(dto.getMappedSigns().get(2), entity);
-        assertSenderSign(dto.getMappedSigns().get(3), entity);
+        Payment entity = step("Получаем документ", () -> searchPayment(dto.getDocument().getId()));
+        step("Проверяем подпись", () -> {
+            assertOperation(dto, requestId.getId(), entity);
+            assertDoc(dto.getDocument(), entity);
+            assertFirstSign(dto.getMappedSigns().get(0), entity);
+            assertSecondSign(dto.getMappedSigns().get(1), entity);
+            assertThirdSign(dto.getMappedSigns().get(2), entity);
+            assertSenderSign(dto.getMappedSigns().get(3), entity);
+        });
     }
 
 }
