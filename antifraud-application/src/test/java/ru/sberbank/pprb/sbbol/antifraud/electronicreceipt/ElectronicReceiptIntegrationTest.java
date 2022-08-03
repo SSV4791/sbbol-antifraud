@@ -17,6 +17,8 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
+import static io.qameta.allure.Allure.step;
+
 abstract class ElectronicReceiptIntegrationTest extends AbstractIntegrationTest {
 
     private static JsonRpcRestClientWithReporting jsonRpcRestClient;
@@ -26,7 +28,7 @@ abstract class ElectronicReceiptIntegrationTest extends AbstractIntegrationTest 
 
     @BeforeAll
     void setup() throws MalformedURLException {
-        jsonRpcRestClient = new JsonRpcRestClientWithReporting(new URL(HOST + port + "/antifraud/v2/electronicreceipt"), Collections.emptyMap());
+        jsonRpcRestClient = step("Создание rest-клиента обработки ЭЧ", () -> new JsonRpcRestClientWithReporting(new URL(HOST + port + "/antifraud/v2/electronicreceipt"), Collections.emptyMap()));
     }
 
     protected static RequestId saveOrUpdate(ElectronicReceiptOperation operation) throws Throwable {
