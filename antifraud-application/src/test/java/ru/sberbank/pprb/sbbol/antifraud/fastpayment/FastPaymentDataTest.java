@@ -1,5 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.fastpayment;
 
+import io.qameta.allure.Allure;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,20 +48,25 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
 
     @Test
     @AllureId("25611")
+    @DisplayName("Изменение сохраненного СБП")
     void updateData() throws Throwable {
-        FastPaymentOperation dto = FastPaymentBuilder.getInstance()
+        FastPaymentOperation dto = Allure.step("Подготовка тестовых данных", () ->FastPaymentBuilder.getInstance()
                 .withDocId(DOC_ID)
                 .withDocNumber(1)
-                .build();
-        RequestId actual = saveOrUpdate(dto);
-        dto.setMappedSigns(FastPaymentSignMapper.convertSigns(dto.getSigns()));
-        assertEquals(requestId, actual.getId());
+                .build());
+        RequestId actual = Allure.step("Сохраняем документ", () -> saveOrUpdate(dto));
+        Allure.step("Добавляем подпись документу", () -> {
+            dto.setMappedSigns(FastPaymentSignMapper.convertSigns(dto.getSigns()));
+            assertEquals(requestId, actual.getId());
+        });
 
-        FastPayment entity = searchFastPayment(DOC_ID);
-        assertOperation(dto, requestId, entity);
-        assertDoc(dto.getDocument(), entity);
-        assertFirstSign(dto.getMappedSigns().get(0), entity);
-        assertSenderSign(dto.getMappedSigns().get(1), entity);
+        FastPayment entity = Allure.step("Получаем документ", () -> searchFastPayment(DOC_ID));
+        Allure.step("Проверяем подпись", () -> {
+            assertOperation(dto, requestId, entity);
+            assertDoc(dto.getDocument(), entity);
+            assertFirstSign(dto.getMappedSigns().get(0), entity);
+            assertSenderSign(dto.getMappedSigns().get(1), entity);
+        });
     }
 
     private void assertOperation(FastPaymentOperation dto, String requestId, FastPayment entity) {
@@ -170,12 +176,15 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
 
     @Test
     @AllureId("25617")
+    @DisplayName("Проверка подписи СБП пустой (null) подписью")
     void validateModelRequiredParamEmptySigns() {
-        FastPaymentOperation operation = createRandomSbpPayment();
-        operation.setSigns(null);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-        String exceptionMessage = ex.getMessage();
-        Assertions.assertTrue(exceptionMessage.contains("signs"), "Should contain signs in message. Message: " + exceptionMessage);
+        FastPaymentOperation operation = Allure.step("Создание документа" , () -> createRandomSbpPayment());
+        Allure.step("Подписание пустой подписью", () -> operation.setSigns(null));
+        Allure.step("Проверка сообщения об ошибке", () -> {
+            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
+            String exceptionMessage = ex.getMessage();
+            Assertions.assertTrue(exceptionMessage.contains("signs"), "Should contain signs in message. Message: " + exceptionMessage);
+        });
     }
 
     @Test
@@ -253,9 +262,11 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
 
     @Test
     @AllureId("22323")
+    @DisplayName("Проверка подписание первой подписью без signChannel")
     void validateModelRequiredParamFirstSignChannel() {
-        FastPaymentOperation operation = createRandomSbpPayment();
-        String sign1 = "{" +
+        FastPaymentOperation operation = Allure.step("Создание документа", () -> createRandomSbpPayment());
+        Allure.step("Подписание СБП единственной подписью без signChannel", () -> {
+            String sign1 = "{" +
                 "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
                 "\"httpReferer\": \"http://localhost:8000/reference_application/Login.do\", " +
                 "\"httpAcceptChars\": \"ISO-8859-1,utf-8;q=0.7,*;q=0.7\", " +
@@ -281,10 +292,13 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
                 "\"signSource\": \"SMS\", " +
                 "\"clientDefinedChannelIndicator\": \"WEB\"" +
                 "}";
-        operation.getSigns().set(1, sign1);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-        String exceptionMessage = ex.getMessage();
-        Assertions.assertTrue(exceptionMessage.contains("firstSignChannel"), "Should contain firstSignChannel in message. Message: " + exceptionMessage);
+            operation.getSigns().set(1, sign1);
+        });
+        Allure.step("Проверка сообщения об ошибке", () -> {
+            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
+            String exceptionMessage = ex.getMessage();
+            Assertions.assertTrue(exceptionMessage.contains("firstSignChannel"), "Should contain firstSignChannel in message. Message: " + exceptionMessage);
+        });
     }
 
     @Test

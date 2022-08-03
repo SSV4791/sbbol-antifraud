@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.TriggeredRule;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 
+import static io.qameta.allure.Allure.addAttachment;
+import static io.qameta.allure.Allure.step;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
@@ -50,21 +53,29 @@ class FastPaymentAnalyzeTest extends FastPaymentIntegrationTest {
 
     @Test
     @AllureId("25608")
+    @DisplayName("Отправка запроса на проверку СБП")
     void sendRequest() throws Throwable {
-        FullAnalyzeResponse expected = createAnalyzeResponse();
-        mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
-                .andExpect(method(HttpMethod.POST))
-                .andRespond(withStatus(HttpStatus.OK)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(objectMapper.writeValueAsString(expected)));
-        SendToAnalyzeRequest request = new SendToAnalyzeRequest(DOC_ID);
-        AnalyzeResponse actual = send(request);
-        mockServer.verify();
-        assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId());
-        assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode() , actual.getActionCode() );
-        assertEquals(expected.getRiskResult().getTriggeredRule().getComment() , actual.getComment() );
-        assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment() , actual.getDetailledComment() );
-        assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime() , actual.getWaitingTime() );
+        FullAnalyzeResponse expected = step("подготовка ожидаемого ответа", () -> {
+            FullAnalyzeResponse expectedResponse = createAnalyzeResponse();
+            addAttachment("сформированный ожидаемый ответ", "text/plain", expectedResponse.toString());
+            mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
+                    .andExpect(method(HttpMethod.POST))
+                    .andRespond(withStatus(HttpStatus.OK)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .body(objectMapper.writeValueAsString(expectedResponse)));
+            return expectedResponse;
+        });
+        SendToAnalyzeRequest request = step("Отправка запроса на анализ", () -> new SendToAnalyzeRequest(DOC_ID));
+        AnalyzeResponse actual = step("Получение ответа с результатом анализа", () -> send(request));
+        step("Проверка результата ответа", () -> {
+            mockServer.verify();
+            assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId());
+            assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode() , actual.getActionCode() );
+            assertEquals(expected.getRiskResult().getTriggeredRule().getComment() , actual.getComment() );
+            assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment() , actual.getDetailledComment() );
+            assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime() , actual.getWaitingTime() );
+        });
+
     }
 
     @Test

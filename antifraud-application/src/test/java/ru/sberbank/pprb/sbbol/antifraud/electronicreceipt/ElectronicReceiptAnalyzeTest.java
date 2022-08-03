@@ -5,6 +5,7 @@ import io.qameta.allure.AllureId;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +30,8 @@ import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import java.util.Random;
 import java.util.UUID;
 
+import static io.qameta.allure.Allure.addAttachment;
+import static io.qameta.allure.Allure.step;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
@@ -59,20 +62,27 @@ class ElectronicReceiptAnalyzeTest extends ElectronicReceiptIntegrationTest {
 
     @Test
     @AllureId("21602")
+    @DisplayName("Отправка запроса на проверку Электронного чека")
     void sendOperationToAnalyzeTest() throws Throwable {
-        FullAnalyzeResponse expected = createFullAnalyzeResponse();
-        mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
-                .andExpect(method(HttpMethod.POST))
-                .andRespond(withStatus(HttpStatus.OK)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(objectMapper.writeValueAsString(expected)));
-        AnalyzeResponse actual = send(new SendToAnalyzeRequest(DOC_ID));
-        mockServer.verify();
-        assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId());
-        assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode());
-        assertEquals(expected.getRiskResult().getTriggeredRule().getComment(), actual.getComment());
-        assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment(), actual.getDetailledComment());
-        assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime(), actual.getWaitingTime());
+        FullAnalyzeResponse expected = step("Подготовка ожидаемого ответа", () -> {
+            FullAnalyzeResponse expectedResponse = createFullAnalyzeResponse();
+            addAttachment("Сформированный ожидаемый ответ", "text/plain", expectedResponse.toString());
+            mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
+                    .andExpect(method(HttpMethod.POST))
+                    .andRespond(withStatus(HttpStatus.OK)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .body(objectMapper.writeValueAsString(expectedResponse)));
+            return expectedResponse;
+        });
+        AnalyzeResponse actual = step("Отправка", () -> send(new SendToAnalyzeRequest(DOC_ID)));
+        step("Проверка результата", () -> {
+            mockServer.verify();
+            assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId());
+            assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode());
+            assertEquals(expected.getRiskResult().getTriggeredRule().getComment(), actual.getComment());
+            assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment(), actual.getDetailledComment());
+            assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime(), actual.getWaitingTime());
+        });
     }
 
     @Test
