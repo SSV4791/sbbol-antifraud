@@ -108,7 +108,7 @@ spec:
           readinessProbe:
             failureThreshold: 3
             httpGet:
-              path: {{ context_prefix }}actuator/health/readiness
+              path: {{ context_prefix }}/actuator/health/readiness
               port: 8080
               scheme: HTTP
             periodSeconds: 30
@@ -118,7 +118,7 @@ spec:
           livenessProbe:
             failureThreshold: 3
             httpGet:
-              path: {{ context_prefix }}actuator/health/liveness
+              path: {{ context_prefix }}/actuator/health/liveness
               port: 8080
               scheme: HTTP
             periodSeconds: 30

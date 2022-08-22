@@ -11,49 +11,49 @@
 [source,properties]
 ----
 openshift:
-  os_host: "dev-gen2.sigma.sbrf.ru"
-  io_control_panel: ci01994970-edevgen2-synapse-control-panel
-  mesh_discovery_address: istiod-basic.ci01994970-edevgen2-synapse-control-panel.svc
+  os_host: "dev-terra000006-idm.ocp.delta.sbrf.ru"
+  io_control_panel: ci02281165-control-plane
+  mesh_discovery_address: istiod-basic-install.ci02281165-control-plane.svc
 
 os_project:
-  host: "https://api.dev-gen2.sigma.sbrf.ru:6443"
+  host: "https://api.dev-terra000006-idm.ocp.delta.sbrf.ru:6443"
+  project: ci02281165-antifraud
   pods: 1
-  project: ci02642164-edevgen2-pprb-kib-dev-sbbol-antifraud
   name: antifraud
   type: factory
-  health_check: false
+  health_check: true
   istio:
     ingress:
       routes:
-        - host: ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru
+        - host: ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru
           port: 5443
           containerPort: 8080
           name: mtls
           certificates:
             ca: "{{ secrets['istio-ingressgateway-ca-certs'].volume.mount }}"
             cert: "{{ secrets['istio-ingressgateway-certs'].volume.mount }}"
-        - host: ingress-ci03045533-sbbol-antifraud-geo-tls.apps.dev-gen2.sigma.sbrf.ru
+        - host: ingress-ci02281165-antifraud-geo-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru
           port: 5441
           containerPort: 8080
           name: mtls-geo
           certificates:
             ca: "{{ secrets['istio-ingressgateway-ca-geo-certs'].volume.mount }}"
             cert: "{{ secrets['istio-ingressgateway-geo-certs'].volume.mount }}"
-        - host: ingress-ci03045533-sbbol-antifraud-ott.apps.dev-gen2.sigma.sbrf.ru
+        - host: ingress-ci02281165-antifraud-ott.apps.dev-terra000006-idm.ocp.delta.sbrf.ru
           port: 5444
           containerPort: 8080
           name: ott
           certificates:
             ca: "{{ secrets['istio-ingressgateway-ca-certs'].volume.mount }}"
             cert: "{{ secrets['istio-ingressgateway-certs'].volume.mount }}"
-        - host: ingress-ci03045533-sbbol-antifraud-geo-ott.apps.dev-gen2.sigma.sbrf.ru
+        - host: ingress-ci02281165-antifraud-geo-ott.apps.dev-terra000006-idm.ocp.delta.sbrf.ru
           port: 5442
           containerPort: 8080
           name: ott-geo
           certificates:
             ca: "{{ secrets['istio-ingressgateway-ca-ott-geo-certs'].volume.mount }}"
             cert: "{{ secrets['istio-ingressgateway-ott-geo-certs'].volume.mount }}"
-        - host: ingress-ci03045533-sbbol-antifraud-geo-hc.apps.dev-gen2.sigma.sbrf.ru
+        - host: ingress-ci02281165-antifraud-geo-hc.apps.dev-terra000006-idm.ocp.delta.sbrf.ru
           port: 5446
           containerPort: 8080
           name: healthcheck
@@ -177,6 +177,128 @@ db_si_password: !vault |
   61646137366566353034336531656430396137393330613338343238656337363936333364633661
   3433323533313864640a343538386332303539313939653337343838353465356637343965356636
   65346431303939643561313836633131616235656362643063303065666133353838
+----
+====
+
+.secman.yml
+[%collapsible]
+====
+[source]
+---
+secman:
+  sigma:
+    jenkins:
+      credentials:
+        token:
+          os:
+            vaultUrl: "https://t.secrets.delta.sbrf.ru"
+            vaultCredentialId: approle_dev_dcb-delta
+            path: CI00149046_CI00363109/A/SBBOL/JEN/DEV/KV/ST_OpenShiftToken_ci02281165-antifraud
+  openshift:
+    enabled: true
+    address: t.secrets.delta.sbrf.ru
+    role: ci02281165-antifraud
+    tenant: CI02281165_CI02352957
+    inject_secrets:
+      app:
+        pgdb-si-secret:
+          type: file
+          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/pgdb-si-secret
+          volume:
+            mount: /deployments/credentials/si_db
+          secrets:
+            secret.properties: secret.properties
+        pgdb-main-secret:
+          type: file
+          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/pgdb-main-secret
+          volume:
+            mount: /deployments/credentials/main_db
+          secrets:
+            secret.properties: secret.properties
+        secret-appjournalstubsettings:
+          type: file
+          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/secret-appjournalstubsettings
+          volume:
+            mount: /deployments/config/app_journal
+          secrets:
+            appJournal.properties: appJournal.properties
+      ingress:
+        istio-ingressgateway-ca-certs:
+          type: file
+          secrets:
+            chain.pem: chain.pem
+          volume:
+            mount: /etc/istio/ingressgateway-ca-certs
+          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-ca-certs
+        istio-ingressgateway-certs:
+          type: file
+          secrets:
+            tls.crt: tls.crt
+            tls.key: tls.key
+          volume:
+            mount: /etc/istio/ingressgateway-certs
+          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-certs
+        istio-ingressgateway-ca-geo-certs:
+          type: file
+          secrets:
+            chain.pem: chain.pem
+          volume:
+            mount: /etc/istio/istio-ingressgateway-ca-geo-certs
+          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-ca-geo-certs
+        istio-ingressgateway-geo-certs:
+          type: file
+          secrets:
+            tls.crt: tls.crt
+            tls.key: tls.key
+          volume:
+            mount: /etc/istio/istio-ingressgateway-geo-certs
+          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-geo-certs
+        istio-ingressgateway-ca-ott-geo-certs:
+          type: file
+          secrets:
+            chain.pem: chain.pem
+          volume:
+            mount: /etc/istio/istio-ingressgateway-ca-ott-geo-certs
+          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-ca-ott-geo-certs
+        istio-ingressgateway-ott-geo-certs:
+          type: file
+          secrets:
+            tls.crt: tls.crt
+            tls.key: tls.key
+          volume:
+            mount: /etc/istio/istio-ingressgateway-ott-geo-certs
+          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-ott-geo-certs
+        istio-ingressgateway-ca-hc-certs:
+          type: file
+          secrets:
+            chain.pem: chain.pem
+          volume:
+            mount: /etc/istio/istio-ingressgateway-ca-hc-certs
+          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-ca-hc-certs
+        istio-ingressgateway-hc-certs:
+          type: file
+          secrets:
+            tls.crt: tls.crt
+            tls.key: tls.key
+          volume:
+            mount: /etc/istio/istio-ingressgateway-hc-certs
+          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-hc-certs
+      egress:
+        istio-egressgateway-ca-certs:
+          type: file
+          secrets:
+            chain.pem: chain.pem
+          volume:
+            mount: /etc/istio/egressgateway-ca-certs
+          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-egressgateway-ca-certs
+        istio-egressgateway-certs:
+          type: file
+          secrets:
+            tls.crt: tls.crt
+            tls.key: tls.key
+          volume:
+            mount: /etc/istio/egressgateway-certs
+          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-egressgateway-certs
 ----
 ====
 
@@ -329,7 +451,21 @@ int:
 ====
 [source,properties]
 ----
-secrets:
+  istio-ingressgateway-ca-certs:
+    source: file
+    files:
+      chain.pem: files/test-ca-chain.pem
+    deployment: ingress-gateway
+    volume:
+      mount: /etc/istio/ingressgateway-ca-certs
+  istio-ingressgateway-certs:
+    source: encrypted-file
+    files:
+      tls.crt: files/antifraud.pem
+      tls.key: files/antifraud.key
+    deployment: ingress-gateway
+    volume:
+      mount: /etc/istio/ingressgateway-certs
   istio-ingressgateway-ca-geo-certs:
     source: file
     files:
@@ -383,8 +519,8 @@ secrets:
   istio-egressgateway-certs:
     source: encrypted-file
     files:
-      tls.crt: files/antifraud/ci03045533-sbbol-antifraud-egress.pem
-      tls.key: files/antifraud/ci03045533-sbbol-antifraud-egress.key
+      tls.crt: files/antifraud.pem
+      tls.key: files/antifraud.pem
     deployment: istio-egressgateway
 ----
 ====
