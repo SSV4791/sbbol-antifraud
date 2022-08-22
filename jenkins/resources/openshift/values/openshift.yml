@@ -1,53 +1,66 @@
 ---
 openshift:
   env: dev
-  os_host: "dev-gen2.sigma.sbrf.ru"
-  io_control_panel: ci01994970-edevgen2-synapse-control-panel
-  mesh_discovery_address: istiod-basic.ci01994970-edevgen2-synapse-control-panel.svc
+  os_host: "dev-terra000006-idm.ocp.delta.sbrf.ru"
+  io_control_panel: ci02281165-control-plane
+  mesh_discovery_address: istiod-basic-install.ci02281165-control-plane.svc
 
 os_project:
   ports:
     - port: 8080
-  health_check: false
-  host: "https://api.dev-gen2.sigma.sbrf.ru:6443"
-  project: ci02642164-edevgen2-pprb-kib-dev-sbbol-antifraud
-  name: pprb4-digital-fraud
+  health_check: true
+  host: "https://api.dev-terra000006-idm.ocp.delta.sbrf.ru:6443"
+  project: ci02281165-antifraud
+  name: antifraud
   istio:
     ingress:
-      mtls:
-        route:
-          host: ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru
+      routes:
+        - host: ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru
           port: 5443
-      mtls_geo:
-        route:
-          host: ingress-ci03045533-sbbol-antifraud-geo-tls.apps.dev-gen2.sigma.sbrf.ru
+          containerPort: 8080
+          name: mtls
+          certificates:
+            ca: "{{ secrets['istio-ingressgateway-ca-certs'].volume.mount }}"
+            cert: "{{ secrets['istio-ingressgateway-certs'].volume.mount }}"
+        - host: ingress-ci02281165-antifraud-geo-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru
           port: 5441
-      ott:
-        route:
-          host: ingress-ci03045533-sbbol-antifraud-ott.apps.dev-gen2.sigma.sbrf.ru
+          containerPort: 8080
+          name: mtls-geo
+          certificates:
+            ca: "{{ secrets['istio-ingressgateway-ca-geo-certs'].volume.mount }}"
+            cert: "{{ secrets['istio-ingressgateway-geo-certs'].volume.mount }}"
+        - host: ingress-ci02281165-antifraud-ott.apps.dev-terra000006-idm.ocp.delta.sbrf.ru
           port: 5444
+          containerPort: 8080
+          name: ott
+          certificates:
+            ca: "{{ secrets['istio-ingressgateway-ca-certs'].volume.mount }}"
+            cert: "{{ secrets['istio-ingressgateway-certs'].volume.mount }}"
+        - host: ingress-ci02281165-antifraud-geo-ott.apps.dev-terra000006-idm.ocp.delta.sbrf.ru
+          port: 5442
+          containerPort: 8080
+          name: ott-geo
+          certificates:
+            ca: "{{ secrets['istio-ingressgateway-ca-ott-geo-certs'].volume.mount }}"
+            cert: "{{ secrets['istio-ingressgateway-ott-geo-certs'].volume.mount }}"
+        - host: ingress-ci02281165-antifraud-geo-hc.apps.dev-terra000006-idm.ocp.delta.sbrf.ru
+          port: 5446
+          containerPort: 8080
+          name: healthcheck
+          certificates:
+            ca: "{{ secrets['istio-ingressgateway-ca-hc-certs'].volume.mount }}"
+            cert: "{{ secrets['istio-ingressgateway-hc-certs'].volume.mount }}"
+      ott:
         key_store: dev-antifraud.p12
         trust_store: sigma_ott_trust.p12
         OTT_MODULE_ID: dev-antifraud
-      ott_geo:
-        route:
-          host: ingress-ci03045533-sbbol-antifraud-geo-ott.apps.dev-gen2.sigma.sbrf.ru
-          port: 5442
-      healthcheck:
-        route:
-          host: ingress-ci03045533-sbbol-antifraud-geo-hc.apps.dev-gen2.sigma.sbrf.ru
-          port: 5446
 
     egress:
-      http:
-        port: 8080
       ott:
         port: 5443
         key_store: dev-antifraud.p12
         trust_store: sigma_ott_trust.p12
         OTT_MODULE_ID: dev-antifraud
-      mtls:
-        port: 5443
 
 registry_area: registry.sigma.sbrf.ru
 nexus_area: Nexus_PROD/CI03045533_sbbol-antifraud
