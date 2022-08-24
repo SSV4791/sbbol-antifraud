@@ -32,6 +32,7 @@ import java.util.UUID;
 
 import static io.qameta.allure.Allure.addAttachment;
 import static io.qameta.allure.Allure.step;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
@@ -77,43 +78,57 @@ class ElectronicReceiptAnalyzeTest extends ElectronicReceiptIntegrationTest {
         AnalyzeResponse actual = step("Отправка", () -> send(new SendToAnalyzeRequest(DOC_ID)));
         step("Проверка результата", () -> {
             mockServer.verify();
-            assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId());
-            assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode());
-            assertEquals(expected.getRiskResult().getTriggeredRule().getComment(), actual.getComment());
-            assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment(), actual.getDetailledComment());
-            assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime(), actual.getWaitingTime());
+            assertAll(
+                    () -> assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId(), "Идентификатор транзакции не совпадает"),
+                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode(), "Рекомендуемое действие в соответсвии со сработавшим правилом не совпадает"),
+                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getComment(), actual.getComment(), "Короткий комментарий по сработавшему правилу, передаваемый в СББОЛ не совпадает"),
+                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment(), actual.getDetailledComment(), "Расширенный комментарий по сработавшему правилу, передаваемый в СББОЛ, не совпадает"),
+                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime(), actual.getWaitingTime(), "Время (в часах) в течение которого СББОЛ ожидает ответ от АС ФМ не совпадает")
+            );
+
         });
     }
 
     @Test
     @AllureId("21596")
+    @DisplayName("Проверка ЭЧ без docId")
     void validateModelRequiredParamDocIdTest() {
-        SendToAnalyzeRequest request = new SendToAnalyzeRequest(null);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> send(request));
-        String exceptionMessage = ex.getMessage();
-        Assertions.assertTrue(exceptionMessage.contains("docId"), "Should contain 'docId' in message. Message: " + exceptionMessage);
+        String exceptionMessage = step("Создание ЭЧ без docID и получение сообщения об ошибке", () -> {
+            SendToAnalyzeRequest request = new SendToAnalyzeRequest(null);
+            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> send(request));
+            return ex.getMessage();
+        });
+        step("Проверка сообщения об ошибке об отсутсвии docID", () -> Assertions.assertTrue(exceptionMessage.contains("docId"), "Should contain 'docId' in message. Message: " + exceptionMessage));
     }
 
     @Test
     @AllureId("21599")
+    @DisplayName("Попытка отправки на анализ ЭЧ отсутствующего в БД")
     void operationNotFoundTest() {
-        SendToAnalyzeRequest request = new SendToAnalyzeRequest(UUID.randomUUID());
-        ApplicationException ex = assertThrows(ApplicationException.class, () -> send(request));
-        String exceptionMessage = ex.getMessage();
-        Assertions.assertTrue(exceptionMessage.contains("Electronic receipt (docId=" + request.getDocId() + ") not found"));
+        SendToAnalyzeRequest request = step("Создание ЭЧ с невалидным docId", () -> new SendToAnalyzeRequest(UUID.randomUUID()));
+        String exceptionMessage = step("Получение сообщения об ошибке", () -> {
+            ApplicationException ex = assertThrows(ApplicationException.class, () -> send(request));
+            return ex.getMessage();
+        });
+        step("Проверка сообщения об ошибке", () -> Assertions.assertTrue(exceptionMessage.contains("Electronic receipt (docId=" + request.getDocId() + ") not found")));
     }
 
     @Test
     @AllureId("21594")
+    @DisplayName("Получение ошибки от смежной АС при отправке на анализ ЭЧ")
     void analyzeErrorTest() {
-        mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
-                .andExpect(method(HttpMethod.POST))
-                .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
-        SendToAnalyzeRequest request = new SendToAnalyzeRequest(DOC_ID);
-        AnalyzeException ex = assertThrows(AnalyzeException.class, () -> send(request));
-        mockServer.verify();
-        String exceptionMessage = ex.getMessage();
-        Assertions.assertTrue(exceptionMessage.contains(request.getDocId().toString()));
+        SendToAnalyzeRequest request = step("Подготовка тестовых данных", () -> {
+            mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
+                    .andExpect(method(HttpMethod.POST))
+                    .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
+            return new SendToAnalyzeRequest(DOC_ID);
+        });
+        String exceptionMessage = step("Получение сообщения об ошибке", () -> {
+            AnalyzeException ex = assertThrows(AnalyzeException.class, () -> send(request));
+            mockServer.verify();
+            return ex.getMessage();
+        });
+        step("Проверка сообщения об ошибке", () -> Assertions.assertTrue(exceptionMessage.contains(request.getDocId().toString())));
     }
 
     private FullAnalyzeResponse createFullAnalyzeResponse() {
