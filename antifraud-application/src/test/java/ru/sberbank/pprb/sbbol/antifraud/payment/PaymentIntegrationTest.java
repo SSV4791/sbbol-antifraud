@@ -17,6 +17,8 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
+import static io.qameta.allure.Allure.step;
+
 public abstract class PaymentIntegrationTest extends AbstractIntegrationTest {
 
     protected static final UUID DOC_ID = UUID.randomUUID();
@@ -31,7 +33,7 @@ public abstract class PaymentIntegrationTest extends AbstractIntegrationTest {
 
     @BeforeAll
     protected void setup() throws Throwable {
-        jsonRpcRestClient = new JsonRpcRestClientWithReporting(new URL(HOST + port + "/antifraud/v2/payment"), Collections.emptyMap());
+        jsonRpcRestClient = step("Создание rest-клиента обработки РПП", () -> new JsonRpcRestClientWithReporting(new URL(HOST + port + "/antifraud/v2/payment"), Collections.emptyMap()));
         fillDatabase();
     }
 
@@ -49,10 +51,10 @@ public abstract class PaymentIntegrationTest extends AbstractIntegrationTest {
     }
 
     protected RequestId generatePayment(UUID docId, Integer docNumber) throws Throwable {
-        PaymentOperation payment = PaymentBuilder.getInstance()
+        PaymentOperation payment = step("Генерация РПП с docId: " + docId, () -> PaymentBuilder.getInstance()
                 .withDocId(docId)
                 .withDocNumber(docNumber)
-                .build();
+                .build());
         return saveOrUpdateData(jsonRpcRestClient, payment);
     }
 
