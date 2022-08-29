@@ -29,6 +29,139 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ApiTestLayer
 class FastPaymentDataTest extends FastPaymentIntegrationTest {
 
+    public static final String FIRST_SIGN_USER_GUID = "{" +
+            "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
+            "\"httpReferer\": \"http://localhost:8000/reference_application/Login.do\", " +
+            "\"httpAcceptChars\": \"ISO-8859-1,utf-8;q=0.7,*;q=0.7\", " +
+            "\"httpAcceptEncoding\": \"gzip, deflate\", " +
+            "\"httpAcceptLanguage\": \"en,en-us;q=0.5\", " +
+            "\"ipAddress\": \"78.245.9.87\", " +
+            "\"privateIpAddress\": \"172.16.0.0\", " +
+            "\"tbCode\": \"546738\", " +
+            "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
+            "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
+            "\"channelIndicator\": \"WEB\", " +
+            "\"userGuid\": \"\", " +
+            "\"signTime\": \"2020-03-23T15:01:15\", " +
+            "\"signLogin\": \"novikova01\", " +
+            "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
+            "\"signCryptoprofileType\": \"OneTimePassword\", " +
+            "\"signToken\": \"signToken\", " +
+            "\"signType\": \"Единственная подпись\", " +
+            "\"signImsi\": \"6176CB3B83F33108E0CBD9F411CAF608\", " +
+            "\"signCertId\": \"signCertId\", " +
+            "\"signPhone\": \"915 168-67-32\", " +
+            "\"signEmail\": \"no@glavbaza36.ru\", " +
+            "\"signChannel\": \"TOKEN\", " +
+            "\"signSource\": \"SMS\", " +
+            "\"clientDefinedChannelIndicator\": \"WEB\"" +
+            "}";
+    public static final String FIRST_SIGN_CHANNEL = "{" +
+            "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
+            "\"httpReferer\": \"http://localhost:8000/reference_application/Login.do\", " +
+            "\"httpAcceptChars\": \"ISO-8859-1,utf-8;q=0.7,*;q=0.7\", " +
+            "\"httpAcceptEncoding\": \"gzip, deflate\", " +
+            "\"httpAcceptLanguage\": \"en,en-us;q=0.5\", " +
+            "\"ipAddress\": \"78.245.9.87\", " +
+            "\"privateIpAddress\": \"172.16.0.0\", " +
+            "\"tbCode\": \"546738\", " +
+            "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
+            "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
+            "\"channelIndicator\": \"WEB\", " +
+            "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
+            "\"signTime\": \"2020-03-23T15:01:15\", " +
+            "\"signLogin\": \"novikova01\", " +
+            "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
+            "\"signCryptoprofileType\": \"OneTimePassword\", " +
+            "\"signToken\": \"signToken\", " +
+            "\"signType\": \"Единственная подпись\", " +
+            "\"signImsi\": \"6176CB3B83F33108E0CBD9F411CAF608\", " +
+            "\"signCertId\": \"signCertId\", " +
+            "\"signPhone\": \"915 168-67-32\", " +
+            "\"signEmail\": \"no@glavbaza36.ru\", " +
+            "\"signSource\": \"SMS\", " +
+            "\"clientDefinedChannelIndicator\": \"WEB\"" +
+            "}";
+    public static final String FIRST_SIGN = "{" +
+            "\"ipAddress\": \"78.245.9.88\", " +
+            "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
+            "\"tbCode\": \"546738\", " +
+            "\"channelIndicator\": \"WEB\", " +
+            "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
+            "\"signTime\": \"2020-03-23T15:01:15\", " +
+            "\"signLogin\": \"novikova01\", " +
+            "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
+            "\"signPhone\": \"915 168-67-32\", " +
+            "\"signChannel\": \"TOKEN\", " +
+            "\"signType\": \"Единственная подпись\", " +
+            "\"signSource\": \"SMS\", " +
+            "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
+            "}";
+    public static final String SENDER_SIGN = "{" +
+            "\"tbCode\": \"546738\", " +
+            "\"channelIndicator\": \"WEB\", " +
+            "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
+            "\"signTime\": \"2020-03-23T15:01:15\", " +
+            "\"signLogin\": \"novikova01\", " +
+            "\"signPhone\": \"915 168-67-32\", " +
+            "\"signChannel\": \"TOKEN\", " +
+            "\"signType\": \"Единственная подпись\", " +
+            "\"signSource\": \"SMS\", " +
+            "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
+            "}";
+    public static final String SENDER_SIGN_LOGIN = "{" +
+            "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
+            "\"httpReferer\": \"http://localhost:8000/reference_application/Login.do\", " +
+            "\"httpAcceptChars\": \"ISO-8859-1,utf-8;q=0.7,*;q=0.7\", " +
+            "\"httpAcceptEncoding\": \"gzip, deflate\", " +
+            "\"httpAcceptLanguage\": \"en,en-us;q=0.5\", " +
+            "\"ipAddress\": \"78.245.9.87\", " +
+            "\"privateIpAddress\": \"172.16.0.0\", " +
+            "\"tbCode\": \"546738\", " +
+            "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
+            "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
+            "\"channelIndicator\": \"WEB\", " +
+            "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
+            "\"signTime\": \"2020-03-23T15:28:25\", " +
+            "\"signCryptoprofile\": \"Иванов Иван Иванович\", " +
+            "\"signCryptoprofileType\": \"OneTimePassword\", " +
+            "\"signToken\": \"signToken\", " +
+            "\"signType\": \"Единственная подпись\", " +
+            "\"signImsi\": \"6176CB3B83F33108E0CBD9F411CAF608\", " +
+            "\"signCertId\": \"signCertId\", " +
+            "\"signPhone\": \"903 158-55-12\", " +
+            "\"signEmail\": \"iv@glavbaza36.ru\", " +
+            "\"signChannel\": \"TOKEN\", " +
+            "\"signSource\": \"SMS\", " +
+            "\"clientDefinedChannelIndicator\": \"WEB\"" +
+            "}";
+    public static final String SENDER_SIGN_CHANNEL = "{" +
+            "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
+            "\"httpReferer\": \"http://localhost:8000/reference_application/Login.do\", " +
+            "\"httpAcceptChars\": \"ISO-8859-1,utf-8;q=0.7,*;q=0.7\", " +
+            "\"httpAcceptEncoding\": \"gzip, deflate\", " +
+            "\"httpAcceptLanguage\": \"en,en-us;q=0.5\", " +
+            "\"ipAddress\": \"78.245.9.87\", " +
+            "\"privateIpAddress\": \"172.16.0.0\", " +
+            "\"tbCode\": \"546738\", " +
+            "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
+            "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
+            "\"channelIndicator\": \"WEB\", " +
+            "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
+            "\"signTime\": \"2020-03-23T16:32:05\", " +
+            "\"signLogin\": \"novikova01\", " +
+            "\"signCryptoprofile\": \"Иванов Иван Иванович\", " +
+            "\"signCryptoprofileType\": \"OneTimePassword\", " +
+            "\"signToken\": \"signToken\", " +
+            "\"signType\": \"Единственная подпись\", " +
+            "\"signImsi\": \"6176CB3B83F33108E0CBD9F411CAF608\", " +
+            "\"signCertId\": \"signCertId\", " +
+            "\"signPhone\": \"903 158-55-12\", " +
+            "\"signEmail\": \"iv@glavbaza36.ru\", " +
+            "\"signSource\": \"SMS\", " +
+            "\"clientDefinedChannelIndicator\": \"WEB\"" +
+            "}";
+
     @Test
     @AllureId("25614")
     @DisplayName("Создание СБП")
@@ -61,7 +194,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
     @AllureId("25611")
     @DisplayName("Изменение сохраненного СБП")
     void updateData() throws Throwable {
-        FastPaymentOperation dto = step("Подготовка тестовых данных", () ->FastPaymentBuilder.getInstance()
+        FastPaymentOperation dto = step("Подготовка тестовых данных", () -> FastPaymentBuilder.getInstance()
                 .withDocId(DOC_ID)
                 .withDocNumber(1)
                 .build());
@@ -208,7 +341,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
     @AllureId("25617")
     @DisplayName("Проверка подписи СБП пустой (null) подписью")
     void validateModelRequiredParamEmptySigns() {
-        FastPaymentOperation operation = step("Создание документа" , () -> createRandomSbpPayment());
+        FastPaymentOperation operation = step("Создание документа СБП" , this::createRandomSbpPayment);
         step("Подписание пустой подписью", () -> operation.setSigns(null));
         step("Проверка сообщения об ошибке", () -> {
             ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
@@ -221,36 +354,9 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
     @AllureId("25616")
     @DisplayName("Валидация модели СБП на наличие обязательного атрибута userGuid в первой подписи")
     void validateModelRequiredParamFirstSignUserGuid() {
-        FastPaymentOperation operation = step("Создание документа" , () -> createRandomSbpPayment());
+        FastPaymentOperation operation = step("Создание документа" , this::createRandomSbpPayment);
         step("Подписание СБП Первой подписью без userGuid", () -> {
-            String sign1 = "{" +
-                    "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
-                    "\"httpReferer\": \"http://localhost:8000/reference_application/Login.do\", " +
-                    "\"httpAcceptChars\": \"ISO-8859-1,utf-8;q=0.7,*;q=0.7\", " +
-                    "\"httpAcceptEncoding\": \"gzip, deflate\", " +
-                    "\"httpAcceptLanguage\": \"en,en-us;q=0.5\", " +
-                    "\"ipAddress\": \"78.245.9.87\", " +
-                    "\"privateIpAddress\": \"172.16.0.0\", " +
-                    "\"tbCode\": \"546738\", " +
-                    "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
-                    "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
-                    "\"channelIndicator\": \"WEB\", " +
-                    "\"userGuid\": \"\", " +
-                    "\"signTime\": \"2020-03-23T15:01:15\", " +
-                    "\"signLogin\": \"novikova01\", " +
-                    "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
-                    "\"signCryptoprofileType\": \"OneTimePassword\", " +
-                    "\"signToken\": \"signToken\", " +
-                    "\"signType\": \"Единственная подпись\", " +
-                    "\"signImsi\": \"6176CB3B83F33108E0CBD9F411CAF608\", " +
-                    "\"signCertId\": \"signCertId\", " +
-                    "\"signPhone\": \"915 168-67-32\", " +
-                    "\"signEmail\": \"no@glavbaza36.ru\", " +
-                    "\"signChannel\": \"TOKEN\", " +
-                    "\"signSource\": \"SMS\", " +
-                    "\"clientDefinedChannelIndicator\": \"WEB\"" +
-                    "}";
-            operation.getSigns().set(1, sign1);
+            operation.getSigns().set(1, FIRST_SIGN_USER_GUID);
         });
         step("Проверка сообщения об ошибке", () -> {
             ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
@@ -263,36 +369,8 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
     @AllureId("25612")
     @DisplayName("Валидация модели СБП на наличие логина в единственной подписи")
     void validateModelRequiredParamSenderSignLogin() {
-        FastPaymentOperation operation = step("Создание документа" , () -> createRandomSbpPayment());
-        step("Подписание СБП единственной подписью без логина", () -> {
-            String sign = "{" +
-                    "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
-                    "\"httpReferer\": \"http://localhost:8000/reference_application/Login.do\", " +
-                    "\"httpAcceptChars\": \"ISO-8859-1,utf-8;q=0.7,*;q=0.7\", " +
-                    "\"httpAcceptEncoding\": \"gzip, deflate\", " +
-                    "\"httpAcceptLanguage\": \"en,en-us;q=0.5\", " +
-                    "\"ipAddress\": \"78.245.9.87\", " +
-                    "\"privateIpAddress\": \"172.16.0.0\", " +
-                    "\"tbCode\": \"546738\", " +
-                    "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
-                    "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
-                    "\"channelIndicator\": \"WEB\", " +
-                    "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
-                    "\"signTime\": \"2020-03-23T15:28:25\", " +
-                    "\"signCryptoprofile\": \"Иванов Иван Иванович\", " +
-                    "\"signCryptoprofileType\": \"OneTimePassword\", " +
-                    "\"signToken\": \"signToken\", " +
-                    "\"signType\": \"Единственная подпись\", " +
-                    "\"signImsi\": \"6176CB3B83F33108E0CBD9F411CAF608\", " +
-                    "\"signCertId\": \"signCertId\", " +
-                    "\"signPhone\": \"903 158-55-12\", " +
-                    "\"signEmail\": \"iv@glavbaza36.ru\", " +
-                    "\"signChannel\": \"TOKEN\", " +
-                    "\"signSource\": \"SMS\", " +
-                    "\"clientDefinedChannelIndicator\": \"WEB\"" +
-                    "}";
-            operation.getSigns().set(0, sign);
-        });
+        FastPaymentOperation operation = step("Создание документа" , this::createRandomSbpPayment);
+        step("Подписание СБП единственной подписью без логина", () -> operation.getSigns().set(0, SENDER_SIGN_LOGIN));
         step("Проверка сообщения об ошибке", () -> {
             ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
             String exceptionMessage = ex.getMessage();
@@ -304,35 +382,9 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
     @AllureId("22323")
     @DisplayName("Проверка подписание единственной подписью без signChannel")
     void validateModelRequiredParamFirstSignChannel() {
-        FastPaymentOperation operation = step("Создание документа", () -> createRandomSbpPayment());
+        FastPaymentOperation operation = step("Создание документа", this::createRandomSbpPayment);
         step("Подписание СБП единственной подписью без signChannel", () -> {
-            String sign1 = "{" +
-                "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
-                "\"httpReferer\": \"http://localhost:8000/reference_application/Login.do\", " +
-                "\"httpAcceptChars\": \"ISO-8859-1,utf-8;q=0.7,*;q=0.7\", " +
-                "\"httpAcceptEncoding\": \"gzip, deflate\", " +
-                "\"httpAcceptLanguage\": \"en,en-us;q=0.5\", " +
-                "\"ipAddress\": \"78.245.9.87\", " +
-                "\"privateIpAddress\": \"172.16.0.0\", " +
-                "\"tbCode\": \"546738\", " +
-                "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
-                "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
-                "\"channelIndicator\": \"WEB\", " +
-                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
-                "\"signTime\": \"2020-03-23T15:01:15\", " +
-                "\"signLogin\": \"novikova01\", " +
-                "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
-                "\"signCryptoprofileType\": \"OneTimePassword\", " +
-                "\"signToken\": \"signToken\", " +
-                "\"signType\": \"Единственная подпись\", " +
-                "\"signImsi\": \"6176CB3B83F33108E0CBD9F411CAF608\", " +
-                "\"signCertId\": \"signCertId\", " +
-                "\"signPhone\": \"915 168-67-32\", " +
-                "\"signEmail\": \"no@glavbaza36.ru\", " +
-                "\"signSource\": \"SMS\", " +
-                "\"clientDefinedChannelIndicator\": \"WEB\"" +
-                "}";
-            operation.getSigns().set(1, sign1);
+            operation.getSigns().set(1, FIRST_SIGN_CHANNEL);
         });
         step("Проверка сообщения об ошибке", () -> {
             ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
@@ -345,35 +397,9 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
     @AllureId("22325")
     @DisplayName("Проверка подписания документа без обязательного параметра senderSignChannel")
     void validateModelRequiredParamSenderSignChannel() {
-        FastPaymentOperation operation = step("Создание документа", () -> createRandomSbpPayment());
+        FastPaymentOperation operation = step("Создание документа", this::createRandomSbpPayment);
         step("Подписание СБП единственной подписью без senderSignChannel", () -> {
-        String sign = "{" +
-                "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
-                "\"httpReferer\": \"http://localhost:8000/reference_application/Login.do\", " +
-                "\"httpAcceptChars\": \"ISO-8859-1,utf-8;q=0.7,*;q=0.7\", " +
-                "\"httpAcceptEncoding\": \"gzip, deflate\", " +
-                "\"httpAcceptLanguage\": \"en,en-us;q=0.5\", " +
-                "\"ipAddress\": \"78.245.9.87\", " +
-                "\"privateIpAddress\": \"172.16.0.0\", " +
-                "\"tbCode\": \"546738\", " +
-                "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
-                "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
-                "\"channelIndicator\": \"WEB\", " +
-                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
-                "\"signTime\": \"2020-03-23T16:32:05\", " +
-                "\"signLogin\": \"novikova01\", " +
-                "\"signCryptoprofile\": \"Иванов Иван Иванович\", " +
-                "\"signCryptoprofileType\": \"OneTimePassword\", " +
-                "\"signToken\": \"signToken\", " +
-                "\"signType\": \"Единственная подпись\", " +
-                "\"signImsi\": \"6176CB3B83F33108E0CBD9F411CAF608\", " +
-                "\"signCertId\": \"signCertId\", " +
-                "\"signPhone\": \"903 158-55-12\", " +
-                "\"signEmail\": \"iv@glavbaza36.ru\", " +
-                "\"signSource\": \"SMS\", " +
-                "\"clientDefinedChannelIndicator\": \"WEB\"" +
-                "}";
-        operation.getSigns().set(0, sign);
+        operation.getSigns().set(0, SENDER_SIGN_CHANNEL);
         });
         step("Проверка сообщения об ошибке", () -> {
             ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
@@ -390,36 +416,9 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
         step("Подписание документа", () ->{
             paymentOperation.setDigitalId(null);
             paymentOperation.getDocument().setDestination(null);
-            String firstSign = "{" +
-                    "\"ipAddress\": \"78.245.9.88\", " +
-                    "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
-                    "\"tbCode\": \"546738\", " +
-                    "\"channelIndicator\": \"WEB\", " +
-                    "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
-                    "\"signTime\": \"2020-03-23T15:01:15\", " +
-                    "\"signLogin\": \"novikova01\", " +
-                    "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
-                    "\"signPhone\": \"915 168-67-32\", " +
-                    "\"signChannel\": \"TOKEN\", " +
-                    "\"signType\": \"Единственная подпись\", " +
-                    "\"signSource\": \"SMS\", " +
-                    "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
-                    "}";
-            String senderSign = "{" +
-                    "\"tbCode\": \"546738\", " +
-                    "\"channelIndicator\": \"WEB\", " +
-                    "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
-                    "\"signTime\": \"2020-03-23T15:01:15\", " +
-                    "\"signLogin\": \"novikova01\", " +
-                    "\"signPhone\": \"915 168-67-32\", " +
-                    "\"signChannel\": \"TOKEN\", " +
-                    "\"signType\": \"Единственная подпись\", " +
-                    "\"signSource\": \"SMS\", " +
-                    "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
-                    "}";
             paymentOperation.getSigns().clear();
-            paymentOperation.getSigns().add(firstSign);
-            paymentOperation.getSigns().add(senderSign);
+            paymentOperation.getSigns().add(FIRST_SIGN);
+            paymentOperation.getSigns().add(SENDER_SIGN);
         });
         step("Сохранение документа", () ->{
             RequestId requestId = saveOrUpdate(paymentOperation);
@@ -450,14 +449,12 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
                     assertNotNull(requestId);
                 });
         FastPayment entity = step("Получение документа", () -> searchFastPayment(dto.getDocument().getId()));
-        step("Проверка документа и подписи", () -> {
-            assertAll(
-                    () ->  assertOperation(dto, requestId.getId(), entity),
-                    () ->  assertDoc(dto.getDocument(), entity),
-                    () ->  assertFirstSign(dto.getMappedSigns().get(0), entity),
-                    () ->  assertSenderSign(dto.getMappedSigns().get(1), entity)
-            );
-        });
+        step("Проверка документа и подписи", () -> assertAll(
+                () ->  assertOperation(dto, requestId.getId(), entity),
+                () ->  assertDoc(dto.getDocument(), entity),
+                () ->  assertFirstSign(dto.getMappedSigns().get(0), entity),
+                () ->  assertSenderSign(dto.getMappedSigns().get(1), entity)
+        ));
     }
 
     //DCBEFSMSC5-T135 antifraud/savedata СБП (все поля)
@@ -480,20 +477,18 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
                 });
 
         FastPayment entity = step("Получение документа", () -> searchFastPayment(dto.getDocument().getId()));
-        step("Проверка документа и подписи", () -> {
-            assertAll(
-                    () ->  assertOperation(dto, requestId.getId(), entity),
-                    () ->  assertDoc(dto.getDocument(), entity),
-                    () ->  assertFirstSign(dto.getMappedSigns().get(0), entity),
-                    () ->  assertSenderSign(dto.getMappedSigns().get(1), entity)
-            );
-        });
+        step("Проверка документа и подписи", () -> assertAll(
+                () ->  assertOperation(dto, requestId.getId(), entity),
+                () ->  assertDoc(dto.getDocument(), entity),
+                () ->  assertFirstSign(dto.getMappedSigns().get(0), entity),
+                () ->  assertSenderSign(dto.getMappedSigns().get(1), entity)
+        ));
     }
 
     //DCBEFSMSC5-T240 antifraud/savedata СБП (данные от СБП не получены)
     @Test
     @AllureId("25615")
-    @DisplayName("Сохраннение СБп без данныз")
+    @DisplayName("Сохраннение СБП без данных")
     void saveFastPaymentWithDontHaveData() throws Throwable {
         FastPaymentOperation dto = step("Создание документа без данных", () -> {
                     UUID docId = UUID.randomUUID();
@@ -512,13 +507,11 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
             assertNotNull(requestId);
         });
         FastPayment entity = step("Получение документа", () -> searchFastPayment(dto.getDocument().getId()));
-        step("Проверка документа и подписи", () -> {
-            assertAll(
-                    () ->  assertOperation(dto, requestId.getId(), entity),
-                    () ->  assertDoc(dto.getDocument(), entity),
-                    () ->  assertFirstSign(dto.getMappedSigns().get(0), entity),
-                    () ->  assertSenderSign(dto.getMappedSigns().get(1), entity)
-            );
-        });
+        step("Проверка документа и подписи", () -> assertAll(
+                () ->  assertOperation(dto, requestId.getId(), entity),
+                () ->  assertDoc(dto.getDocument(), entity),
+                () ->  assertFirstSign(dto.getMappedSigns().get(0), entity),
+                () ->  assertSenderSign(dto.getMappedSigns().get(1), entity)
+        ));
     }
 }

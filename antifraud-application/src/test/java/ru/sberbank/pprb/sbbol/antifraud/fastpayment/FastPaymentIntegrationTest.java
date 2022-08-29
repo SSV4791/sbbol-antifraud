@@ -17,6 +17,8 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
+import static io.qameta.allure.Allure.step;
+
 abstract class FastPaymentIntegrationTest extends AbstractIntegrationTest {
 
     protected static final UUID DOC_ID = UUID.randomUUID();
@@ -31,7 +33,7 @@ abstract class FastPaymentIntegrationTest extends AbstractIntegrationTest {
 
     @BeforeAll
     void setup() throws Throwable {
-        jsonRpcRestClient = new JsonRpcRestClientWithReporting(new URL(HOST + port + "/antifraud/v2/fastpayment"), Collections.emptyMap());
+        jsonRpcRestClient = step("Создание rest-клиента обработки СБП", () -> new JsonRpcRestClientWithReporting(new URL(HOST + port + "/antifraud/v2/fastpayment"), Collections.emptyMap()));
         fillDatabase();
     }
 
@@ -49,10 +51,10 @@ abstract class FastPaymentIntegrationTest extends AbstractIntegrationTest {
     }
 
     protected RequestId generateFastPayment(UUID docId, Integer docNumber) throws Throwable {
-        FastPaymentOperation operation = FastPaymentBuilder.getInstance()
+        FastPaymentOperation operation = step("Генерация СБП с docId: " + docId, () -> FastPaymentBuilder.getInstance()
                 .withDocId(docId)
                 .withDocNumber(docNumber)
-                .build();
+                .build());
         return saveOrUpdateData(jsonRpcRestClient, operation);
     }
 

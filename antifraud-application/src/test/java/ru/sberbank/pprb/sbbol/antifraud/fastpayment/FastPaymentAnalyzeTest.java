@@ -28,6 +28,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 
 import static io.qameta.allure.Allure.addAttachment;
 import static io.qameta.allure.Allure.step;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
@@ -69,42 +70,53 @@ class FastPaymentAnalyzeTest extends FastPaymentIntegrationTest {
         AnalyzeResponse actual = step("Получение ответа с результатом анализа", () -> send(request));
         step("Проверка результата ответа", () -> {
             mockServer.verify();
-            assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId());
-            assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode() , actual.getActionCode() );
-            assertEquals(expected.getRiskResult().getTriggeredRule().getComment() , actual.getComment() );
-            assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment() , actual.getDetailledComment() );
-            assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime() , actual.getWaitingTime() );
+            assertAll(
+                    () -> assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId()),
+                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode() , actual.getActionCode() ),
+                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getComment() , actual.getComment() ),
+                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment() , actual.getDetailledComment() ),
+                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime() , actual.getWaitingTime() )
+            );
         });
 
     }
 
     @Test
     @AllureId("25609")
+    @DisplayName("Валидация запроса отправки СБП на анализ")
     void validateModelRequiredParamDocId() {
-        SendToAnalyzeRequest request = new SendToAnalyzeRequest(null);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> send(request));
-        String exceptionMessage = ex.getMessage();
-        Assertions.assertTrue(exceptionMessage.contains("docId"), "Should contain docId in message. Message: " + exceptionMessage);
+        String exceptionMessage = step("Создание СБП без docID и получение сообщения об ошибке", () -> {
+            SendToAnalyzeRequest request = new SendToAnalyzeRequest(null);
+            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> send(request));
+            return ex.getMessage();
+        });
+        step("Проверка сообщения об ошибке об отсутсвии docID", () -> Assertions.assertTrue(exceptionMessage.contains("docId"), "Should contain docId in message. Message: " + exceptionMessage));
     }
 
     @Test
     @AllureId("22327")
+    @DisplayName("Получение ошибки от смежной АС при отправке на анализ СБП")
     void analyzeErrorTest() {
-        mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
-                .andExpect(method(HttpMethod.POST))
-                .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
-        SendToAnalyzeRequest request = new SendToAnalyzeRequest(DOC_ID);
-        AnalyzeException ex = assertThrows(AnalyzeException.class, () -> send(request));
-        mockServer.verify();
-        String exceptionMessage = ex.getMessage();
-        Assertions.assertTrue(exceptionMessage.contains(request.getDocId().toString()));
+        SendToAnalyzeRequest request = step("Подготовка тестовых данных", () -> {
+            mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
+                    .andExpect(method(HttpMethod.POST))
+                    .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
+            return new SendToAnalyzeRequest(DOC_ID);
+        });
+        String exceptionMessage = step("Получение сообщения об ошибке", () -> {
+            AnalyzeException ex = assertThrows(AnalyzeException.class, () -> send(request));
+            mockServer.verify();
+            return ex.getMessage();
+        });
+        step("Проверка сообщения об ошибке", () -> Assertions.assertTrue(exceptionMessage.contains(request.getDocId().toString())));
     }
 
     @Test
     @AllureId("22326")
+    @DisplayName("Проверка типа события клиента для индикатора канала")
     void clientDefinedEventTypeTest() {
-        String sbp = DboOperation.SBP_B2C.getClientDefinedEventType(null);
-        assertEquals("SBP", sbp);
+        String sbp = step("Получаем тип события", () -> DboOperation.SBP_B2C.getClientDefinedEventType(null));
+        step("Проверяем тип события", () -> assertEquals("SBP", sbp));
     }
 
     private FullAnalyzeResponse createAnalyzeResponse() {
