@@ -116,4 +116,4 @@ release:
     type: release
     checkmarx: true
     params_folder: release/02.001.00
-    istio_tag: '2.0'
+    istio_tag: '2.1'
