@@ -30,6 +30,7 @@ spec:
         sidecar.istio.io/proxyMemoryLimit: {{ os_project.istio.sidecar.limits.memory | default("300Mi") }}
         sidecar.istio.io/proxyCPU: {{ os_project.istio.sidecar.requests.cpu | default("50m") }}
         sidecar.istio.io/proxyMemory: {{ os_project.istio.sidecar.requests.memory | default("150Mi") }}
+        openshift.io/scc: restricted
 {% if secman.openshift.enabled is not defined or secman.openshift.enabled | bool %}
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/agent-init-first: 'false'
@@ -60,6 +61,9 @@ spec:
         secman-injector: enabled
 {% endif %}
     spec:
+      serviceAccountName: default
+      securityContext:
+        runAsNonRoot: true
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
