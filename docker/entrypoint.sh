@@ -1,5 +1,14 @@
 #!/bin/sh
 
+# Ожидание готовности контейнера истио
+echo Waiting for Istio
+while ! nc -z 127.0.0.1 15021 ;
+do
+    echo -n .
+    sleep 1
+done
+echo Istio OK
+
 # Ожидание инжекта секретов
 if [ -z $1 ]; then
     waiting_secrets=/tmp/secman/config/waitingSecrets.txt
