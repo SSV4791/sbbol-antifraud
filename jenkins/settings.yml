@@ -81,8 +81,8 @@ pr_check:
       qaReporterUpload sonarCoverage --info
 
 release:
-  version_pattern: '02\.001\.\d{2}_\d{4}'
-  version_init: 02.001.00_0000
+  version_pattern: '02\.002\.\d{2}_\d{4}'
+  version_init: 02.002.00_0000
   artifact_id: antifraud
   group_id: Nexus_PROD.CI03045533_sbbol-antifraud
   docker_registry: registry.sigma.sbrf.ru
@@ -116,4 +116,4 @@ release:
     type: release
     checkmarx: true
     params_folder: release/02.001.00
-    istio_tag: '2.1'
+    istio_tag: '2.3'
