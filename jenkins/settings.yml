@@ -1,20 +1,24 @@
 docker:
   images:
-    java: registry.sigma.sbrf.ru/ci00149046/ci00405008_sbbolufs/bellsoft/liberica-openjdk-alpine:15.0.1-9-sber-certs
+    java: registry.sigma.sbrf.ru/ci00149046/ci00405008_sbbolufs/bellsoft/liberica-openjdk-rhel7.7-205:15.0.2-10
     postgres: registry.sigma.sbrf.ru/ci00149046/ci00405008_sbbolufs/postgres:13-alpine
 
 credentials:
   sonar: sonar-token
   nexus: TUZ_DCBMSC5
-  checkmarx: DS_SAST_CRED
+  checkmarx: TUZ_00170030-sast
   openshift: TUZ_DCBMSC5
+  nexus_token: antifraud-nexus3-token
+  registry_delta: tuz-antifraud-delta
 
+project_name: antifraud
 allure_project_id: '37'
 
 pr_check:
   liquibase:
     match:
       files:
+        - 'buildSrc/'
         - 'antifraud-application/src/main/resources/db/changelog'
         - 'jenkins/liquibase/liquibase.properties'
     executable:
@@ -27,6 +31,7 @@ pr_check:
     workdir: openshift
     match:
       files:
+        - 'buildSrc/'
         - 'openshift/'
         - 'jenkins/resources/openshift/'
     server: dev-terra000006-idm.ocp
@@ -34,6 +39,7 @@ pr_check:
   build_gradle:
     match:
       files:
+        - 'buildSrc/'
         - 'antifraud-application/'
         - 'antifraud-api/'
         - 'antifraud-rpc-api/'
@@ -45,12 +51,15 @@ pr_check:
     memory: '2g'
     command: >-
       ./gradlew
-      -PnexusLogin=${env.NEXUS_USR}
-      -PnexusPassword=${env.NEXUS_PWD}
-      clean build
+      -PtokenName=${env.TOKEN_NAME}
+      -PtokenPassword=${env.TOKEN_PASSWORD}
+      -Dgradle.wrapperUser=${env.TOKEN_NAME}
+      -Dgradle.wrapperPassword=${env.TOKEN_PASSWORD}
+      clean build -x test
   test:
     match:
       files:
+        - 'buildSrc/'
         - 'antifraud-application/'
         - 'antifraud-api/'
         - 'antifraud-rpc-api/'
@@ -64,8 +73,10 @@ pr_check:
     memory: '2g'
     command: >-
       ./gradlew
-      -PnexusLogin=${env.NEXUS_USR}
-      -PnexusPassword='${env.NEXUS_PWD}'
+      -PtokenName=${env.TOKEN_NAME}
+      -PtokenPassword=${env.TOKEN_PASSWORD}
+      -Dgradle.wrapperUser=${env.TOKEN_NAME}
+      -Dgradle.wrapperPassword=${env.TOKEN_PASSWORD}
       -Dsonar.login=${env.SONAR_TOKEN}
       -Dsonar.host.url=https://sbt-sonarqube.sigma.sbrf.ru/
       -Dsonar.projectKey=ru.sberbank.pprb.sbbol.antifraud
@@ -83,35 +94,59 @@ pr_check:
 release:
   version_pattern: '02\.002\.\d{2}_\d{4}'
   version_init: 02.002.00_0000
-  artifact_id: antifraud
-  group_id: Nexus_PROD.CI03045533_sbbol-antifraud
-  docker_registry: registry.sigma.sbrf.ru
-  docker_prom: 'pprb/ci02473994/ci03045533_sbbol_antifraud'
-  docker_dev: 'pprb-dev/ci02473994/ci03045533_sbbol_antifraud_dev'
+  repository: maven-distr-dev  # необходим для releasePipe для выкачки предсобранных артефатов
+  artifact_id: CI03045533
+  group_id: CI02473994
+  docker_dev: docker-dev.registry-ci.delta.sbrf.ru
+  docker_prom: docker-release.registry-ci.delta.sbrf.ru
+  image_name: 'CI02473994/CI03045533/antifraud'
   doc_path: 'docs/build/docs'
+  params_folder: antifraud
+  qgm:
+    repository: maven-distr
   build_gradle:
     cpu: 2
-    mem: '2g'
+    memory: '2g'
     command: >-
       ./gradlew
-      -PnexusLogin=${env.NEXUS_USR}
-      -PnexusPassword=${env.NEXUS_PWD}
+      -PtokenName=${env.TOKEN_NAME}
+      -PtokenPassword=${env.TOKEN_PASSWORD}
+      -Dgradle.wrapperUser=${env.TOKEN_NAME}
+      -Dgradle.wrapperPassword=${env.TOKEN_PASSWORD}
       -Pversion=${env.VERSION}
-      -Dtest-layer=unit,api,web,configuration,cdcConsumer,cdcProvider
-      -Dpact.url=${env.PACT_BROKER_URL}
-      -Dpactbroker.auth.username=${env.PACT_USER}
-      -Dpactbroker.auth.password='${env.PACT_PASSWORD}'
-      -Dpact.pacticipant.version=${env.VERSION}
-      -Dpact.pacticipant.tag=${params.branch}
-      -Dpactbroker.consumerversionselectors.tags=${settings.release.artifact_id}:${params.branch}
       -Dbuild.link=${env.BUILD_URL}
       -Dbuild.type=release
-      -Dallure.link=${Const.ALLURE_ENTRYPOINT_URL}jobrun/${launch.jobRunId}
-      -Dsonar.login=${env.SONAR_TOKEN}
-      -Dsonar.host.url=https://sbt-sonarqube.sigma.sbrf.ru/
-      -Dsonar.projectKey=ru.sberbank.pprb.sbbol.antifraud
-      -Dsonar.branch.name=${params.branch}
-      build qaReporterUpload sonarCoverage --parallel --info
+      build -x test --parallel --info
+  run_backend_tests: true
+  test:
+    allure_dir: build/allure-results
+    email_list: fmpisarev@sberbank.ru
+    backend:
+      command: >-
+        ./gradlew
+        -PtokenName=${env.TOKEN_NAME}
+        -PtokenPassword=${env.TOKEN_PASSWORD}
+        -Dgradle.wrapperUser=${env.TOKEN_NAME}
+        -Dgradle.wrapperPassword=${env.TOKEN_PASSWORD}
+        -Pversion=${env.VERSION}
+        -Dtest-layer=unit,api,web,configuration,cdcConsumer,cdcProvider
+        -Dpact.url=${env.PACT_BROKER_URL}
+        -Dpactbroker.auth.username=${env.PACT_USER}
+        -Dpactbroker.auth.password='${env.PACT_PASSWORD}'
+        -Dpact.pacticipant.version=${env.VERSION}
+        -Dpact.pacticipant.tag=${params.branch}
+        -Dpactbroker.consumerversionselectors.tags=antifraud:${params.branch}
+        -Dbuild.link=${env.BUILD_URL}
+        -Dbuild.type=release
+        -Dallure.link=${Const.ALLURE_ENTRYPOINT_URL}jobrun/${launch.jobRunId}
+        -Dsonar.login=${env.SONAR_TOKEN}
+        -Dsonar.host.url=https://sbt-sonarqube.sigma.sbrf.ru/
+        -Dsonar.projectKey=ru.sberbank.pprb.sbbol.antifraud
+        -Dsonar.branch.name=${params.branch}
+        build qaReporterUpload sonarCoverage --parallel --info
+  jobs:
+    test_release:
+      wait: true
   default_values:
     type: release
     checkmarx: true

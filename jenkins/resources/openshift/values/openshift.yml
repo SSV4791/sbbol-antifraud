@@ -62,8 +62,14 @@ os_project:
         trust_store: sigma_ott_trust.p12
         OTT_MODULE_ID: dev-antifraud
 
+nexus:
+  base_uri: https://nexus-ci.delta.sbrf.ru/repository
+  repository: maven-distr
+  group: CI02473994
+  artifactId: CI03045533
+
 registry_area: registry.sigma.sbrf.ru
-nexus_area: Nexus_PROD/CI03045533_sbbol-antifraud
+registry_area_app: docker-internal.registry-ci.delta.sbrf.ru
 versionMask: "D-\\d{2}\\.\\d{3}\\.\\d{2}_\\d{4}"
 
 project_suffix: "{{ (os_project.project | hash('md5'))[:6] }}"
