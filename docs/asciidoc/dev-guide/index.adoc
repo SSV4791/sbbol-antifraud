@@ -25,10 +25,14 @@ systemProp.javax.net.ssl.trustStorePassword=changeit
 
 === Сборка проекта
 
-Необходимо добавить креды для gradle (при первом запуске с `-p buildSrc`)
+Необходимо добавить креды для gradle.
+Необходимо залогиниться в https://nexus-ci.sigma.sbrf.ru/ и в управлении аккаунтом (manage account) получить User Token
+для своей учетной записи. После этого указать в ~/.gradle/gradle.properties:
 ```
-./gradlew addCredentials --no-scan --key nexusLogin --value OUT-Pupkin-VV -p buildSrc
-./gradlew addCredentials --no-scan --key nexusPassword --value 123456Zx -p buildSrc
+systemProp.gradle.wrapperUser=<Your user token name code>
+systemProp.gradle.wrapperPassword=<Your user token pass code>
+tokenName=<Your user token name code>
+tokenPassword=<Your user token pass code>
 ```
 
 Проект собирается через gradlew командой

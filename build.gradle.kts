@@ -1,6 +1,4 @@
-import groovy.lang.Tuple
 import org.springframework.boot.gradle.tasks.bundling.BootJar
-import nu.studer.gradle.credentials.domain.CredentialsContainer
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 plugins {
@@ -9,7 +7,6 @@ plugins {
     jacoco
     id("org.springframework.boot") version "2.4.4"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("nu.studer.credentials") version "2.1"
     id("org.sonarqube") version "3.2.0"
     id("ru.sbt.meta.meta-gradle-plugin")
     id("ru.sbrf.build.gradle.qa.reporter") version "3.2.+"
@@ -17,31 +14,36 @@ plugins {
     `maven-publish`
 }
 
-val credentials: CredentialsContainer by project.extra
-val nexusLoginValue = (project.properties["nexusLogin"] ?: credentials.getProperty("nexusLogin")) as String?
-val nexusPasswordValue = (project.properties["nexusPassword"] ?: credentials.getProperty("nexusPassword")) as String?
+//нужны для meta
+val nexusLogin = project.properties["nexusLogin"] as String?
+val nexusPassword = project.properties["nexusPassword"] as String?
+
+val tokenName = project.properties["tokenName"] as String?
+val tokenPassword = project.properties["tokenPassword"] as String?
 
 val allureVersion: String by rootProject
 
 allprojects {
     apply(plugin = "java-library")
     apply(plugin = "jacoco")
-    apply(plugin = "nu.studer.credentials")
 
     repositories {
         repositories {
 
             maven {
-                val publicRepositoryUrl: String by project
-                url = uri(publicRepositoryUrl)
+                url = uri("https://nexus-ci.delta.sbrf.ru/repository/public/")
+                credentials {
+                    username = tokenName
+                    password = tokenPassword
+                }
                 isAllowInsecureProtocol = true
             }
 
             maven {
-                url = uri("https://nexus.sigma.sbrf.ru/nexus/content/groups/internal")
+                url = uri("https://nexus-ci.delta.sbrf.ru/repository/maven-proxy-lib-internal/")
                 credentials {
-                    username = nexusLoginValue
-                    password = nexusPasswordValue
+                    username = tokenName
+                    password = tokenPassword
                 }
                 isAllowInsecureProtocol = true
             }
@@ -149,90 +151,44 @@ tasks.register<Zip>("fullDistrib") {
     }
 }
 
-tasks.register("snapshot") {
-    group = "publishing"
-    description = "Publish snapshot distributions to nexus CI snapshot repository"
-    dependsOn(tasks.withType<PublishToMavenRepository>().matching {
-        it.repository == publishing.repositories["snapshot"] && it.publication == publishing.publications["snapshot"]
-    })
-}
-
-tasks.register("dev") {
-    group = "publishing"
-    description = "Publish develop distributions to nexus CI release repository"
-    dependsOn(tasks.withType<PublishToMavenRepository>().matching {
-        it.repository == publishing.repositories["dev"] && it.publication == publishing.publications["dev"]
-    })
-}
-tasks.register("release") {
-    group = "publishing"
-    description = "Publish release distributions to nexus CDP release repository"
-    dependsOn(tasks.withType<PublishToMavenRepository>().matching {
-        it.repository == publishing.repositories["release"] && it.publication == publishing.publications["release"]
-    })
-}
-
 publishing {
     publications {
-        listOf<Tuple<String>>(
-            Tuple("api", "antifraud-api", "antifraud-api/build/libs/antifraud-api-${version}.jar"),
-            Tuple("rpc-api", "antifraud-rpc-api", "antifraud-rpc-api/build/libs/antifraud-rpc-api-${version}.jar")
-        ).forEach {
-            create<MavenPublication>(it.first()) {
-                groupId = "ru.sberbank.pprb.sbbol.antifraud"
-                artifactId = it[1]
-                artifact(layout.projectDirectory.file(it.last()).asFile)
-            }
-        }
-        listOf<Tuple<String>>(
-            Tuple("snapshot", "ru.sberbank.pprb.sbbol.antifraud"),
-            Tuple("dev", "ru.sberbank.pprb.sbbol.antifraud"),
-            Tuple("release", "Nexus_PROD.CI03045533_sbbol-antifraud")
-        ).forEach {
-            create<MavenPublication>(it.first()) {
-                groupId = it.last()
-                artifactId = "antifraud"
-                artifact(tasks["fullDistrib"]) {
-                    classifier = "distrib.configs"
-                }
+        create<MavenPublication>("publish") {
+            groupId = "${project.properties["groupId"]}"
+            artifactId = "${project.properties["artifactId"]}"
+            artifact(tasks["fullDistrib"]) {
+                classifier = "distrib"
             }
         }
     }
-
     repositories {
-        listOf<Tuple<String>>(
-            Tuple("snapshot", "https://nexus.sigma.sbrf.ru/nexus/content/repositories/SBT_CI_distr_repo-snapshot"),
-            Tuple("dev", "https://nexus.sigma.sbrf.ru/nexus/content/repositories/SBT_CI_distr_repo"),
-            Tuple("release", "https://sbrf-nexus.sigma.sbrf.ru/nexus/content/repositories/Nexus_PROD")
-        ).forEach {
-            maven {
-                name = it.first()
-                url = uri(it.last())
-                isAllowInsecureProtocol = true
-                credentials {
-                    username = nexusLoginValue
-                    password = nexusPasswordValue
-                }
+        maven {
+            name = "publish"
+            url = uri(project.properties["repo"]!!)
+            isAllowInsecureProtocol = true
+            credentials {
+                username = tokenName
+                password = tokenPassword
             }
         }
     }
 }
 
 val coverageExclusions = listOf(
-    // Классы с конфигурациями
-    "antifraud-application/src/main/java/ru/sberbank/pprb/sbbol/antifraud/AntiFraudRunner.java",
-    "**/ru/sberbank/pprb/sbbol/antifraud/config/**",
-    "**/ru/sberbank/pprb/sbbol/antifraud/logging/**",
-    //POJO
-    "**/ru/sberbank/pprb/sbbol/antifraud/api/**",
-    //Классы с контроллерами и вызовами сервисов без логики, в которых происходит только вызов соответствующего сервиса
-    "**/ru/sberbank/pprb/sbbol/antifraud/rpc/**",
-    "**/ru/sberbank/pprb/sbbol/antifraud/service/rpc/**",
-    //Классы с exception
-    "**/exception/**",
-    //Инфраструктура
-    "**/*Aspect*",
-    "**/*Config*"
+        // Классы с конфигурациями
+        "antifraud-application/src/main/java/ru/sberbank/pprb/sbbol/antifraud/AntiFraudRunner.java",
+        "**/ru/sberbank/pprb/sbbol/antifraud/config/**",
+        "**/ru/sberbank/pprb/sbbol/antifraud/logging/**",
+        //POJO
+        "**/ru/sberbank/pprb/sbbol/antifraud/api/**",
+        //Классы с контроллерами и вызовами сервисов без логики, в которых происходит только вызов соответствующего сервиса
+        "**/ru/sberbank/pprb/sbbol/antifraud/rpc/**",
+        "**/ru/sberbank/pprb/sbbol/antifraud/service/rpc/**",
+        //Классы с exception
+        "**/exception/**",
+        //Инфраструктура
+        "**/*Aspect*",
+        "**/*Config*"
 )
 
 tasks {
@@ -256,8 +212,8 @@ jacoco {
 
 meta {
     nexusUrl = null
-    nexusUser = nexusLoginValue
-    nexusPassword = nexusPasswordValue
+    nexusUser = nexusLogin
+    nexusPassword = this@Build_gradle.nexusPassword
     componentId = "8255f180-74c2-11eb-6742-005056b72594"
     ext {
         set("url", "https://meta.sigma.sbrf.ru")
@@ -269,11 +225,11 @@ meta {
 sonarqube {
     properties {
         property(
-            "sonar.coverage.jacoco.xmlReportPaths",
-            "${rootProject.projectDir}/build/coverage/jacoco/jacocoTestReport.xml"
+                "sonar.coverage.jacoco.xmlReportPaths",
+                "${rootProject.projectDir}/build/coverage/jacoco/jacocoTestReport.xml"
         )
         property(
-            "sonar.coverage.exclusions", """
+                "sonar.coverage.exclusions", """
             **/ru/sberbank/pprb/sbbol/antifraud/service/entity/**,
             **/ru/sberbank/pprb/sbbol/antifraud/api/**,
             **/ru/sberbank/pprb/sbbol/antifraud/service/aspect/logging/**,
@@ -282,7 +238,7 @@ sonarqube {
         """.trimIndent()
         )
         property(
-            "sonar.cpd.exclusions", """
+                "sonar.cpd.exclusions", """
             antifraud-api/src/main/java/ru/sberbank/pprb/sbbol/antifraud/api/**, 
             antifraud-service/src/main/java/ru/sberbank/pprb/sbbol/antifraud/service/entity/**
         """.trimIndent()

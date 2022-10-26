@@ -1,27 +1,27 @@
-import nu.studer.gradle.credentials.domain.CredentialsContainer
-
 plugins {
-    `java-base`
-    id("nu.studer.credentials") version "2.1"
+    `java-library`
 }
 
-val credentials: CredentialsContainer by project.extra
-val nexusLoginValue = (project.properties["nexusLogin"] ?: credentials.getProperty("nexusLogin")) as String?
-val nexusPasswordValue = (project.properties["nexusPassword"] ?: credentials.getProperty("nexusPassword")) as String?
+val tokenName = project.properties["tokenName"] as String?
+val tokenPassword = project.properties["tokenPassword"] as String?
 
 repositories {
     maven {
-        url = uri("https://nexus.sigma.sbrf.ru/nexus/content/groups/public/")
+        url = uri("https://nexus-ci.delta.sbrf.ru/repository/maven-proxy-lib-internal/")
+        credentials {
+            username = tokenName
+            password = tokenPassword
+        }
         isAllowInsecureProtocol = true
     }
 
     maven {
-        url = uri("https://nexus.sigma.sbrf.ru/nexus/content/groups/internal/")
-        isAllowInsecureProtocol = true
+        url = uri("https://nexus-ci.delta.sbrf.ru/repository/public/")
         credentials {
-            username = nexusLoginValue
-            password = nexusPasswordValue
+            username = tokenName
+            password = tokenPassword
         }
+        isAllowInsecureProtocol = true
     }
 }
 
