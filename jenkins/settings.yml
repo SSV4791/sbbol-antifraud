@@ -27,6 +27,7 @@ pr_check:
       path: antifraud-application/src/main/resources/db/changelog/changelog.yaml
     defaults_file:
       path: jenkins/liquibase/liquibase.properties
+    command_type: 'update'
   openshift:
     workdir: openshift
     match:

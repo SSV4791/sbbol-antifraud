@@ -26,16 +26,23 @@ dependencies {
     implementation("ru.sbrf.journal:standin-client-cloud:4.0.27")
     implementation("org.liquibase:liquibase-core")
 
-    runtimeOnly("com.h2database:h2:1.4.200")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
     runtimeOnly("org.postgresql:postgresql:42.2.19")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude("junit:junit")
         exclude(group= "com.vaadin.external.google", module="android-json")
+        exclude("com.h2database", "h2")
     }
 
+    testImplementation("org.testcontainers:postgresql:1.17.3")
+
     // заглушка для тестирования репликации между БД
-    testImplementation("sbp.integration.orm:orm-tests-common:4.1.14")
+    testImplementation("sbp.integration.orm:orm-tests-common:4.1.14") {
+        exclude("com.vaadin.external.google", "android-json")
+        exclude("com.h2database", "h2")
+    }
 
     testImplementation(group = "ru.dcbqa.allureee.annotations", name = "dcb-allure-annotations", version = "1.3.+")
 
