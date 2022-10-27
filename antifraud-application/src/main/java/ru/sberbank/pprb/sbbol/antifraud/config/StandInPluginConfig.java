@@ -1,30 +1,24 @@
 package ru.sberbank.pprb.sbbol.antifraud.config;
 
 import com.sbt.pprb.integration.changevector.serialization.SerializerType;
+import com.sbt.pprb.integration.replication.OrderingControlStrategy;
+import com.sbt.pprb.integration.replication.PartitionLockMode;
+import com.sbt.pprb.integration.replication.PartitionMultiplyingMode;
 import com.sbt.pprb.integration.replication.ReplicationStrategy;
-import com.sbt.pprb.integration.replication.hashkey.InterfaceBasedHashKeyResolver;
-import com.sbt.pprb.integration.replication.hashkey.StaticHashKeyResolver;
-import com.sbt.pprb.integration.replication.journal.JournalHashKeyResolver;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
-@Component
 @ConfigurationProperties(prefix = "standin.plugin.configuration")
 public class StandInPluginConfig {
-
-    private Resolver journalHashKeyResolver;
 
     private ReplicationStrategy replicationStrategy;
 
     private SerializerType serializerType;
 
-    public Resolver getJournalHashKeyResolver() {
-        return journalHashKeyResolver;
-    }
+    private PartitionLockMode partitionLockMode;
 
-    public void setJournalHashKeyResolver(Resolver journalHashKeyResolver) {
-        this.journalHashKeyResolver = journalHashKeyResolver;
-    }
+    private PartitionMultiplyingMode partitionMultiplyingMode;
+
+    private OrderingControlStrategy orderingControlStrategy;
 
     public ReplicationStrategy getReplicationStrategy() {
         return replicationStrategy;
@@ -42,22 +36,27 @@ public class StandInPluginConfig {
         this.serializerType = serializerType;
     }
 
-    public enum Resolver {
-        STATIC {
-            @Override
-            public JournalHashKeyResolver instance() {
-                return new StaticHashKeyResolver("1");
-            }
-        },
-        INTERFACE {
-            @Override
-            public JournalHashKeyResolver instance() {
-                return new InterfaceBasedHashKeyResolver();
-            }
-        }
-        ;
-
-        public abstract JournalHashKeyResolver instance();
+    public PartitionLockMode getPartitionLockMode() {
+        return partitionLockMode;
     }
 
+    public void setPartitionLockMode(PartitionLockMode partitionLockMode) {
+        this.partitionLockMode = partitionLockMode;
+    }
+
+    public PartitionMultiplyingMode getPartitionMultiplyingMode() {
+        return partitionMultiplyingMode;
+    }
+
+    public void setPartitionMultiplyingMode(PartitionMultiplyingMode partitionMultiplyingMode) {
+        this.partitionMultiplyingMode = partitionMultiplyingMode;
+    }
+
+    public OrderingControlStrategy getOrderingControlStrategy() {
+        return orderingControlStrategy;
+    }
+
+    public void setOrderingControlStrategy(OrderingControlStrategy orderingControlStrategy) {
+        this.orderingControlStrategy = orderingControlStrategy;
+    }
 }

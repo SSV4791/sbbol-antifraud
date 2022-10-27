@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: 1666880549323_hibernate_se_v_4_3_2.sql
+      relativeToChangelogFile: true

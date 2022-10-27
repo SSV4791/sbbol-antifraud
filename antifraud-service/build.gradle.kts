@@ -2,6 +2,7 @@ val pactVersion: String by rootProject
 val allureVersion: String by rootProject
 val junitVersion: String by rootProject
 val junitPlatformVersion: String by rootProject
+val standinPluginVersion: String by project
 
 dependencies {
     implementation(project(":antifraud-api"))
@@ -11,7 +12,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.hibernate:hibernate-jcache:5.4.29.Final")
-    implementation("sbp.integration.orm:sbp-hibernate-standin:4.1.14")
+    implementation("sbp.integration.orm:sbp-hibernate-standin:$standinPluginVersion")
     implementation("org.apache.commons:commons-lang3:3.11")
     implementation("org.mapstruct:mapstruct:1.4.2.Final")
     implementation("io.micrometer:micrometer-core:1.6.5")

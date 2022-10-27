@@ -5,24 +5,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
 import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.dcbqa.allureee.annotations.layers.ConfigurationTestLayer;
+import ru.sberbank.pprb.sbbol.antifraud.common.AbstractIntegrationTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@DirtiesContext
-@ActiveProfiles("test")
 @ConfigurationTestLayer
 @ApiTestLayer
-class UnknownJsonPropertiesTest {
+class UnknownJsonPropertiesTest extends AbstractIntegrationTest {
 
     @Autowired
     private ObjectMapper objectMapper;
