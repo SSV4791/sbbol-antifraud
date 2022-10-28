@@ -44,9 +44,11 @@ data:
     management.health.db.enabled=false
 
     # StandIn plugin
-    standin.plugin.configuration.journalHashKeyResolver=INTERFACE
-    standin.plugin.configuration.replicationStrategy=STANDIN_LOCKS
-    standin.plugin.configuration.serializerType=BINARY_KRYO
+    standin.plugin.configuration.replicationStrategy={{ standin.plugin.configuration.replication_strategy | default ('PARTITION_LOCKS') }}
+    standin.plugin.configuration.serializerType={{ standin.plugin.configuration.serializer_type | default ('BINARY_KRYO') }}
+    standin.plugin.configuration.partitionLockMode={{ standin.plugin.configuration.partition_lock_mode | default ('NONE') }}
+    standin.plugin.configuration.partitionMultiplyingMode={{ standin.plugin.configuration.partition_multiplying_mode | default ('FORBIDDEN') }}
+    standin.plugin.configuration.orderingControlStrategy={{ standin.plugin.configuration.ordering_control_strategy | default ('IDEMPOTENT_VERSION_CONTROL') }}
 
     # Application Journal
     appjournal.moduleId=pprb4-digital-fraud

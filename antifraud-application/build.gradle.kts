@@ -4,6 +4,7 @@ val pactVersion: String by rootProject
 val allureVersion: String by rootProject
 val junitVersion: String by rootProject
 val junitPlatformVersion: String by rootProject
+val standinPluginVersion: String by project
 
 dependencies {
     implementation(project(":antifraud-api"))
@@ -22,20 +23,26 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework:spring-orm:5.3.5")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("sbp.integration.orm:sbp-hibernate-standin:4.1.14")
-    implementation("ru.sbrf.journal:standin-client-cloud:4.0.27")
+    implementation("sbp.integration.orm:sbp-hibernate-standin:$standinPluginVersion")
     implementation("org.liquibase:liquibase-core")
 
-    runtimeOnly("com.h2database:h2:1.4.200")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
     runtimeOnly("org.postgresql:postgresql:42.2.19")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude("junit:junit")
         exclude(group= "com.vaadin.external.google", module="android-json")
+        exclude("com.h2database", "h2")
     }
 
+    testImplementation("org.testcontainers:postgresql:1.17.3")
+
     // заглушка для тестирования репликации между БД
-    testImplementation("sbp.integration.orm:orm-tests-common:4.1.14")
+    testImplementation("sbp.integration.orm:orm-tests-common:$standinPluginVersion") {
+        exclude("com.vaadin.external.google", "android-json")
+        exclude("com.h2database", "h2")
+    }
 
     testImplementation(group = "ru.dcbqa.allureee.annotations", name = "dcb-allure-annotations", version = "1.3.+")
 
