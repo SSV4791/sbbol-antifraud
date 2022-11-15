@@ -1,5 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.processor;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.validation.annotation.Validated;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
@@ -31,6 +32,6 @@ public interface Processor<T extends Operation> {
      * @param request запрос на отправку данных в ФП ИС
      * @return результат анализа данных
      */
-    AnalyzeResponse send(@Valid SendToAnalyzeRequest request);
+    AnalyzeResponse send(@Valid SendToAnalyzeRequest request) throws JsonProcessingException;
 
 }

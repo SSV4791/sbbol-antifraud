@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
@@ -16,7 +15,6 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
-import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.payment.Payment;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.payment.PaymentMapper;
@@ -62,7 +60,6 @@ public class PaymentProcessor implements Processor<PaymentOperation> {
 
     @Override
     public RequestId saveOrUpdate(@Valid PaymentOperation request) {
-        logger.info("Processing payment (docId={}) save or update request", request.getDocument().getId());
         request.setMappedSigns(PaymentSignMapper.convertSigns(request.getSigns()));
         PaymentModelValidator.validate(request);
         Optional<Payment> searchResult = repository.findFirstByDocId(request.getDocument().getId().toString());
@@ -78,33 +75,20 @@ public class PaymentProcessor implements Processor<PaymentOperation> {
     }
 
     @Override
-    public AnalyzeResponse send(@Valid SendToAnalyzeRequest request) {
-        logger.info("Sending payment (docId={}) to analyze", request.getDocId());
+    public AnalyzeResponse send(@Valid SendToAnalyzeRequest request) throws JsonProcessingException {
         AnalyzeRequest paymentAnalyzeRequest = createPaymentAnalyzeRequest(request.getDocId());
-        try {
-            String jsonRequest = objectMapper.writeValueAsString(paymentAnalyzeRequest);
-            logger.debug("Payment (docId={}) analyze request: {}", request.getDocId(), jsonRequest);
-            String jsonResponse = restTemplate.postForObject(endPoint, new HttpEntity<>(jsonRequest, httpHeaders), String.class);
-            logger.debug("Payment (docId={}) full analyze response: {}", request.getDocId(), jsonResponse);
-            FullAnalyzeResponse fullAnalyzeResponse = objectMapper.readValue(jsonResponse, FullAnalyzeResponse.class);
-            return mapper.toAnalyzeResponse(fullAnalyzeResponse);
-        } catch (HttpStatusCodeException e) {
-            String message = "Payment (docId=" + request.getDocId() + ") analyze error";
-            logger.error(message, e);
-            throw new AnalyzeException(message);
-        } catch (JsonProcessingException e) {
-            String message = "Payment (docId=" + request.getDocId() + ") json processing error";
-            logger.error(message, e);
-            throw new ApplicationException(message);
-        }
+        String jsonRequest = objectMapper.writeValueAsString(paymentAnalyzeRequest);
+        logger.debug("Payment (docId={}) analyze request: {}", request.getDocId(), jsonRequest);
+        String jsonResponse = restTemplate.postForObject(endPoint, new HttpEntity<>(jsonRequest, httpHeaders), String.class);
+        logger.debug("Payment (docId={}) full analyze response: {}", request.getDocId(), jsonResponse);
+        FullAnalyzeResponse fullAnalyzeResponse = objectMapper.readValue(jsonResponse, FullAnalyzeResponse.class);
+        return mapper.toAnalyzeResponse(fullAnalyzeResponse);
     }
 
     private AnalyzeRequest createPaymentAnalyzeRequest(UUID docId) {
         Optional<Payment> searchResult = repository.findFirstByDocId(docId.toString());
         if (searchResult.isEmpty()) {
-            String message = "Payment (docId=" + docId + ") not found";
-            logger.error(message);
-            throw new ApplicationException(message);
+            throw new ApplicationException("Payment (docId=" + docId + ") not found");
         }
         return mapper.toAnalyzeRequest(searchResult.get());
     }

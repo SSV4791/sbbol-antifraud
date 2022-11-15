@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
@@ -16,7 +15,6 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentOperation;
-import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.fastpayment.FastPayment;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.fastpayment.FastPaymentMapper;
@@ -62,7 +60,6 @@ public class FastPaymentProcessor implements Processor<FastPaymentOperation> {
 
     @Override
     public RequestId saveOrUpdate(@Valid FastPaymentOperation request) {
-        logger.info("Processing fast payment (docId={}) save or update request", request.getDocument().getId());
         request.setMappedSigns(FastPaymentSignMapper.convertSigns(request.getSigns()));
         FastPaymentModelValidator.validate(request);
         Optional<FastPayment> searchResult = repository.findFirstByDocId(request.getDocument().getId().toString());
@@ -78,33 +75,20 @@ public class FastPaymentProcessor implements Processor<FastPaymentOperation> {
     }
 
     @Override
-    public AnalyzeResponse send(@Valid SendToAnalyzeRequest request) {
-        logger.info("Sending fast payment (docId={}) to analyze", request.getDocId());
+    public AnalyzeResponse send(@Valid SendToAnalyzeRequest request) throws JsonProcessingException {
         AnalyzeRequest paymentAnalyzeRequest = createFastPaymentAnalyzeRequest(request.getDocId());
-        try {
-            String jsonRequest = objectMapper.writeValueAsString(paymentAnalyzeRequest);
-            logger.debug("Fast payment (docId={}) analyze request: {}", request.getDocId(), jsonRequest);
-            String jsonResponse = restTemplate.postForObject(endPoint, new HttpEntity<>(jsonRequest, httpHeaders), String.class);
-            logger.debug("Fast payment (docId={}) full analyze response: {}", request.getDocId(), jsonResponse);
-            FullAnalyzeResponse fullAnalyzeResponse = objectMapper.readValue(jsonResponse, FullAnalyzeResponse.class);
-            return mapper.toAnalyzeResponse(fullAnalyzeResponse);
-        } catch (HttpStatusCodeException e) {
-            String message = "Fast payment (docId=" + request.getDocId() + ") analyze error";
-            logger.error(message, e);
-            throw new AnalyzeException(message);
-        } catch (JsonProcessingException e) {
-            String message = "Fast payment (docId=" + request.getDocId() + ") json processing error";
-            logger.error(message, e);
-            throw new ApplicationException(message);
-        }
+        String jsonRequest = objectMapper.writeValueAsString(paymentAnalyzeRequest);
+        logger.debug("Fast payment (docId={}) analyze request: {}", request.getDocId(), jsonRequest);
+        String jsonResponse = restTemplate.postForObject(endPoint, new HttpEntity<>(jsonRequest, httpHeaders), String.class);
+        logger.debug("Fast payment (docId={}) full analyze response: {}", request.getDocId(), jsonResponse);
+        FullAnalyzeResponse fullAnalyzeResponse = objectMapper.readValue(jsonResponse, FullAnalyzeResponse.class);
+        return mapper.toAnalyzeResponse(fullAnalyzeResponse);
     }
 
     private AnalyzeRequest createFastPaymentAnalyzeRequest(UUID docId) {
         Optional<FastPayment> searchResult = repository.findFirstByDocId(docId.toString());
         if (searchResult.isEmpty()) {
-            String message = "Fast payment (docId=" + docId + ") not found";
-            logger.error(message);
-            throw new ApplicationException(message);
+            throw new ApplicationException("Fast payment (docId=" + docId + ") not found");
         }
         return mapper.toAnalyzeRequest(searchResult.get());
     }

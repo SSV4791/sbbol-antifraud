@@ -14,20 +14,18 @@ import ru.sberbank.pprb.sbbol.antifraud.service.rpc.AbstractService;
 @AutoJsonRpcServiceImpl
 public class ElectronicReceiptServiceImpl extends AbstractService<ElectronicReceiptOperation> implements ElectronicReceiptService {
 
-    private final Processor<ElectronicReceiptOperation> processor;
-
     public ElectronicReceiptServiceImpl(Processor<ElectronicReceiptOperation> processor) {
-        this.processor = processor;
+        super(processor);
     }
 
     @Override
     public RequestId saveOrUpdateData(ElectronicReceiptOperation request) {
-        return saveOrUpdate(processor, request);
+        return saveOrUpdate(request);
     }
 
     @Override
     public AnalyzeResponse analyzeOperation(SendToAnalyzeRequest request) {
-        return analyze(processor, request);
+        return analyze(request);
     }
 
 }

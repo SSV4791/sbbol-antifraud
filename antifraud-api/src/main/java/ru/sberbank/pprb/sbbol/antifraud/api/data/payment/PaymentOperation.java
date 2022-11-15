@@ -12,6 +12,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Модель платежного поручения
@@ -60,6 +61,11 @@ public class PaymentOperation implements Operation {
      * Список данных по подписям, приведенных к модели подписи
      */
     private List<PaymentSign> mappedSigns;
+
+    @Override
+    public UUID getDocId() {
+        return getDocument() == null ? null : getDocument().getId();
+    }
 
     public LocalDateTime getTimeStamp() {
         return timeStamp;

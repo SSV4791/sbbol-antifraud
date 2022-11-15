@@ -1,6 +1,5 @@
 package ru.sberbank.pprb.sbbol.antifraud.electronicreceipt;
 
-import io.qameta.allure.Allure;
 import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
