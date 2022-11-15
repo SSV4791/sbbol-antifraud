@@ -44,18 +44,20 @@ data:
     management.health.db.enabled=false
 
     # StandIn plugin
-    standin.plugin.configuration.replicationStrategy={{ standin.plugin.configuration.replication_strategy | default ('PARTITION_LOCKS') }}
+    standin.plugin.configuration.replicationStrategy={{ standin.plugin.configuration.replication_strategy | default ('STANDIN_LOCKS') }}
     standin.plugin.configuration.serializerType={{ standin.plugin.configuration.serializer_type | default ('BINARY_KRYO') }}
     standin.plugin.configuration.partitionLockMode={{ standin.plugin.configuration.partition_lock_mode | default ('NONE') }}
     standin.plugin.configuration.partitionMultiplyingMode={{ standin.plugin.configuration.partition_multiplying_mode | default ('FORBIDDEN') }}
-    standin.plugin.configuration.orderingControlStrategy={{ standin.plugin.configuration.ordering_control_strategy | default ('IDEMPOTENT_VERSION_CONTROL') }}
+    standin.plugin.configuration.orderingControlStrategy={{ standin.plugin.configuration.ordering_control_strategy | default ('IDEMPOTENT_ORDERING_CONTROL') }}
 
     # Application Journal
     appjournal.moduleId=pprb4-digital-fraud
     standin.cloud.client.mmtCallTimeout=30
     standin.cloud.client.heartBeatPeriod=1000
-    standin.cloud.client.concurrency=10
+    standin.cloud.client.subscriptionKafkaConcurrency={{ standin.cloud.client.subscription_kafka_concurrency | default(5) }}
     standin.cloud.client.groupId=group_1
+    standin.cloud.client.kafka-retry={{ standin.cloud.client.kafka_retry | default(0) }}
+    standin.cloud.client.retry-timeout={{ standin.cloud.client.retry_timeout | default(10000) }}
     standin.cloud.client.kafka.producerConfig."[security.protocol]"=SSL
     standin.cloud.client.kafka.producerConfig."[ssl.keystore.location]"=/opt/keystore/kafka/server.keystore.jks
     standin.cloud.client.kafka.producerConfig."[ssl.truststore.location]"=/opt/keystore/kafka/trust.jks

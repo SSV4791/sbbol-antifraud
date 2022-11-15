@@ -92,3 +92,17 @@ context_prefix: /antifraud/
 fraud:
   adapter:
     context: /asfm/v1.0/pprb_bhb_hist_b2b_aful/notify
+
+standin:
+  cloud:
+    client:
+      subscription_kafka_concurrency: 5
+      kafka_retry: 3
+      retry_timeout: 600000
+  plugin:
+    configuration:
+      replication_strategy: STANDIN_LOCKS
+      serializer_type: BINARY_KRYO
+      partition_lock_mode: NONE
+      partition_multiplying_mode: FORBIDDEN
+      ordering_control_strategy: IDEMPOTENT_ORDERING_CONTROL
