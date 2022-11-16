@@ -69,7 +69,6 @@ pr_check:
         - 'gradle.properties'
         - 'settings.gradle.kts'
         - 'jenkins/settings.yml'
-    postgres: true
     cpu: 2
     memory: '2g'
     command: >-
