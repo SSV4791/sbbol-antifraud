@@ -36,7 +36,7 @@ public final class PaymentSignMapper {
                 PaymentSign sign = objectMapper.readValue(str, PaymentSign.class);
                 signList.add(sign);
             } catch (JsonProcessingException ex) {
-                throw new ModelArgumentException("Payment sign parsing error", ex);
+                throw new ModelArgumentException("Payment sign parsing error. " + ex.getOriginalMessage(), ex);
             }
         }
         if (signList.size() > 1) {

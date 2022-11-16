@@ -1,11 +1,8 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.validator.payment;
 
-import org.apache.commons.lang3.EnumUtils;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentDocument;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentSign;
-import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.service.validator.ModelValidator;
 
 import java.util.List;
@@ -64,9 +61,6 @@ public final class PaymentModelValidator extends ModelValidator {
             logWarn(sign.getDevicePrint(), "devicePrint or mobSdkData");
         }
         validateRequiredParam(sign.getChannelIndicator(), "channelIndicator");
-        if (!EnumUtils.isValidEnum(DboOperation.PaymentChannelIndicator.class, sign.getChannelIndicator())) {
-            throw new ModelArgumentException("Unknown type of channelIndicator: " + sign.getChannelIndicator());
-        }
         validateRequiredParam(sign.getUserGuid(), "userGuid");
         validateRequiredParam(sign.getClientDefinedChannelIndicator(), "clientDefinedChannelIndicator");
     }

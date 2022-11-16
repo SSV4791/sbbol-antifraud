@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedEventType;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -29,7 +30,7 @@ public class EventDataHeader implements Serializable {
     /**
      * Тип устройства, через которое работает пользователь
      */
-    private String clientDefinedEventType;
+    private ClientDefinedEventType clientDefinedEventType;
 
     /**
      * Время создания запроса
@@ -42,7 +43,7 @@ public class EventDataHeader implements Serializable {
     @JsonCreator
     public EventDataHeader(@JsonProperty("eventType") String eventType,
                            @JsonProperty("eventDescription") String eventDescription,
-                           @JsonProperty("clientDefinedEventType") String clientDefinedEventType,
+                           @JsonProperty("clientDefinedEventType") ClientDefinedEventType clientDefinedEventType,
                            @JsonProperty("timeOfOccurrence") LocalDateTime timeOfOccurrence) {
         this.eventType = eventType;
         this.eventDescription = eventDescription;
@@ -69,11 +70,11 @@ public class EventDataHeader implements Serializable {
         this.eventDescription = eventDescription;
     }
 
-    public String getClientDefinedEventType() {
+    public ClientDefinedEventType getClientDefinedEventType() {
         return clientDefinedEventType;
     }
 
-    public void setClientDefinedEventType(String clientDefinedEventType) {
+    public void setClientDefinedEventType(ClientDefinedEventType clientDefinedEventType) {
         this.clientDefinedEventType = clientDefinedEventType;
     }
 

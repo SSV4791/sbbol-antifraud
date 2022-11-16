@@ -524,7 +524,7 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
     @Mapping(source = "timeOfOccurrence", target = "eventDataList.eventDataHeader.timeOfOccurrence")
     @Mapping(target = "eventDataList.eventDataHeader.eventType", expression = "java(DboOperation.PAYMENT_DT_0401060.getEventType())")
     @Mapping(target = "eventDataList.eventDataHeader.eventDescription", expression = "java(DboOperation.PAYMENT_DT_0401060.getEventDescription())")
-    @Mapping(target = "eventDataList.eventDataHeader.clientDefinedEventType", expression = "java(DboOperation.PAYMENT_DT_0401060.getClientDefinedEventType(payment.getChannelIndicator()))")
+    @Mapping(target = "eventDataList.eventDataHeader.clientDefinedEventType", expression = "java(DboOperation.PAYMENT_DT_0401060.getClientDefinedEventType(payment.getChannelIndicator(), payment.getClientDefinedChannelIndicator()))")
     @Mapping(source = "amount", target = "eventDataList.transactionData.amount.sum")
     @Mapping(source = "currency", target = "eventDataList.transactionData.amount.currency")
     @Mapping(source = "executionSpeed", target = "eventDataList.transactionData.executionSpeed")

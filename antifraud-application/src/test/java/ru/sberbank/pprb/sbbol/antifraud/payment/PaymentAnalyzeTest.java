@@ -18,6 +18,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedEventType;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
@@ -34,6 +37,7 @@ import java.util.stream.Stream;
 import static io.qameta.allure.Allure.parameter;
 import static io.qameta.allure.Allure.step;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
@@ -60,8 +64,8 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
     @Test
     @AllureId("19653")
     @DisplayName("Отправка запроса на проверку РПП")
-    void sendRequest() throws Throwable {
-        FullAnalyzeResponse expected = step("Подготовка ожидаемого ответа", () -> createAnalyzeResponse());
+    void sendRequest() {
+        FullAnalyzeResponse expected = step("Подготовка ожидаемого ответа", this::createAnalyzeResponse);
         AnalyzeResponse actual = step("Отправка запроса на анализ и получение ответа с результатом анализа", () -> {
             mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
                     .andExpect(method(HttpMethod.POST))
@@ -117,18 +121,22 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
     @ParameterizedTest(name = "Проверка типа события клиента для индикатора канала {0}")
     @MethodSource("provideClientEventTypes")
     @DisplayName("Проверка типа события клиента для индикатора канала")
-    void clientDefinedEventTypeTest(String channelIndicator, String expected) {
+    void clientDefinedEventTypeTest(ChannelIndicator channelIndicator, ClientDefinedChannelIndicator clientDefinedChannelIndicator, ClientDefinedEventType expected) {
         parameter("Индикатор канала", channelIndicator);
+        parameter("Дополнительная информация об используемом канале передачи данных", clientDefinedChannelIndicator);
         parameter("Тип события", expected);
-        String actual = step("Получаем тип события по индикатору канала " + channelIndicator, () -> DboOperation.PAYMENT_DT_0401060.getClientDefinedEventType(channelIndicator));
-        step("Проверяем тип события " + expected, () -> assertEquals(expected, actual));
+        ClientDefinedEventType actual = step("Получаем тип события", () -> DboOperation.PAYMENT_DT_0401060.getClientDefinedEventType(channelIndicator, clientDefinedChannelIndicator));
+        step("Проверяем тип события " + expected, () -> assertSame(expected, actual));
     }
 
     private static Stream<Arguments> provideClientEventTypes() {
         return Stream.of(
-                Arguments.of("WEB", "BROWSER_PAYDOCRU"),
-                Arguments.of("MOBILE", "MOBSBBOL_PAYDOCRU"),
-                Arguments.of("BRANCH", "BRANCH_PAYDOCRU")
+                Arguments.of(ChannelIndicator.WEB, null, ClientDefinedEventType.BROWSER_PAYDOCRU),
+                Arguments.of(ChannelIndicator.MOBILE, null, ClientDefinedEventType.MOBSBBOL_PAYDOCRU),
+                Arguments.of(ChannelIndicator.BRANCH, null, ClientDefinedEventType.BRANCH_PAYDOCRU),
+                Arguments.of(ChannelIndicator.OTHER, ClientDefinedChannelIndicator.PPRB_UPG_1C, ClientDefinedEventType.UPG_1C_PAYDOCRU),
+                Arguments.of(ChannelIndicator.OTHER, ClientDefinedChannelIndicator.PPRB_UPG_SBB, ClientDefinedEventType.UPG_SBB_PAYDOCRU),
+                Arguments.of(ChannelIndicator.OTHER, ClientDefinedChannelIndicator.PPRB_UPG_CORP, ClientDefinedEventType.UPG_CORP_PAYDOCRU)
         );
     }
 

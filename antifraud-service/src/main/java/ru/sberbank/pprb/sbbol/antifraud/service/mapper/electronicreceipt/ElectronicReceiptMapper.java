@@ -4,6 +4,8 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ElectronicReceiptOperation;
@@ -15,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-@Mapper(componentModel = "spring", imports = DboOperation.class)
+@Mapper(componentModel = "spring", imports = {DboOperation.class, ChannelIndicator.class, ClientDefinedChannelIndicator.class})
 public abstract class ElectronicReceiptMapper implements CommonMapper<ElectronicReceipt> {
 
     public static final String EPK_ID = "epkId";
@@ -216,9 +218,6 @@ public abstract class ElectronicReceiptMapper implements CommonMapper<Electronic
         descriptionMap.put(SENDER_EMAIL, "Отправивший Адрес электронной почты");
         DESCRIPTION_MAP = Collections.unmodifiableMap(descriptionMap);
     }
-
-    public static final String CHANNEL_INDICATOR = "WEB";
-    public static final String CLIENT_DEFINED_CHANNEL_INDICATOR = "PPRB_BROWSER";
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "version", ignore = true)
@@ -482,12 +481,12 @@ public abstract class ElectronicReceiptMapper implements CommonMapper<Electronic
     @Mapping(source = "timeOfOccurrence", target = "eventDataList.eventDataHeader.timeOfOccurrence")
     @Mapping(target = "eventDataList.eventDataHeader.eventType", expression = "java(DboOperation.ELECTRONIC_CHEQUE.getEventType())")
     @Mapping(target = "eventDataList.eventDataHeader.eventDescription", expression = "java(DboOperation.ELECTRONIC_CHEQUE.getEventDescription())")
-    @Mapping(target = "eventDataList.eventDataHeader.clientDefinedEventType", expression = "java(DboOperation.ELECTRONIC_CHEQUE.getClientDefinedEventType(null))")
+    @Mapping(target = "eventDataList.eventDataHeader.clientDefinedEventType", expression = "java(DboOperation.ELECTRONIC_CHEQUE.getClientDefinedEventType())")
     @Mapping(source = "amount", target = "eventDataList.transactionData.amount.sum")
     @Mapping(source = "currency", target = "eventDataList.transactionData.amount.currency")
     @Mapping(source = "accountNumber", target = "eventDataList.transactionData.myAccountData.accountNumber")
-    @Mapping(target = "channelIndicator", expression = "java(CHANNEL_INDICATOR)")
-    @Mapping(target = "clientDefinedChannelIndicator", expression = "java(CLIENT_DEFINED_CHANNEL_INDICATOR)")
+    @Mapping(target = "channelIndicator", expression = "java(ChannelIndicator.WEB)")
+    @Mapping(target = "clientDefinedChannelIndicator", expression = "java(ClientDefinedChannelIndicator.PPRB_BROWSER)")
     public abstract AnalyzeRequest toAnalyzeRequest(ElectronicReceipt entity);
 
     @AfterMapping

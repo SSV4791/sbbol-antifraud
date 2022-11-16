@@ -1,10 +1,9 @@
 package ru.sberbank.pprb.sbbol.antifraud.fastpayment;
 
-import io.qameta.allure.Allure;
+import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import io.qameta.allure.AllureId;
 import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentDocument;
@@ -12,7 +11,6 @@ import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentOperatio
 import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentPayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentReceiver;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentSign;
-import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.fastpayment.FastPayment;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.fastpayment.FastPaymentSignMapper;
@@ -54,7 +52,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
             "\"signEmail\": \"no@glavbaza36.ru\", " +
             "\"signChannel\": \"TOKEN\", " +
             "\"signSource\": \"SMS\", " +
-            "\"clientDefinedChannelIndicator\": \"WEB\"" +
+            "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
             "}";
     public static final String FIRST_SIGN_CHANNEL = "{" +
             "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
@@ -80,7 +78,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
             "\"signPhone\": \"915 168-67-32\", " +
             "\"signEmail\": \"no@glavbaza36.ru\", " +
             "\"signSource\": \"SMS\", " +
-            "\"clientDefinedChannelIndicator\": \"WEB\"" +
+            "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
             "}";
     public static final String FIRST_SIGN = "{" +
             "\"ipAddress\": \"78.245.9.88\", " +
@@ -133,7 +131,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
             "\"signEmail\": \"iv@glavbaza36.ru\", " +
             "\"signChannel\": \"TOKEN\", " +
             "\"signSource\": \"SMS\", " +
-            "\"clientDefinedChannelIndicator\": \"WEB\"" +
+            "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
             "}";
     public static final String SENDER_SIGN_CHANNEL = "{" +
             "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
@@ -159,13 +157,43 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
             "\"signPhone\": \"903 158-55-12\", " +
             "\"signEmail\": \"iv@glavbaza36.ru\", " +
             "\"signSource\": \"SMS\", " +
-            "\"clientDefinedChannelIndicator\": \"WEB\"" +
+            "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
+            "}";
+    public static final String SIGN_UNKNOWN_TYPE_CHANNEL_INDICATOR = "{" +
+            "\"ipAddress\": \"78.245.9.88\", " +
+            "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
+            "\"tbCode\": \"546738\", " +
+            "\"channelIndicator\": \"UNKNOWN\", " +
+            "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
+            "\"signTime\": \"2020-03-23T15:01:15\", " +
+            "\"signLogin\": \"novikova01\", " +
+            "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
+            "\"signPhone\": \"915 168-67-32\", " +
+            "\"signChannel\": \"TOKEN\", " +
+            "\"signType\": \"Единственная подпись\", " +
+            "\"signSource\": \"SMS\", " +
+            "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
+            "}";
+    public static final String SIGN_UNKNOWN_TYPE_CLIENT_DEFINED_CHANNEL_INDICATOR = "{" +
+            "\"ipAddress\": \"78.245.9.88\", " +
+            "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
+            "\"tbCode\": \"546738\", " +
+            "\"channelIndicator\": \"WEB\", " +
+            "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
+            "\"signTime\": \"2020-03-23T15:01:15\", " +
+            "\"signLogin\": \"novikova01\", " +
+            "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
+            "\"signPhone\": \"915 168-67-32\", " +
+            "\"signChannel\": \"TOKEN\", " +
+            "\"signType\": \"Единственная подпись\", " +
+            "\"signSource\": \"SMS\", " +
+            "\"clientDefinedChannelIndicator\": \"UNKNOWN\"" +
             "}";
 
     @Test
     @AllureId("25614")
     @DisplayName("Создание СБП")
-    void createData() throws Throwable {
+    void createData() {
         FastPaymentOperation dto = step("Подготовка тестовых данных", () -> {
             UUID docId = UUID.randomUUID();
             Integer docNumber = Math.abs(new Random().nextInt());
@@ -405,6 +433,30 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
             ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
             String exceptionMessage = ex.getMessage();
             Assertions.assertTrue(exceptionMessage.contains("senderSignChannel"), "Should contain senderSignChannel in message. Message: " + exceptionMessage);
+        });
+    }
+
+    @Test
+    @DisplayName("Проверка подписи СБП с не валидным значением параметра channelIndicator")
+    void channelIndicatorUnknownTypeTest() {
+        FastPaymentOperation operation = step("Создание документа", this::createRandomSbpPayment);
+        step("Подписание СБП без параметра channelIndicator", () -> operation.getSigns().add(1, SIGN_UNKNOWN_TYPE_CHANNEL_INDICATOR));
+        step("Проверка сообщения об ошибке", () -> {
+            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
+            String exceptionMessage = ex.getMessage();
+            Assertions.assertTrue(exceptionMessage.contains("ChannelIndicator"), "Should contain channelIndicator in message. Message: " + exceptionMessage);
+        });
+    }
+
+    @Test
+    @DisplayName("Проверка подписи СБП с не валидным значением параметра clientDefinedChannelIndicator")
+    void clientDefinedChannelIndicatorUnknownTypeTest() {
+        FastPaymentOperation operation = step("Создание документа", this::createRandomSbpPayment);
+        step("Подписание СБП без параметра clientDefinedChannelIndicator", () -> operation.getSigns().add(1, SIGN_UNKNOWN_TYPE_CLIENT_DEFINED_CHANNEL_INDICATOR));
+        step("Проверка сообщения об ошибке", () -> {
+            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
+            String exceptionMessage = ex.getMessage();
+            Assertions.assertTrue(exceptionMessage.contains("ClientDefinedChannelIndicator"), "Should contain clientDefinedChannelIndicator in message. Message: " + exceptionMessage);
         });
     }
 

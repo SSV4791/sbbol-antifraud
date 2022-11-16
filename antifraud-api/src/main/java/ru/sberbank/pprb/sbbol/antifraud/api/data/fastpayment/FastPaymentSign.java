@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -72,7 +74,7 @@ public class FastPaymentSign implements Serializable {
     /**
      * Тип канала связи, через который осуществляется связь клиента с банком
      */
-    private String channelIndicator;
+    private ChannelIndicator channelIndicator;
 
     /**
      * Уникальный идентификатор пользователя
@@ -144,7 +146,7 @@ public class FastPaymentSign implements Serializable {
     /**
      * Дополнительная информация об используемом канале передачи данных
      */
-    private String clientDefinedChannelIndicator;
+    private ClientDefinedChannelIndicator clientDefinedChannelIndicator;
 
     public String getHttpAccept() {
         return httpAccept;
@@ -226,11 +228,11 @@ public class FastPaymentSign implements Serializable {
         this.mobSdkData = mobSdkData;
     }
 
-    public String getChannelIndicator() {
+    public ChannelIndicator getChannelIndicator() {
         return channelIndicator;
     }
 
-    public void setChannelIndicator(String channelIndicator) {
+    public void setChannelIndicator(ChannelIndicator channelIndicator) {
         this.channelIndicator = channelIndicator;
     }
 
@@ -346,11 +348,11 @@ public class FastPaymentSign implements Serializable {
         this.signSource = signSource;
     }
 
-    public String getClientDefinedChannelIndicator() {
+    public ClientDefinedChannelIndicator getClientDefinedChannelIndicator() {
         return clientDefinedChannelIndicator;
     }
 
-    public void setClientDefinedChannelIndicator(String clientDefinedChannelIndicator) {
+    public void setClientDefinedChannelIndicator(ClientDefinedChannelIndicator clientDefinedChannelIndicator) {
         this.clientDefinedChannelIndicator = clientDefinedChannelIndicator;
     }
 

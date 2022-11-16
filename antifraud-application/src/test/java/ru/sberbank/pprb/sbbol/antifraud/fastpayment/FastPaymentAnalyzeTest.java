@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedEventType;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
@@ -30,6 +31,7 @@ import static io.qameta.allure.Allure.addAttachment;
 import static io.qameta.allure.Allure.step;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
@@ -115,8 +117,8 @@ class FastPaymentAnalyzeTest extends FastPaymentIntegrationTest {
     @AllureId("22326")
     @DisplayName("Проверка типа события клиента для индикатора канала")
     void clientDefinedEventTypeTest() {
-        String sbp = step("Получаем тип события", () -> DboOperation.SBP_B2C.getClientDefinedEventType(null));
-        step("Проверяем тип события", () -> assertEquals("SBP", sbp));
+        ClientDefinedEventType sbp = step("Получаем тип события", () -> DboOperation.SBP_B2C.getClientDefinedEventType());
+        step("Проверяем тип события", () -> assertSame(ClientDefinedEventType.SBP, sbp));
     }
 
     private FullAnalyzeResponse createAnalyzeResponse() {

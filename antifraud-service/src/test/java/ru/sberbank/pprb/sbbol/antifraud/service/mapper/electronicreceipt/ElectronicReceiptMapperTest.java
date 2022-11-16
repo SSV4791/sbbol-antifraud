@@ -5,6 +5,8 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
 import ru.dcbqa.allureee.annotations.layers.UnitTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
@@ -94,7 +96,7 @@ class ElectronicReceiptMapperTest extends MapperTest {
         assertNotNull(analyzeRequest.getEventDataList().getEventDataHeader());
         assertEquals(DboOperation.ELECTRONIC_CHEQUE.getEventType(), analyzeRequest.getEventDataList().getEventDataHeader().getEventType());
         assertEquals(DboOperation.ELECTRONIC_CHEQUE.getEventDescription(), analyzeRequest.getEventDataList().getEventDataHeader().getEventDescription());
-        assertEquals(DboOperation.ELECTRONIC_CHEQUE.getClientDefinedEventType(null), analyzeRequest.getEventDataList().getEventDataHeader().getClientDefinedEventType());
+        assertEquals(DboOperation.ELECTRONIC_CHEQUE.getClientDefinedEventType(), analyzeRequest.getEventDataList().getEventDataHeader().getClientDefinedEventType());
         assertEquals(electronicReceipt.getTimeOfOccurrence(), analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence());
         assertNotNull(analyzeRequest.getEventDataList().getTransactionData());
         assertNotNull(analyzeRequest.getEventDataList().getTransactionData().getAmount());
@@ -108,8 +110,8 @@ class ElectronicReceiptMapperTest extends MapperTest {
         assertNotNull(analyzeRequest.getEventDataList().getClientDefinedAttributeList());
         assertEquals(ElectronicReceiptMapper.CAPACITY, analyzeRequest.getEventDataList().getClientDefinedAttributeList().getFact().size());
 
-        assertEquals(ElectronicReceiptMapper.CHANNEL_INDICATOR, analyzeRequest.getChannelIndicator());
-        assertEquals(ElectronicReceiptMapper.CLIENT_DEFINED_CHANNEL_INDICATOR, analyzeRequest.getClientDefinedChannelIndicator());
+        assertEquals(ChannelIndicator.WEB, analyzeRequest.getChannelIndicator());
+        assertEquals(ClientDefinedChannelIndicator.PPRB_BROWSER, analyzeRequest.getClientDefinedChannelIndicator());
     }
 
     @Test

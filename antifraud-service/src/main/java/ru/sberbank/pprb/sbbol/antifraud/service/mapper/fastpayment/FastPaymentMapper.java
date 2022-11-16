@@ -449,7 +449,7 @@ public abstract class FastPaymentMapper implements CommonMapper<FastPayment> {
     @Mapping(source = "timeOfOccurrence", target = "eventDataList.eventDataHeader.timeOfOccurrence")
     @Mapping(target = "eventDataList.eventDataHeader.eventType", expression = "java(DboOperation.SBP_B2C.getEventType())")
     @Mapping(target = "eventDataList.eventDataHeader.eventDescription", expression = "java(DboOperation.SBP_B2C.getEventDescription())")
-    @Mapping(target = "eventDataList.eventDataHeader.clientDefinedEventType", expression = "java(DboOperation.SBP_B2C.getClientDefinedEventType(null))")
+    @Mapping(target = "eventDataList.eventDataHeader.clientDefinedEventType", expression = "java(DboOperation.SBP_B2C.getClientDefinedEventType())")
     @Mapping(source = "amount", target = "eventDataList.transactionData.amount.sum")
     @Mapping(source = "currency", target = "eventDataList.transactionData.amount.currency")
     @Mapping(source = "accountNumber", target = "eventDataList.transactionData.myAccountData.accountNumber")
