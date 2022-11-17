@@ -482,6 +482,94 @@ class PaymentDataTest extends PaymentIntegrationTest {
         });
     }
 
+    @Test
+    void illegalClientDefinedChannelIndicatorForWebTest() {
+        String sign = "{" +
+                "\"ipAddress\": \"78.245.9.87\", " +
+                "\"tbCode\": \"546738\", " +
+                "\"channelIndicator\": \"WEB\", " +
+                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
+                "\"signTime\": \"2020-03-23T15:01:15\", " +
+                "\"signLogin\": \"novikova01\", " +
+                "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
+                "\"signPhone\": \"915 168-67-32\", " +
+                "\"signChannel\": \"TOKEN\", " +
+                "\"clientDefinedChannelIndicator\": \"PPRB_MOBSBBOL\"" +
+                "}";
+        PaymentOperation paymentOperation = createRandomPayment();
+        paymentOperation.getSigns().add(0, sign);
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(paymentOperation));
+        String exceptionMessage = ex.getMessage();
+        Assertions.assertTrue(exceptionMessage.contains("channelIndicator=WEB"));
+        Assertions.assertTrue(exceptionMessage.contains("clientDefinedChannelIndicator=PPRB_MOBSBBOL"));
+    }
+
+    @Test
+    void illegalClientDefinedChannelIndicatorForMobileTest() {
+        String sign = "{" +
+                "\"ipAddress\": \"78.245.9.87\", " +
+                "\"tbCode\": \"546738\", " +
+                "\"channelIndicator\": \"MOBILE\", " +
+                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
+                "\"signTime\": \"2020-03-23T15:01:15\", " +
+                "\"signLogin\": \"novikova01\", " +
+                "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
+                "\"signPhone\": \"915 168-67-32\", " +
+                "\"signChannel\": \"TOKEN\", " +
+                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
+                "}";
+        PaymentOperation paymentOperation = createRandomPayment();
+        paymentOperation.getSigns().add(0, sign);
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(paymentOperation));
+        String exceptionMessage = ex.getMessage();
+        Assertions.assertTrue(exceptionMessage.contains("channelIndicator=MOBILE"));
+        Assertions.assertTrue(exceptionMessage.contains("clientDefinedChannelIndicator=PPRB_BROWSER"));
+    }
+
+    @Test
+    void illegalClientDefinedChannelIndicatorForBranchTest() {
+        String sign = "{" +
+                "\"ipAddress\": \"78.245.9.87\", " +
+                "\"tbCode\": \"546738\", " +
+                "\"channelIndicator\": \"BRANCH\", " +
+                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
+                "\"signTime\": \"2020-03-23T15:01:15\", " +
+                "\"signLogin\": \"novikova01\", " +
+                "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
+                "\"signPhone\": \"915 168-67-32\", " +
+                "\"signChannel\": \"TOKEN\", " +
+                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
+                "}";
+        PaymentOperation paymentOperation = createRandomPayment();
+        paymentOperation.getSigns().add(0, sign);
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(paymentOperation));
+        String exceptionMessage = ex.getMessage();
+        Assertions.assertTrue(exceptionMessage.contains("channelIndicator=BRANCH"));
+        Assertions.assertTrue(exceptionMessage.contains("clientDefinedChannelIndicator=PPRB_BROWSER"));
+    }
+
+    @Test
+    void illegalClientDefinedChannelIndicatorForOtherTest() {
+        String sign = "{" +
+                "\"ipAddress\": \"78.245.9.87\", " +
+                "\"tbCode\": \"546738\", " +
+                "\"channelIndicator\": \"OTHER\", " +
+                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
+                "\"signTime\": \"2020-03-23T15:01:15\", " +
+                "\"signLogin\": \"novikova01\", " +
+                "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
+                "\"signPhone\": \"915 168-67-32\", " +
+                "\"signChannel\": \"TOKEN\", " +
+                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
+                "}";
+        PaymentOperation paymentOperation = createRandomPayment();
+        paymentOperation.getSigns().add(0, sign);
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(paymentOperation));
+        String exceptionMessage = ex.getMessage();
+        Assertions.assertTrue(exceptionMessage.contains("channelIndicator=OTHER"));
+        Assertions.assertTrue(exceptionMessage.contains("clientDefinedChannelIndicator=PPRB_BROWSER"));
+    }
+
     //DCBEFSMSC5-T183 antifraud/savedata РПП (минимум полей)
     @Test
     @DisplayName("Сохранение РПП с минимальным набором полей")

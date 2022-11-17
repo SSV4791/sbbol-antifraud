@@ -461,6 +461,78 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
     }
 
     @Test
+    void illegalChannelIndicatorTest() {
+        FastPaymentOperation operation = createRandomSbpPayment();
+        String sign = "{" +
+                "\"ipAddress\": \"78.245.9.88\", " +
+                "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
+                "\"tbCode\": \"546738\", " +
+                "\"channelIndicator\": \"BRANCH\", " +
+                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
+                "\"signTime\": \"2020-03-23T15:01:15\", " +
+                "\"signLogin\": \"novikova01\", " +
+                "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
+                "\"signPhone\": \"915 168-67-32\", " +
+                "\"signChannel\": \"TOKEN\", " +
+                "\"signType\": \"Единственная подпись\", " +
+                "\"signSource\": \"SMS\", " +
+                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
+                "}";
+        operation.getSigns().add(0, sign);
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
+        String exceptionMessage = ex.getMessage();
+        Assertions.assertTrue(exceptionMessage.contains("channelIndicator=BRANCH"));
+    }
+
+    @Test
+    void illegalClientDefinedChannelIndicatorForMobileTest() {
+        FastPaymentOperation operation = createRandomSbpPayment();
+        String sign = "{" +
+                "\"ipAddress\": \"78.245.9.88\", " +
+                "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
+                "\"tbCode\": \"546738\", " +
+                "\"channelIndicator\": \"MOBILE\", " +
+                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
+                "\"signTime\": \"2020-03-23T15:01:15\", " +
+                "\"signLogin\": \"novikova01\", " +
+                "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
+                "\"signPhone\": \"915 168-67-32\", " +
+                "\"signChannel\": \"TOKEN\", " +
+                "\"signType\": \"Единственная подпись\", " +
+                "\"signSource\": \"SMS\", " +
+                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
+                "}";
+        operation.getSigns().add(0, sign);
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
+        String exceptionMessage = ex.getMessage();
+        Assertions.assertTrue(exceptionMessage.contains("clientDefinedChannelIndicator=PPRB_BROWSER"));
+    }
+
+    @Test
+    void illegalClientDefinedChannelIndicatorForWebTest() {
+        FastPaymentOperation operation = createRandomSbpPayment();
+        String sign = "{" +
+                "\"ipAddress\": \"78.245.9.88\", " +
+                "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
+                "\"tbCode\": \"546738\", " +
+                "\"channelIndicator\": \"WEB\", " +
+                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
+                "\"signTime\": \"2020-03-23T15:01:15\", " +
+                "\"signLogin\": \"novikova01\", " +
+                "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
+                "\"signPhone\": \"915 168-67-32\", " +
+                "\"signChannel\": \"TOKEN\", " +
+                "\"signType\": \"Единственная подпись\", " +
+                "\"signSource\": \"SMS\", " +
+                "\"clientDefinedChannelIndicator\": \"PPRB_MOBSBBOL\"" +
+                "}";
+        operation.getSigns().add(0, sign);
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
+        String exceptionMessage = ex.getMessage();
+        Assertions.assertTrue(exceptionMessage.contains("clientDefinedChannelIndicator=PPRB_MOBSBBOL"));
+    }
+
+    @Test
     @AllureId("22324")
     @DisplayName("Создание СБП c только обязательными параметрами подписи")
     void createDataOnlyWithRequiredSignParams() throws Throwable {

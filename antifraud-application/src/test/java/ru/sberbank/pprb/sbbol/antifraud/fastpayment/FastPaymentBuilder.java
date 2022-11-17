@@ -146,7 +146,7 @@ public class FastPaymentBuilder {
                 "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
                 "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
                 "\"mobSdkData\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3D\", " +
-                "\"channelIndicator\": \"WEB\", " +
+                "\"channelIndicator\": \"MOBILE\", " +
                 "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
                 "\"signTime\": \"2020-03-23T15:28:25\", " +
                 "\"signLogin\": \"ivanov05\", " +
@@ -160,7 +160,7 @@ public class FastPaymentBuilder {
                 "\"signEmail\": \"iv@glavbaza36.ru\", " +
                 "\"signChannel\": \"TOKEN\", " +
                 "\"signSource\": \"SMS\", " +
-                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
+                "\"clientDefinedChannelIndicator\": \"PPRB_MOBSBBOL\"" +
                 "}";
         List<String> signs = new ArrayList<>(2);
         signs.add(sign2);

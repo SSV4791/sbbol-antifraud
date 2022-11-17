@@ -1,13 +1,21 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.validator.fastpayment;
 
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentPayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentReceiver;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentSign;
+import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.service.validator.ModelValidator;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentDocument;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentOperation;
 
 import java.util.List;
+
+import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator.MOBILE;
+import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator.WEB;
+import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator.PPRB_BROWSER;
+import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator.PPRB_MOBSBBOL;
 
 /**
  * Сервис валидации наличия полей в запросе на сохранение или обновление данных
@@ -60,9 +68,10 @@ public final class FastPaymentModelValidator extends ModelValidator {
     }
 
     private static void validateFirstSignUserData(FastPaymentSign sign) {
-        validateRequiredParam(sign.getClientDefinedChannelIndicator(), "clientDefinedChannelIndicator");
-        validateRequiredParam(sign.getUserGuid(), "userGuid");
         validateRequiredParam(sign.getChannelIndicator(), "channelIndicator");
+        validateRequiredParam(sign.getClientDefinedChannelIndicator(), "clientDefinedChannelIndicator");
+        checkChannelIndicators(sign.getChannelIndicator(), sign.getClientDefinedChannelIndicator());
+        validateRequiredParam(sign.getUserGuid(), "userGuid");
         if (sign.getDevicePrint() == null && sign.getMobSdkData() == null) {
             logWarn(sign.getDevicePrint(), "devicePrint or mobSdkData");
         }
@@ -75,6 +84,18 @@ public final class FastPaymentModelValidator extends ModelValidator {
         logWarn(sign.getHttpAcceptChars(), "httpAcceptChars");
         logWarn(sign.getHttpReferer(), "httpReferer");
         logWarn(sign.getHttpAccept(), "httpAccept");
+    }
+
+    private static void checkChannelIndicators(ChannelIndicator channelIndicator, ClientDefinedChannelIndicator clientDefinedChannelIndicator) {
+        if (WEB != channelIndicator && MOBILE != channelIndicator) {
+            throw new ModelArgumentException("Illegal channelIndicator=" + channelIndicator + " for fast payment");
+        }
+        if (WEB == channelIndicator && PPRB_BROWSER != clientDefinedChannelIndicator) {
+            throw new ModelArgumentException("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channelIndicator=" + channelIndicator);
+        }
+        if (MOBILE == channelIndicator && PPRB_MOBSBBOL != clientDefinedChannelIndicator) {
+            throw new ModelArgumentException("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channelIndicator=" + channelIndicator);
+        }
     }
 
     private static void validateFirstSign(FastPaymentSign sign) {
