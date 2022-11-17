@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.dcbqa.allureee.annotations.layers.UnitTestLayer;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
@@ -63,7 +64,7 @@ class PaymentMapperTest extends MapperTest {
         payment.setRequestId(UUID.randomUUID().toString());
         payment.setEpkId(UUID.randomUUID().toString());
         payment.setUserGuid(UUID.randomUUID().toString());
-        payment.setChannelIndicator("WEB");
+        payment.setChannelIndicator(ChannelIndicator.WEB);
 
         AnalyzeRequest analyzeRequest = MAPPER.toAnalyzeRequest(payment);
         assertNotNull(analyzeRequest);
@@ -98,7 +99,7 @@ class PaymentMapperTest extends MapperTest {
         assertNotNull(analyzeRequest.getEventDataList().getEventDataHeader());
         assertEquals(PAYMENT_DT_0401060.getEventType(), analyzeRequest.getEventDataList().getEventDataHeader().getEventType());
         assertEquals(PAYMENT_DT_0401060.getEventDescription(), analyzeRequest.getEventDataList().getEventDataHeader().getEventDescription());
-        assertEquals(PAYMENT_DT_0401060.getClientDefinedEventType(payment.getChannelIndicator()), analyzeRequest.getEventDataList().getEventDataHeader().getClientDefinedEventType());
+        assertEquals(PAYMENT_DT_0401060.getClientDefinedEventType(payment.getChannelIndicator(), payment.getClientDefinedChannelIndicator()), analyzeRequest.getEventDataList().getEventDataHeader().getClientDefinedEventType());
         assertEquals(payment.getTimeOfOccurrence().plusHours(3), analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence());
 
         assertNotNull(analyzeRequest.getEventDataList().getTransactionData());

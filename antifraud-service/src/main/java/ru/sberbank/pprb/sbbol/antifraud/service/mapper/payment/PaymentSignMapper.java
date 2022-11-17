@@ -2,8 +2,6 @@ package ru.sberbank.pprb.sbbol.antifraud.service.mapper.payment;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentSign;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 
@@ -15,8 +13,6 @@ import java.util.List;
  * Сервис маппинга подписей
  */
 public final class PaymentSignMapper {
-
-    private static final Logger logger = LoggerFactory.getLogger(PaymentSignMapper.class);
 
     private static final ObjectMapper objectMapper;
 
@@ -40,11 +36,8 @@ public final class PaymentSignMapper {
                 PaymentSign sign = objectMapper.readValue(str, PaymentSign.class);
                 signList.add(sign);
             } catch (JsonProcessingException ex) {
-                logger.error("Sign parsing error", ex);
+                throw new ModelArgumentException("Payment sign parsing error. " + ex.getOriginalMessage(), ex);
             }
-        }
-        if (signList.isEmpty()) {
-            throw new ModelArgumentException("Signs parsing error. No element has been converted to a sign model");
         }
         if (signList.size() > 1) {
             signList.sort(Comparator.comparing(PaymentSign::getSignTime, Comparator.nullsLast(Comparator.naturalOrder())));

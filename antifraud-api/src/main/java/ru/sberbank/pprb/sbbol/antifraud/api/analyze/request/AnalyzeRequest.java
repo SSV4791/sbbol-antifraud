@@ -1,5 +1,8 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.analyze.request;
 
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator;
+
 import java.io.Serializable;
 
 /**
@@ -25,7 +28,7 @@ public class AnalyzeRequest implements Serializable {
     /**
      * Тип канала связи, через который осуществляется связь клиента с банком
      */
-    private String channelIndicator;
+    private ChannelIndicator channelIndicator;
 
     /**
      * Данные события
@@ -35,7 +38,7 @@ public class AnalyzeRequest implements Serializable {
     /**
      * Дополнительная информация об используемом канале передачи данных
      */
-    private String clientDefinedChannelIndicator;
+    private ClientDefinedChannelIndicator clientDefinedChannelIndicator;
 
     public MessageHeader getMessageHeader() {
         return messageHeader;
@@ -61,11 +64,11 @@ public class AnalyzeRequest implements Serializable {
         this.deviceRequest = deviceRequest;
     }
 
-    public String getChannelIndicator() {
+    public ChannelIndicator getChannelIndicator() {
         return channelIndicator;
     }
 
-    public void setChannelIndicator(String channelIndicator) {
+    public void setChannelIndicator(ChannelIndicator channelIndicator) {
         this.channelIndicator = channelIndicator;
     }
 
@@ -77,11 +80,11 @@ public class AnalyzeRequest implements Serializable {
         this.eventDataList = eventDataList;
     }
 
-    public String getClientDefinedChannelIndicator() {
+    public ClientDefinedChannelIndicator getClientDefinedChannelIndicator() {
         return clientDefinedChannelIndicator;
     }
 
-    public void setClientDefinedChannelIndicator(String clientDefinedChannelIndicator) {
+    public void setClientDefinedChannelIndicator(ClientDefinedChannelIndicator clientDefinedChannelIndicator) {
         this.clientDefinedChannelIndicator = clientDefinedChannelIndicator;
     }
 

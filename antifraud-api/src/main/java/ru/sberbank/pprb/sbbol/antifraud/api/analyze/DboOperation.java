@@ -10,8 +10,22 @@ public enum DboOperation {
      */
     PAYMENT_DT_0401060("PAYMENT", "Платежное поручение") {
         @Override
-        public String getClientDefinedEventType(String channelIndicator) {
-            return PaymentChannelIndicator.valueOf(channelIndicator).getClientDefinedEventType();
+        public ClientDefinedEventType getClientDefinedEventType(ChannelIndicator channelIndicator, ClientDefinedChannelIndicator clientDefinedChannelIndicator) {
+            if (ChannelIndicator.OTHER == channelIndicator) {
+                return switch (clientDefinedChannelIndicator) {
+                    case PPRB_UPG_1C -> ClientDefinedEventType.UPG_1C_PAYDOCRU;
+                    case PPRB_UPG_SBB -> ClientDefinedEventType.UPG_SBB_PAYDOCRU;
+                    case PPRB_UPG_CORP -> ClientDefinedEventType.UPG_CORP_PAYDOCRU;
+                    default -> throw new IllegalArgumentException("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channel indicator " + channelIndicator);
+                };
+            } else {
+                return switch (channelIndicator) {
+                    case WEB -> ClientDefinedEventType.BROWSER_PAYDOCRU;
+                    case MOBILE -> ClientDefinedEventType.MOBSBBOL_PAYDOCRU;
+                    case BRANCH -> ClientDefinedEventType.BRANCH_PAYDOCRU;
+                    default -> throw new IllegalArgumentException("Illegal channelIndicator=" + channelIndicator);
+                };
+            }
         }
     },
 
@@ -20,8 +34,8 @@ public enum DboOperation {
      */
     SBP_B2C("PAYMENT", "Перевод СБП") {
         @Override
-        public String getClientDefinedEventType(String channelIndicator) {
-            return "SBP";
+        public ClientDefinedEventType getClientDefinedEventType() {
+            return ClientDefinedEventType.SBP;
         }
     },
 
@@ -30,8 +44,8 @@ public enum DboOperation {
      */
     ELECTRONIC_CHEQUE("CLIENT_DEFINED", "Заказ наличных с использованием электронного чека") {
         @Override
-        public String getClientDefinedEventType(String channelIndicator) {
-            return "CASH_ORDER";
+        public ClientDefinedEventType getClientDefinedEventType() {
+            return ClientDefinedEventType.CASH_ORDER;
         }
     };
 
@@ -53,10 +67,17 @@ public enum DboOperation {
     /**
      * Получить тип устройства, через которое работает пользователь
      *
-     * @param channelIndicator тип канала связи, через который осуществляется связь клиента с банком
+     * @param channelIndicator              тип канала связи, через который осуществляется связь клиента с банком
+     * @param clientDefinedChannelIndicator дополнительная информация об используемом канале передачи данных
      * @return тип устройства, через которое работает пользователь
      */
-    public abstract String getClientDefinedEventType(String channelIndicator);
+    public ClientDefinedEventType getClientDefinedEventType(ChannelIndicator channelIndicator, ClientDefinedChannelIndicator clientDefinedChannelIndicator) {
+        return null;
+    }
+
+    public ClientDefinedEventType getClientDefinedEventType() {
+        return null;
+    }
 
     public String getEventType() {
         return eventType;
@@ -64,30 +85,6 @@ public enum DboOperation {
 
     public String getEventDescription() {
         return eventDescription;
-    }
-
-    /**
-     * Тип канала связи для РПП, через который осуществляется связь клиента с банком
-     */
-    public enum PaymentChannelIndicator {
-
-        WEB("BROWSER_PAYDOCRU"),
-        MOBILE("MOBSBBOL_PAYDOCRU"),
-        BRANCH("BRANCH_PAYDOCRU");
-
-        /**
-         * Тип устройства, через которое работает пользователь
-         */
-        private final String clientDefinedEventType;
-
-        PaymentChannelIndicator(String clientDefinedEventType) {
-            this.clientDefinedEventType = clientDefinedEventType;
-        }
-
-        public String getClientDefinedEventType() {
-            return clientDefinedEventType;
-        }
-
     }
 
 }

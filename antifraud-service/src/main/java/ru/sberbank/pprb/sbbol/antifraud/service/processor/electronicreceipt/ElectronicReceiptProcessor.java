@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
@@ -16,7 +15,6 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ElectronicReceiptOperation;
-import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.electronicreceipt.ElectronicReceipt;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.electronicreceipt.ElectronicReceiptMapper;
@@ -59,7 +57,6 @@ public class ElectronicReceiptProcessor implements Processor<ElectronicReceiptOp
 
     @Override
     public RequestId saveOrUpdate(ElectronicReceiptOperation request) {
-        logger.info("Processing electronic receipt (docId={}) save or update request", request.getDocument().getId());
         ElectronicReceiptModelValidator.validate(request);
         Optional<ElectronicReceipt> searchResult = repository.findFirstByDocId(request.getDocument().getId().toString());
         ElectronicReceipt entity;
@@ -74,33 +71,20 @@ public class ElectronicReceiptProcessor implements Processor<ElectronicReceiptOp
     }
 
     @Override
-    public AnalyzeResponse send(SendToAnalyzeRequest request) {
-        logger.info("Sending electronic receipt (docId={}) to analyze", request.getDocId());
+    public AnalyzeResponse send(SendToAnalyzeRequest request) throws JsonProcessingException {
         AnalyzeRequest analyzeRequest = createAnalyzeRequest(request.getDocId());
-        try {
-            String jsonRequest = objectMapper.writeValueAsString(analyzeRequest);
-            logger.debug("Electronic receipt (docId={}) analyze request: {}", request.getDocId(), jsonRequest);
-            String jsonResponse = restTemplate.postForObject(endPoint, new HttpEntity<>(jsonRequest, httpHeaders), String.class);
-            logger.debug("Electronic receipt (docId={}) full analyze response: {}", request.getDocId(), jsonResponse);
-            FullAnalyzeResponse fullAnalyzeResponse = objectMapper.readValue(jsonResponse, FullAnalyzeResponse.class);
-            return mapper.toAnalyzeResponse(fullAnalyzeResponse);
-        } catch (HttpStatusCodeException e) {
-            String message = "Electronic receipt (docId=" + request.getDocId() + ") analyze error";
-            logger.error(message, e);
-            throw new AnalyzeException(message);
-        } catch (JsonProcessingException e) {
-            String message = "Electronic receipt (docId=" + request.getDocId() + ") json processing error";
-            logger.error(message, e);
-            throw new ApplicationException(message);
-        }
+        String jsonRequest = objectMapper.writeValueAsString(analyzeRequest);
+        logger.debug("Electronic receipt (docId={}) analyze request: {}", request.getDocId(), jsonRequest);
+        String jsonResponse = restTemplate.postForObject(endPoint, new HttpEntity<>(jsonRequest, httpHeaders), String.class);
+        logger.debug("Electronic receipt (docId={}) full analyze response: {}", request.getDocId(), jsonResponse);
+        FullAnalyzeResponse fullAnalyzeResponse = objectMapper.readValue(jsonResponse, FullAnalyzeResponse.class);
+        return mapper.toAnalyzeResponse(fullAnalyzeResponse);
     }
 
     private AnalyzeRequest createAnalyzeRequest(UUID docId) {
         Optional<ElectronicReceipt> searchResult = repository.findFirstByDocId(docId.toString());
         if (searchResult.isEmpty()) {
-            String message = "Electronic receipt (docId=" + docId + ") not found";
-            logger.error(message);
-            throw new ApplicationException(message);
+            throw new ApplicationException("Electronic receipt (docId=" + docId + ") not found");
         }
         return mapper.toAnalyzeRequest(searchResult.get());
     }

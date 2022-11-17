@@ -40,11 +40,8 @@ public final class FastPaymentSignMapper {
                 FastPaymentSign sign = objectMapper.readValue(str, FastPaymentSign.class);
                 signList.add(sign);
             } catch (JsonProcessingException ex) {
-                logger.error("Sign parsing error", ex);
+                throw new ModelArgumentException("Fast payment sign parsing error. " + ex.getOriginalMessage(), ex);
             }
-        }
-        if (signList.isEmpty()) {
-            throw new ModelArgumentException("Signs parsing error. No element has been converted to a sign model");
         }
         if (signList.size() > 1) {
             signList.sort(Comparator.comparing(FastPaymentSign::getSignTime, Comparator.nullsLast(Comparator.naturalOrder())));

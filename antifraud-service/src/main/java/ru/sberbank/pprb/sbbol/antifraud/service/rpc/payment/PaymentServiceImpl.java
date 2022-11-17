@@ -14,20 +14,18 @@ import ru.sberbank.pprb.sbbol.antifraud.service.rpc.AbstractService;
 @AutoJsonRpcServiceImpl
 public class PaymentServiceImpl extends AbstractService<PaymentOperation> implements PaymentService {
 
-    private final Processor<PaymentOperation> processor;
-
     public PaymentServiceImpl(Processor<PaymentOperation> processor) {
-        this.processor = processor;
+        super(processor);
     }
 
     @Override
     public RequestId saveOrUpdateData(PaymentOperation request) {
-        return saveOrUpdate(processor, request);
+        return saveOrUpdate(request);
     }
 
     @Override
     public AnalyzeResponse analyzeOperation(SendToAnalyzeRequest request) {
-        return analyze(processor, request);
+        return analyze(request);
     }
 
 }

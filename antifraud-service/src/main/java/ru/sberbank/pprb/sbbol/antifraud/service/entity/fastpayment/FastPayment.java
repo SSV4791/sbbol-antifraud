@@ -2,10 +2,14 @@ package ru.sberbank.pprb.sbbol.antifraud.service.entity.fastpayment;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator;
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -114,7 +118,8 @@ public class FastPayment extends BaseEntity {
      * Тип канала связи, через который осуществляется связь клиента с банком
      */
     @Column(length = 15)
-    private String channelIndicator;
+    @Enumerated(EnumType.STRING)
+    private ChannelIndicator channelIndicator;
 
     /**
      * Время создания запроса
@@ -455,7 +460,8 @@ public class FastPayment extends BaseEntity {
      * Дополнительная информация об используемом канале передачи данных
      */
     @Column(length = 15)
-    private String clientDefinedChannelIndicator;
+    @Enumerated(EnumType.STRING)
+    private ClientDefinedChannelIndicator clientDefinedChannelIndicator;
 
     @Override
     public boolean equals(Object obj) {
@@ -598,11 +604,11 @@ public class FastPayment extends BaseEntity {
         this.mobSdkData = mobSdkData;
     }
 
-    public String getChannelIndicator() {
+    public ChannelIndicator getChannelIndicator() {
         return channelIndicator;
     }
 
-    public void setChannelIndicator(String channelIndicator) {
+    public void setChannelIndicator(ChannelIndicator channelIndicator) {
         this.channelIndicator = channelIndicator;
     }
 
@@ -1062,11 +1068,11 @@ public class FastPayment extends BaseEntity {
         this.senderSource = senderSource;
     }
 
-    public String getClientDefinedChannelIndicator() {
+    public ClientDefinedChannelIndicator getClientDefinedChannelIndicator() {
         return clientDefinedChannelIndicator;
     }
 
-    public void setClientDefinedChannelIndicator(String clientDefinedChannelIndicator) {
+    public void setClientDefinedChannelIndicator(ClientDefinedChannelIndicator clientDefinedChannelIndicator) {
         this.clientDefinedChannelIndicator = clientDefinedChannelIndicator;
     }
 }

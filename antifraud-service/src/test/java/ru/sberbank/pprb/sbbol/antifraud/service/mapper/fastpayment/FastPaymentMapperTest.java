@@ -97,7 +97,7 @@ class FastPaymentMapperTest extends MapperTest {
         assertNotNull(analyzeRequest.getEventDataList().getEventDataHeader());
         assertEquals(SBP_B2C.getEventType(), analyzeRequest.getEventDataList().getEventDataHeader().getEventType());
         assertEquals(SBP_B2C.getEventDescription(), analyzeRequest.getEventDataList().getEventDataHeader().getEventDescription());
-        assertEquals(SBP_B2C.getClientDefinedEventType(fastPayment.getChannelIndicator()), analyzeRequest.getEventDataList().getEventDataHeader().getClientDefinedEventType());
+        assertEquals(SBP_B2C.getClientDefinedEventType(), analyzeRequest.getEventDataList().getEventDataHeader().getClientDefinedEventType());
         assertEquals(fastPayment.getTimeOfOccurrence().plusHours(3), analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence());
 
         assertNotNull(analyzeRequest.getEventDataList().getTransactionData());

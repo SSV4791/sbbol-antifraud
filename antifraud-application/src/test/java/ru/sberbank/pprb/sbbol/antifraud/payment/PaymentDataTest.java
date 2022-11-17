@@ -1,6 +1,5 @@
 package ru.sberbank.pprb.sbbol.antifraud.payment;
 
-import io.qameta.allure.Allure;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -51,7 +50,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
             "\"signEmail\": \"no@glavbaza36.ru\", " +
             "\"signChannel\": \"TOKEN\", " +
             "\"signSource\": \"SMS\", " +
-            "\"clientDefinedChannelIndicator\": \"WEB\"" +
+            "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
             "}";
     public static final String FIRST_SIGN_CHANNEL = "{" +
             "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
@@ -77,7 +76,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
             "\"signPhone\": \"915 168-67-32\", " +
             "\"signEmail\": \"no@glavbaza36.ru\", " +
             "\"signSource\": \"SMS\", " +
-            "\"clientDefinedChannelIndicator\": \"WEB\"" +
+            "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
             "}";
     public static final String FIRST_SIGN = "{" +
             "\"ipAddress\": \"78.245.9.87\", " +
@@ -126,7 +125,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
             "\"signEmail\": \"iv@glavbaza36.ru\", " +
             "\"signChannel\": \"TOKEN\", " +
             "\"signSource\": \"SMS\", " +
-            "\"clientDefinedChannelIndicator\": \"WEB\"" +
+            "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
             "}";
     public static final String SENDER_SIGN_CHANNEL = "{" +
             "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
@@ -152,7 +151,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
             "\"signPhone\": \"903 158-55-12\", " +
             "\"signEmail\": \"iv@glavbaza36.ru\", " +
             "\"signSource\": \"SMS\", " +
-            "\"clientDefinedChannelIndicator\": \"WEB\"" +
+            "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
             "}";
     public static final String SIGN_UNKNOWN_TYPE_CHANNEL_INDICATOR = "{" +
             "\"ipAddress\": \"78.245.9.87\", " +
@@ -167,10 +166,23 @@ class PaymentDataTest extends PaymentIntegrationTest {
             "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
             "}";
 
+    public static final String SIGN_UNKNOWN_TYPE_CLIENT_DEFINED_CHANNEL_INDICATOR = "{" +
+            "\"ipAddress\": \"78.245.9.87\", " +
+            "\"tbCode\": \"546738\", " +
+            "\"channelIndicator\": \"WEB\", " +
+            "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
+            "\"signTime\": \"2020-03-23T15:01:15\", " +
+            "\"signLogin\": \"novikova01\", " +
+            "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
+            "\"signPhone\": \"915 168-67-32\", " +
+            "\"signChannel\": \"TOKEN\", " +
+            "\"clientDefinedChannelIndicator\": \"UNKNOWN\"" +
+            "}";
+
     @Test
     @AllureId("19651")
     @DisplayName("Создание РПП")
-    void createData() throws Throwable {
+    void createData() {
         PaymentOperation dto = step("Подготовка тестовых данных", () -> {
             UUID docId = UUID.randomUUID();
             Integer docNumber = Math.abs(new Random().nextInt());
@@ -198,7 +210,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
     @Test
     @AllureId("19646")
     @DisplayName("Изменение созданного РПП")
-    void updateData() throws Throwable {
+    void updateData() {
         PaymentOperation dto = step("Подготовка тестовых данных", () -> PaymentBuilder.getInstance()
                     .withDocId(DOC_ID)
                     .withDocNumber(1)
@@ -454,7 +466,19 @@ class PaymentDataTest extends PaymentIntegrationTest {
         step("Проверка сообщения об ошибке", () -> {
             ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(paymentOperation));
             String exceptionMessage = ex.getMessage();
-            Assertions.assertTrue(exceptionMessage.contains("channelIndicator"), "Should contain channelIndicator in message. Message: " + exceptionMessage);
+            Assertions.assertTrue(exceptionMessage.contains("ChannelIndicator"), "Should contain channelIndicator in message. Message: " + exceptionMessage);
+        });
+    }
+
+    @Test
+    @DisplayName("Проверка подписи РПП с не валидным значением параметра clientDefinedChannelIndicator")
+    void clientDefinedChannelIndicatorUnknownTypeTest() {
+        PaymentOperation paymentOperation = step("Создание документа", this::createRandomPayment);
+        step("Подписание РПП без параметра clientDefinedChannelIndicator", () -> paymentOperation.getSigns().add(1, SIGN_UNKNOWN_TYPE_CLIENT_DEFINED_CHANNEL_INDICATOR));
+        step("Проверка сообщения об ошибке", () -> {
+            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(paymentOperation));
+            String exceptionMessage = ex.getMessage();
+            Assertions.assertTrue(exceptionMessage.contains("ClientDefinedChannelIndicator"), "Should contain clientDefinedChannelIndicator in message. Message: " + exceptionMessage);
         });
     }
 
@@ -462,7 +486,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
     @Test
     @DisplayName("Сохранение РПП с минимальным набором полей")
     @AllureId("25619")
-    void savePaymentWithMinimumFields () throws Throwable {
+    void savePaymentWithMinimumFields() {
         PaymentOperation dto = step("Подготовка тестовых данных", () -> {
             UUID docId = UUID.randomUUID();
             Integer docNumber = Math.abs(new Random().nextInt());
@@ -496,7 +520,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
     @Test
     @DisplayName("Сохранение РПП с максимальным набором полей")
     @AllureId("25620")
-    void savePaymentWithAllFields () throws Throwable {
+    void savePaymentWithAllFields() {
         PaymentOperation dto = step("Подготовка тестовых данных", () -> {
                     UUID docId = UUID.randomUUID();
                     Integer docNumber = Math.abs(new Random().nextInt());
