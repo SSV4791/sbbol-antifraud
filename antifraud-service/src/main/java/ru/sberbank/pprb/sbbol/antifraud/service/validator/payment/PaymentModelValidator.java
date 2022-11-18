@@ -1,11 +1,22 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.validator.payment;
 
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentDocument;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentSign;
+import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.service.validator.ModelValidator;
 
 import java.util.List;
+
+import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator.BRANCH;
+import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator.MOBILE;
+import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator.OTHER;
+import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator.WEB;
+import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator.*;
+import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator.PPRB_UPG_1C;
+import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator.PPRB_UPG_SBB;
 
 /**
  * Сервис валидации наличия полей в запросе на сохранение или обновление данных
@@ -60,9 +71,26 @@ public final class PaymentModelValidator extends ModelValidator {
         if (sign.getDevicePrint() == null && sign.getMobSdkData() == null) {
             logWarn(sign.getDevicePrint(), "devicePrint or mobSdkData");
         }
-        validateRequiredParam(sign.getChannelIndicator(), "channelIndicator");
         validateRequiredParam(sign.getUserGuid(), "userGuid");
+        validateRequiredParam(sign.getChannelIndicator(), "channelIndicator");
         validateRequiredParam(sign.getClientDefinedChannelIndicator(), "clientDefinedChannelIndicator");
+        checkChannelIndicators(sign.getChannelIndicator(), sign.getClientDefinedChannelIndicator());
+    }
+    
+    private static void checkChannelIndicators(ChannelIndicator channelIndicator, ClientDefinedChannelIndicator clientDefinedChannelIndicator) {
+        if (WEB == channelIndicator && PPRB_BROWSER != clientDefinedChannelIndicator) {
+            throw new ModelArgumentException("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channelIndicator=" + channelIndicator);
+        }
+        if (MOBILE == channelIndicator && PPRB_MOBSBBOL != clientDefinedChannelIndicator) {
+            throw new ModelArgumentException("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channelIndicator=" + channelIndicator);
+        }
+        if (BRANCH == channelIndicator && PPRB_OFFICE != clientDefinedChannelIndicator) {
+            throw new ModelArgumentException("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channelIndicator=" + channelIndicator);
+        }
+        if (OTHER == channelIndicator && PPRB_UPG_1C != clientDefinedChannelIndicator &&
+                PPRB_UPG_SBB != clientDefinedChannelIndicator && PPRB_UPG_CORP != clientDefinedChannelIndicator) {
+            throw new ModelArgumentException("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channelIndicator=" + channelIndicator);
+        }
     }
 
     private static void validateFirstSign(PaymentSign sign) {

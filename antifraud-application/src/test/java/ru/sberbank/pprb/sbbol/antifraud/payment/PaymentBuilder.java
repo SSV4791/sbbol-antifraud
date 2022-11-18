@@ -122,7 +122,7 @@ public class PaymentBuilder {
                 "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
                 "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
                 "\"mobSdkData\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3D\", " +
-                "\"channelIndicator\": \"WEB\", " +
+                "\"channelIndicator\": \"MOBILE\", " +
                 "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522015f\", " +
                 "\"signTime\": \"2020-03-23T15:28:25\", " +
                 "\"signLogin\": \"ivanov05\", " +
@@ -136,7 +136,7 @@ public class PaymentBuilder {
                 "\"signEmail\": \"iv@glavbaza36.ru\", " +
                 "\"signChannel\": \"TOKEN\", " +
                 "\"signSource\": \"SMS\", " +
-                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
+                "\"clientDefinedChannelIndicator\": \"PPRB_MOBSBBOL\"" +
                 "}";
         String sign3 = "{" +
                 "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
@@ -150,7 +150,7 @@ public class PaymentBuilder {
                 "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
                 "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
                 "\"mobSdkData\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3D\", " +
-                "\"channelIndicator\": \"WEB\", " +
+                "\"channelIndicator\": \"BRANCH\", " +
                 "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522016f\", " +
                 "\"signTime\": \"2020-03-23T16:00:05\", " +
                 "\"signLogin\": \"petrov11\", " +
@@ -164,7 +164,7 @@ public class PaymentBuilder {
                 "\"signEmail\": \"pe@glavbaza36.ru\", " +
                 "\"signChannel\": \"TOKEN\", " +
                 "\"signSource\": \"SMS\", " +
-                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
+                "\"clientDefinedChannelIndicator\": \"PPRB_OFFICE\"" +
                 "}";
         String sign4 = "{" +
                 "\"httpAccept\": \"text/javascript, text/html, application/xml, text/xml, */*\", " +
@@ -178,7 +178,7 @@ public class PaymentBuilder {
                 "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
                 "\"devicePrint\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20\", " +
                 "\"mobSdkData\": \"version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3D\", " +
-                "\"channelIndicator\": \"WEB\", " +
+                "\"channelIndicator\": \"OTHER\", " +
                 "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522016f\", " +
                 "\"signTime\": \"2020-03-23T16:32:05\", " +
                 "\"signLogin\": \"sidorov22\", " +
@@ -192,7 +192,7 @@ public class PaymentBuilder {
                 "\"signEmail\": \"pe@glavbaza36.ru\", " +
                 "\"signChannel\": \"TOKEN\", " +
                 "\"signSource\": \"SMS\", " +
-                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
+                "\"clientDefinedChannelIndicator\": \"PPRB_UPG_CORP\"" +
                 "}";
         List<String> signs = new ArrayList<>(4);
         signs.add(sign3);
