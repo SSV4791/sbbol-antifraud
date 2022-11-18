@@ -45,7 +45,6 @@ public class PaymentDocument implements Serializable {
     /**
      * Буквенный код валюты перевода в соответствии со стандартом ISO
      */
-    @NotBlank(message = "The document.currency attribute must be filled")
     private String currency;
 
     /**

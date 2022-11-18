@@ -531,12 +531,12 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
     @Mapping(source = "otherAccBankType", target = "eventDataList.transactionData.otherAccountBankType")
     @Mapping(source = "accountNumber", target = "eventDataList.transactionData.myAccountData.accountNumber")
     @Mapping(source = "otherAccName", target = "eventDataList.transactionData.otherAccountData.accountName")
-    @Mapping(source = "balAccNumber", target = "eventDataList.transactionData.otherAccountData.accountNumber")
+    @Mapping(target = "eventDataList.transactionData.otherAccountData.accountNumber", expression = "java(payment.getBalAccNumber() == null ? \"\" : payment.getBalAccNumber())")
     @Mapping(source = "otherBicCode", target = "eventDataList.transactionData.otherAccountData.routingCode")
     @Mapping(source = "otherAccOwnershipType", target = "eventDataList.transactionData.otherAccountData.otherAccountOwnershipType")
     @Mapping(source = "otherAccType", target = "eventDataList.transactionData.otherAccountData.otherAccountType")
     @Mapping(source = "transferMediumType", target = "eventDataList.transactionData.otherAccountData.transferMediumType")
-    public abstract AnalyzeRequest toAnalyzeRequest(Payment entity);
+    public abstract AnalyzeRequest toAnalyzeRequest(Payment payment);
 
     @AfterMapping
     protected void createClientDefinedAttributeList(@MappingTarget AnalyzeRequest analyzeRequest, Payment entity) {

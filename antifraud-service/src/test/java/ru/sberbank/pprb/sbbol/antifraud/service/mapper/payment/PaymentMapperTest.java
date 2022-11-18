@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.dcbqa.allureee.annotations.layers.UnitTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
@@ -19,6 +20,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation.PAYMENT_DT_0401060;
 
 @UnitTestLayer
@@ -65,6 +67,7 @@ class PaymentMapperTest extends MapperTest {
         payment.setEpkId(UUID.randomUUID().toString());
         payment.setUserGuid(UUID.randomUUID().toString());
         payment.setChannelIndicator(ChannelIndicator.WEB);
+        payment.setClientDefinedChannelIndicator(ClientDefinedChannelIndicator.PPRB_BROWSER);
 
         AnalyzeRequest analyzeRequest = MAPPER.toAnalyzeRequest(payment);
         assertNotNull(analyzeRequest);
@@ -123,6 +126,27 @@ class PaymentMapperTest extends MapperTest {
 
         assertNotNull(analyzeRequest.getEventDataList().getClientDefinedAttributeList());
         assertEquals(PaymentMapper.CAPACITY, analyzeRequest.getEventDataList().getClientDefinedAttributeList().getFact().size());
+    }
+
+    @Test
+    void ToAnalyzeRequestWithBalAccNumberAndCurrencyNull() {
+        PodamFactory podamFactory = podamFactory();
+        Payment payment = podamFactory.populatePojo(new Payment());
+        payment.setChannelIndicator(ChannelIndicator.WEB);
+        payment.setClientDefinedChannelIndicator(ClientDefinedChannelIndicator.PPRB_BROWSER);
+        payment.setRequestId(UUID.randomUUID().toString());
+        payment.setEpkId(UUID.randomUUID().toString());
+        payment.setUserGuid(UUID.randomUUID().toString());
+        payment.setCurrency(null);
+        payment.setBalAccNumber(null);
+        AnalyzeRequest analyzeRequest = MAPPER.toAnalyzeRequest(payment);
+        assertNotNull(analyzeRequest);
+        assertNotNull(analyzeRequest.getEventDataList());
+        assertNotNull(analyzeRequest.getEventDataList().getTransactionData());
+        assertNotNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData());
+        assertEquals("", analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getAccountNumber());
+        assertNotNull(analyzeRequest.getEventDataList().getTransactionData().getAmount());
+        assertNull(analyzeRequest.getEventDataList().getTransactionData().getAmount().getCurrency());
     }
 
     @Test
