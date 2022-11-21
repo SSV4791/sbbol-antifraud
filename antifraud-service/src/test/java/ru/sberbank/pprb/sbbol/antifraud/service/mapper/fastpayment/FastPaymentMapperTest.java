@@ -6,6 +6,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.dcbqa.allureee.annotations.layers.UnitTestLayer;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
@@ -63,6 +65,8 @@ class FastPaymentMapperTest extends MapperTest {
         fastPayment.setRequestId(UUID.randomUUID().toString());
         fastPayment.setEpkId(UUID.randomUUID().toString());
         fastPayment.setUserGuid(UUID.randomUUID().toString());
+        fastPayment.setChannelIndicator(ChannelIndicator.WEB);
+        fastPayment.setClientDefinedChannelIndicator(ClientDefinedChannelIndicator.PPRB_BROWSER);
 
         AnalyzeRequest analyzeRequest = MAPPER.toAnalyzeRequest(fastPayment);
         assertNotNull(analyzeRequest);

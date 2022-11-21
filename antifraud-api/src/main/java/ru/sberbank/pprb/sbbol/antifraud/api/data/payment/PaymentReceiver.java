@@ -28,7 +28,6 @@ public class PaymentReceiver implements Serializable {
     /**
      * Номер балансового счета получателя платежа
      */
-    @NotBlank(message = "The document.receiver.balAccNumber attribute must be filled")
     private String balAccNumber;
 
     /**
