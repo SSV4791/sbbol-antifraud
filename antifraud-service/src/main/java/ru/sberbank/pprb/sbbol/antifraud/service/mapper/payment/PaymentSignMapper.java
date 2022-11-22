@@ -1,6 +1,7 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.mapper.payment;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentSign;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
@@ -18,6 +19,7 @@ public final class PaymentSignMapper {
 
     static {
         objectMapper = new ObjectMapper();
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     }
 
     private PaymentSignMapper() {
