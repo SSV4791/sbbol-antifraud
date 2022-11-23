@@ -20,7 +20,6 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation.PAYMENT_DT_0401060;
 
 @UnitTestLayer
@@ -146,7 +145,7 @@ class PaymentMapperTest extends MapperTest {
         assertNotNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData());
         assertEquals("", analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getAccountNumber());
         assertNotNull(analyzeRequest.getEventDataList().getTransactionData().getAmount());
-        assertNull(analyzeRequest.getEventDataList().getTransactionData().getAmount().getCurrency());
+        assertEquals("RUB", analyzeRequest.getEventDataList().getTransactionData().getAmount().getCurrency());
     }
 
     @Test
