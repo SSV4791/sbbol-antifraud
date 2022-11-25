@@ -47,7 +47,9 @@ public enum DboOperation {
         public ClientDefinedEventType getClientDefinedEventType() {
             return ClientDefinedEventType.CASH_ORDER;
         }
-    };
+    },
+
+    PARTNERS(null, null);
 
     /**
      * Тип события

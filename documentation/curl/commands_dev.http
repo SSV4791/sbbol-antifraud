@@ -1,0 +1,50 @@
+GET https://ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru/antifraud/actuator/health/liveness
+
+###
+
+POST https://ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru/antifraud/v2/payment
+Content-Type: application/json-rpc
+
+< payment_saveorupdate.json
+
+###
+
+POST https://ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru/antifraud/v2/payment
+Content-Type: application/json-rpc
+
+< payment_send.json
+
+###
+
+POST https://ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru/antifraud/v2/fastpayment
+Content-Type: application/json-rpc
+
+< fastpayment_saveorupdate.json
+
+###
+
+POST https://ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru/antifraud/v2/fastpayment
+Content-Type: application/json-rpc
+
+< fastpayment_send.json
+
+###
+
+POST https://ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru/antifraud/v2/electronicreceipt
+Content-Type: application/json-rpc
+
+< electronicreceipt_saveorupdate.json
+
+###
+
+POST https://ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru/antifraud/v2/electronicreceipt
+Content-Type: application/json-rpc
+
+< electronicreceipt_send.json
+
+###
+
+POST https://ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru/antifraud/v2/counterparty
+Content-Type: application/json-rpc
+
+< counterparty_send.json

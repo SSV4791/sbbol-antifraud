@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
-public interface CommonMapper<T extends BaseEntity> {
+public interface CommonMapper<T> {
 
     @Mapping(source = "identificationData.transactionId", target = "transactionId")
     @Mapping(source = "riskResult.triggeredRule.actionCode", target = "actionCode")

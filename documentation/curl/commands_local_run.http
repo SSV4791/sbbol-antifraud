@@ -37,3 +37,10 @@ POST http://127.0.0.1:8080/antifraud/v2/electronicreceipt
 Content-Type: application/json-rpc
 
 < electronicreceipt_send.json
+
+###
+
+POST http://127.0.0.1:8080/antifraud/v2/counterparty
+Content-Type: application/json-rpc
+
+< counterparty_send.json
