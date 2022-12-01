@@ -25,7 +25,10 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.IdentificationData;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.RiskResult;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.TriggeredRule;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
+import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
+
+import java.util.UUID;
 
 import static io.qameta.allure.Allure.addAttachment;
 import static io.qameta.allure.Allure.step;
@@ -111,6 +114,14 @@ class FastPaymentAnalyzeTest extends FastPaymentIntegrationTest {
             return ex.getMessage();
         });
         step("Проверка сообщения об ошибке", () -> Assertions.assertTrue(exceptionMessage.contains(request.getDocId().toString())));
+    }
+
+    @Test
+    void fastPaymentNotFoundTest() {
+        UUID docId = UUID.randomUUID();
+        ApplicationException ex = assertThrows(ApplicationException.class, () -> send(new SendToAnalyzeRequest(docId)));
+        String message = ex.getMessage();
+        Assertions.assertTrue(message.contains("Fast payment (docId=" + docId + ") not found"));
     }
 
     @Test
