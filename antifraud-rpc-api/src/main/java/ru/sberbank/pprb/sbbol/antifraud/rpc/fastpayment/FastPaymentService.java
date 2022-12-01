@@ -6,6 +6,7 @@ import com.googlecode.jsonrpc4j.JsonRpcError;
 import com.googlecode.jsonrpc4j.JsonRpcErrors;
 import com.googlecode.jsonrpc4j.JsonRpcParam;
 import com.googlecode.jsonrpc4j.JsonRpcService;
+import org.apache.commons.lang.UnhandledException;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
@@ -30,7 +31,7 @@ public interface FastPaymentService {
             @JsonRpcError(exception = ModelArgumentException.class, code = -32600),
             @JsonRpcError(exception = InvalidFormatException.class, code = -32600),
             @JsonRpcError(exception = InvalidTypeIdException.class, code = -32600),
-            @JsonRpcError(exception = ApplicationException.class, code = -32001)
+            @JsonRpcError(exception = UnhandledException.class, code = -32001)
     })
     RequestId saveOrUpdateData(@JsonRpcParam(value = "dataparams") FastPaymentOperation request);
 
@@ -46,6 +47,7 @@ public interface FastPaymentService {
             @JsonRpcError(exception = InvalidTypeIdException.class, code = -32600),
             @JsonRpcError(exception = ApplicationException.class, code = -32001),
             @JsonRpcError(exception = AnalyzeException.class, code = -32001),
+            @JsonRpcError(exception = UnhandledException.class, code = -32001)
     })
     AnalyzeResponse analyzeOperation(@JsonRpcParam(value = "analyzeparams") SendToAnalyzeRequest request);
 

@@ -7,6 +7,7 @@ com.fasterxml.jackson.core:jackson-databind:2.11.4=compileClasspath,default,runt
 com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.4=default,runtimeClasspath,testRuntimeClasspath
 com.github.briandilley.jsonrpc4j:jsonrpc4j:1.6=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 commons-codec:commons-codec:1.15=default,runtimeClasspath,testRuntimeClasspath
+commons-lang:commons-lang:2.6=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 jakarta.validation:jakarta.validation-api:2.0.2=default,runtimeClasspath,testRuntimeClasspath
 net.iharder:base64:2.3.9=default,runtimeClasspath,testRuntimeClasspath
 org.apache.httpcomponents:httpcore-nio:4.4.14=default,runtimeClasspath,testRuntimeClasspath

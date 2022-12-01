@@ -1,5 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.rpc;
 
+import org.apache.commons.lang.UnhandledException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -42,7 +43,7 @@ public abstract class AbstractService<T extends Operation> {
         } catch (RuntimeException e) {
             String errorMsg = msg + "Error while processing save request";
             logger.error(errorMsg, e);
-            throw new ApplicationException(errorMsg, e);
+            throw new UnhandledException(errorMsg, e);
         }
     }
 
@@ -58,7 +59,7 @@ public abstract class AbstractService<T extends Operation> {
             logger.error(errorMsg, e);
             throw new ModelArgumentException(errorMsg, e);
         } catch (ApplicationException e) {
-            logger.error(msg + e.getMessage(), e);
+            logger.warn(msg + e.getMessage(), e);
             throw e;
         } catch (HttpStatusCodeException e) {
             String errorMsg = msg + "Analysis error";
@@ -67,7 +68,7 @@ public abstract class AbstractService<T extends Operation> {
         } catch (Exception e) {
             String errorMsg = msg + "Error while processing analysis request";
             logger.error(errorMsg, e);
-            throw new ApplicationException(errorMsg, e);
+            throw new UnhandledException(errorMsg, e);
         }
     }
 
