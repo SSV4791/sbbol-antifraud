@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 /**
- * Запрос отправки на анализ электронного чека
+ * Запрос отправки на анализ документа по идентификатору
  */
 public class SendToAnalyzeRequest implements Serializable {
 

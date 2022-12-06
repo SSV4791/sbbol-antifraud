@@ -1,5 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.analyze.request;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
@@ -17,6 +18,7 @@ public class EventData implements Serializable {
     /**
      * Данные транзакции
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private TransactionData transactionData;
 
     /**

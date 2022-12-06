@@ -44,6 +44,8 @@ dependencies {
         exclude("com.h2database", "h2")
     }
 
+    testImplementation("uk.co.jemos.podam:podam:7.2.9.RELEASE")
+
     testImplementation(group = "ru.dcbqa.allureee.annotations", name = "dcb-allure-annotations", version = "1.3.+")
 
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = junitVersion)

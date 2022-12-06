@@ -35,7 +35,6 @@ public enum ClientDefinedEventType {
      */
     UPG_CORP_PAYDOCRU,
 
-
     /**
      * Для СБП
      */
@@ -44,6 +43,16 @@ public enum ClientDefinedEventType {
     /**
      * Для ЭЧ
      */
-    CASH_ORDER
+    CASH_ORDER,
+
+    /**
+     * Операция по счету доверенного контрагента (партнера)
+     */
+    BROWSER_APPROVAL,
+
+    /**
+     * Операция по счету контрагента (партнера), подлежащему удалению из справочника
+     */
+    BROWSER_REMOVE_PAYEE
 
 }

@@ -1,21 +1,23 @@
-package ru.sberbank.pprb.sbbol.antifraud.api.analyze.request;
+package ru.sberbank.pprb.sbbol.antifraud.api.analyze.counterparty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * Сообщение заголовка
+ * Сообщение заголовка по счету доверенного контрагента (партнера) или
+ * по контрагенту (партнеру), подлежащему удалению из справочника
  */
-public class MessageHeader implements Serializable {
+public class CounterPartyMessageHeader implements Serializable {
 
     /**
      * Дата и время формирования события
@@ -23,17 +25,18 @@ public class MessageHeader implements Serializable {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
+    @NotNull(message = "The attribute \"messageHeader.timeStamp\" must be filled")
     private LocalDateTime timeStamp;
 
     /**
      * Идентификатор метода
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotBlank(message = "The attribute \"messageHeader.requestType\" must be filled")
     private String requestType;
 
     @JsonCreator
-    public MessageHeader(@JsonProperty("timeStamp") LocalDateTime timeStamp,
-                         @JsonProperty("requestType") String requestType) {
+    public CounterPartyMessageHeader(@JsonProperty("timeStamp") LocalDateTime timeStamp,
+                                     @JsonProperty("requestType") String requestType) {
         this.timeStamp = timeStamp;
         this.requestType = requestType;
     }
@@ -56,7 +59,7 @@ public class MessageHeader implements Serializable {
 
     @Override
     public String toString() {
-        return "MessageHeader{" +
+        return "{" +
                 "timeStamp=" + timeStamp +
                 ", requestType='" + requestType + '\'' +
                 '}';

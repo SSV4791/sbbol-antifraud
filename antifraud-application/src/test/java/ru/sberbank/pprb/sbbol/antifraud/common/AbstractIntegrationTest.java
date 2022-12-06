@@ -9,6 +9,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import ru.sberbank.pprb.sbbol.antifraud.AntiFraudRunner;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithOutSavingRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.Operation;
@@ -41,6 +42,14 @@ public abstract class AbstractIntegrationTest {
     }
 
     protected static AnalyzeResponse sendData(JsonRpcRestClientWithReporting searchRpcClient, SendToAnalyzeRequest request) throws Throwable {
+        return searchRpcClient.invoke(
+                "analyzeOperation",
+                Collections.singletonMap("analyzeparams", request),
+                AnalyzeResponse.class
+        );
+    }
+
+    protected static AnalyzeResponse sendData(JsonRpcRestClientWithReporting searchRpcClient, AnalyzeWithOutSavingRequest request) throws Throwable {
         return searchRpcClient.invoke(
                 "analyzeOperation",
                 Collections.singletonMap("analyzeparams", request),

@@ -28,7 +28,7 @@ public abstract class AbstractService<T extends Operation> {
 
     protected RequestId saveOrUpdate(T request) {
         String msg = "DocId=" + request.getDocId() + ". ";
-        logger.info("{}Saving data", msg);
+        logger.debug("{}Saving data", msg);
         try {
             return processor.saveOrUpdate(request);
         } catch (ConstraintViolationException e) {
@@ -49,7 +49,7 @@ public abstract class AbstractService<T extends Operation> {
 
     protected AnalyzeResponse analyze(SendToAnalyzeRequest request) {
         String msg = "DocId=" + request.getDocId() + ". ";
-        logger.info("{}Sending data to analyze", msg);
+        logger.debug("{}Sending data to analyze", msg);
         try {
             return processor.send(request);
         } catch (ConstraintViolationException e) {

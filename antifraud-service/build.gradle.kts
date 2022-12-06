@@ -25,7 +25,7 @@ dependencies {
 
     annotationProcessor("org.mapstruct:mapstruct-processor:1.4.2.Final")
 
-    testImplementation("uk.co.jemos.podam:podam:7.2.6.RELEASE")
+    testImplementation("uk.co.jemos.podam:podam:7.2.9.RELEASE")
     // Обход бага с локами в gradle
     testImplementation("org.hibernate:hibernate-core")
 
