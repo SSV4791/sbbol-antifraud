@@ -1,5 +1,6 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension;
 
 plugins {
     `java-library`
@@ -31,7 +32,7 @@ allprojects {
         repositories {
 
             maven {
-                url = uri("https://nexus-ci.delta.sbrf.ru/repository/public/")
+                url = uri(project.properties["publicRepositoryUrl"]!!)
                 credentials {
                     username = tokenName
                     password = tokenPassword
@@ -40,7 +41,7 @@ allprojects {
             }
 
             maven {
-                url = uri("https://nexus-ci.delta.sbrf.ru/repository/maven-proxy-lib-internal/")
+                url = uri(project.properties["proxyRepositoryUrl"]!!)
                 credentials {
                     username = tokenName
                     password = tokenPassword
@@ -97,8 +98,38 @@ idea {
 
 subprojects {
     apply(plugin = "io.spring.dependency-management")
-    dependencies {
-        implementation(platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES))
+
+    the<DependencyManagementExtension>().apply {
+        imports {
+            mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+        }
+    }
+
+    if (setOf("antifraud-api", "antifraud-rpc-api").contains(project.name) && !project.version.toString().startsWith("D-00.000.00_")) {
+        apply(plugin = "maven-publish")
+        publishing {
+            publications {
+                if (setOf("antifraud-api", "antifraud-rpc-api").contains(project.name)) {
+                    create<MavenPublication>("api") {
+                        from(components["java"])
+                        groupId = "ru.sberbank.pprb.antifraud"
+                        artifactId = project.name
+                    }
+                }
+            }
+
+            repositories {
+                maven {
+                    name = "api"
+                    url = uri(project.properties["libReleaseRepositoryUrl"]!!)
+                    isAllowInsecureProtocol = true
+                    credentials {
+                        username = tokenName
+                        password = tokenPassword
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -161,6 +192,7 @@ publishing {
             }
         }
     }
+
     repositories {
         maven {
             name = "publish"
