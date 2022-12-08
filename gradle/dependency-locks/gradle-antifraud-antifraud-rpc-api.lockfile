@@ -21,5 +21,4 @@ org.ow2.asm:asm-commons:9.1=jacocoAnt
 org.ow2.asm:asm-tree:9.1=jacocoAnt
 org.ow2.asm:asm:9.1=jacocoAnt
 org.slf4j:slf4j-api:1.7.30=default,runtimeClasspath,testRuntimeClasspath
-org.springframework.boot:spring-boot-dependencies:2.4.4=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 empty=annotationProcessor,archives,testAnnotationProcessor

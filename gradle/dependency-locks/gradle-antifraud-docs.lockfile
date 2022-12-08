@@ -9,5 +9,4 @@ org.ow2.asm:asm-analysis:9.1=jacocoAnt
 org.ow2.asm:asm-commons:9.1=jacocoAnt
 org.ow2.asm:asm-tree:9.1=jacocoAnt
 org.ow2.asm:asm:9.1=jacocoAnt
-org.springframework.boot:spring-boot-dependencies:2.4.4=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
-empty=annotationProcessor,archives,testAnnotationProcessor
+empty=annotationProcessor,archives,compileClasspath,default,runtimeClasspath,testAnnotationProcessor,testCompileClasspath,testRuntimeClasspath
