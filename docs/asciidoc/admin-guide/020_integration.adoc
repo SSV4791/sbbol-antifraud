@@ -23,7 +23,9 @@
 Потребители: ППРБ.РКО.ЮЛ.ФП СБП Расчеты +
 ППРБ ЮЛ Digital B2B -> ППРБ ЮЛ История операций События антифрода -> FastPaymentService -> analyzeOperation +
 Потребители: ППРБ.Кассовые операции ЮЛ +
-ППРБ ЮЛ Digital B2B -> ППРБ ЮЛ История операций События антифрода -> ElectronicReceiptService -> analyzeOperation
+ППРБ ЮЛ Digital B2B -> ППРБ ЮЛ История операций События антифрода -> ElectronicReceiptService -> analyzeOperation +
+Потребители: ППРБ.Партнеры +
+ППРБ ЮЛ Digital B2B -> ППРБ ЮЛ История операций События антифрода -> CounterPartyService -> analyzeOperation
 
 ===	Интеграции с платформенными сервисами
 
