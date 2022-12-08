@@ -36,8 +36,10 @@ spec:
         vault.hashicorp.com/agent-init-first: 'false'
         vault.hashicorp.com/agent-pre-populate-only: 'false'
         vault.hashicorp.com/agent-pre-populate: 'false'
-        vault.hashicorp.com/agent-limits-cpu: 400m
-        vault.hashicorp.com/agent-limits-mem: 128Mi
+        vault.hashicorp.com/agent-limits-cpu: '{{ os_project.vault.sidecar.limits.cpu | default("400m") }}'
+        vault.hashicorp.com/agent-limits-mem: '{{ os_project.vault.sidecar.limits.memory | default("128Mi") }}'
+        vault.hashicorp.com/agent-requests-cpu: '{{ os_project.vault.sidecar.requests.cpu | default("250m") }}'
+        vault.hashicorp.com/agent-requests-mem: '{{ os_project.vault.sidecar.requests.memory | default("64Mi") }}'
         vault.hashicorp.com/role: '{{ secman.openshift.role }}'
         vault.hashicorp.com/namespace: '{{ secman.openshift.tenant }}'
 {% for secret in secman.openshift.inject_secrets.app.values() if secret.condition is not defined or secret.condition %}

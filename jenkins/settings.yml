@@ -7,7 +7,7 @@ credentials:
   sonar: sonar-token
   nexus: TUZ_DCBMSC5
   checkmarx: TUZ_00170030-sast
-  openshift: TUZ_DCBMSC5
+  openshift_token: os-token
   nexus_token: antifraud-nexus3-token
   registry_delta: tuz-antifraud-delta
 
@@ -35,7 +35,7 @@ pr_check:
         - 'buildSrc/'
         - 'openshift/'
         - 'jenkins/resources/openshift/'
-    server: dev-terra000006-idm.ocp
+    url_api: https://api.dev-terra000006-idm.ocp.delta.sbrf.ru:6443
     namespace: ci02281165-antifraud
   build_gradle:
     match:

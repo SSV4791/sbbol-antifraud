@@ -18,11 +18,33 @@ openshift:
 os_project:
   host: "https://api.dev-terra000006-idm.ocp.delta.sbrf.ru:6443"
   project: ci02281165-antifraud
-  pods: 1
+  pods: 8
   name: antifraud
   type: factory
-  health_check: true
+  requests:
+    cpu: '1'
+    memory: 2Gi
+    ephemeral-storage: 600Mi
+  limits:
+    cpu: '1'
+    memory: 2Gi
+    ephemeral-storage: 600Mi
+  vault:
+    sidecar:
+      requests:
+        cpu: 250m
+        memory: 64Mi
+      limits:
+        cpu: 400m
+        memory: 128Mi
   istio:
+    sidecar:
+      requests:
+        cpu: 50m
+        memory: 150Mi
+      limits:
+        cpu: 200m
+        memory: 300Mi
     ingress:
       routes:
         - host: ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru
@@ -64,8 +86,8 @@ os_project:
         key_store: dev-antifraud.p12
         trust_store: sigma_ott_trust.p12
         OTT_MODULE_ID: dev-antifraud
-      pods: 1
-      fluentbit: &fluentbit_resources
+      pods: 2
+      fluentbit:
         resources:
           requests:
             cpu: 50m
@@ -75,24 +97,78 @@ os_project:
             cpu: 100m
             memory: 256Mi
             ephemeral_storage: 256Mi
-      proxy: &proxy_resources
+      proxy:
         resources:
           requests:
-            cpu: 200m
-            memory: 500Mi
+            cpu: 400m
+            memory: 800Mi
             ephemeral_storage: 32Mi
           limits:
-            cpu: 200m
-            memory: 500Mi
+            cpu: 400m
+            memory: 800Mi
             ephemeral_storage: 64Mi
+      ott_sidecar:
+        resources:
+          requests:
+            cpu: 300m
+            memory: 300Mi
+            ephemeral_storage: 600Mi
+          limits:
+            cpu: 400m
+            memory: 500Mi
+            ephemeral_storage: 600Mi
+      vault_agent:
+        resources:
+          requests:
+            cpu: 250m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 128Mi
     egress:
-      pods: 1
+      pods: 2
       http:
         port: 8080
       mtls:
         port: 8443
-      fluentbit: *fluentbit_resources
-      proxy: *proxy_resources
+      fluentbit:
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+            ephemeral_storage: 128Mi
+          limits:
+            cpu: 100m
+            memory: 256Mi
+            ephemeral_storage: 256Mi
+      proxy:
+        resources:
+          requests:
+            cpu: 200m
+            memory: 800Mi
+            ephemeral_storage: 32Mi
+          limits:
+            cpu: 200m
+            memory: 800Mi
+            ephemeral_storage: 64Mi
+      ott_sidecar:
+        resources:
+          requests:
+            cpu: 400m
+            memory: 500Mi
+            ephemeral_storage: 600Mi
+          limits:
+            cpu: 400m
+            memory: 500Mi
+            ephemeral_storage: 600Mi
+      vault_agent:
+        resources:
+          requests:
+            cpu: 250m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 128Mi
       ott:
         port: 5443
         key_store: dev-antifraud.p12
@@ -110,6 +186,14 @@ versionMask: "D-\\d{2}\\.\\d{3}\\.\\d{2}_\\d{4}"
 
 fluentbit:
   module_id: pprb4-digital-fraud
+  limits:
+    cpu: 100m
+    memory: 100Mi
+    ephemeral_storage: 600Mi
+  requests:
+    cpu: 100m
+    memory: 100Mi
+    ephemeral_storage: 600Mi
 
 app_journal:
   secret: secret-appjournalstubsettings
