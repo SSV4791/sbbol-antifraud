@@ -146,8 +146,18 @@ public abstract class CounterPartyMapper implements CommonMapper<CounterPartyCli
     @Mapping(source = "eventData.eventType", target = "eventDataList.eventDataHeader.eventType")
     @Mapping(source = "eventData.eventDescription", target = "eventDataList.eventDataHeader.eventDescription")
     @Mapping(source = "eventData.clientDefinedEventType", target = "eventDataList.eventDataHeader.clientDefinedEventType")
-    @Mapping(target = "eventDataList.transactionData", ignore = true)
     @Mapping(target = "eventDataList.clientDefinedAttributeList", ignore = true)
+    @Mapping(target = "eventDataList.transactionData.executionSpeed", ignore = true)
+    @Mapping(target = "eventDataList.transactionData.otherAccountBankType", ignore = true)
+    @Mapping(target = "eventDataList.transactionData.otherAccountData.accountName", ignore = true)
+    @Mapping(target = "eventDataList.transactionData.otherAccountData.routingCode", ignore = true)
+    @Mapping(target = "eventDataList.transactionData.otherAccountData.otherAccountOwnershipType", ignore = true)
+    @Mapping(target = "eventDataList.transactionData.otherAccountData.otherAccountType", ignore = true)
+    @Mapping(target = "eventDataList.transactionData.otherAccountData.transferMediumType", ignore = true)
+    @Mapping(target = "eventDataList.transactionData.amount.sum", expression = "java(0L)")
+    @Mapping(target = "eventDataList.transactionData.amount.currency", constant = "RUB")
+    @Mapping(target = "eventDataList.transactionData.myAccountData.accountNumber", constant = "")
+    @Mapping(target = "eventDataList.transactionData.otherAccountData.accountNumber", constant = "")
     public abstract AnalyzeRequest toAnalyzeRequest(CounterPartySendToAnalyzeRq request);
 
     @AfterMapping

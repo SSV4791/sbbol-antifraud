@@ -57,7 +57,21 @@ public class CounterPartyMapperTest extends MapperTest {
         assertEquals(request.getEventData().getClientDefinedEventType(), analyzeRequest.getEventDataList().getEventDataHeader().getClientDefinedEventType());
         assertEquals(request.getEventData().getTimeOfOccurrence().plusHours(3), analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence());
         assertEquals(CounterPartyMapper.CAPACITY, analyzeRequest.getEventDataList().getClientDefinedAttributeList().getFact().size());
-        assertNull(analyzeRequest.getEventDataList().getTransactionData());
+        assertNotNull(analyzeRequest.getEventDataList().getTransactionData());
+        assertNotNull(analyzeRequest.getEventDataList().getTransactionData().getAmount());
+        assertEquals(0, analyzeRequest.getEventDataList().getTransactionData().getAmount().getSum());
+        assertEquals("RUB", analyzeRequest.getEventDataList().getTransactionData().getAmount().getCurrency());
+        assertNull(analyzeRequest.getEventDataList().getTransactionData().getExecutionSpeed());
+        assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountBankType());
+        assertNotNull(analyzeRequest.getEventDataList().getTransactionData().getMyAccountData());
+        assertEquals("", analyzeRequest.getEventDataList().getTransactionData().getMyAccountData().getAccountNumber());
+        assertNotNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData());
+        assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getAccountName());
+        assertEquals("", analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getAccountNumber());
+        assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getRoutingCode());
+        assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getOtherAccountOwnershipType());
+        assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getOtherAccountType());
+        assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getTransferMediumType());
 
         assertEquals(request.getChannelIndicator(), analyzeRequest.getChannelIndicator());
         assertEquals(request.getClientDefinedChannelIndicator(), analyzeRequest.getClientDefinedChannelIndicator());
