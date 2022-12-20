@@ -4,25 +4,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 
+import java.util.UUID;
+
 public abstract class ModelValidator {
 
     private static final Logger logger = LoggerFactory.getLogger(ModelValidator.class);
 
-    private static final String MESSAGE = "The attribute must be filled: {}";
+    private static final String MESSAGE = "DocId={}. The attribute must be filled: {}";
     private static final String SIGN_MESSAGE = MESSAGE + "{}";
 
     protected ModelValidator() {
     }
 
-    protected static void logWarn(Object param, String name) {
+    protected static void logWarn(Object param, UUID docId, String name) {
         if (param == null) {
-            logger.warn(MESSAGE, name);
+            logger.warn(MESSAGE, docId, name);
         }
     }
 
-    protected static void logWarnSign(Object param, String signName, String paramName) {
+    protected static void logWarnSign(Object param, UUID docId, String signName, String paramName) {
         if (param == null) {
-            logger.warn(SIGN_MESSAGE, signName, paramName);
+            logger.warn(SIGN_MESSAGE, docId, signName, paramName);
         }
     }
 
@@ -33,19 +35,11 @@ public abstract class ModelValidator {
     }
 
     protected static String signNameSwitcher(int i) {
-        String signName;
-        switch (i) {
-            case (1):
-                signName = "secondSign";
-                break;
-            case (2):
-                signName = "thirdSign";
-                break;
-            default:
-                signName = null;
-                break;
-        }
-        return signName;
+        return switch (i) {
+            case (1) -> "secondSign";
+            case (2) -> "thirdSign";
+            default -> null;
+        };
     }
 
 }

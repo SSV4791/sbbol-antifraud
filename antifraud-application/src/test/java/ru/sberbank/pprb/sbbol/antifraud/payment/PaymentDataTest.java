@@ -354,21 +354,6 @@ class PaymentDataTest extends PaymentIntegrationTest {
     }
 
     @Test
-    @AllureId("19656")
-    @DisplayName("Создание РПП с пустым полем orgGuid")
-    void validateModelRequiredParamOrgGuid() {
-        PaymentOperation operation = step("Создание документа", this::createRandomPayment);
-        ModelArgumentException ex = step("Сохранение документа с пустым orgGuid", () -> {
-            operation.setOrgGuid(null);
-            return assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-        });
-        step("Проверка, что в сообщении об ошибке, присутствует информация о пустом orgGuid", () -> {
-            String exceptionMessage = ex.getMessage();
-            Assertions.assertTrue(exceptionMessage.contains("orgGuid"), "Should contain orgGuid in message. Message: " + exceptionMessage);
-        });
-    }
-
-    @Test
     @AllureId("19641")
     @DisplayName("Валидация модели РПП на наличие обязательного атрибута signs")
     void validateModelRequiredParamEmptySigns() {
@@ -378,66 +363,6 @@ class PaymentDataTest extends PaymentIntegrationTest {
             ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
             String exceptionMessage = ex.getMessage();
             Assertions.assertTrue(exceptionMessage.contains("signs"), "Should contain signs in message. Message: " + exceptionMessage);
-        });
-    }
-
-    @Test
-    @AllureId("19652")
-    @DisplayName("Валидация модели РПП на наличие обязательного атрибута userGuid в первой подписи")
-    void validateModelRequiredParamFirstSignUserGuid() {
-        PaymentOperation operation = step("Создание документа", this::createRandomPayment);
-        step("Подписание РПП Первой подписью без userGuid", () -> {
-            operation.getSigns().set(1, FIRST_SIGN_USER_GUID);
-        });
-        step("Проверка сообщения об ошибке", () -> {
-            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-            String exceptionMessage = ex.getMessage();
-            Assertions.assertTrue(exceptionMessage.contains("userGuid"), "Should contain userGuid in message. Message: " + exceptionMessage);
-        });
-    }
-
-    @Test
-    @AllureId("19649")
-    @DisplayName("Проверка подписи РПП без логина подписавшего")
-    void validateModelRequiredParamSenderSignLogin() {
-        PaymentOperation operation = step("Создание документа", this::createRandomPayment);
-        step("Подписание РПП без логина подписавшего", () -> {
-            operation.getSigns().set(3, SENDER_SIGN_LOGIN);
-        });
-        step("Проверка сообщения об ошибке", () -> {
-            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-            String exceptionMessage = ex.getMessage();
-            Assertions.assertTrue(exceptionMessage.contains("senderSignLogin"), "Should contain senderSignLogin in message. Message: " + exceptionMessage);
-        });
-    }
-
-    @Test
-    @AllureId("21798")
-    @DisplayName("Проверка подписания РПП первой подписью без параметра firstSignChannel")
-    void validateModelRequiredParamFirstSignChannel() {
-        PaymentOperation operation = step("Создание документа", this::createRandomPayment);
-        step("Подписание РПП Первой подписью без signChannel", () -> {
-            operation.getSigns().set(1, FIRST_SIGN_CHANNEL);
-        });
-        step("Проверка сообщения об ошибке", () -> {
-            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-            String exceptionMessage = ex.getMessage();
-            Assertions.assertTrue(exceptionMessage.contains("firstSignChannel"), "Should contain firstSignChannel in message. Message: " + exceptionMessage);
-        });
-    }
-
-    @Test
-    @AllureId("21799")
-    @DisplayName("Проверка подписи РПП подписавшего без параметра senderSignChannel")
-    void validateModelRequiredParamSenderSignChannel() {
-        PaymentOperation operation = step("Создание документа", this::createRandomPayment);
-        step("Подписание РПП без параметра senderSignChannel", () -> {
-            operation.getSigns().set(3, SENDER_SIGN_CHANNEL);
-        });
-        step("Проверка сообщения об ошибке", () -> {
-            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-            String exceptionMessage = ex.getMessage();
-            Assertions.assertTrue(exceptionMessage.contains("senderSignChannel"), "Should contain senderSignChannel in message. Message: " + exceptionMessage);
         });
     }
 

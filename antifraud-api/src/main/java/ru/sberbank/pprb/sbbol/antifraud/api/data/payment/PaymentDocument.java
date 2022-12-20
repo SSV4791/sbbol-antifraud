@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -33,13 +31,11 @@ public class PaymentDocument implements Serializable {
      */
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
-    @NotNull(message = "The document.date attribute must be filled")
     private LocalDate date;
 
     /**
      * Сумма перевода
      */
-    @NotNull(message = "The document.amount attribute must be filled")
     private Long amount;
 
     /**
@@ -50,7 +46,6 @@ public class PaymentDocument implements Serializable {
     /**
      * Назначение платежа
      */
-    @NotBlank(message = "The document.destination attribute must be filled")
     private String destination;
 
     /**
@@ -76,15 +71,11 @@ public class PaymentDocument implements Serializable {
     /**
      * Данные плательщика
      */
-    @Valid
-    @NotNull(message = "Document.payer attribute cannot be null")
     private PaymentPayer payer;
 
     /**
      * Данные получателя
      */
-    @Valid
-    @NotNull(message = "Document.receiver attribute cannot be null")
     private PaymentReceiver receiver;
 
     public UUID getId() {
