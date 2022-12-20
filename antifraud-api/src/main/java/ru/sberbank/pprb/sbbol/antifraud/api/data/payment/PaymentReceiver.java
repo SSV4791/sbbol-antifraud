@@ -1,6 +1,5 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.data.payment;
 
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -11,13 +10,11 @@ public class PaymentReceiver implements Serializable {
     /**
      * Наименование получателя платежа
      */
-    @NotBlank(message = "The document.receiver.otherAccName attribute must be filled")
     private String otherAccName;
 
     /**
      * БИК банка получателя
      */
-    @NotBlank(message = "The document.receiver.otherBicCode attribute must be filled")
     private String otherBicCode;
 
     /**

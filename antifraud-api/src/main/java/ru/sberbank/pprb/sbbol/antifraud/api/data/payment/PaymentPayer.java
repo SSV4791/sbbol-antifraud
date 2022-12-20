@@ -1,6 +1,5 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.data.payment;
 
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -11,13 +10,11 @@ public class PaymentPayer implements Serializable {
     /**
      * Номер счета отправителя (плательщика)
      */
-    @NotBlank(message = "The document.payer.accountNumber attribute must be filled")
     private String accountNumber;
 
     /**
      * ИНН организации
      */
-    @NotBlank(message = "The document.payer.inn attribute must be filled")
     private String inn;
 
     public String getAccountNumber() {

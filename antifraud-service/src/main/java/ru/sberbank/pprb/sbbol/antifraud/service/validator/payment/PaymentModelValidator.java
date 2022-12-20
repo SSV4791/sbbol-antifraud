@@ -4,18 +4,24 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentDocument;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentPayer;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentReceiver;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentSign;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.service.validator.ModelValidator;
 
 import java.util.List;
+import java.util.UUID;
 
 import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator.BRANCH;
 import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator.MOBILE;
 import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator.OTHER;
 import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator.WEB;
-import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator.*;
+import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator.PPRB_BROWSER;
+import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator.PPRB_MOBSBBOL;
+import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator.PPRB_OFFICE;
 import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator.PPRB_UPG_1C;
+import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator.PPRB_UPG_CORP;
 import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator.PPRB_UPG_SBB;
 
 /**
@@ -32,46 +38,72 @@ public final class PaymentModelValidator extends ModelValidator {
      * @param payment модель РПП для валидации
      */
     public static void validate(PaymentOperation payment) {
-        logWarn(payment.getTimeStamp(), "timeStamp");
-        logWarn(payment.getTimeOfOccurrence(), "timeOfOccurrence");
-        validateDocument(payment.getDocument());
-        validateSigns(payment.getMappedSigns());
+        logWarn(payment.getOrgGuid(), payment.getDocId(), "orgGuid");
+        logWarn(payment.getDigitalId(), payment.getDocId(), "digitalId");
+        validateDocument(payment.getDocument(), payment.getDocId());
+        validateSigns(payment.getMappedSigns(), payment.getDocId());
     }
 
-    private static void validateDocument(PaymentDocument document) {
-        logWarn(document.getNumber(), "document.number");
-        logWarn(document.getExecutionSpeed(), "document.executionSpeed");
-        logWarn(document.getOtherAccBankType(), "document.otherAccBankType");
-        logWarn(document.getOtherAccOwnershipType(), "document.otherAccOwnershipType");
-        logWarn(document.getTransferMediumType(), "document.transferMediumType");
-        logWarn(document.getReceiver().getOtherAccType(), "document.receiver.otherAccType");
+    private static void validateDocument(PaymentDocument document, UUID docId) {
+        logWarn(document.getNumber(), docId, "document.number");
+        logWarn(document.getDate(), docId, "document.date");
+        logWarn(document.getAmount(), docId, "document.amount");
+        logWarn(document.getCurrency(), docId, "document.currency");
+        logWarn(document.getDestination(), docId, "document.destination");
+        logWarn(document.getExecutionSpeed(), docId, "document.executionSpeed");
+        logWarn(document.getOtherAccBankType(), docId, "document.otherAccBankType");
+        logWarn(document.getOtherAccOwnershipType(), docId, "document.otherAccOwnershipType");
+        logWarn(document.getTransferMediumType(), docId, "document.transferMediumType");
+        validatePayer(document.getPayer(), docId);
+        validateReceiver(document.getReceiver(), docId);
     }
 
-    private static void validateSigns(List<PaymentSign> signs) {
-        validateFirstSignUserData(signs.get(0));
-        validateFirstSign(signs.get(0));
+    private static void validatePayer(PaymentPayer payer, UUID docId) {
+        logWarn(payer.getAccountNumber(), docId, "document.payer.accountNumber");
+        logWarn(payer.getInn(), docId, "document.payer.inn");
+    }
+
+    private static void validateReceiver(PaymentReceiver receiver, UUID docId) {
+        logWarn(receiver.getOtherAccName(), docId, "document.receiver.otherAccName");
+        logWarn(receiver.getOtherBicCode(), docId, "document.receiver.otherBicCode");
+        logWarn(receiver.getInn(), docId, "document.receiver.inn");
+        logWarn(receiver.getBalAccNumber(), docId, "document.receiver.balAccNumber");
+        logWarn(receiver.getOtherAccType(), docId, "document.receiver.otherAccType");
+    }
+
+    private static void validateSigns(List<PaymentSign> signs, UUID docId) {
+        validateFirstSign(signs.get(0), docId);
         if (signs.size() > 1) {
-            validateSenderSign(signs.get(signs.size() - 1));
+            validateSenderSign(signs.get(signs.size() - 1), docId);
         }
         for (int i = 1; i < signs.size() - 1; i++) {
-            validateSign(signs.get(i), signNameSwitcher(i));
+            validateSign(signs.get(i), signNameSwitcher(i), docId);
         }
     }
 
-    private static void validateFirstSignUserData(PaymentSign sign) {
-        logWarn(sign.getHttpAccept(), "httpAccept");
-        logWarn(sign.getHttpReferer(), "httpReferer");
-        logWarn(sign.getHttpAcceptChars(), "httpAcceptChars");
-        logWarn(sign.getHttpAcceptEncoding(), "httpAcceptEncoding");
-        logWarn(sign.getHttpAcceptLanguage(), "httpAcceptLanguage");
-        validateRequiredParam(sign.getIpAddress(), "ipAddress");
-        logWarn(sign.getPrivateIpAddress(), "privateIpAddress");
-        validateRequiredParam(sign.getTbCode(), "tbCode");
-        logWarn(sign.getUserAgent(), "userAgent");
+    private static void validateFirstSign(PaymentSign sign, UUID docId) {
+        validateFirstSignUserData(sign, docId);
+        validateSignWithRequiredParams(sign, "firstSign", docId);
+    }
+
+    private static void validateSenderSign(PaymentSign sign, UUID docId) {
+        validateSignWithRequiredParams(sign, "senderSign", docId);
+    }
+
+    private static void validateFirstSignUserData(PaymentSign sign, UUID docId) {
+        logWarn(sign.getHttpAccept(), docId, "httpAccept");
+        logWarn(sign.getHttpReferer(), docId, "httpReferer");
+        logWarn(sign.getHttpAcceptChars(), docId, "httpAcceptChars");
+        logWarn(sign.getHttpAcceptEncoding(), docId, "httpAcceptEncoding");
+        logWarn(sign.getHttpAcceptLanguage(), docId, "httpAcceptLanguage");
+        logWarn(sign.getIpAddress(), docId, "ipAddress");
+        logWarn(sign.getPrivateIpAddress(), docId, "privateIpAddress");
+        logWarn(sign.getTbCode(), docId, "tbCode");
+        logWarn(sign.getUserAgent(), docId, "userAgent");
         if (sign.getDevicePrint() == null && sign.getMobSdkData() == null) {
-            logWarn(sign.getDevicePrint(), "devicePrint or mobSdkData");
+            logWarn(sign.getDevicePrint(), docId, "devicePrint or mobSdkData");
         }
-        validateRequiredParam(sign.getUserGuid(), "userGuid");
+        logWarn(sign.getUserGuid(), docId, "userGuid");
         validateRequiredParam(sign.getChannelIndicator(), "channelIndicator");
         validateRequiredParam(sign.getClientDefinedChannelIndicator(), "clientDefinedChannelIndicator");
         checkChannelIndicators(sign.getChannelIndicator(), sign.getClientDefinedChannelIndicator());
@@ -93,37 +125,25 @@ public final class PaymentModelValidator extends ModelValidator {
         }
     }
 
-    private static void validateFirstSign(PaymentSign sign) {
-        validateRequiredParam(sign.getSignCryptoprofile(), "firstSignCryptoprofile");
-        validateSignWithRequiredParams(sign, "firstSign");
-    }
-
-    private static void validateSenderSign(PaymentSign sign) {
-        validateSignWithRequiredParams(sign, "senderSign");
-    }
-
-    private static void validateSignWithRequiredParams(PaymentSign sign, String signName) {
+    private static void validateSignWithRequiredParams(PaymentSign sign, String signName, UUID docId) {
         validateRequiredParam(sign.getSignTime(), signName + "Time");
-        validateRequiredParam(sign.getSignLogin(), signName + "Login");
-        validateRequiredParam(sign.getSignChannel(), signName + "Channel");
-        validateRequiredParam(sign.getSignPhone(), signName + "Phone");
-        validateSign(sign, signName);
+        validateSign(sign, signName, docId);
     }
 
-    private static void validateSign(PaymentSign sign, String signName) {
-        logWarnSign(sign.getSignTime(), signName, "Time");
-        logWarnSign(sign.getIpAddress(), signName, "Ip");
-        logWarnSign(sign.getSignLogin(), signName, "Login");
-        logWarnSign(sign.getSignCryptoprofile(), signName, "Cryptoprofile");
-        logWarnSign(sign.getSignCryptoprofileType(), signName, "CryptoprofileType");
-        logWarnSign(sign.getChannelIndicator(), signName, "Channel");
-        logWarnSign(sign.getSignToken(), signName, "Token");
-        logWarnSign(sign.getSignType(), signName, "Type");
-        logWarnSign(sign.getSignImsi(), signName, "Imsi");
-        logWarnSign(sign.getSignCertId(), signName, "CertId");
-        logWarnSign(sign.getSignPhone(), signName, "Phone");
-        logWarnSign(sign.getSignEmail(), signName, "Email");
-        logWarnSign(sign.getSignSource(), signName, "Source");
+    private static void validateSign(PaymentSign sign, String signName, UUID docId) {
+        logWarnSign(sign.getSignTime(), docId, signName, "Time");
+        logWarnSign(sign.getIpAddress(), docId, signName, "Ip");
+        logWarnSign(sign.getSignLogin(), docId, signName, "Login");
+        logWarnSign(sign.getSignCryptoprofile(), docId, signName, "Cryptoprofile");
+        logWarnSign(sign.getSignCryptoprofileType(), docId, signName, "CryptoprofileType");
+        logWarnSign(sign.getChannelIndicator(), docId, signName, "Channel");
+        logWarnSign(sign.getSignToken(), docId, signName, "Token");
+        logWarnSign(sign.getSignType(), docId, signName, "Type");
+        logWarnSign(sign.getSignImsi(), docId, signName, "Imsi");
+        logWarnSign(sign.getSignCertId(), docId, signName, "CertId");
+        logWarnSign(sign.getSignPhone(), docId, signName, "Phone");
+        logWarnSign(sign.getSignEmail(), docId, signName, "Email");
+        logWarnSign(sign.getSignSource(), docId, signName, "Source");
     }
 
 }

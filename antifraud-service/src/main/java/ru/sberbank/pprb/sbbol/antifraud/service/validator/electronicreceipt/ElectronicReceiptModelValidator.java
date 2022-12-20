@@ -12,21 +12,21 @@ public class ElectronicReceiptModelValidator extends ModelValidator {
     }
 
     public static void validate(ElectronicReceiptOperation operation) {
-        logWarn(operation.getDigitalId(), "digitalId");
-        logWarn(operation.getPrivateIpAddress(), "privateIpAddress");
-        logWarn(operation.getDocument().getReceiver().getMiddleName(), "document.receiver.middleName");
-        logWarn(operation.getDocument().getReceiver().getDulCodeIssue(), "document.receiver.dulCodeIssue");
-        logWarn(operation.getDeviceRequest().getHttpAccept(), "deviceRequest.httpAccept");
-        logWarn(operation.getDeviceRequest().getHttpReferer(), "deviceRequest.httpReferer");
-        logWarn(operation.getDeviceRequest().getHttpAcceptChars(), "deviceRequest.httpAcceptChars");
-        logWarn(operation.getDeviceRequest().getHttpAcceptEncoding(),"deviceRequest.httpAcceptEncoding");
-        logWarn(operation.getDeviceRequest().getHttpAcceptLanguage(), "deviceRequest.httpAcceptLanguage");
-        logWarn(operation.getSign().getSignCryptoprofile(), "sign.signCryptoprofile");
-        logWarn(operation.getSign().getSignEmail(), "sign.signEmail");
-        logWarn(operation.getSign().getSignToken(), "sign.signToken");
-        logWarn(operation.getSign().getSignCertId(), "sign.signCertId");
-        logWarn(operation.getSign().getSignImsi(), "sign.signImsi");
-        logWarn(operation.getSign().getSignPhone(), "sign.signPhone");
+        logWarn(operation.getDigitalId(), operation.getDocId(), "digitalId");
+        logWarn(operation.getPrivateIpAddress(), operation.getDocId(), "privateIpAddress");
+        logWarn(operation.getDocument().getReceiver().getMiddleName(), operation.getDocId(), "document.receiver.middleName");
+        logWarn(operation.getDocument().getReceiver().getDulCodeIssue(), operation.getDocId(), "document.receiver.dulCodeIssue");
+        logWarn(operation.getDeviceRequest().getHttpAccept(), operation.getDocId(), "deviceRequest.httpAccept");
+        logWarn(operation.getDeviceRequest().getHttpReferer(), operation.getDocId(), "deviceRequest.httpReferer");
+        logWarn(operation.getDeviceRequest().getHttpAcceptChars(), operation.getDocId(), "deviceRequest.httpAcceptChars");
+        logWarn(operation.getDeviceRequest().getHttpAcceptEncoding(),operation.getDocId(), "deviceRequest.httpAcceptEncoding");
+        logWarn(operation.getDeviceRequest().getHttpAcceptLanguage(), operation.getDocId(), "deviceRequest.httpAcceptLanguage");
+        logWarn(operation.getSign().getSignCryptoprofile(), operation.getDocId(), "sign.signCryptoprofile");
+        logWarn(operation.getSign().getSignEmail(), operation.getDocId(), "sign.signEmail");
+        logWarn(operation.getSign().getSignToken(), operation.getDocId(), "sign.signToken");
+        logWarn(operation.getSign().getSignCertId(), operation.getDocId(), "sign.signCertId");
+        logWarn(operation.getSign().getSignImsi(), operation.getDocId(), "sign.signImsi");
+        logWarn(operation.getSign().getSignPhone(), operation.getDocId(), "sign.signPhone");
     }
 
 }

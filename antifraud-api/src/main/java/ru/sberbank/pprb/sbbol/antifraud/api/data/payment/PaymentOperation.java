@@ -22,6 +22,7 @@ public class PaymentOperation implements Operation {
     /**
      * Дата и время формирования события
      */
+    @NotNull(message = "TimeStamp attribute cannot be null")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime timeStamp;
@@ -29,7 +30,6 @@ public class PaymentOperation implements Operation {
     /**
      * Уникальный идентификатор клиента
      */
-    @NotBlank(message = "The orgGuid attribute must be filled")
     private String orgGuid;
 
     /**
@@ -40,6 +40,7 @@ public class PaymentOperation implements Operation {
     /**
      * Время создания запроса
      */
+    @NotNull(message = "TimeOfOccurrence attribute cannot be null")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime timeOfOccurrence;
