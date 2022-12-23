@@ -29,10 +29,14 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.IdentificationData;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.RiskResult;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.TriggeredRule;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentDocument;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -87,6 +91,33 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
                 () -> assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime(), actual.getWaitingTime(),"Время (в часах) в течение которого СББОЛ ожидает ответ от АС ФМ не совпадает")
         );
         });
+    }
+
+    @Test
+    void sendRequestWithMinFields() throws Throwable {
+        PaymentOperation paymentOperation = new PaymentOperation();
+        paymentOperation.setTimeStamp(LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+        paymentOperation.setDocument(new PaymentDocument());
+        paymentOperation.getDocument().setId(UUID.randomUUID());
+        saveOrUpdate(paymentOperation);
+
+        FullAnalyzeResponse expected = createAnalyzeResponse();
+        mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(objectMapper.writeValueAsString(expected)));
+
+        AnalyzeResponse actual = send(new SendToAnalyzeRequest(paymentOperation.getDocId()));
+        deletePaymentByDocId(paymentOperation.getDocId());
+        mockServer.verify();
+        assertAll(
+                () -> assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId(),"Идентификатор транзакции не совпадает"),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode(),"Рекомендуемое действие не совпадает"),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getComment(), actual.getComment(),"Короткий комментарий по сработавшему правилу, передаваемый в СББОЛ, не совпадает"),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment(), actual.getDetailledComment(),"Расширенный комментарий по сработавшему правилу, передаваемый в СББОЛ, не совпадает"),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime(), actual.getWaitingTime(),"Время (в часах) в течение которого СББОЛ ожидает ответ от АС ФМ не совпадает")
+        );
     }
 
     @Test

@@ -7,8 +7,6 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.Operation;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,7 +38,6 @@ public class PaymentOperation implements Operation {
     /**
      * Время создания запроса
      */
-    @NotNull(message = "TimeOfOccurrence attribute cannot be null")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime timeOfOccurrence;
@@ -55,8 +52,7 @@ public class PaymentOperation implements Operation {
     /**
      * Список данных по подписям в виде json-строк
      */
-    @NotEmpty(message = "The signs attribute must be filled")
-    private List<@NotBlank(message = "Sign attribute cannot be null or blank") String> signs;
+    private List<String> signs;
 
     /**
      * Список данных по подписям, приведенных к модели подписи

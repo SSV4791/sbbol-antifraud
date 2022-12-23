@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 @Mapper(componentModel = "spring", imports = DboOperation.class)
@@ -524,7 +525,8 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
     @Mapping(source = "timeOfOccurrence", target = "eventDataList.eventDataHeader.timeOfOccurrence")
     @Mapping(target = "eventDataList.eventDataHeader.eventType", expression = "java(DboOperation.PAYMENT_DT_0401060.getEventType())")
     @Mapping(target = "eventDataList.eventDataHeader.eventDescription", expression = "java(DboOperation.PAYMENT_DT_0401060.getEventDescription())")
-    @Mapping(target = "eventDataList.eventDataHeader.clientDefinedEventType", expression = "java(DboOperation.PAYMENT_DT_0401060.getClientDefinedEventType(payment.getChannelIndicator(), payment.getClientDefinedChannelIndicator()))")
+    @Mapping(target = "eventDataList.eventDataHeader.clientDefinedEventType", expression =
+            "java(payment.getChannelIndicator() != null && payment.getClientDefinedChannelIndicator() != null ? DboOperation.PAYMENT_DT_0401060.getClientDefinedEventType(payment.getChannelIndicator(), payment.getClientDefinedChannelIndicator()) : null)")
     @Mapping(source = "amount", target = "eventDataList.transactionData.amount.sum")
     @Mapping(target = "eventDataList.transactionData.amount.currency", expression = "java(payment.getCurrency() == null ? \"RUB\" : payment.getCurrency())")
     @Mapping(source = "executionSpeed", target = "eventDataList.transactionData.executionSpeed")
@@ -546,10 +548,12 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
     // Требование ФП ИС прибавлять 3 часа для приведения времени к МСК. По согласованию данные атрибуты приходят в 0 тайм зоне
     @AfterMapping
     protected void add3HoursToTime(@MappingTarget AnalyzeRequest analyzeRequest) {
-        LocalDateTime timeStamp = analyzeRequest.getMessageHeader().getTimeStamp().plusHours(3);
-        LocalDateTime timeOfOccurrence = analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence().plusHours(3);
-        analyzeRequest.getMessageHeader().setTimeStamp(timeStamp);
-        analyzeRequest.getEventDataList().getEventDataHeader().setTimeOfOccurrence(timeOfOccurrence);
+        if (Objects.nonNull(analyzeRequest.getMessageHeader().getTimeStamp())) {
+            analyzeRequest.getMessageHeader().setTimeStamp(analyzeRequest.getMessageHeader().getTimeStamp().plusHours(3));
+        }
+        if (Objects.nonNull(analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence())) {
+            analyzeRequest.getEventDataList().getEventDataHeader().setTimeOfOccurrence(analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence().plusHours(3));
+        }
         analyzeRequest.getEventDataList().getClientDefinedAttributeList().getFact().stream()
                 .filter(attribute -> attribute.getName().equals(DESCRIPTION_MAP.get(FIRST_SIGN_TIME)) ||
                         attribute.getName().equals(DESCRIPTION_MAP.get(SECOND_SIGN_TIME)) ||

@@ -22,6 +22,10 @@ public abstract class ModelValidator {
         }
     }
 
+    protected static void logWarn(String message, UUID docId) {
+        logger.warn("DocId={}. {}", docId, message);
+    }
+
     protected static void logWarnSign(Object param, UUID docId, String signName, String paramName) {
         if (param == null) {
             logger.warn(SIGN_MESSAGE, docId, signName, paramName);
@@ -36,6 +40,7 @@ public abstract class ModelValidator {
 
     protected static String signNameSwitcher(int i) {
         return switch (i) {
+            case (0) -> "firstSign";
             case (1) -> "secondSign";
             case (2) -> "thirdSign";
             default -> null;
