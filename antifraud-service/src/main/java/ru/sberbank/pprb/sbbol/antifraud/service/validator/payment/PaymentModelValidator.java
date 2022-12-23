@@ -1,5 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.validator.payment;
 
+import org.springframework.util.CollectionUtils;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentDocument;
@@ -7,10 +8,10 @@ import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentPayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentReceiver;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentSign;
-import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.service.validator.ModelValidator;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator.BRANCH;
@@ -39,9 +40,14 @@ public final class PaymentModelValidator extends ModelValidator {
      */
     public static void validate(PaymentOperation payment) {
         logWarn(payment.getOrgGuid(), payment.getDocId(), "orgGuid");
+        logWarn(payment.getTimeOfOccurrence(), payment.getDocId(), "timeOfOccurrence");
         logWarn(payment.getDigitalId(), payment.getDocId(), "digitalId");
         validateDocument(payment.getDocument(), payment.getDocId());
-        validateSigns(payment.getMappedSigns(), payment.getDocId());
+        if (CollectionUtils.isEmpty(payment.getSigns())) {
+            logWarn(null, payment.getDocId(), "signs");
+        } else {
+            validateSigns(payment.getMappedSigns(), payment.getDocId());
+        }
     }
 
     private static void validateDocument(PaymentDocument document, UUID docId) {
@@ -54,40 +60,35 @@ public final class PaymentModelValidator extends ModelValidator {
         logWarn(document.getOtherAccBankType(), docId, "document.otherAccBankType");
         logWarn(document.getOtherAccOwnershipType(), docId, "document.otherAccOwnershipType");
         logWarn(document.getTransferMediumType(), docId, "document.transferMediumType");
+        logWarn(document.getPayer(), docId, "document.payer");
         validatePayer(document.getPayer(), docId);
+        logWarn(document.getReceiver(), docId, "document.receiver");
         validateReceiver(document.getReceiver(), docId);
     }
 
     private static void validatePayer(PaymentPayer payer, UUID docId) {
-        logWarn(payer.getAccountNumber(), docId, "document.payer.accountNumber");
-        logWarn(payer.getInn(), docId, "document.payer.inn");
+        if (Objects.nonNull(payer)) {
+            logWarn(payer.getAccountNumber(), docId, "document.payer.accountNumber");
+            logWarn(payer.getInn(), docId, "document.payer.inn");
+        }
     }
 
     private static void validateReceiver(PaymentReceiver receiver, UUID docId) {
-        logWarn(receiver.getOtherAccName(), docId, "document.receiver.otherAccName");
-        logWarn(receiver.getOtherBicCode(), docId, "document.receiver.otherBicCode");
-        logWarn(receiver.getInn(), docId, "document.receiver.inn");
-        logWarn(receiver.getBalAccNumber(), docId, "document.receiver.balAccNumber");
-        logWarn(receiver.getOtherAccType(), docId, "document.receiver.otherAccType");
+        if (Objects.nonNull(receiver)) {
+            logWarn(receiver.getOtherAccName(), docId, "document.receiver.otherAccName");
+            logWarn(receiver.getOtherBicCode(), docId, "document.receiver.otherBicCode");
+            logWarn(receiver.getInn(), docId, "document.receiver.inn");
+            logWarn(receiver.getBalAccNumber(), docId, "document.receiver.balAccNumber");
+            logWarn(receiver.getOtherAccType(), docId, "document.receiver.otherAccType");
+        }
     }
 
     private static void validateSigns(List<PaymentSign> signs, UUID docId) {
-        validateFirstSign(signs.get(0), docId);
-        if (signs.size() > 1) {
-            validateSenderSign(signs.get(signs.size() - 1), docId);
-        }
-        for (int i = 1; i < signs.size() - 1; i++) {
+        validateFirstSignUserData(signs.get(0), docId);
+        for (int i = 0; i < signs.size() - 1; i++) {
             validateSign(signs.get(i), signNameSwitcher(i), docId);
         }
-    }
-
-    private static void validateFirstSign(PaymentSign sign, UUID docId) {
-        validateFirstSignUserData(sign, docId);
-        validateSignWithRequiredParams(sign, "firstSign", docId);
-    }
-
-    private static void validateSenderSign(PaymentSign sign, UUID docId) {
-        validateSignWithRequiredParams(sign, "senderSign", docId);
+        validateSign(signs.get(signs.size() - 1), "senderSign", docId);
     }
 
     private static void validateFirstSignUserData(PaymentSign sign, UUID docId) {
@@ -104,30 +105,27 @@ public final class PaymentModelValidator extends ModelValidator {
             logWarn(sign.getDevicePrint(), docId, "devicePrint or mobSdkData");
         }
         logWarn(sign.getUserGuid(), docId, "userGuid");
-        validateRequiredParam(sign.getChannelIndicator(), "channelIndicator");
-        validateRequiredParam(sign.getClientDefinedChannelIndicator(), "clientDefinedChannelIndicator");
-        checkChannelIndicators(sign.getChannelIndicator(), sign.getClientDefinedChannelIndicator());
+        logWarn(sign.getChannelIndicator(), docId, "channelIndicator");
+        logWarn(sign.getClientDefinedChannelIndicator(), docId, "clientDefinedChannelIndicator");
+        if (sign.getChannelIndicator() != null && sign.getClientDefinedChannelIndicator() != null) {
+            checkChannelIndicators(sign.getChannelIndicator(), sign.getClientDefinedChannelIndicator(), docId);
+        }
     }
     
-    private static void checkChannelIndicators(ChannelIndicator channelIndicator, ClientDefinedChannelIndicator clientDefinedChannelIndicator) {
+    private static void checkChannelIndicators(ChannelIndicator channelIndicator, ClientDefinedChannelIndicator clientDefinedChannelIndicator, UUID docId) {
         if (WEB == channelIndicator && PPRB_BROWSER != clientDefinedChannelIndicator) {
-            throw new ModelArgumentException("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channelIndicator=" + channelIndicator);
+            logWarn("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channelIndicator=" + channelIndicator, docId);
         }
         if (MOBILE == channelIndicator && PPRB_MOBSBBOL != clientDefinedChannelIndicator) {
-            throw new ModelArgumentException("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channelIndicator=" + channelIndicator);
+            logWarn("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channelIndicator=" + channelIndicator, docId);
         }
         if (BRANCH == channelIndicator && PPRB_OFFICE != clientDefinedChannelIndicator) {
-            throw new ModelArgumentException("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channelIndicator=" + channelIndicator);
+            logWarn("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channelIndicator=" + channelIndicator, docId);
         }
         if (OTHER == channelIndicator && PPRB_UPG_1C != clientDefinedChannelIndicator &&
                 PPRB_UPG_SBB != clientDefinedChannelIndicator && PPRB_UPG_CORP != clientDefinedChannelIndicator) {
-            throw new ModelArgumentException("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channelIndicator=" + channelIndicator);
+            logWarn("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channelIndicator=" + channelIndicator, docId);
         }
-    }
-
-    private static void validateSignWithRequiredParams(PaymentSign sign, String signName, UUID docId) {
-        validateRequiredParam(sign.getSignTime(), signName + "Time");
-        validateSign(sign, signName, docId);
     }
 
     private static void validateSign(PaymentSign sign, String signName, UUID docId) {

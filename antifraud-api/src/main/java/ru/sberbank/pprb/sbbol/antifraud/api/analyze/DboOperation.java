@@ -16,14 +16,14 @@ public enum DboOperation {
                     case PPRB_UPG_1C -> ClientDefinedEventType.UPG_1C_PAYDOCRU;
                     case PPRB_UPG_SBB -> ClientDefinedEventType.UPG_SBB_PAYDOCRU;
                     case PPRB_UPG_CORP -> ClientDefinedEventType.UPG_CORP_PAYDOCRU;
-                    default -> throw new IllegalArgumentException("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channel indicator " + channelIndicator);
+                    default -> null;
                 };
             } else {
                 return switch (channelIndicator) {
                     case WEB -> ClientDefinedEventType.BROWSER_PAYDOCRU;
                     case MOBILE -> ClientDefinedEventType.MOBSBBOL_PAYDOCRU;
                     case BRANCH -> ClientDefinedEventType.BRANCH_PAYDOCRU;
-                    default -> throw new IllegalArgumentException("Illegal channelIndicator=" + channelIndicator);
+                    default -> null;
                 };
             }
         }

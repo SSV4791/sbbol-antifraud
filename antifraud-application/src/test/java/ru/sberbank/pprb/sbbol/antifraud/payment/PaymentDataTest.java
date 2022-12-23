@@ -13,6 +13,8 @@ import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.payment.Payment;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.payment.PaymentSignMapper;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Random;
 import java.util.UUID;
 
@@ -354,19 +356,6 @@ class PaymentDataTest extends PaymentIntegrationTest {
     }
 
     @Test
-    @AllureId("19641")
-    @DisplayName("Валидация модели РПП на наличие обязательного атрибута signs")
-    void validateModelRequiredParamEmptySigns() {
-        PaymentOperation operation = step("Создание документа", this::createRandomPayment);
-        step("Подписание пустой подписью", () -> operation.setSigns(null));
-        step("Проверка сообщения об ошибке", () -> {
-            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-            String exceptionMessage = ex.getMessage();
-            Assertions.assertTrue(exceptionMessage.contains("signs"), "Should contain signs in message. Message: " + exceptionMessage);
-        });
-    }
-
-    @Test
     @AllureId("19954")
     @DisplayName("Сохранение РПП с минимальным набором атрибутов подписей")
     void createDataOnlyWithRequiredSignParams() throws Throwable {
@@ -408,94 +397,6 @@ class PaymentDataTest extends PaymentIntegrationTest {
     }
 
     @Test
-    void illegalClientDefinedChannelIndicatorForWebTest() {
-        String sign = "{" +
-                "\"ipAddress\": \"78.245.9.87\", " +
-                "\"tbCode\": \"546738\", " +
-                "\"channelIndicator\": \"WEB\", " +
-                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
-                "\"signTime\": \"2020-03-23T15:01:15\", " +
-                "\"signLogin\": \"novikova01\", " +
-                "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
-                "\"signPhone\": \"915 168-67-32\", " +
-                "\"signChannel\": \"TOKEN\", " +
-                "\"clientDefinedChannelIndicator\": \"PPRB_MOBSBBOL\"" +
-                "}";
-        PaymentOperation paymentOperation = createRandomPayment();
-        paymentOperation.getSigns().add(0, sign);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(paymentOperation));
-        String exceptionMessage = ex.getMessage();
-        Assertions.assertTrue(exceptionMessage.contains("channelIndicator=WEB"));
-        Assertions.assertTrue(exceptionMessage.contains("clientDefinedChannelIndicator=PPRB_MOBSBBOL"));
-    }
-
-    @Test
-    void illegalClientDefinedChannelIndicatorForMobileTest() {
-        String sign = "{" +
-                "\"ipAddress\": \"78.245.9.87\", " +
-                "\"tbCode\": \"546738\", " +
-                "\"channelIndicator\": \"MOBILE\", " +
-                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
-                "\"signTime\": \"2020-03-23T15:01:15\", " +
-                "\"signLogin\": \"novikova01\", " +
-                "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
-                "\"signPhone\": \"915 168-67-32\", " +
-                "\"signChannel\": \"TOKEN\", " +
-                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
-                "}";
-        PaymentOperation paymentOperation = createRandomPayment();
-        paymentOperation.getSigns().add(0, sign);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(paymentOperation));
-        String exceptionMessage = ex.getMessage();
-        Assertions.assertTrue(exceptionMessage.contains("channelIndicator=MOBILE"));
-        Assertions.assertTrue(exceptionMessage.contains("clientDefinedChannelIndicator=PPRB_BROWSER"));
-    }
-
-    @Test
-    void illegalClientDefinedChannelIndicatorForBranchTest() {
-        String sign = "{" +
-                "\"ipAddress\": \"78.245.9.87\", " +
-                "\"tbCode\": \"546738\", " +
-                "\"channelIndicator\": \"BRANCH\", " +
-                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
-                "\"signTime\": \"2020-03-23T15:01:15\", " +
-                "\"signLogin\": \"novikova01\", " +
-                "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
-                "\"signPhone\": \"915 168-67-32\", " +
-                "\"signChannel\": \"TOKEN\", " +
-                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
-                "}";
-        PaymentOperation paymentOperation = createRandomPayment();
-        paymentOperation.getSigns().add(0, sign);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(paymentOperation));
-        String exceptionMessage = ex.getMessage();
-        Assertions.assertTrue(exceptionMessage.contains("channelIndicator=BRANCH"));
-        Assertions.assertTrue(exceptionMessage.contains("clientDefinedChannelIndicator=PPRB_BROWSER"));
-    }
-
-    @Test
-    void illegalClientDefinedChannelIndicatorForOtherTest() {
-        String sign = "{" +
-                "\"ipAddress\": \"78.245.9.87\", " +
-                "\"tbCode\": \"546738\", " +
-                "\"channelIndicator\": \"OTHER\", " +
-                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
-                "\"signTime\": \"2020-03-23T15:01:15\", " +
-                "\"signLogin\": \"novikova01\", " +
-                "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
-                "\"signPhone\": \"915 168-67-32\", " +
-                "\"signChannel\": \"TOKEN\", " +
-                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
-                "}";
-        PaymentOperation paymentOperation = createRandomPayment();
-        paymentOperation.getSigns().add(0, sign);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(paymentOperation));
-        String exceptionMessage = ex.getMessage();
-        Assertions.assertTrue(exceptionMessage.contains("channelIndicator=OTHER"));
-        Assertions.assertTrue(exceptionMessage.contains("clientDefinedChannelIndicator=PPRB_BROWSER"));
-    }
-
-    @Test
     void disableFailOnUnknownPropertiesSignTest() throws Throwable {
         String sign = "{" +
                 "\"ipAddress\": \"78.245.9.87\", " +
@@ -522,31 +423,19 @@ class PaymentDataTest extends PaymentIntegrationTest {
     @AllureId("25619")
     void savePaymentWithMinimumFields() {
         PaymentOperation dto = step("Подготовка тестовых данных", () -> {
-            UUID docId = UUID.randomUUID();
-            Integer docNumber = Math.abs(new Random().nextInt());
-            return PaymentBuilder.getInstance()
-                    .withDocId(docId)
-                    .withDocNumber(docNumber)
-                    .build();
+            PaymentOperation paymentOperation = new PaymentOperation();
+            paymentOperation.setTimeStamp(LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+            paymentOperation.setDocument(new PaymentDocument());
+            paymentOperation.getDocument().setId(UUID.randomUUID());
+            return paymentOperation;
         });
-        RequestId requestId = step("Сохраняем документ", () -> {
-            dto.setDigitalId(null);
-            dto.getDocument().getReceiver().setInn(null);
-            return saveOrUpdate(dto);
-        });
-        step("Подписываем документ", () -> {
-            dto.setMappedSigns(PaymentSignMapper.convertSigns(dto.getSigns()));
-            assertNotNull(requestId);
-        });
+        RequestId requestId = step("Сохраняем документ", () -> saveOrUpdate(dto));
         Payment entity = step("Получаем документ", () -> searchPayment(dto.getDocument().getId()));
         step("Проверяем документ и подпись", () ->
                 assertAll(
-                        () -> assertOperation(dto, requestId.getId(), entity),
-                        () -> assertDoc(dto.getDocument(), entity),
-                        () -> assertFirstSign(dto.getMappedSigns().get(0), entity),
-                        () -> assertSecondSign(dto.getMappedSigns().get(1), entity),
-                        () -> assertThirdSign(dto.getMappedSigns().get(2), entity),
-                        () -> assertSenderSign(dto.getMappedSigns().get(3), entity)
+                        () -> assertEquals(dto.getTimeStamp(), entity.getEventTime()),
+                        () -> assertEquals(dto.getDocument().getId().toString(), entity.getDocId()),
+                        () -> assertEquals(requestId.getId(), entity.getRequestId())
                 ));
     }
 

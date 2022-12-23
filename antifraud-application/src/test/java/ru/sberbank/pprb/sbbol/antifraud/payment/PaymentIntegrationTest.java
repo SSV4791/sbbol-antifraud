@@ -68,4 +68,9 @@ public abstract class PaymentIntegrationTest extends AbstractIntegrationTest {
         return searchResult.isEmpty() ? null : searchResult.get();
     }
 
+    protected void deletePaymentByDocId(UUID docId) {
+        Optional<Payment> payment = repository.findFirstByDocId(docId.toString());
+        payment.ifPresent(value -> repository.delete(value));
+    }
+
 }
