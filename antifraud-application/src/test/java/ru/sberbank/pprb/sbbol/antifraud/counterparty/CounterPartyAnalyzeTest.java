@@ -3,8 +3,10 @@ package ru.sberbank.pprb.sbbol.antifraud.counterparty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.googlecode.jsonrpc4j.spring.rest.JsonRpcRestClientWithReporting;
+import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -85,6 +87,8 @@ class CounterPartyAnalyzeTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @AllureId("55377")
+    @DisplayName("Отправка партнеров на анализ (успешный овет)")
     void analyzeTest() throws Throwable {
         FullAnalyzeResponse fullAnalyzeResponse = factory.populatePojo(new FullAnalyzeResponse());
         mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
@@ -107,6 +111,8 @@ class CounterPartyAnalyzeTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @AllureId("55380")
+    @DisplayName("Отправка партнеров на анализ (ответ с ошибкой)")
     void analysisErrorTest() throws JsonProcessingException {
         mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
                 .andExpect(method(HttpMethod.POST))
@@ -125,6 +131,8 @@ class CounterPartyAnalyzeTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @AllureId("55382")
+    @DisplayName("Валидация модели партнеров Основные аттрибуты")
     void validateModel1stLevelTest() {
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> analyze(new CounterPartySendToAnalyzeRq()));
         String message = ex.getMessage();
@@ -141,6 +149,8 @@ class CounterPartyAnalyzeTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @AllureId("55381")
+    @DisplayName("Валидация модели партнеров clientDefinedAttributeList")
     void validateModel2ndLevelTest() {
         CounterPartySendToAnalyzeRq request = new CounterPartySendToAnalyzeRq();
         request.setMessageHeader(new CounterPartyMessageHeader(null, null));
@@ -181,6 +191,8 @@ class CounterPartyAnalyzeTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @AllureId("55379")
+    @DisplayName("Валидация модели партнеров BROWSER_APPROVAL")
     void validateModelBrowserApprovalTest() {
         String[] excludedFields = {
                 "firstSignTime", "firstSignIpAddress", "firstSignLogin", "firstSignCryptoprofile",
@@ -213,6 +225,8 @@ class CounterPartyAnalyzeTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @AllureId("55378")
+    @DisplayName("Валидация модели партнеров BROWSER_REMOVE_PAYEE")
     void validateModelBrowserRemovePayeeTest() {
         String[] excludedFields = {
                 "senderIpAddress", "senderLogin", "senderPhone", "senderEmail", "senderSource"
