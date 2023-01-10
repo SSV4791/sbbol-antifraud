@@ -179,8 +179,6 @@ class CounterPartyAnalyzeTest extends AbstractIntegrationTest {
                 () -> assertTrue(message.contains("clientDefinedAttributeList.receiverName")),
                 () -> assertTrue(message.contains("clientDefinedAttributeList.counterpartyId")),
                 () -> assertTrue(message.contains("clientDefinedAttributeList.payerInn")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.receiverBicSwift")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.receiverAccount")),
                 () -> assertTrue(message.contains("clientDefinedAttributeList.osbNumber")),
                 () -> assertTrue(message.contains("clientDefinedAttributeList.vspNumber")),
                 () -> assertTrue(message.contains("clientDefinedAttributeList.dboOperationName")),
@@ -197,7 +195,7 @@ class CounterPartyAnalyzeTest extends AbstractIntegrationTest {
         String[] excludedFields = {
                 "firstSignTime", "firstSignIpAddress", "firstSignLogin", "firstSignCryptoprofile",
                 "firstSignCryptoprofileType", "firstSignChannel", "firstSignType", "firstSignPhone",
-                "firstSignEmail", "firstSignSource"
+                "firstSignEmail", "firstSignSource", "receiverBicSwift"
         };
         addExcludedFields(CounterPartyClientDefinedAttributes.class, excludedFields);
         addExcludedFields(CounterPartyDeviceRequest.class, "devicePrint", "mobSdkData");
@@ -217,6 +215,7 @@ class CounterPartyAnalyzeTest extends AbstractIntegrationTest {
                 () -> assertTrue(message.contains("clientDefinedAttributeList.firstSignPhone")),
                 () -> assertTrue(message.contains("clientDefinedAttributeList.firstSignEmail")),
                 () -> assertTrue(message.contains("clientDefinedAttributeList.firstSignSource")),
+                () -> assertTrue(message.contains("clientDefinedAttributeList.receiverBicSwift")),
                 () -> assertTrue(message.contains("deviceRequest.devicePrint")),
                 () -> assertTrue(message.contains("deviceRequest.mobSdkData"))
         );

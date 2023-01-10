@@ -48,13 +48,11 @@ public class CounterPartyClientDefinedAttributes implements Serializable {
     /**
      * БИК SWIFT получателя
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.receiverBicSwift\" must be filled")
     private String receiverBicSwift;
 
     /**
      * Номер счета получателя
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.receiverAccount\" must be filled")
     private String receiverAccount;
 
     /**
