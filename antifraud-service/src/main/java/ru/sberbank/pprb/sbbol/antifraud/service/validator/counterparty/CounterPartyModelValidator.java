@@ -15,6 +15,14 @@ public final class CounterPartyModelValidator {
         if (StringUtils.isBlank(request.getDeviceRequest().getDevicePrint()) && StringUtils.isBlank(request.getDeviceRequest().getMobSdkData())) {
             stringBuilder.append("One of the attributes \"deviceRequest.devicePrint\" or \"deviceRequest.mobSdkData\" must be filled.\n");
         }
+        validateBrowserApproval(request, stringBuilder);
+        validateBrowserRemovePayee(request, stringBuilder);
+        if (!stringBuilder.isEmpty()) {
+            throw new ModelArgumentException("ClientTransactionId=" + request.getClientTransactionId() + ". " + stringBuilder);
+        }
+    }
+
+    private static void validateBrowserApproval(CounterPartySendToAnalyzeRq request, StringBuilder stringBuilder) {
         if (ClientDefinedEventType.BROWSER_APPROVAL == request.getEventData().getClientDefinedEventType()) {
             if (StringUtils.isBlank(request.getClientDefinedAttributeList().getReceiverBicSwift())) {
                 stringBuilder.append("The attribute \"clientDefinedAttributeList.receiverBicSwift\" must be filled");
@@ -50,6 +58,9 @@ public final class CounterPartyModelValidator {
                 stringBuilder.append("The attribute \"clientDefinedAttributeList.firstSignSource\" must be filled.\n");
             }
         }
+    }
+
+    private static void validateBrowserRemovePayee(CounterPartySendToAnalyzeRq request, StringBuilder stringBuilder) {
         if (ClientDefinedEventType.BROWSER_REMOVE_PAYEE == request.getEventData().getClientDefinedEventType()) {
             if (StringUtils.isBlank(request.getClientDefinedAttributeList().getSenderIpAddress())) {
                 stringBuilder.append("The attribute \"clientDefinedAttributeList.senderIpAddress\" must be filled.\n");
@@ -66,9 +77,6 @@ public final class CounterPartyModelValidator {
             if (StringUtils.isBlank(request.getClientDefinedAttributeList().getSenderSource())) {
                 stringBuilder.append("The attribute \"clientDefinedAttributeList.senderSource\" must be filled.\n");
             }
-        }
-        if (!stringBuilder.isEmpty()) {
-            throw new ModelArgumentException("ClientTransactionId=" + request.getClientTransactionId() + ". " + stringBuilder);
         }
     }
 
