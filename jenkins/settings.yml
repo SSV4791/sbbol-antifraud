@@ -49,7 +49,7 @@ pr_check:
         - 'gradle.properties'
         - 'settings.gradle.kts'
     cpu: 2
-    memory: '2g'
+    memory: '6g'
     command: >-
       ./gradlew
       -PtokenName=${env.TOKEN_NAME}
@@ -70,7 +70,7 @@ pr_check:
         - 'settings.gradle.kts'
         - 'jenkins/settings.yml'
     cpu: 2
-    memory: '2g'
+    memory: '6g'
     command: >-
       ./gradlew
       -PtokenName=${env.TOKEN_NAME}
@@ -106,7 +106,7 @@ release:
     repository: maven-distr
   build_gradle:
     cpu: 2
-    memory: '2g'
+    memory: '6g'
     command: >-
       ./gradlew
       -PtokenName=${env.TOKEN_NAME}

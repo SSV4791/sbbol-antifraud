@@ -16,6 +16,9 @@ public final class CounterPartyModelValidator {
             stringBuilder.append("One of the attributes \"deviceRequest.devicePrint\" or \"deviceRequest.mobSdkData\" must be filled.\n");
         }
         if (ClientDefinedEventType.BROWSER_APPROVAL == request.getEventData().getClientDefinedEventType()) {
+            if (StringUtils.isBlank(request.getClientDefinedAttributeList().getReceiverBicSwift())) {
+                stringBuilder.append("The attribute \"clientDefinedAttributeList.receiverBicSwift\" must be filled");
+            }
             if (request.getClientDefinedAttributeList().getFirstSignTime() == null) {
                 stringBuilder.append("The attribute \"clientDefinedAttributeList.firstSignTime\" must be filled.\n");
             }

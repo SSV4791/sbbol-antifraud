@@ -105,7 +105,7 @@ subprojects {
         }
     }
 
-    if (setOf("antifraud-api", "antifraud-rpc-api").contains(project.name) && !project.version.toString().startsWith("D-00.000.00_")) {
+    if (project.properties["publishApi"]!! == "true" && setOf("antifraud-api", "antifraud-rpc-api").contains(project.name)) {
         apply(plugin = "maven-publish")
         publishing {
             publications {
