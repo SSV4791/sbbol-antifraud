@@ -179,8 +179,6 @@ class CounterPartyAnalyzeTest extends AbstractIntegrationTest {
                 () -> assertTrue(message.contains("clientDefinedAttributeList.receiverName")),
                 () -> assertTrue(message.contains("clientDefinedAttributeList.counterpartyId")),
                 () -> assertTrue(message.contains("clientDefinedAttributeList.payerInn")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.osbNumber")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.vspNumber")),
                 () -> assertTrue(message.contains("clientDefinedAttributeList.dboOperationName")),
                 () -> assertTrue(message.contains("clientDefinedAttributeList.payerName")),
                 () -> assertTrue(message.contains("clientDefinedAttributeList.epkId")),

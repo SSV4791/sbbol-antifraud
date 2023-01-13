@@ -58,13 +58,11 @@ public class CounterPartyClientDefinedAttributes implements Serializable {
     /**
      * Номер ОСБ
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.osbNumber\" must be filled")
     private String osbNumber;
 
     /**
      * Номер ВСП
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.vspNumber\" must be filled")
     private String vspNumber;
 
     /**
