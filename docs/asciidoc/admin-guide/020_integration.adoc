@@ -25,7 +25,9 @@
 Потребители: ППРБ.Кассовые операции ЮЛ +
 ППРБ ЮЛ Digital B2B -> ППРБ ЮЛ История операций События антифрода -> ElectronicReceiptService -> analyzeOperation +
 Потребители: ППРБ.Партнеры +
-ППРБ ЮЛ Digital B2B -> ППРБ ЮЛ История операций События антифрода -> CounterPartyService -> analyzeOperation
+ППРБ ЮЛ Digital B2B -> ППРБ ЮЛ История операций События антифрода -> CounterPartyService -> analyzeOperation +
+Потребители: ППРБ.КММБ.Оформление кредита +
+ППРБ ЮЛ Digital B2B -> ППРБ ЮЛ История операций События антифрода -> CreditService -> analyzeOperation
 
 ===	Интеграции с платформенными сервисами
 

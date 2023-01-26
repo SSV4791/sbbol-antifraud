@@ -447,3 +447,159 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
 ----
 {"jsonrpc":"2.0","id":1,"result":{"transactionId":"c9ec0107588b433ea025fcf31443e88c","actionCode":"ALLOW"}}
 ----
+
+* Вызов ФП ИС для анализа события (заявка на кредит или банковская гарантия) +
+
+.credit_send.json
+[%collapsible]
+====
+[source,json]
+----
+{
+  "jsonrpc": "2.0",
+  "method": "analyzeOperation",
+  "id": 1,
+  "params": {
+    "analyzeparams": {
+      "messageHeader": {
+        "timeStamp": "2022-10-13T17:33:15.386",
+        "requestType": "ANALYZE"
+      },
+      "identificationData": {
+        "clientTransactionId": "5899acd3-dba7-41d4-83e4-ea17525d0d38",
+        "tbCode": "546738",
+        "userUcpId": "36ff1f5f-a0d2-4337-a4bd-1f620ac3462b",
+        "dboOperation": "CREDIT_REQ_MMB_PPRB",
+        "userLoginName": "user123"
+      },
+      "deviceRequest": {
+        "devicePrint": "version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20",
+        "mobSdkData": null,
+        "httpAccept": "text/javascript, text/html, application/xml, text/xml, */*",
+        "httpAcceptChars": "ISO-8859-1,utf-8;q=0.7,*;q=0.7",
+        "httpAcceptEncoding": "gzip, deflate",
+        "httpAcceptLanguage": "en,en-us;q=0.5",
+        "httpReferer": "http://localhost:8000/reference_application/Login.do",
+        "ipAddress": "127.0.0.1",
+        "userAgent": "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)"
+      },
+      "eventData": {
+        "eventType": "ANY_TYPE",
+        "eventDescription": "Счет доверенного контрагента",
+        "clientDefinedEventType": "BROWSER_REQUEST_GUARANTEE",
+        "timeOfOccurrence": "2022-10-13T17:33:15.386",
+        "transactionData": {
+          "amount": 5500000,
+          "currency": "RUB"
+        }
+      },
+      "clientDefinedAttributeList": {
+        "requestNumber": "requestNumber",
+        "createDate": "2022-10-13",
+        "applicantShortName": "applicantShortName",
+        "cardCurrency": "cardCurrency",
+        "applicantTaxNumber": "applicantTaxNumber",
+        "applicantKpp": "applicantKpp",
+        "applicantKppList": "applicantKppList",
+        "applicantOgrn": "applicantOgrn",
+        "applicantFullName": "applicantFullName",
+        "applicantFullNameInt": "applicantFullNameInt",
+        "applicantShortNameInt": "applicantShortNameInt",
+        "accountList": "accountList",
+        "productName": "productName",
+        "loanAmount": "loanAmount",
+        "guaranteeAmount": "guaranteeAmount",
+        "rate": "rate",
+        "creditDuration": "creditDuration",
+        "repaymentSchedule": "repaymentSchedule",
+        "contactPhone": "contactPhone",
+        "notificationPhone": "notificationPhone",
+        "cardChannel": "cardChannel",
+        "osbNumber": "osbNumber",
+        "vspNumber": "vspNumber",
+        "dboOperationName": "dboOperationName",
+        "clientName": "clientName",
+        "mainActivity": "mainActivity",
+        "clientCategory": "clientCategory",
+        "onlySignDateTime": "2022-10-13T17:33:15.386",
+        "onlySignIpAddress": "onlySignIpAddress",
+        "onlySignLogin": "onlySignLogin",
+        "onlySignCryptoprofile": "onlySignCryptoprofile",
+        "onlySignCryptoprofileType": "onlySignCryptoprofileType",
+        "onlySignChannel": "onlySignChannel",
+        "onlySignToken": "onlySignToken",
+        "onlySignType": "onlySignType",
+        "onlySignImsi": "onlySignImsi",
+        "onlySignCertId": "onlySignCertId",
+        "onlySignPhone": "onlySignPhone",
+        "onlySignEmail": "onlySignEmail",
+        "onlySignSource": "onlySignSource",
+        "privateIpAddress": "privateIpAddress",
+        "ucpId": "ucpId",
+        "ucpIdDirector": "ucpIdDirector",
+        "digitalId": "digitalId",
+        "sbbolGuid": "sbbolGuid",
+        "creationChannel": "creationChannel",
+        "cfleId": "cfleId",
+        "divisionCode": "divisionCode",
+        "creditPurpose": "creditPurpose",
+        "selectedParametersDescr": "selectedParametersDescr",
+        "gracePeriod": "gracePeriod",
+        "productPurposeSystemName": "productPurposeSystemName",
+        "productPurposeName": "productPurposeName",
+        "monthlyPayment": "monthlyPayment",
+        "borrowerUcpId": "borrowerUcpId",
+        "borrowerFio": "borrowerFio",
+        "borrowerNumberDul": "borrowerNumberDul",
+        "borrowerTypeDul": "borrowerTypeDul",
+        "borrowerBirthday": "borrowerBirthday",
+        "borrowerTaxNumber": "borrowerTaxNumber",
+        "flIeUcpId": "flIeUcpId",
+        "flIeFio": "flIeFio",
+        "flIeNumberDul": "flIeNumberDul",
+        "flIeIdTypeDul": "flIeIdTypeDul",
+        "flIeBirthday": "flIeBirthday",
+        "flIeTaxNumber": "flIeTaxNumber",
+        "digitalUserId": "digitalUserId",
+        "signMethod": "signMethod",
+        "auctionNumber": "auctionNumber",
+        "guaranteePurpose": "guaranteePurpose",
+        "guaranteeType": "guaranteeType",
+        "guaranteeForm": "guaranteeForm",
+        "guaranteeCodeForm": "guaranteeCodeForm",
+        "guaranteeDateStart": "guaranteeDateStart",
+        "guaranteeDateEnd": "guaranteeDateEnd",
+        "applicationsDateEnd": "applicationsDateEnd",
+        "lawType": "lawType",
+        "purchaseObjectName": "purchaseObjectName",
+        "supplierMethodDeterm": "supplierMethodDeterm",
+        "purchaseCode": "purchaseCode",
+        "isUnreliable": "isUnreliable",
+        "isArchived": "isArchived",
+        "isMultipleLots": "isMultipleLots",
+        "linkSiteGovProc": "linkSiteGovProc",
+        "customerContractNumber": "customerContractNumber",
+        "customerContractDate": "customerContractDate",
+        "customerTaxNumber": "customerTaxNumber",
+        "customerName": "customerName",
+        "customerOgrn": "customerOgrn",
+        "customerAddress": "customerAddress"
+      },
+      "channelIndicator": "WEB",
+      "clientDefinedChannelIndicator": "PPRB_BROWSER"
+    }
+  }
+}
+----
+====
+
+[source,bash]
+----
+curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/counterparty -d "@credit_send.json" -H "Content-Type: application/json" -X POST --cacert chain.pem --cert cert.pem --key cert.key
+----
+
+Пример ответа:
+[source,json]
+----
+{"jsonrpc":"2.0","id":1,"result":{"transactionId":"c9ec0107588b433ea025fcf31443e88c","actionCode":"ALLOW"}}
+----
