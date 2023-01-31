@@ -53,6 +53,26 @@ public enum ClientDefinedEventType {
     /**
      * Операция по счету контрагента (партнера), подлежащему удалению из справочника
      */
-    BROWSER_REMOVE_PAYEE
+    BROWSER_REMOVE_PAYEE,
+
+    /**
+     * Для продукта Кредит, channelIndicator="WEB"
+     */
+    BROWSER_REQUEST_CREDIT,
+
+    /**
+     * Для продукта Кредит, channelIndicator="MOBILE"
+     */
+    MOBSBBOL_REQUEST_CREDIT,
+
+    /**
+     * Для продукта Банковская гарантия, channelIndicator="WEB"
+     */
+    BROWSER_REQUEST_GUARANTEE,
+
+    /**
+     * Для продукта Банковская гарантия, channelIndicator="MOBILE"
+     */
+    MOBSBBOL_REQUEST_GUARANTEE
 
 }

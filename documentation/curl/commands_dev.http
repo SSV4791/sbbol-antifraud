@@ -48,3 +48,10 @@ POST https://ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta
 Content-Type: application/json-rpc
 
 < counterparty_send.json
+
+###
+
+POST https://ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru/antifraud/v2/credit
+Content-Type: application/json-rpc
+
+< credit_send.json
