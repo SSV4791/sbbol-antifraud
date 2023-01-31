@@ -20,7 +20,6 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedEventType;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.credit.CreditClientDefinedAttributes;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.credit.CreditEventData;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.credit.CreditIdentificationData;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.credit.CreditMessageHeader;
@@ -30,7 +29,6 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.common.AbstractIntegrationTest;
-import uk.co.jemos.podam.api.AbstractClassInfoStrategy;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
 
@@ -85,18 +83,6 @@ public class CreditAnalyzeTest extends AbstractIntegrationTest {
         return sendData(jsonRpcRestClient, request);
     }
 
-    private void addExcludedFields(Class<?> pojoClass, String... fieldNames) {
-        for (String fieldName : fieldNames) {
-            ((AbstractClassInfoStrategy) factory.getClassStrategy()).addExcludedField(pojoClass, fieldName);
-        }
-    }
-
-    private void removeExcludedFields(Class<?> pojoClass, String... fieldNames) {
-        for (String fieldName : fieldNames) {
-            ((AbstractClassInfoStrategy) factory.getClassStrategy()).removeExcludedField(pojoClass, fieldName);
-        }
-    }
-
     @Test
     @DisplayName("Отправка на анализ заявок на кредит или банковских гарантий (успешный овет)")
     void analyzeTest() throws Throwable {
@@ -146,10 +132,8 @@ public class CreditAnalyzeTest extends AbstractIntegrationTest {
         String message = ex.getMessage();
         assertAll(
                 () -> assertTrue(message.contains("ClientTransactionId")),
-                () -> assertTrue(message.contains("messageHeader")),
                 () -> assertTrue(message.contains("identificationData")),
                 () -> assertTrue(message.contains("eventData")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList")),
                 () -> assertTrue(message.contains("channelIndicator")),
                 () -> assertTrue(message.contains("clientDefinedChannelIndicator"))
         );
@@ -168,81 +152,12 @@ public class CreditAnalyzeTest extends AbstractIntegrationTest {
         String message = ex.getMessage();
         assertAll(
                 () -> assertTrue(message.contains("ClientTransactionId")),
-                () -> assertTrue(message.contains("messageHeader.requestType")),
                 () -> assertTrue(message.contains("identificationData.clientTransactionId")),
-                () -> assertTrue(message.contains("identificationData.tbCode")),
                 () -> assertTrue(message.contains("identificationData.userUcpId")),
                 () -> assertTrue(message.contains("identificationData.dboOperation")),
                 () -> assertTrue(message.contains("eventData.eventType")),
-                () -> assertTrue(message.contains("eventData.clientDefinedEventType")),
-                () -> assertTrue(message.contains("eventData.timeOfOccurrence")),
-                () -> assertTrue(message.contains("eventData.transactionData")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList"))
+                () -> assertTrue(message.contains("eventData.clientDefinedEventType"))
         );
-    }
-
-    @Test
-    @DisplayName("Валидация модели clientDefinedAttributeList заявки на кредит")
-    void validateClientDefinedAttributeListForCredit() {
-        CreditSendToAnalyzeRq request = factory.populatePojo(new CreditSendToAnalyzeRq());
-        request.setClientDefinedAttributeList(new CreditClientDefinedAttributes());
-        request.getEventData().getTransactionData().setCurrency(null);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> analyze(request));
-        String message = ex.getMessage();
-        assertAll(
-                () -> assertTrue(message.contains("eventData.transactionData.currency")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.requestNumber")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.createDate")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.applicantShortName")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.cardCurrency")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.applicantTaxNumber")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.applicantOgrn")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.applicantFullName")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.productName")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.contactPhone")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.dboOperationName")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.clientName")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.clientCategory")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.onlySignDateTime")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.onlySignIpAddress")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.onlySignLogin")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.onlySignCryptoprofile")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.onlySignCryptoprofileType")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.onlySignChannel")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.onlySignType")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.onlySignSource")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.privateIpAddress")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.ucpId")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.creationChannel")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.cfleId")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.divisionCode")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.selectedParametersDescr")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.borrowerUcpId")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.borrowerTaxNumber")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.digitalUserId")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.signMethod"))
-        );
-    }
-
-    @Test
-    @DisplayName("Валидация модели clientDefinedAttributeList банковской гарантии")
-    void validateClientDefinedAttributeListForGuarantee() {
-        String[] excludedFields = {
-                "auctionNumber", "guaranteeType", "guaranteeForm", "guaranteeDateStart", "guaranteeDateEnd"
-        };
-        addExcludedFields(CreditClientDefinedAttributes.class, excludedFields);
-        CreditSendToAnalyzeRq request = factory.populatePojo(new CreditSendToAnalyzeRq());
-        request.getEventData().setClientDefinedEventType(ClientDefinedEventType.BROWSER_REQUEST_GUARANTEE);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> analyze(request));
-        String message = ex.getMessage();
-        assertAll(
-                () -> assertTrue(message.contains("clientDefinedAttributeList.auctionNumber")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.guaranteeType")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.guaranteeForm")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.guaranteeDateStart")),
-                () -> assertTrue(message.contains("clientDefinedAttributeList.guaranteeDateEnd"))
-        );
-        removeExcludedFields(CreditClientDefinedAttributes.class, excludedFields);
     }
 
 }

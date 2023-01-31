@@ -8,8 +8,6 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,7 +20,6 @@ public class CreditClientDefinedAttributes implements Serializable {
     /**
      * Номер кредитной заявки
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.requestNumber\" must be filled")
     private String requestNumber;
 
     /**
@@ -31,25 +28,21 @@ public class CreditClientDefinedAttributes implements Serializable {
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @NotNull(message = "The attribute \"clientDefinedAttributeList.createDate\" must be filled")
     private LocalDate createDate;
 
     /**
      * Краткое наименование организации ЮЛ/ИП
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.applicantShortName\" must be filled")
     private String applicantShortName;
 
     /**
      * Валюта карты
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.cardCurrency\" must be filled")
     private String cardCurrency;
 
     /**
      * ИНН заёмщика ЮЛ/ИП
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.applicantTaxNumber\" must be filled")
     private String applicantTaxNumber;
 
     /**
@@ -65,13 +58,11 @@ public class CreditClientDefinedAttributes implements Serializable {
     /**
      * ОГРН/ОГРНИП заёмщика ЮЛ/ИП
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.applicantOgrn\" must be filled")
     private String applicantOgrn;
 
     /**
      * Полное наименование организации заёмщика ЮЛ/ИП
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.applicantFullName\" must be filled")
     private String applicantFullName;
 
     /**
@@ -92,7 +83,6 @@ public class CreditClientDefinedAttributes implements Serializable {
     /**
      * Вид кредитного продукта
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.productName\" must be filled")
     private String productName;
 
     /**
@@ -123,7 +113,6 @@ public class CreditClientDefinedAttributes implements Serializable {
     /**
      * Контактный телефон
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.contactPhone\" must be filled")
     private String contactPhone;
 
     /**
@@ -149,13 +138,11 @@ public class CreditClientDefinedAttributes implements Serializable {
     /**
      * Операция ДБО
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.dboOperationName\" must be filled")
     private String dboOperationName;
 
     /**
      * Наименование клиента
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.clientName\" must be filled")
     private String clientName;
 
     /**
@@ -166,7 +153,6 @@ public class CreditClientDefinedAttributes implements Serializable {
     /**
      * Категория клиента
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.clientCategory\" must be filled")
     private String clientCategory;
 
     /**
@@ -175,37 +161,31 @@ public class CreditClientDefinedAttributes implements Serializable {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
-    @NotNull(message = "The attribute \"clientDefinedAttributeList.onlySignDateTime\" must be filled")
     private LocalDateTime onlySignDateTime;
 
     /**
      * Единственная подпись IP адрес
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.onlySignIpAddress\" must be filled")
     private String onlySignIpAddress;
 
     /**
      * Единственная подпись Логин
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.onlySignLogin\" must be filled")
     private String onlySignLogin;
 
     /**
      * Единственная подпись Наименование криптопрофиля
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.onlySignCryptoprofile\" must be filled")
     private String onlySignCryptoprofile;
 
     /**
      * Единственная подпись Тип криптопрофиля
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.onlySignCryptoprofileType\" must be filled")
     private String onlySignCryptoprofileType;
 
     /**
      * Единственная подпись Канал подписи
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.onlySignChannel\" must be filled")
     private String onlySignChannel;
 
     /**
@@ -216,7 +196,6 @@ public class CreditClientDefinedAttributes implements Serializable {
     /**
      * Единственная подпись Тип подписи
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.onlySignType\" must be filled")
     private String onlySignType;
 
     /**
@@ -242,19 +221,16 @@ public class CreditClientDefinedAttributes implements Serializable {
     /**
      * Единственная подпись Канал
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.onlySignSource\" must be filled")
     private String onlySignSource;
 
     /**
      * Локальный IP адрес
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.privateIpAddress\" must be filled")
     private String privateIpAddress;
 
     /**
      * Идентификатор ЕПК ЮЛ/ИП заемщика
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.ucpId\" must be filled")
     private String ucpId;
 
     /**
@@ -275,19 +251,16 @@ public class CreditClientDefinedAttributes implements Serializable {
     /**
      * Канал источник создания
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.creationChannel\" must be filled")
     private String creationChannel;
 
     /**
      * Идентификатор кредитной заявки в ППРБ.КФЮЛ
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.cfleId\" must be filled")
     private String cfleId;
 
     /**
      * Код подразделения
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.divisionCode\" must be filled")
     private String divisionCode;
 
     /**
@@ -298,7 +271,6 @@ public class CreditClientDefinedAttributes implements Serializable {
     /**
      * Текстовое описание выбранных условий
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.selectedParametersDescr\" must be filled")
     private String selectedParametersDescr;
 
     /**
@@ -324,7 +296,6 @@ public class CreditClientDefinedAttributes implements Serializable {
     /**
      * Идентификатор заемщика
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.borrowerUcpId\" must be filled")
     private String borrowerUcpId;
 
     /**
@@ -350,7 +321,6 @@ public class CreditClientDefinedAttributes implements Serializable {
     /**
      * ИНН заемщика
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.borrowerTaxNumber\" must be filled")
     private String borrowerTaxNumber;
 
     /**
@@ -386,13 +356,11 @@ public class CreditClientDefinedAttributes implements Serializable {
     /**
      * Идентификатор пользователя (отправитель заявки в Банк) в ППРБ.DigitalB2B
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.digitalUserId\" must be filled")
     private String digitalUserId;
 
     /**
      * Способ подписания
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.signMethod\" must be filled")
     private String signMethod;
 
     /**

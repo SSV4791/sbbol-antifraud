@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -26,7 +25,6 @@ public class CreditMessageHeader implements Serializable {
     /**
      * Идентификатор метода
      */
-    @NotBlank(message = "The attribute \"messageHeader.requestType\" must be filled")
     private String requestType;
 
     public LocalDateTime getTimeStamp() {

@@ -20,7 +20,6 @@ public class CreditIdentificationData implements Serializable {
     /**
      * Код территориального банка, в котором обслуживается организация
      */
-    @NotBlank(message = "The attribute \"identificationData.tbCode\" must be filled")
     private String tbCode;
 
     /**

@@ -7,7 +7,6 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedEventType;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -41,14 +40,11 @@ public class CreditEventData implements Serializable {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
-    @NotNull(message = "The attribute \"eventData.timeOfOccurrence\" must be filled")
     private LocalDateTime timeOfOccurrence;
 
     /**
      * Данные транзакции
      */
-    @Valid
-    @NotNull(message = "The attribute \"eventData.transactionData\" must be filled")
     private CreditTransactionData transactionData;
 
     public String getEventType() {

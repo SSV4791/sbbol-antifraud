@@ -1,6 +1,5 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.analyze.credit;
 
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -16,7 +15,6 @@ public class CreditTransactionData implements Serializable {
     /**
      * Валюта кредита
      */
-    @NotBlank(message = "The attribute \"eventData.transactionData.currency\" must be filled")
     private String currency;
 
     public Long getAmount() {
