@@ -43,7 +43,6 @@ public class CounterPartyEventData implements Serializable {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
-    @NotNull(message = "The attribute \"eventData.timeOfOccurrence\" must be filled")
     private LocalDateTime timeOfOccurrence;
 
     @JsonCreator

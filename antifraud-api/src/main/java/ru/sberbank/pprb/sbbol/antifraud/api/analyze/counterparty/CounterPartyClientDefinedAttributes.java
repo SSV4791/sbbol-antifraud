@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -20,13 +19,11 @@ public class CounterPartyClientDefinedAttributes implements Serializable {
     /**
      * Наименование получателя
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.receiverName\" must be filled")
     private String receiverName;
 
     /**
      * Уникальный идентификатор партнера
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.counterpartyId\" must be filled")
     private String counterpartyId;
 
     /**
@@ -42,7 +39,6 @@ public class CounterPartyClientDefinedAttributes implements Serializable {
     /**
      * ИНН отправителя
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.payerInn\" must be filled")
     private String payerInn;
 
     /**
@@ -68,13 +64,11 @@ public class CounterPartyClientDefinedAttributes implements Serializable {
     /**
      * Наименование операции ДБО
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.dboOperationName\" must be filled")
     private String dboOperationName;
 
     /**
      * Наименование клиента
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.payerName\" must be filled")
     private String payerName;
 
     /**
@@ -178,13 +172,11 @@ public class CounterPartyClientDefinedAttributes implements Serializable {
     /**
      * Идентификатор ЕПК ЮЛ
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.epkId\" must be filled")
     private String epkId;
 
     /**
      * Идентификатор Личного кабинета
      */
-    @NotBlank(message = "The attribute \"clientDefinedAttributeList.digitalId\" must be filled")
     private String digitalId;
 
     /**

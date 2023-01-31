@@ -16,8 +16,6 @@ public class CounterPartySendToAnalyzeRq implements AnalyzeWithOutSavingRequest 
     /**
      * Сообщение заголовка
      */
-    @Valid
-    @NotNull(message = "The attribute \"messageHeader\" must be filled")
     private CounterPartyMessageHeader messageHeader;
 
     /**
@@ -30,8 +28,6 @@ public class CounterPartySendToAnalyzeRq implements AnalyzeWithOutSavingRequest 
     /**
      * Данные устройства
      */
-    @Valid
-    @NotNull(message = "The attribute \"deviceRequest\" must be filled")
     private CounterPartyDeviceRequest deviceRequest;
 
     /**
@@ -44,8 +40,6 @@ public class CounterPartySendToAnalyzeRq implements AnalyzeWithOutSavingRequest 
     /**
      * Данные CUSTOM FACT
      */
-    @Valid
-    @NotNull(message = "The attribute \"clientDefinedAttributeList\" must be filled")
     private CounterPartyClientDefinedAttributes clientDefinedAttributeList;
 
     /**
