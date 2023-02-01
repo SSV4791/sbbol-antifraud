@@ -15,8 +15,6 @@ public class CreditSendToAnalyzeRq implements AnalyzeWithOutSavingRequest {
     /**
      * Заголовок сообщения
      */
-    @Valid
-    @NotNull(message = "The attribute \"messageHeader\" must be filled")
     private CreditMessageHeader messageHeader;
 
     /**
@@ -41,8 +39,6 @@ public class CreditSendToAnalyzeRq implements AnalyzeWithOutSavingRequest {
     /**
      * Данные CUSTOM FACT
      */
-    @Valid
-    @NotNull(message = "The attribute \"clientDefinedAttributeList\" must be filled")
     private CreditClientDefinedAttributes clientDefinedAttributeList;
 
     /**

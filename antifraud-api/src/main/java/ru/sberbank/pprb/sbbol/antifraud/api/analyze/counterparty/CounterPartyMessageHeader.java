@@ -8,8 +8,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -25,13 +23,11 @@ public class CounterPartyMessageHeader implements Serializable {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
-    @NotNull(message = "The attribute \"messageHeader.timeStamp\" must be filled")
     private LocalDateTime timeStamp;
 
     /**
      * Идентификатор метода
      */
-    @NotBlank(message = "The attribute \"messageHeader.requestType\" must be filled")
     private String requestType;
 
     @JsonCreator

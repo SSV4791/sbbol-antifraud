@@ -1,7 +1,5 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.analyze.counterparty;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -48,13 +46,11 @@ public class CounterPartyDeviceRequest implements Serializable {
     /**
      * IP адрес
      */
-    @NotBlank(message = "The attribute \"deviceRequest.ipAddress\" must be filled")
     private String ipAddress;
 
     /**
      * Значение заголовка User-Agent HTTP-запроса
      */
-    @NotBlank(message = "The attribute \"deviceRequest.userAgent\" must be filled")
     private String userAgent;
 
     public String getDevicePrint() {

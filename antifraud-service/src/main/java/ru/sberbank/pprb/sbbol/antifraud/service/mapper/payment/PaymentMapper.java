@@ -559,6 +559,7 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
                         attribute.getName().equals(DESCRIPTION_MAP.get(SECOND_SIGN_TIME)) ||
                         attribute.getName().equals(DESCRIPTION_MAP.get(THIRD_SIGN_TIME)) ||
                         attribute.getName().equals(DESCRIPTION_MAP.get(SENDER_SIGN_TIME)))
+                .filter(attribute -> Objects.nonNull(attribute.getValue()))
                 .forEach(attribute -> attribute.setValue(LocalDateTime.parse(attribute.getValue()).plusHours(3).toString()));
     }
 

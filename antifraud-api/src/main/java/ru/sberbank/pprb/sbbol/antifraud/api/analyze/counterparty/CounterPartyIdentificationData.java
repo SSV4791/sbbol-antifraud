@@ -21,7 +21,6 @@ public class CounterPartyIdentificationData implements Serializable {
     /**
      * Код территориального банка, в котором обслуживается организация (tbCode)
      */
-    @NotBlank(message = "The attribute \"identificationData.orgName\" must be filled")
     private String orgName;
 
     /**
@@ -39,7 +38,6 @@ public class CounterPartyIdentificationData implements Serializable {
     /**
      * Идентификатор Логина
      */
-    @NotBlank(message = "The attribute \"identificationData.userLoginName\" must be filled")
     private String userLoginName;
 
     public String getClientTransactionId() {
