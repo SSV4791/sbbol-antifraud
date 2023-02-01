@@ -92,8 +92,8 @@ pr_check:
       qaReporterUpload sonarCoverage --info
 
 release:
-  version_pattern: '02\.004\.\d{2}_\d{4}'
-  version_init: 02.004.00_0000
+  version_pattern: '02\.003\.\d{2}_\d{4}'
+  version_init: 02.003.00_0000
   repository: maven-distr-dev  # необходим для releasePipe для выкачки предсобранных артефатов
   artifact_id: CI03045533
   group_id: CI02473994
