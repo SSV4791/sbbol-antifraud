@@ -110,7 +110,7 @@ class ElectronicReceiptAnalyzeTest extends ElectronicReceiptIntegrationTest {
             ApplicationException ex = assertThrows(ApplicationException.class, () -> send(request));
             return ex.getMessage();
         });
-        step("Проверка сообщения об ошибке", () -> Assertions.assertTrue(exceptionMessage.contains("Electronic receipt (docId=" + request.getDocId() + ") not found")));
+        step("Проверка сообщения об ошибке", () -> Assertions.assertTrue(exceptionMessage.contains("DocId=" + request.getDocId() + ". Electronic receipt not found")));
     }
 
     @Test

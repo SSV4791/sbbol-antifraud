@@ -84,7 +84,7 @@ public class CreditAnalyzeTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @DisplayName("Отправка на анализ заявок на кредит или банковских гарантий (успешный овет)")
+    @DisplayName("Отправка на анализ заявок на кредит или банковских гарантий (успешный ответ)")
     void analyzeTest() throws Throwable {
         FullAnalyzeResponse fullAnalyzeResponse = factory.populatePojo(new FullAnalyzeResponse());
         mockServer.expect(ExpectedCount.once(), requestTo(endPoint))

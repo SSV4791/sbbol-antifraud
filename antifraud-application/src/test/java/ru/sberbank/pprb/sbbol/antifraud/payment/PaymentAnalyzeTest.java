@@ -155,7 +155,7 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
         UUID docId = UUID.randomUUID();
         ApplicationException ex = assertThrows(ApplicationException.class, () -> send(new SendToAnalyzeRequest(docId)));
         String message = ex.getMessage();
-        Assertions.assertTrue(message.contains("Payment (docId=" + docId + ") not found"));
+        Assertions.assertTrue(message.contains("DocId=" + docId + ". Payment not found"));
     }
 
     @AllureId("20379")
