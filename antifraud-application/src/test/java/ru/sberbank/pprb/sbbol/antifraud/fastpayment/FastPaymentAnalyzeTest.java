@@ -121,7 +121,7 @@ class FastPaymentAnalyzeTest extends FastPaymentIntegrationTest {
         UUID docId = UUID.randomUUID();
         ApplicationException ex = assertThrows(ApplicationException.class, () -> send(new SendToAnalyzeRequest(docId)));
         String message = ex.getMessage();
-        Assertions.assertTrue(message.contains("Fast payment (docId=" + docId + ") not found"));
+        Assertions.assertTrue(message.contains("DocId=" + docId + ". Fast payment not found"));
     }
 
     @Test

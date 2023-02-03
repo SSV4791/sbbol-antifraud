@@ -1,12 +1,12 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.rpc;
 
+import org.apache.commons.lang.UnhandledException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.HttpStatusCodeException;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithOutSavingRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
-import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeWithOutSavingProcessor;
 
@@ -38,13 +38,13 @@ public class AnalyzeWithOutSavingAbstractService<T extends AnalyzeWithOutSavingR
             logger.error(msg + e.getMessage(), e);
             throw e;
         } catch (HttpStatusCodeException e) {
-            String errorMsg = msg + "Analysis error";
+            String errorMsg = msg + "Analysis error. Status code: " + e.getStatusCode() + ". " + e.getMessage();
             logger.error(errorMsg, e);
             throw new AnalyzeException(errorMsg, e);
         } catch (Exception e) {
-            String errorMsg = msg + "Error while processing analysis request";
+            String errorMsg = msg + "Error while processing analysis request. " + e.getMessage();
             logger.error(errorMsg, e);
-            throw new ApplicationException(errorMsg, e);
+            throw new UnhandledException(errorMsg, e);
         }
     }
 

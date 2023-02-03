@@ -83,7 +83,7 @@ class CounterPartyAnalyzeTest extends AbstractIntegrationTest {
 
     @Test
     @AllureId("55377")
-    @DisplayName("Отправка партнеров на анализ (успешный овет)")
+    @DisplayName("Отправка партнеров на анализ (успешный ответ)")
     void analyzeTest() throws Throwable {
         FullAnalyzeResponse fullAnalyzeResponse = factory.populatePojo(new FullAnalyzeResponse());
         mockServer.expect(ExpectedCount.once(), requestTo(endPoint))

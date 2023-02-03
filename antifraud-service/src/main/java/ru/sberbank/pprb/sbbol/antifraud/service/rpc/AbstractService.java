@@ -53,20 +53,20 @@ public abstract class AbstractService<T extends Operation> {
         try {
             return processor.send(request);
         } catch (ConstraintViolationException e) {
-            String errorMsg = e.getConstraintViolations().stream()
+            String errorMsg = msg + e.getConstraintViolations().stream()
                     .map(cv -> cv == null ? "null" : (cv.getPropertyPath() + ": " + cv.getMessage()))
                     .collect(Collectors.joining(", "));
             logger.error(errorMsg, e);
             throw new ModelArgumentException(errorMsg, e);
         } catch (ApplicationException e) {
-            logger.warn(msg + e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             throw e;
         } catch (HttpStatusCodeException e) {
-            String errorMsg = msg + "Analysis error";
+            String errorMsg = msg + "Analysis error. Status code: " + e.getStatusCode() + ". " + e.getMessage();
             logger.error(errorMsg, e);
             throw new AnalyzeException(errorMsg, e);
         } catch (Exception e) {
-            String errorMsg = msg + "Error while processing analysis request";
+            String errorMsg = msg + "Error while processing analysis request. " + e.getMessage();
             logger.error(errorMsg, e);
             throw new UnhandledException(errorMsg, e);
         }

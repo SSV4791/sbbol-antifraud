@@ -7,7 +7,6 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.ClientDefinedAttribu
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.EventData;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
-import ru.sberbank.pprb.sbbol.antifraud.service.entity.BaseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
