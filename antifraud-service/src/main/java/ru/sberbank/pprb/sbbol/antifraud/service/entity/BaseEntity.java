@@ -12,6 +12,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 import java.time.Instant;
+import java.util.Objects;
 
 @MappedSuperclass
 public abstract class BaseEntity implements HashKeyProvider {
@@ -59,8 +60,6 @@ public abstract class BaseEntity implements HashKeyProvider {
         this.version = version;
     }
 
-    public abstract String getEpkId();
-
     public Instant getLastChangeDate() {
         return lastChangeDate;
     }
@@ -72,7 +71,7 @@ public abstract class BaseEntity implements HashKeyProvider {
     @Transient
     @Override
     public String getHashKey() {
-        return getEpkId();
+        return String.valueOf(Objects.hash(getId()) % 10000);
     }
 
 }

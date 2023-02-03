@@ -286,7 +286,8 @@ public class Payment extends BaseEntity {
 
     /**
      * 1-я подпись Номер телефона
-     */@Column(length = 13)
+     */
+    @Column(length = 13)
     private String firstSignPhone;
 
     /**
@@ -581,7 +582,6 @@ public class Payment extends BaseEntity {
         this.eventTime = timeStamp;
     }
 
-    @Override
     public String getEpkId() {
         return epkId;
     }
