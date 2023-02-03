@@ -2,7 +2,7 @@ package ru.sberbank.pprb.sbbol.antifraud.service.processor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.validation.annotation.Validated;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendAfterSavingRq;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.Operation;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
@@ -16,7 +16,7 @@ import javax.validation.Valid;
  */
 
 @Validated
-public interface Processor<T extends Operation> {
+public interface Processor<T extends Operation, R extends SendAfterSavingRq> {
 
     /**
      * Сохранение или обновление данных
@@ -32,6 +32,6 @@ public interface Processor<T extends Operation> {
      * @param request запрос на отправку данных в ФП ИС
      * @return результат анализа данных
      */
-    AnalyzeResponse send(@Valid SendToAnalyzeRequest request) throws JsonProcessingException;
+    AnalyzeResponse send(@Valid R request) throws JsonProcessingException;
 
 }

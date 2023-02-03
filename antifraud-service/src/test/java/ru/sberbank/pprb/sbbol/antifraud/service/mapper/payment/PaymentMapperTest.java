@@ -67,6 +67,7 @@ class PaymentMapperTest extends MapperTest {
         payment.setUserGuid(UUID.randomUUID().toString());
         payment.setChannelIndicator(ChannelIndicator.WEB);
         payment.setClientDefinedChannelIndicator(ClientDefinedChannelIndicator.PPRB_BROWSER);
+        payment.setDocId(UUID.randomUUID().toString());
 
         AnalyzeRequest analyzeRequest = MAPPER.toAnalyzeRequest(payment);
         assertNotNull(analyzeRequest);
@@ -75,10 +76,10 @@ class PaymentMapperTest extends MapperTest {
         assertEquals(payment.getEventTime().plusHours(3), analyzeRequest.getMessageHeader().getTimeStamp());
 
         assertNotNull(analyzeRequest.getIdentificationData());
-        assertEquals(payment.getDocId(), analyzeRequest.getIdentificationData().getClientTransactionId());
+        assertEquals(payment.getDocId(), analyzeRequest.getIdentificationData().getClientTransactionId().toString());
         assertEquals(payment.getTbCode(), analyzeRequest.getIdentificationData().getOrgName());
         assertEquals("", analyzeRequest.getIdentificationData().getUserName());
-        assertEquals(PAYMENT_DT_0401060, analyzeRequest.getIdentificationData().getDboOperation());
+        assertEquals(PAYMENT_DT_0401060.name(), analyzeRequest.getIdentificationData().getDboOperation());
         assertEquals(payment.getRequestId(), analyzeRequest.getIdentificationData().getRequestId().toString());
         assertEquals(payment.getSenderLogin(), analyzeRequest.getIdentificationData().getUserLoginName());
 
@@ -93,21 +94,21 @@ class PaymentMapperTest extends MapperTest {
         assertEquals(payment.getIpAddress(), analyzeRequest.getDeviceRequest().getIpAddress());
         assertEquals(payment.getUserAgent(), analyzeRequest.getDeviceRequest().getUserAgent());
 
-        assertEquals(payment.getChannelIndicator(), analyzeRequest.getChannelIndicator());
-        assertEquals(payment.getClientDefinedChannelIndicator(), analyzeRequest.getClientDefinedChannelIndicator());
+        assertEquals(payment.getChannelIndicator().name(), analyzeRequest.getChannelIndicator());
+        assertEquals(payment.getClientDefinedChannelIndicator().name(), analyzeRequest.getClientDefinedChannelIndicator());
 
         assertNotNull(analyzeRequest.getEventDataList());
 
-        assertNotNull(analyzeRequest.getEventDataList().getEventDataHeader());
-        assertEquals(PAYMENT_DT_0401060.getEventType(), analyzeRequest.getEventDataList().getEventDataHeader().getEventType());
-        assertEquals(PAYMENT_DT_0401060.getEventDescription(), analyzeRequest.getEventDataList().getEventDataHeader().getEventDescription());
-        assertEquals(PAYMENT_DT_0401060.getClientDefinedEventType(payment.getChannelIndicator(), payment.getClientDefinedChannelIndicator()), analyzeRequest.getEventDataList().getEventDataHeader().getClientDefinedEventType());
-        assertEquals(payment.getTimeOfOccurrence().plusHours(3), analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence());
+        assertNotNull(analyzeRequest.getEventDataList().getEventData());
+        assertEquals(PAYMENT_DT_0401060.getEventType(), analyzeRequest.getEventDataList().getEventData().getEventType());
+        assertEquals(PAYMENT_DT_0401060.getEventDescription(), analyzeRequest.getEventDataList().getEventData().getEventDescription());
+        assertEquals(PAYMENT_DT_0401060.getClientDefinedEventType(payment.getChannelIndicator(), payment.getClientDefinedChannelIndicator()).name(), analyzeRequest.getEventDataList().getEventData().getClientDefinedEventType());
+        assertEquals(payment.getTimeOfOccurrence().plusHours(3), analyzeRequest.getEventDataList().getEventData().getTimeOfOccurrence());
 
         assertNotNull(analyzeRequest.getEventDataList().getTransactionData());
 
         assertNotNull(analyzeRequest.getEventDataList().getTransactionData().getAmount());
-        assertEquals(payment.getAmount(), analyzeRequest.getEventDataList().getTransactionData().getAmount().getSum());
+        assertEquals(payment.getAmount(), analyzeRequest.getEventDataList().getTransactionData().getAmount().getAmount());
         assertEquals(payment.getCurrency(), analyzeRequest.getEventDataList().getTransactionData().getAmount().getCurrency());
         assertEquals(payment.getExecutionSpeed(), analyzeRequest.getEventDataList().getTransactionData().getExecutionSpeed());
         assertEquals(payment.getOtherAccBankType(), analyzeRequest.getEventDataList().getTransactionData().getOtherAccountBankType());
@@ -136,6 +137,7 @@ class PaymentMapperTest extends MapperTest {
         payment.setRequestId(UUID.randomUUID().toString());
         payment.setEpkId(UUID.randomUUID().toString());
         payment.setUserGuid(UUID.randomUUID().toString());
+        payment.setDocId(UUID.randomUUID().toString());
         payment.setCurrency(null);
         payment.setBalAccNumber(null);
         AnalyzeRequest analyzeRequest = MAPPER.toAnalyzeRequest(payment);

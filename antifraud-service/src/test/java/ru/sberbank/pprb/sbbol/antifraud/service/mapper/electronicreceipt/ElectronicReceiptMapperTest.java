@@ -68,16 +68,17 @@ class ElectronicReceiptMapperTest extends MapperTest {
         electronicReceipt.setRequestId(UUID.randomUUID().toString());
         electronicReceipt.setEpkId(UUID.randomUUID().toString());
         electronicReceipt.setUserGuid(UUID.randomUUID().toString());
+        electronicReceipt.setDocId(UUID.randomUUID().toString());
         AnalyzeRequest analyzeRequest = MAPPER.toAnalyzeRequest(electronicReceipt);
         assertNotNull(analyzeRequest);
         assertNotNull(analyzeRequest.getMessageHeader());
         assertEquals(electronicReceipt.getEventTime(), analyzeRequest.getMessageHeader().getTimeStamp());
 
         assertNotNull(analyzeRequest.getIdentificationData());
-        assertEquals(electronicReceipt.getDocId(), analyzeRequest.getIdentificationData().getClientTransactionId());
+        assertEquals(electronicReceipt.getDocId(), analyzeRequest.getIdentificationData().getClientTransactionId().toString());
         assertEquals(electronicReceipt.getTbCode(), analyzeRequest.getIdentificationData().getOrgName());
         assertNull(analyzeRequest.getIdentificationData().getUserName());
-        assertEquals(DboOperation.ELECTRONIC_CHEQUE, analyzeRequest.getIdentificationData().getDboOperation());
+        assertEquals(DboOperation.ELECTRONIC_CHEQUE.name(), analyzeRequest.getIdentificationData().getDboOperation());
         assertEquals(electronicReceipt.getRequestId(), analyzeRequest.getIdentificationData().getRequestId().toString());
         assertEquals(electronicReceipt.getSenderLogin(), analyzeRequest.getIdentificationData().getUserLoginName());
 
@@ -93,14 +94,14 @@ class ElectronicReceiptMapperTest extends MapperTest {
         assertEquals(electronicReceipt.getUserAgent(), analyzeRequest.getDeviceRequest().getUserAgent());
 
         assertNotNull(analyzeRequest.getEventDataList());
-        assertNotNull(analyzeRequest.getEventDataList().getEventDataHeader());
-        assertEquals(DboOperation.ELECTRONIC_CHEQUE.getEventType(), analyzeRequest.getEventDataList().getEventDataHeader().getEventType());
-        assertEquals(DboOperation.ELECTRONIC_CHEQUE.getEventDescription(), analyzeRequest.getEventDataList().getEventDataHeader().getEventDescription());
-        assertEquals(DboOperation.ELECTRONIC_CHEQUE.getClientDefinedEventType(), analyzeRequest.getEventDataList().getEventDataHeader().getClientDefinedEventType());
-        assertEquals(electronicReceipt.getTimeOfOccurrence(), analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence());
+        assertNotNull(analyzeRequest.getEventDataList().getEventData());
+        assertEquals(DboOperation.ELECTRONIC_CHEQUE.getEventType(), analyzeRequest.getEventDataList().getEventData().getEventType());
+        assertEquals(DboOperation.ELECTRONIC_CHEQUE.getEventDescription(), analyzeRequest.getEventDataList().getEventData().getEventDescription());
+        assertEquals(DboOperation.ELECTRONIC_CHEQUE.getClientDefinedEventType().name(), analyzeRequest.getEventDataList().getEventData().getClientDefinedEventType());
+        assertEquals(electronicReceipt.getTimeOfOccurrence(), analyzeRequest.getEventDataList().getEventData().getTimeOfOccurrence());
         assertNotNull(analyzeRequest.getEventDataList().getTransactionData());
         assertNotNull(analyzeRequest.getEventDataList().getTransactionData().getAmount());
-        assertEquals(electronicReceipt.getAmount(), analyzeRequest.getEventDataList().getTransactionData().getAmount().getSum());
+        assertEquals(electronicReceipt.getAmount(), analyzeRequest.getEventDataList().getTransactionData().getAmount().getAmount());
         assertEquals(electronicReceipt.getCurrency(), analyzeRequest.getEventDataList().getTransactionData().getAmount().getCurrency());
         assertNull(analyzeRequest.getEventDataList().getTransactionData().getExecutionSpeed());
         assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountBankType());
@@ -110,8 +111,8 @@ class ElectronicReceiptMapperTest extends MapperTest {
         assertNotNull(analyzeRequest.getEventDataList().getClientDefinedAttributeList());
         assertEquals(ElectronicReceiptMapper.CAPACITY, analyzeRequest.getEventDataList().getClientDefinedAttributeList().getFact().size());
 
-        assertEquals(ChannelIndicator.WEB, analyzeRequest.getChannelIndicator());
-        assertEquals(ClientDefinedChannelIndicator.PPRB_BROWSER, analyzeRequest.getClientDefinedChannelIndicator());
+        assertEquals(ChannelIndicator.WEB.name(), analyzeRequest.getChannelIndicator());
+        assertEquals(ClientDefinedChannelIndicator.PPRB_BROWSER.name(), analyzeRequest.getClientDefinedChannelIndicator());
     }
 
     @Test

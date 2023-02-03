@@ -27,7 +27,7 @@ import java.util.UUID;
  * Осуществляет отправку данных в ФП ИС.
  */
 @Service
-public class PaymentProcessor extends AnalyzeAbstractProcessor implements Processor<PaymentOperation> {
+public class PaymentProcessor extends AnalyzeAbstractProcessor implements Processor<PaymentOperation, SendToAnalyzeRequest> {
 
     private final PaymentRepository repository;
     private final PaymentMapper mapper;
@@ -55,7 +55,7 @@ public class PaymentProcessor extends AnalyzeAbstractProcessor implements Proces
             entity = mapper.toEntity(request);
         }
         Payment result = repository.save(entity);
-        return new RequestId(result.getRequestId());
+        return new RequestId(UUID.fromString(result.getRequestId()));
     }
 
     @Override

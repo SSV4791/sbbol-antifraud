@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * Данные счета плательщика
  */
-public class PayerAccount implements Serializable {
+public class MyAccountData implements Serializable {
 
     /**
      * Номер счета отправителя (плательщика)
@@ -16,8 +16,11 @@ public class PayerAccount implements Serializable {
     private String accountNumber;
 
     @JsonCreator
-    public PayerAccount(@JsonProperty("accountNumber") String accountNumber) {
+    public MyAccountData(@JsonProperty("accountNumber") String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    public MyAccountData() {
     }
 
     public String getAccountNumber() {
@@ -34,4 +37,5 @@ public class PayerAccount implements Serializable {
                 "accountNumber='" + accountNumber + '\'' +
                 '}';
     }
+
 }

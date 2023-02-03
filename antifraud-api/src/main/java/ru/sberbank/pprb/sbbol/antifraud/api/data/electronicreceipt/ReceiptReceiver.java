@@ -1,8 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import javax.validation.constraints.NotBlank;
@@ -36,7 +34,6 @@ public class ReceiptReceiver implements Serializable {
      * Дата рождения получателя ДС
      */
     @JsonSerialize(using = LocalDateSerializer.class)
-    @JsonDeserialize(using = LocalDateDeserializer.class)
     @NotNull(message = "The document.receiver.birthDay attribute must be filled")
     private LocalDate birthDay;
 
@@ -62,7 +59,6 @@ public class ReceiptReceiver implements Serializable {
      * Дата выдачи
      */
     @JsonSerialize(using = LocalDateSerializer.class)
-    @JsonDeserialize(using = LocalDateDeserializer.class)
     @NotNull(message = "The document.receiver.dulDateIssue attribute must be filled")
     private LocalDate dulDateIssue;
 

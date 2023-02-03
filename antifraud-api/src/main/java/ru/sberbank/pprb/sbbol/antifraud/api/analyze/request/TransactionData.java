@@ -27,13 +27,13 @@ public class TransactionData implements Serializable {
     /**
      * Данные счета плательщика
      */
-    private PayerAccount myAccountData;
+    private MyAccountData myAccountData;
 
     /**
      * Данные счета получателя
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private ReceiverAccount otherAccountData;
+    private OtherAccountData otherAccountData;
 
     public Amount getAmount() {
         return amount;
@@ -59,19 +59,19 @@ public class TransactionData implements Serializable {
         this.otherAccountBankType = otherAccountBankType;
     }
 
-    public PayerAccount getMyAccountData() {
+    public MyAccountData getMyAccountData() {
         return myAccountData;
     }
 
-    public void setMyAccountData(PayerAccount myAccountData) {
+    public void setMyAccountData(MyAccountData myAccountData) {
         this.myAccountData = myAccountData;
     }
 
-    public ReceiverAccount getOtherAccountData() {
+    public OtherAccountData getOtherAccountData() {
         return otherAccountData;
     }
 
-    public void setOtherAccountData(ReceiverAccount otherAccountData) {
+    public void setOtherAccountData(OtherAccountData otherAccountData) {
         this.otherAccountData = otherAccountData;
     }
 
@@ -85,4 +85,5 @@ public class TransactionData implements Serializable {
                 ", otherAccountData=" + otherAccountData +
                 '}';
     }
+
 }

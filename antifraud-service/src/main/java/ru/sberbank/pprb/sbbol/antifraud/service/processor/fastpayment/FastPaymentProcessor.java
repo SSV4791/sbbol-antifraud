@@ -27,7 +27,7 @@ import java.util.UUID;
  * Осуществляет отправку данных в ФП ИС.
  */
 @Service
-public class FastPaymentProcessor extends AnalyzeAbstractProcessor implements Processor<FastPaymentOperation> {
+public class FastPaymentProcessor extends AnalyzeAbstractProcessor implements Processor<FastPaymentOperation, SendToAnalyzeRequest> {
 
     private final FastPaymentRepository repository;
     private final FastPaymentMapper mapper;
@@ -55,7 +55,7 @@ public class FastPaymentProcessor extends AnalyzeAbstractProcessor implements Pr
             entity = mapper.toEntity(request);
         }
         FastPayment result = repository.save(entity);
-        return new RequestId(result.getRequestId());
+        return new RequestId(UUID.fromString(result.getRequestId()));
     }
 
     @Override

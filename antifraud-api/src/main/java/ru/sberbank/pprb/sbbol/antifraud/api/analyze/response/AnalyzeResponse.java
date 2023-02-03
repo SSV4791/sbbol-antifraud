@@ -38,6 +38,16 @@ public class AnalyzeResponse implements Serializable {
      */
     private Integer waitingTime;
 
+    /**
+     * HTTP status code ответа от АС Фрод-мониторинг
+     */
+    private String statusCode;
+
+    /**
+     * Код ответа от АС Фрод-мониторинг
+     */
+    private Integer reasonCode;
+
     public String getTransactionId() {
         return transactionId;
     }
@@ -78,14 +88,33 @@ public class AnalyzeResponse implements Serializable {
         this.waitingTime = waitingTime;
     }
 
+    public String getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public Integer getReasonCode() {
+        return reasonCode;
+    }
+
+    public void setReasonCode(Integer reasonCode) {
+        this.reasonCode = reasonCode;
+    }
+
     @Override
     public String toString() {
-        return "PaymentAnalyzeResponse{" +
+        return "AnalyzeResponse{" +
                 "transactionId='" + transactionId + '\'' +
                 ", actionCode='" + actionCode + '\'' +
                 ", comment='" + comment + '\'' +
                 ", detailledComment='" + detailledComment + '\'' +
                 ", waitingTime=" + waitingTime +
+                ", statusCode='" + statusCode + '\'' +
+                ", reasonCode=" + reasonCode +
                 '}';
     }
+
 }

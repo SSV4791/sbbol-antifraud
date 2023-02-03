@@ -1,0 +1,101 @@
+{
+  "jsonrpc": "2.0",
+  "method": "analyzeOperation",
+  "id": 1,
+  "params": {
+    "analyzeparams": {
+      "messageHeader": {
+        "timeStamp": "2022-10-13T17:33:15.386",
+        "requestType": "ANALYZE"
+      },
+      "identificationData": {
+        "clientTransactionId": "36ff1f5f-a0d2-4337-a4bd-1f620ac3462b",
+        "orgName": "orgName",
+        "userName": "userName",
+        "dboOperation": "dboOperation",
+        "userLoginName": "userLoginName"
+      },
+      "deviceRequest": {
+        "devicePrint": "devicePrint",
+        "mobSdkData": "mobSdkData",
+        "httpAccept": "httpAccept",
+        "httpAcceptChars": "httpAcceptChars",
+        "httpAcceptEncoding": "httpAcceptEncoding",
+        "httpAcceptLanguage": "httpAcceptLanguage",
+        "httpReferrer": "httpReferrer",
+        "ipAddress": "ipAddress",
+        "userAgent": "userAgent"
+      },
+      "eventDataList": {
+        "eventData": {
+          "eventType": "eventType",
+          "eventDescription": "eventDescription",
+          "clientDefinedEventType": "clientDefinedEventType",
+          "timeOfOccurrence": "2022-10-13T17:33:15.386"
+        },
+        "transactionData": {
+          "amount": {
+            "amount": 4200000,
+            "currency": "RUB"
+          },
+          "executionSpeed": "executionSpeed",
+          "otherAccountBankType": "otherAccountBankType",
+          "myAccountData": {
+            "accountNumber": "accountNumber"
+          },
+          "otherAccountData": {
+            "accountName": "accountName",
+            "accountNumber": "accountNumber",
+            "routingCode": "routingCode",
+            "otherAccountOwnershipType": "otherAccountOwnershipType",
+            "otherAccountType": "otherAccountType",
+            "transferMediumType": "transferMediumType"
+          }
+        },
+        "customersDataList": {
+          "customer": {
+            "surname": "surname",
+            "name": "name",
+            "patronymic": "patronymic",
+            "birthday": "2000-10-13",
+            "passportNumber": "passportNumber",
+            "passportSeries": "passportSeries",
+            "mobilePhone": "mobilePhone",
+            "status": "status"
+          }
+        },
+        "clientDefinedAttributeList": {
+          "fact": [
+            {
+              "name": "ЕПК.id",
+              "value": "2435423123142324312",
+              "dataType": "STRING"
+            },
+            {
+              "name": "Уникальный идентификатор пользователя",
+              "value": "cda20b5e-11ff-43c6-abc3-f54c7c305058",
+              "dataType": "STRING"
+            },
+            {
+              "name": "ИНН отправителя",
+              "value": "1324354653423123",
+              "dataType": "STRING"
+            },
+            {
+              "name": "ИНН получателя",
+              "value": "1232453423142534",
+              "dataType": "STRING"
+            },
+            {
+              "name": "1-я подпись Время подписи",
+              "value": "2022-10-13T17:33:15.386",
+              "dataType": "STRING"
+            }
+          ]
+        }
+      },
+      "channelIndicator": "channelIndicator",
+      "clientDefinedChannelIndicator": "clientDefinedChannelIndicator"
+    }
+  }
+}

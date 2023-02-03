@@ -1,11 +1,9 @@
 package ru.sberbank.pprb.sbbol.antifraud.configuration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.dcbqa.allureee.annotations.layers.ConfigurationTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.common.AbstractIntegrationTest;
@@ -17,8 +15,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ApiTestLayer
 class UnknownJsonPropertiesTest extends AbstractIntegrationTest {
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    public UnknownJsonPropertiesTest() {
+        super("");
+    }
 
     /**
      * Тест для проверки конфигурации ObjectMapper'а в контексте Spring.
@@ -41,7 +40,7 @@ class UnknownJsonPropertiesTest extends AbstractIntegrationTest {
                       "unknownField": "unexpected"
                   }
                 """;
-        MyClass value = objectMapper.readValue(jsonContent, MyClass.class);
+        MyClass value = objectMapper().readValue(jsonContent, MyClass.class);
         assertNotNull(value);
         assertEquals("expected", value.getField());
     }

@@ -138,4 +138,5 @@ public class DeviceRequest implements Serializable {
                 ", userAgent='" + userAgent + '\'' +
                 '}';
     }
+
 }

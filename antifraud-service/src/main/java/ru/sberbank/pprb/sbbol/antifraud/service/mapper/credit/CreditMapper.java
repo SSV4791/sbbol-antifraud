@@ -306,17 +306,18 @@ public abstract class CreditMapper implements CommonMapper<CreditClientDefinedAt
     @Mapping(source = "identificationData.tbCode", target = "identificationData.orgName")
     @Mapping(target = "identificationData.requestId", expression = "java(UUID.randomUUID())")
     @Mapping(source = "deviceRequest.httpReferer", target = "deviceRequest.httpReferrer")
-    @Mapping(source = "eventData.timeOfOccurrence", target = "eventDataList.eventDataHeader.timeOfOccurrence")
-    @Mapping(source = "eventData.eventType", target = "eventDataList.eventDataHeader.eventType")
-    @Mapping(source = "eventData.eventDescription", target = "eventDataList.eventDataHeader.eventDescription")
-    @Mapping(source = "eventData.clientDefinedEventType", target = "eventDataList.eventDataHeader.clientDefinedEventType")
-    @Mapping(source = "eventData.transactionData.amount", target = "eventDataList.transactionData.amount.sum", defaultValue = "0L")
+    @Mapping(source = "eventData.timeOfOccurrence", target = "eventDataList.eventData.timeOfOccurrence")
+    @Mapping(source = "eventData.eventType", target = "eventDataList.eventData.eventType")
+    @Mapping(source = "eventData.eventDescription", target = "eventDataList.eventData.eventDescription")
+    @Mapping(source = "eventData.clientDefinedEventType", target = "eventDataList.eventData.clientDefinedEventType")
+    @Mapping(source = "eventData.transactionData.amount", target = "eventDataList.transactionData.amount.amount", defaultValue = "0L")
     @Mapping(source = "eventData.transactionData.currency", target = "eventDataList.transactionData.amount.currency")
     @Mapping(target = "eventDataList.clientDefinedAttributeList", ignore = true)
     @Mapping(target = "eventDataList.transactionData.executionSpeed", ignore = true)
     @Mapping(target = "eventDataList.transactionData.otherAccountBankType", ignore = true)
     @Mapping(target = "eventDataList.transactionData.myAccountData.accountNumber", constant = "")
     @Mapping(target = "eventDataList.transactionData.otherAccountData.accountNumber", constant = "")
+    @Mapping(target = "eventDataList.customersDataList", ignore = true)
     public abstract AnalyzeRequest toAnalyzeRequest(CreditSendToAnalyzeRq request);
 
     @AfterMapping

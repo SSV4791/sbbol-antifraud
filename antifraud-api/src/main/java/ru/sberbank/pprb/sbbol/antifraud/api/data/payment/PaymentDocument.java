@@ -1,8 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.data.payment;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import javax.validation.constraints.NotNull;
@@ -30,7 +28,6 @@ public class PaymentDocument implements Serializable {
      * Дата документа
      */
     @JsonSerialize(using = LocalDateSerializer.class)
-    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate date;
 
     /**

@@ -512,7 +512,7 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
     @Mapping(source = "senderLogin", target = "identificationData.userLoginName")
     @Mapping(source = "requestId", target = "identificationData.requestId")
     @Mapping(target = "identificationData.userName", constant = "")
-    @Mapping(target = "identificationData.dboOperation", expression = "java(DboOperation.PAYMENT_DT_0401060)")
+    @Mapping(target = "identificationData.dboOperation", expression = "java(DboOperation.PAYMENT_DT_0401060.name())")
     @Mapping(source = "devicePrint", target = "deviceRequest.devicePrint")
     @Mapping(source = "mobSdkData", target = "deviceRequest.mobSdkData")
     @Mapping(source = "httpAccept", target = "deviceRequest.httpAccept")
@@ -522,12 +522,12 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
     @Mapping(source = "httpReferer", target = "deviceRequest.httpReferrer")
     @Mapping(source = "ipAddress", target = "deviceRequest.ipAddress")
     @Mapping(source = "userAgent", target = "deviceRequest.userAgent")
-    @Mapping(source = "timeOfOccurrence", target = "eventDataList.eventDataHeader.timeOfOccurrence")
-    @Mapping(target = "eventDataList.eventDataHeader.eventType", expression = "java(DboOperation.PAYMENT_DT_0401060.getEventType())")
-    @Mapping(target = "eventDataList.eventDataHeader.eventDescription", expression = "java(DboOperation.PAYMENT_DT_0401060.getEventDescription())")
-    @Mapping(target = "eventDataList.eventDataHeader.clientDefinedEventType", expression =
-            "java(payment.getChannelIndicator() != null && payment.getClientDefinedChannelIndicator() != null ? DboOperation.PAYMENT_DT_0401060.getClientDefinedEventType(payment.getChannelIndicator(), payment.getClientDefinedChannelIndicator()) : null)")
-    @Mapping(source = "amount", target = "eventDataList.transactionData.amount.sum")
+    @Mapping(source = "timeOfOccurrence", target = "eventDataList.eventData.timeOfOccurrence")
+    @Mapping(target = "eventDataList.eventData.eventType", expression = "java(DboOperation.PAYMENT_DT_0401060.getEventType())")
+    @Mapping(target = "eventDataList.eventData.eventDescription", expression = "java(DboOperation.PAYMENT_DT_0401060.getEventDescription())")
+    @Mapping(target = "eventDataList.eventData.clientDefinedEventType", expression =
+            "java(payment.getChannelIndicator() != null && payment.getClientDefinedChannelIndicator() != null ? DboOperation.PAYMENT_DT_0401060.getClientDefinedEventType(payment.getChannelIndicator(), payment.getClientDefinedChannelIndicator()).name() : null)")
+    @Mapping(source = "amount", target = "eventDataList.transactionData.amount.amount")
     @Mapping(target = "eventDataList.transactionData.amount.currency", expression = "java(payment.getCurrency() == null ? \"RUB\" : payment.getCurrency())")
     @Mapping(source = "executionSpeed", target = "eventDataList.transactionData.executionSpeed")
     @Mapping(source = "otherAccBankType", target = "eventDataList.transactionData.otherAccountBankType")
@@ -551,8 +551,8 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
         if (Objects.nonNull(analyzeRequest.getMessageHeader().getTimeStamp())) {
             analyzeRequest.getMessageHeader().setTimeStamp(analyzeRequest.getMessageHeader().getTimeStamp().plusHours(3));
         }
-        if (Objects.nonNull(analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence())) {
-            analyzeRequest.getEventDataList().getEventDataHeader().setTimeOfOccurrence(analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence().plusHours(3));
+        if (Objects.nonNull(analyzeRequest.getEventDataList().getEventData().getTimeOfOccurrence())) {
+            analyzeRequest.getEventDataList().getEventData().setTimeOfOccurrence(analyzeRequest.getEventDataList().getEventData().getTimeOfOccurrence().plusHours(3));
         }
         analyzeRequest.getEventDataList().getClientDefinedAttributeList().getFact().stream()
                 .filter(attribute -> attribute.getName().equals(DESCRIPTION_MAP.get(FIRST_SIGN_TIME)) ||

@@ -11,9 +11,9 @@ import java.io.Serializable;
 public class Amount implements Serializable {
 
     /**
-     * Сумма перевода (amount)
+     * Сумма перевода
      */
-    private Long sum;
+    private Long amount;
 
     /**
      * Валюта перевода, буквенный код валюты перевода в соответствии со стандартом ISO
@@ -21,19 +21,21 @@ public class Amount implements Serializable {
     private String currency;
 
     @JsonCreator
-    public Amount(@JsonProperty("amount") Long sum,
+    public Amount(@JsonProperty("amount") Long amount,
                   @JsonProperty("currency") String currency) {
-        this.sum = sum;
+        this.amount = amount;
         this.currency = currency;
     }
 
-    @JsonProperty("amount")
-    public Long getSum() {
-        return sum;
+    public Amount() {
     }
 
-    public void setSum(Long sum) {
-        this.sum = sum;
+    public Long getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Long amount) {
+        this.amount = amount;
     }
 
     public String getCurrency() {
@@ -47,8 +49,9 @@ public class Amount implements Serializable {
     @Override
     public String toString() {
         return "{" +
-                "sum=" + sum +
+                "amount=" + amount +
                 ", currency='" + currency + '\'' +
                 '}';
     }
+
 }

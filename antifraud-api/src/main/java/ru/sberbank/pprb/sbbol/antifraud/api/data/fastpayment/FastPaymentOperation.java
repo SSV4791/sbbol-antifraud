@@ -1,9 +1,8 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.Operation;
 
 import javax.validation.Valid;
@@ -23,7 +22,6 @@ public class FastPaymentOperation implements Operation {
      * Дата и время формирования события
      */
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @NotNull(message = "The timeStamp attribute must be filled")
     private LocalDateTime timeStamp;
 
@@ -42,7 +40,6 @@ public class FastPaymentOperation implements Operation {
      * Время создания запроса
      */
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @NotNull(message = "The timeOfOccurrence attribute must be filled")
     private LocalDateTime timeOfOccurrence;
 
@@ -67,6 +64,11 @@ public class FastPaymentOperation implements Operation {
     @Override
     public UUID getDocId() {
         return getDocument() == null ? null : getDocument().getId();
+    }
+
+    @Override
+    public String getDboOperation() {
+        return DboOperation.SBP_B2C.name();
     }
 
     public LocalDateTime getTimeStamp() {

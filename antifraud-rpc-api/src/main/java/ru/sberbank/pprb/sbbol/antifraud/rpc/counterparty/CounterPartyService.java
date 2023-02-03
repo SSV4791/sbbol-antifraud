@@ -13,8 +13,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 
 /**
- * Сервис отправки данных в ФП ИС для последующего анализа по счету доверенного контрагента (партнера)
- * и по контрагенту (партнеру), подлежащему удалению из справочника
+ * Сервис отправки данных в ФП ИС для последующего анализа по счету доверенного контрагента (партнера) или по контрагенту (партнеру), подлежащему удалению из справочника
  */
 @JsonRpcService("/antifraud/v2/counterparty")
 public interface CounterPartyService {

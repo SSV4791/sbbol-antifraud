@@ -241,9 +241,9 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
         });
     }
 
-    private void assertOperation(FastPaymentOperation dto, String requestId, FastPayment entity) {
+    private void assertOperation(FastPaymentOperation dto, UUID requestId, FastPayment entity) {
         assertAll(
-                () -> assertEquals(requestId, entity.getRequestId()),
+                () -> assertEquals(requestId.toString(), entity.getRequestId()),
                 () -> assertEquals(dto.getTimeStamp(), entity.getEventTime()),
                 () -> assertEquals(dto.getOrgGuid(), entity.getEpkId()),
                 () -> assertEquals(dto.getDigitalId(), entity.getDigitalId()),

@@ -3,6 +3,8 @@ package ru.sberbank.pprb.sbbol.antifraud.service.mapper.fastpayment;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentSign;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 
@@ -19,6 +21,8 @@ public final class FastPaymentSignMapper {
 
     static {
         objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     }
 

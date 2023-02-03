@@ -1,0 +1,11 @@
+{
+  "jsonrpc": "2.0",
+  "method": "analyzeOperation",
+  "id": 1,
+  "params": {
+    "analyzeparams": {
+      "docId": "36ff1f5f-a0d2-4337-a4bd-1f620ac3462b",
+      "dboOperation": "dboOperation"
+    }
+  }
+}

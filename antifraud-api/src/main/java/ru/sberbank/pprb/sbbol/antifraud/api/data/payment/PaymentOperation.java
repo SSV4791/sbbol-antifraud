@@ -1,9 +1,8 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.data.payment;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.Operation;
 
 import javax.validation.Valid;
@@ -20,9 +19,8 @@ public class PaymentOperation implements Operation {
     /**
      * Дата и время формирования события
      */
-    @NotNull(message = "TimeStamp attribute cannot be null")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @NotNull(message = "TimeStamp attribute cannot be null")
     private LocalDateTime timeStamp;
 
     /**
@@ -39,7 +37,6 @@ public class PaymentOperation implements Operation {
      * Время создания запроса
      */
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime timeOfOccurrence;
 
     /**
@@ -62,6 +59,11 @@ public class PaymentOperation implements Operation {
     @Override
     public UUID getDocId() {
         return getDocument() == null ? null : getDocument().getId();
+    }
+
+    @Override
+    public String getDboOperation() {
+        return DboOperation.PAYMENT_DT_0401060.name();
     }
 
     public LocalDateTime getTimeStamp() {

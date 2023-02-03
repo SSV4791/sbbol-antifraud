@@ -1,8 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import javax.validation.constraints.NotBlank;
@@ -53,7 +51,6 @@ public class FastPaymentPayer implements Serializable {
      * Дата открытия счета плательщика
      */
     @JsonSerialize(using = LocalDateSerializer.class)
-    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate accCreateDate;
 
     /**

@@ -19,6 +19,7 @@ dependencies {
     implementation("io.micrometer:micrometer-registry-jmx:1.6.5")
     implementation("io.micrometer:micrometer-registry-prometheus:1.6.5")
     implementation("org.aspectj:aspectjrt:1.9.6")
+    implementation("com.vladmihalcea:hibernate-types-52:2.20.0")
 
     runtimeOnly("org.ehcache:ehcache:3.9.2")
     runtimeOnly("org.aspectj:aspectjweaver:1.9.5")

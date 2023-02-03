@@ -1,20 +1,15 @@
 package ru.sberbank.pprb.sbbol.antifraud.electronicreceipt;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qameta.allure.AllureId;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.ExpectedCount;
-import org.springframework.test.web.client.MockRestServiceServer;
-import org.springframework.web.client.RestTemplate;
 import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
@@ -26,6 +21,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.TriggeredRule;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
+import ru.sberbank.pprb.sbbol.antifraud.common.AbstractIntegrationTest;
 
 import java.util.Random;
 import java.util.UUID;
@@ -40,44 +36,35 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 
 @ApiTestLayer
-class ElectronicReceiptAnalyzeTest extends ElectronicReceiptIntegrationTest {
+class ElectronicReceiptAnalyzeTest extends AbstractIntegrationTest {
 
     private static final UUID DOC_ID = UUID.randomUUID();
 
-    @Autowired
-    private RestTemplate restTemplate;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Value("${fpis.endpoint}")
-    private String endPoint;
-
-    private MockRestServiceServer mockServer;
+    public ElectronicReceiptAnalyzeTest() {
+        super("/antifraud/v2/electronicreceipt");
+    }
 
     @BeforeEach
     void init() throws Throwable {
         saveOrUpdate(ElectronicReceiptBuilder.getInstance().withDocId(DOC_ID).build());
-        mockServer = MockRestServiceServer.createServer(restTemplate);
     }
 
     @Test
     @AllureId("21602")
     @DisplayName("Отправка запроса на проверку Электронного чека")
-    void sendOperationToAnalyzeTest() throws Throwable {
+    void sendOperationToAnalyzeTest() {
         FullAnalyzeResponse expected = step("Подготовка ожидаемого ответа", () -> {
             FullAnalyzeResponse expectedResponse = createFullAnalyzeResponse();
             addAttachment("Сформированный ожидаемый ответ", "text/plain", expectedResponse.toString());
-            mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
+            mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
                     .andExpect(method(HttpMethod.POST))
                     .andRespond(withStatus(HttpStatus.OK)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .body(objectMapper.writeValueAsString(expectedResponse)));
+                            .body(objectMapper().writeValueAsString(expectedResponse)));
             return expectedResponse;
         });
         AnalyzeResponse actual = step("Отправка", () -> send(new SendToAnalyzeRequest(DOC_ID)));
         step("Проверка результата", () -> {
-            mockServer.verify();
             assertAll(
                     () -> assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId(), "Идентификатор транзакции не совпадает"),
                     () -> assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode(), "Рекомендуемое действие в соответсвии со сработавшим правилом не совпадает"),
@@ -118,14 +105,13 @@ class ElectronicReceiptAnalyzeTest extends ElectronicReceiptIntegrationTest {
     @DisplayName("Получение ошибки от смежной АС при отправке на анализ ЭЧ")
     void analyzeErrorTest() {
         SendToAnalyzeRequest request = step("Подготовка тестовых данных", () -> {
-            mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
+            mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
                     .andExpect(method(HttpMethod.POST))
                     .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
             return new SendToAnalyzeRequest(DOC_ID);
         });
         String exceptionMessage = step("Получение сообщения об ошибке", () -> {
             AnalyzeException ex = assertThrows(AnalyzeException.class, () -> send(request));
-            mockServer.verify();
             return ex.getMessage();
         });
         step("Проверка сообщения об ошибке", () -> Assertions.assertTrue(exceptionMessage.contains(request.getDocId().toString())));

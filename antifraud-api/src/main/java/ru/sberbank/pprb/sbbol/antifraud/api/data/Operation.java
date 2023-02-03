@@ -15,4 +15,11 @@ public interface Operation extends Serializable {
      */
     UUID getDocId();
 
+    /**
+     * Получить тип операции
+     *
+     * @return тип операции
+     */
+    String getDboOperation();
+
 }

@@ -1,7 +1,7 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.analyze.request;
 
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
-
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -13,7 +13,8 @@ public class IdentificationData implements Serializable {
     /**
      * ID документа (docId)
      */
-    private String clientTransactionId;
+    @NotNull(message = "The attribute \"identificationData.clientTransactionId\" must be filled")
+    private UUID clientTransactionId;
 
     /**
      * Код территориального банка, в котором обслуживается организация (tbCode)
@@ -28,23 +29,24 @@ public class IdentificationData implements Serializable {
     /**
      * Тип операции
      */
-    private DboOperation dboOperation;
+    @NotBlank(message = "The attribute \"identificationData.dboOperation\" must be filled")
+    private String dboOperation;
 
     /**
-     * Идентификатор запроса во ФродМониторинг
+     * Идентификатор запроса во Фрод-мониторинг (генерируется на стороне Фрод-агрегатора)
      */
     private UUID requestId;
 
     /**
-     * Идентификатор Логина
+     * Идентификатор логина
      */
     private String userLoginName;
 
-    public String getClientTransactionId() {
+    public UUID getClientTransactionId() {
         return clientTransactionId;
     }
 
-    public void setClientTransactionId(String clientTransactionId) {
+    public void setClientTransactionId(UUID clientTransactionId) {
         this.clientTransactionId = clientTransactionId;
     }
 
@@ -64,11 +66,11 @@ public class IdentificationData implements Serializable {
         this.userName = userName;
     }
 
-    public DboOperation getDboOperation() {
+    public String getDboOperation() {
         return dboOperation;
     }
 
-    public void setDboOperation(DboOperation dboOperation) {
+    public void setDboOperation(String dboOperation) {
         this.dboOperation = dboOperation;
     }
 
@@ -90,11 +92,11 @@ public class IdentificationData implements Serializable {
 
     @Override
     public String toString() {
-        return "{" +
-                "clientTransactionId='" + clientTransactionId + '\'' +
+        return "IdentificationData{" +
+                "clientTransactionId=" + clientTransactionId +
                 ", orgName='" + orgName + '\'' +
                 ", userName='" + userName + '\'' +
-                ", dboOperation=" + dboOperation +
+                ", dboOperation='" + dboOperation + '\'' +
                 ", requestId=" + requestId +
                 ", userLoginName='" + userLoginName + '\'' +
                 '}';

@@ -67,6 +67,7 @@ class FastPaymentMapperTest extends MapperTest {
         fastPayment.setUserGuid(UUID.randomUUID().toString());
         fastPayment.setChannelIndicator(ChannelIndicator.WEB);
         fastPayment.setClientDefinedChannelIndicator(ClientDefinedChannelIndicator.PPRB_BROWSER);
+        fastPayment.setDocId(UUID.randomUUID().toString());
 
         AnalyzeRequest analyzeRequest = MAPPER.toAnalyzeRequest(fastPayment);
         assertNotNull(analyzeRequest);
@@ -75,10 +76,10 @@ class FastPaymentMapperTest extends MapperTest {
         assertEquals(fastPayment.getEventTime().plusHours(3), analyzeRequest.getMessageHeader().getTimeStamp());
 
         assertNotNull(analyzeRequest.getIdentificationData());
-        assertEquals(fastPayment.getDocId(), analyzeRequest.getIdentificationData().getClientTransactionId());
+        assertEquals(fastPayment.getDocId(), analyzeRequest.getIdentificationData().getClientTransactionId().toString());
         assertEquals(fastPayment.getTbCode(), analyzeRequest.getIdentificationData().getOrgName());
         assertEquals("", analyzeRequest.getIdentificationData().getUserName());
-        assertEquals(SBP_B2C, analyzeRequest.getIdentificationData().getDboOperation());
+        assertEquals(SBP_B2C.name(), analyzeRequest.getIdentificationData().getDboOperation());
         assertEquals(fastPayment.getRequestId(), analyzeRequest.getIdentificationData().getRequestId().toString());
         assertEquals(fastPayment.getSenderLogin(), analyzeRequest.getIdentificationData().getUserLoginName());
 
@@ -93,21 +94,21 @@ class FastPaymentMapperTest extends MapperTest {
         assertEquals(fastPayment.getIpAddress(), analyzeRequest.getDeviceRequest().getIpAddress());
         assertEquals(fastPayment.getUserAgent(), analyzeRequest.getDeviceRequest().getUserAgent());
 
-        assertEquals(fastPayment.getChannelIndicator(), analyzeRequest.getChannelIndicator());
-        assertEquals(fastPayment.getClientDefinedChannelIndicator(), analyzeRequest.getClientDefinedChannelIndicator());
+        assertEquals(fastPayment.getChannelIndicator().name(), analyzeRequest.getChannelIndicator());
+        assertEquals(fastPayment.getClientDefinedChannelIndicator().name(), analyzeRequest.getClientDefinedChannelIndicator());
 
         assertNotNull(analyzeRequest.getEventDataList());
 
-        assertNotNull(analyzeRequest.getEventDataList().getEventDataHeader());
-        assertEquals(SBP_B2C.getEventType(), analyzeRequest.getEventDataList().getEventDataHeader().getEventType());
-        assertEquals(SBP_B2C.getEventDescription(), analyzeRequest.getEventDataList().getEventDataHeader().getEventDescription());
-        assertEquals(SBP_B2C.getClientDefinedEventType(), analyzeRequest.getEventDataList().getEventDataHeader().getClientDefinedEventType());
-        assertEquals(fastPayment.getTimeOfOccurrence().plusHours(3), analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence());
+        assertNotNull(analyzeRequest.getEventDataList().getEventData());
+        assertEquals(SBP_B2C.getEventType(), analyzeRequest.getEventDataList().getEventData().getEventType());
+        assertEquals(SBP_B2C.getEventDescription(), analyzeRequest.getEventDataList().getEventData().getEventDescription());
+        assertEquals(SBP_B2C.getClientDefinedEventType().name(), analyzeRequest.getEventDataList().getEventData().getClientDefinedEventType());
+        assertEquals(fastPayment.getTimeOfOccurrence().plusHours(3), analyzeRequest.getEventDataList().getEventData().getTimeOfOccurrence());
 
         assertNotNull(analyzeRequest.getEventDataList().getTransactionData());
 
         assertNotNull(analyzeRequest.getEventDataList().getTransactionData().getAmount());
-        assertEquals(fastPayment.getAmount(), analyzeRequest.getEventDataList().getTransactionData().getAmount().getSum());
+        assertEquals(fastPayment.getAmount(), analyzeRequest.getEventDataList().getTransactionData().getAmount().getAmount());
         assertEquals(fastPayment.getCurrency(), analyzeRequest.getEventDataList().getTransactionData().getAmount().getCurrency());
 
         assertNotNull(analyzeRequest.getEventDataList().getTransactionData().getMyAccountData());

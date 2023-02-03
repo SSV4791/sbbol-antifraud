@@ -4,13 +4,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.util.UUID;
 
 /**
  * Запрос отправки на анализ документа по идентификатору
  */
-public class SendToAnalyzeRequest implements Serializable {
+public class SendToAnalyzeRequest implements SendAfterSavingRq {
 
     /**
      * Уникальный идентификатор документа
@@ -23,6 +22,12 @@ public class SendToAnalyzeRequest implements Serializable {
         this.docId = docId;
     }
 
+    @Override
+    public String getDboOperation() {
+        return null;
+    }
+
+    @Override
     public UUID getDocId() {
         return docId;
     }

@@ -5,6 +5,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Идентификационные данные по счету доверенного контрагента (партнера) или
@@ -15,8 +16,8 @@ public class CounterPartyIdentificationData implements Serializable {
     /**
      * ID документа (docId)
      */
-    @NotBlank(message = "The attribute \"identificationData.clientTransactionId\" must be filled")
-    private String clientTransactionId;
+    @NotNull(message = "The attribute \"identificationData.clientTransactionId\" must be filled")
+    private UUID clientTransactionId;
 
     /**
      * Код территориального банка, в котором обслуживается организация (tbCode)
@@ -40,11 +41,11 @@ public class CounterPartyIdentificationData implements Serializable {
      */
     private String userLoginName;
 
-    public String getClientTransactionId() {
+    public UUID getClientTransactionId() {
         return clientTransactionId;
     }
 
-    public void setClientTransactionId(String clientTransactionId) {
+    public void setClientTransactionId(UUID clientTransactionId) {
         this.clientTransactionId = clientTransactionId;
     }
 

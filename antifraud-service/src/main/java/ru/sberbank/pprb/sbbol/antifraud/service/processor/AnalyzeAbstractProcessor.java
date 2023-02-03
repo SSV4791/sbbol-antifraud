@@ -35,11 +35,11 @@ public class AnalyzeAbstractProcessor {
         this.objectMapper = objectMapper;
     }
 
-    public AnalyzeResponse sendToAnalyze(AnalyzeRequest request) throws JsonProcessingException {
+    protected AnalyzeResponse sendToAnalyze(AnalyzeRequest request) throws JsonProcessingException {
         String jsonRequest = objectMapper.writeValueAsString(request);
-        logger.debug("ClientTransactionId={}. Analyze request: {}", request.getIdentificationData().getClientTransactionId(), jsonRequest);
+        logger.debug("ClientTransactionId={}, dboOperation={}. Analyze request: {}", request.getIdentificationData().getClientTransactionId(), request.getIdentificationData().getDboOperation(), jsonRequest);
         String jsonResponse = restTemplate.postForObject(endPoint, new HttpEntity<>(jsonRequest, httpHeaders), String.class);
-        logger.debug("ClientTransactionId={}. Full analyze response: {}", request.getIdentificationData().getClientTransactionId(), jsonResponse);
+        logger.debug("ClientTransactionId={}, dboOperation={}. Full analyze response: {}", request.getIdentificationData().getClientTransactionId(), request.getIdentificationData().getDboOperation(), jsonResponse);
         FullAnalyzeResponse fullAnalyzeResponse = objectMapper.readValue(jsonResponse, FullAnalyzeResponse.class);
         return mapper.toAnalyzeResponse(fullAnalyzeResponse);
     }

@@ -1,8 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import javax.validation.constraints.Max;
@@ -42,7 +40,6 @@ public class ReceiptSign implements Serializable {
      * Дата и время подписи
      */
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @NotNull(message = "The sign.signTime attribute must be filled")
     private LocalDateTime signTime;
 

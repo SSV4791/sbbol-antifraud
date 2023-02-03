@@ -12,9 +12,9 @@ import ru.sberbank.pprb.sbbol.antifraud.service.rpc.AbstractService;
 
 @Service
 @AutoJsonRpcServiceImpl
-public class FastPaymentServiceImpl extends AbstractService<FastPaymentOperation> implements FastPaymentService {
+public class FastPaymentServiceImpl extends AbstractService<FastPaymentOperation, SendToAnalyzeRequest> implements FastPaymentService {
 
-    public FastPaymentServiceImpl(Processor<FastPaymentOperation> processor) {
+    public FastPaymentServiceImpl(Processor<FastPaymentOperation, SendToAnalyzeRequest> processor) {
         super(processor);
     }
 

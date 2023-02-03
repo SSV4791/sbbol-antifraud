@@ -143,10 +143,10 @@ public abstract class CounterPartyMapper implements CommonMapper<CounterPartyCli
     }
 
     @Mapping(target = "identificationData.requestId", expression = "java(UUID.randomUUID())")
-    @Mapping(source = "eventData.timeOfOccurrence", target = "eventDataList.eventDataHeader.timeOfOccurrence")
-    @Mapping(source = "eventData.eventType", target = "eventDataList.eventDataHeader.eventType")
-    @Mapping(source = "eventData.eventDescription", target = "eventDataList.eventDataHeader.eventDescription")
-    @Mapping(source = "eventData.clientDefinedEventType", target = "eventDataList.eventDataHeader.clientDefinedEventType")
+    @Mapping(source = "eventData.timeOfOccurrence", target = "eventDataList.eventData.timeOfOccurrence")
+    @Mapping(source = "eventData.eventType", target = "eventDataList.eventData.eventType")
+    @Mapping(source = "eventData.eventDescription", target = "eventDataList.eventData.eventDescription")
+    @Mapping(source = "eventData.clientDefinedEventType", target = "eventDataList.eventData.clientDefinedEventType")
     @Mapping(target = "eventDataList.clientDefinedAttributeList", ignore = true)
     @Mapping(target = "eventDataList.transactionData.executionSpeed", ignore = true)
     @Mapping(target = "eventDataList.transactionData.otherAccountBankType", ignore = true)
@@ -155,10 +155,11 @@ public abstract class CounterPartyMapper implements CommonMapper<CounterPartyCli
     @Mapping(target = "eventDataList.transactionData.otherAccountData.otherAccountOwnershipType", ignore = true)
     @Mapping(target = "eventDataList.transactionData.otherAccountData.otherAccountType", ignore = true)
     @Mapping(target = "eventDataList.transactionData.otherAccountData.transferMediumType", ignore = true)
-    @Mapping(target = "eventDataList.transactionData.amount.sum", expression = "java(0L)")
+    @Mapping(target = "eventDataList.transactionData.amount.amount", expression = "java(0L)")
     @Mapping(target = "eventDataList.transactionData.amount.currency", constant = "RUB")
     @Mapping(target = "eventDataList.transactionData.myAccountData.accountNumber", constant = "")
     @Mapping(target = "eventDataList.transactionData.otherAccountData.accountNumber", constant = "")
+    @Mapping(target = "eventDataList.customersDataList", ignore = true)
     public abstract AnalyzeRequest toAnalyzeRequest(CounterPartySendToAnalyzeRq request);
 
     @AfterMapping
@@ -172,8 +173,8 @@ public abstract class CounterPartyMapper implements CommonMapper<CounterPartyCli
         if (Objects.nonNull(analyzeRequest.getMessageHeader().getTimeStamp())) {
             analyzeRequest.getMessageHeader().setTimeStamp(analyzeRequest.getMessageHeader().getTimeStamp().plusHours(3));
         }
-        if (Objects.nonNull(analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence())) {
-            analyzeRequest.getEventDataList().getEventDataHeader().setTimeOfOccurrence(analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence().plusHours(3));
+        if (Objects.nonNull(analyzeRequest.getEventDataList().getEventData().getTimeOfOccurrence())) {
+            analyzeRequest.getEventDataList().getEventData().setTimeOfOccurrence(analyzeRequest.getEventDataList().getEventData().getTimeOfOccurrence().plusHours(3));
         }
         analyzeRequest.getEventDataList().getClientDefinedAttributeList().getFact().stream()
                 .filter(attribute -> attribute.getName().equals(DESCRIPTION_MAP.get(FIRST_SIGN_TIME)))
