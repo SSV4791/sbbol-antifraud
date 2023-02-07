@@ -310,13 +310,13 @@ public abstract class CreditMapper implements CommonMapper<CreditClientDefinedAt
     @Mapping(source = "eventData.eventType", target = "eventDataList.eventDataHeader.eventType")
     @Mapping(source = "eventData.eventDescription", target = "eventDataList.eventDataHeader.eventDescription")
     @Mapping(source = "eventData.clientDefinedEventType", target = "eventDataList.eventDataHeader.clientDefinedEventType")
-    @Mapping(source = "eventData.transactionData.amount", target = "eventDataList.transactionData.amount.sum")
+    @Mapping(source = "eventData.transactionData.amount", target = "eventDataList.transactionData.amount.sum", defaultValue = "0L")
     @Mapping(source = "eventData.transactionData.currency", target = "eventDataList.transactionData.amount.currency")
     @Mapping(target = "eventDataList.clientDefinedAttributeList", ignore = true)
     @Mapping(target = "eventDataList.transactionData.executionSpeed", ignore = true)
     @Mapping(target = "eventDataList.transactionData.otherAccountBankType", ignore = true)
-    @Mapping(target = "eventDataList.transactionData.myAccountData", ignore = true)
-    @Mapping(target = "eventDataList.transactionData.otherAccountData", ignore = true)
+    @Mapping(target = "eventDataList.transactionData.myAccountData.accountNumber", constant = "")
+    @Mapping(target = "eventDataList.transactionData.otherAccountData.accountNumber", constant = "")
     public abstract AnalyzeRequest toAnalyzeRequest(CreditSendToAnalyzeRq request);
 
     @AfterMapping

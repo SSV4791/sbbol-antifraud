@@ -18,7 +18,7 @@ public class CreditMapperTest extends MapperTest {
     private static final CreditMapper MAPPER = new CreditMapperImpl();
 
     @Test
-    void ToAnalyzeRequestTest() {
+    void toAnalyzeRequestTest() {
         PodamFactory podamFactory = podamFactory();
         CreditSendToAnalyzeRq request = podamFactory.populatePojo(new CreditSendToAnalyzeRq());
         request.getIdentificationData().setDboOperation(DboOperation.CREDIT_REQ_MMB_PPRB);
@@ -60,11 +60,32 @@ public class CreditMapperTest extends MapperTest {
         assertEquals(request.getEventData().getTransactionData().getCurrency(), analyzeRequest.getEventDataList().getTransactionData().getAmount().getCurrency());
         assertNull(analyzeRequest.getEventDataList().getTransactionData().getExecutionSpeed());
         assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountBankType());
-        assertNull(analyzeRequest.getEventDataList().getTransactionData().getMyAccountData());
-        assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData());
+        assertNotNull(analyzeRequest.getEventDataList().getTransactionData().getMyAccountData());
+        assertEquals("", analyzeRequest.getEventDataList().getTransactionData().getMyAccountData().getAccountNumber());
+        assertNotNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData());
+        assertEquals("", analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getAccountNumber());
+        assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getAccountName());
+        assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getOtherAccountType());
+        assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getOtherAccountOwnershipType());
+        assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getRoutingCode());
+        assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getTransferMediumType());
 
         assertEquals(request.getChannelIndicator(), analyzeRequest.getChannelIndicator());
         assertEquals(request.getClientDefinedChannelIndicator(), analyzeRequest.getClientDefinedChannelIndicator());
+    }
+
+    @Test
+    void toAnalyzeRequestWithOutAmountTest() {
+        PodamFactory podamFactory = podamFactory();
+        CreditSendToAnalyzeRq request = podamFactory.populatePojo(new CreditSendToAnalyzeRq());
+        request.getIdentificationData().setDboOperation(DboOperation.CREDIT_REQ_MMB_PPRB);
+        request.getEventData().getTransactionData().setAmount(null);
+        AnalyzeRequest analyzeRequest = MAPPER.toAnalyzeRequest(request);
+
+        assertNotNull(analyzeRequest);
+        assertNotNull(analyzeRequest.getEventDataList());
+        assertNotNull(analyzeRequest.getEventDataList().getTransactionData());
+        assertEquals(0L, analyzeRequest.getEventDataList().getTransactionData().getAmount().getSum());
     }
 
 }
