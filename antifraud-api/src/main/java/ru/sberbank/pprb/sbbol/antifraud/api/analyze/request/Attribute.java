@@ -1,9 +1,12 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.analyze.request;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 
 /**
- * Атрибут, определяющий клиента
+ * Атрибут, определенный клиентом (custom fact)
  */
 public class Attribute implements Serializable {
 
@@ -18,9 +21,21 @@ public class Attribute implements Serializable {
     private String value;
 
     /**
-     * Тип данных
+     * Тип данных, всегда STRING
      */
     private String dataType;
+
+    @JsonCreator
+    public Attribute(@JsonProperty("name") String name,
+                     @JsonProperty("value") String value,
+                     @JsonProperty("dataType") String dataType) {
+        this.name = name;
+        this.value = value;
+        this.dataType = dataType;
+    }
+
+    public Attribute() {
+    }
 
     public String getName() {
         return name;
@@ -54,4 +69,5 @@ public class Attribute implements Serializable {
                 ", dataType='" + dataType + '\'' +
                 '}';
     }
+
 }

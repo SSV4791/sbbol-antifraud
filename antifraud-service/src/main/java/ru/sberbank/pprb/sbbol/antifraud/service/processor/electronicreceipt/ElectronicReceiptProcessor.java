@@ -26,7 +26,7 @@ import java.util.UUID;
  * Осуществляет отправку данных в ФП ИС.
  */
 @Service
-public class ElectronicReceiptProcessor extends AnalyzeAbstractProcessor implements Processor<ElectronicReceiptOperation> {
+public class ElectronicReceiptProcessor extends AnalyzeAbstractProcessor implements Processor<ElectronicReceiptOperation, SendToAnalyzeRequest> {
 
     private final ElectronicReceiptRepository repository;
     private final ElectronicReceiptMapper mapper;
@@ -53,7 +53,7 @@ public class ElectronicReceiptProcessor extends AnalyzeAbstractProcessor impleme
             entity = mapper.toEntity(request);
         }
         ElectronicReceipt result = repository.save(entity);
-        return new RequestId(result.getRequestId());
+        return new RequestId(UUID.fromString(result.getRequestId()));
     }
 
     @Override

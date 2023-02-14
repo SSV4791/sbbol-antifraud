@@ -1,30 +1,24 @@
 package ru.sberbank.pprb.sbbol.antifraud.payment;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.ExpectedCount;
-import org.springframework.test.web.client.MockRestServiceServer;
-import org.springframework.web.client.RestTemplate;
+import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedEventType;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
-import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.IdentificationData;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.RiskResult;
@@ -42,10 +36,10 @@ import java.util.stream.Stream;
 
 import static io.qameta.allure.Allure.parameter;
 import static io.qameta.allure.Allure.step;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
@@ -54,35 +48,21 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PaymentAnalyzeTest extends PaymentIntegrationTest {
 
-    @Autowired
-    private RestTemplate restTemplate;
-    @Autowired
-    private ObjectMapper objectMapper;
-    @Value("${fpis.endpoint}")
-    private String endPoint;
-    private MockRestServiceServer mockServer;
-
-    @BeforeEach
-    public void init() {
-        mockServer = MockRestServiceServer.createServer(restTemplate);
-    }
-
     @Test
     @AllureId("19653")
     @DisplayName("Отправка запроса на проверку РПП")
     void sendRequest() {
         FullAnalyzeResponse expected = step("Подготовка ожидаемого ответа", this::createAnalyzeResponse);
         AnalyzeResponse actual = step("Отправка запроса на анализ и получение ответа с результатом анализа", () -> {
-            mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
+            mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
                     .andExpect(method(HttpMethod.POST))
                     .andRespond(withStatus(HttpStatus.OK)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .body(objectMapper.writeValueAsString(expected)));
+                            .body(objectMapper().writeValueAsString(expected)));
             SendToAnalyzeRequest request = new SendToAnalyzeRequest(DOC_ID);
             return send(request);
         });
         step("Проверка результата ответа", () -> {
-            mockServer.verify();
             assertAll(
                 () -> assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId(),"Идентификатор транзакции не совпадает"),
                 () -> assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode(),"Рекомендуемое действие не совпадает"),
@@ -102,15 +82,14 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
         saveOrUpdate(paymentOperation);
 
         FullAnalyzeResponse expected = createAnalyzeResponse();
-        mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
+        mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
                 .andExpect(method(HttpMethod.POST))
                 .andRespond(withStatus(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(objectMapper.writeValueAsString(expected)));
+                        .body(objectMapper().writeValueAsString(expected)));
 
         AnalyzeResponse actual = send(new SendToAnalyzeRequest(paymentOperation.getDocId()));
         deletePaymentByDocId(paymentOperation.getDocId());
-        mockServer.verify();
         assertAll(
                 () -> assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId(),"Идентификатор транзакции не совпадает"),
                 () -> assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode(),"Рекомендуемое действие не совпадает"),
@@ -137,14 +116,13 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
     @DisplayName("Получение ошибки от смежной АС при отправке на анализ РПП")
     void analyzeErrorTest() {
         SendToAnalyzeRequest request = step("Подготовка тестовых данных", () -> {
-            mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
+            mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
                     .andExpect(method(HttpMethod.POST))
                     .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
             return new SendToAnalyzeRequest(DOC_ID);
         });
         String exceptionMessage = step("Получение сообщения об ошибке", () -> {
             AnalyzeException ex = assertThrows(AnalyzeException.class, () -> send(request));
-            mockServer.verify();
             return ex.getMessage();
         });
         step("Проверка сообщения об ошибке", () -> Assertions.assertTrue(exceptionMessage.contains(request.getDocId().toString())));

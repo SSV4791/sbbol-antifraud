@@ -1,9 +1,9 @@
 package ru.sberbank.pprb.sbbol.antifraud.payment;
 
+import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import io.qameta.allure.AllureId;
 import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentDocument;
@@ -19,10 +19,10 @@ import java.util.Random;
 import java.util.UUID;
 
 import static io.qameta.allure.Allure.step;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ApiTestLayer
 class PaymentDataTest extends PaymentIntegrationTest {
@@ -231,14 +231,14 @@ class PaymentDataTest extends PaymentIntegrationTest {
                 () -> assertSecondSign(dto.getMappedSigns().get(1), entity),
                 () -> assertThirdSign(dto.getMappedSigns().get(2), entity),
                 () -> assertSenderSign(dto.getMappedSigns().get(3), entity),
-                () -> assertEquals(requestId, entity.getRequestId()),
+                () -> assertEquals(requestId.toString(), entity.getRequestId()),
                 () -> assertEquals(1, entity.getDocNumber())
         ));
     }
 
-    private void assertOperation(PaymentOperation dto, String requestId, Payment entity) {
+    private void assertOperation(PaymentOperation dto, UUID requestId, Payment entity) {
         assertAll(
-                () -> assertEquals(requestId, entity.getRequestId(), "Идентификатор записи не совпадает"),
+                () -> assertEquals(requestId.toString(), entity.getRequestId(), "Идентификатор записи не совпадает"),
                 () -> assertEquals(dto.getTimeStamp(), entity.getEventTime(), "Дата и время формирования события не совпадают"),
                 () -> assertEquals(dto.getOrgGuid(), entity.getEpkId(), "ЕПК Id не совпадает"),
                 () -> assertEquals(dto.getDigitalId(), entity.getDigitalId(), "Digital ID не совпадает"),
@@ -435,7 +435,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
                 assertAll(
                         () -> assertEquals(dto.getTimeStamp(), entity.getEventTime()),
                         () -> assertEquals(dto.getDocument().getId().toString(), entity.getDocId()),
-                        () -> assertEquals(requestId.getId(), entity.getRequestId())
+                        () -> assertEquals(requestId.getId().toString(), entity.getRequestId())
                 ));
     }
 

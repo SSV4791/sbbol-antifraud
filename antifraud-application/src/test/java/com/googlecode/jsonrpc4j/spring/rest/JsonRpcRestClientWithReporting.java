@@ -41,7 +41,7 @@ public class JsonRpcRestClientWithReporting extends JsonRpcClient implements IJs
         this(serviceUrl, new ObjectMapper());
     }
 
-    private JsonRpcRestClientWithReporting(URL serviceUrl, ObjectMapper mapper) {
+    public JsonRpcRestClientWithReporting(URL serviceUrl, ObjectMapper mapper) {
         this(serviceUrl, mapper, null, new HashMap<String, String>());
     }
 

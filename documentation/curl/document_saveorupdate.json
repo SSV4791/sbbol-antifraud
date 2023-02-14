@@ -1,0 +1,77 @@
+{
+  "jsonrpc": "2.0",
+  "method": "saveOrUpdateData",
+  "id": 1,
+  "params": {
+    "dataparams": {
+      "timestamp": "2022-10-13T17:33:15.386+03:00",
+      "requestType": "ANALYZE",
+      "docId": "36ff1f5f-a0d2-4337-a4bd-1f620ac3462b",
+      "orgName": "orgName",
+      "userName": "userName",
+      "dboOperation": "dboOperation",
+      "userLoginName": "userLoginName",
+      "devicePrint": "devicePrint",
+      "mobSdkData": "mobSdkData",
+      "httpAccept": "httpAccept",
+      "httpAcceptChars": "httpAcceptChars",
+      "httpAcceptEncoding": "httpAcceptEncoding",
+      "httpAcceptLanguage": "httpAcceptLanguage",
+      "httpReferrer": "httpReferrer",
+      "ipAddress": "ipAddress",
+      "userAgent": "userAgent",
+      "eventType": "eventType",
+      "eventDescription": "eventDescription",
+      "clientDefinedEventType": "clientDefinedEventType",
+      "timeOfOccurrence": "2022-10-13T17:33:15.386+03:00",
+      "amount": 4200000,
+      "currency": "RUB",
+      "executionSpeed": "executionSpeed",
+      "otherAccountBankType": "otherAccountBankType",
+      "myAccountNumber": "myAccountNumber",
+      "accountName": "accountName",
+      "otherAccountNumber": "otherAccountNumber",
+      "routingCode": "routingCode",
+      "otherAccountOwnershipType": "ownershipType",
+      "otherAccountType": "otherAccountType",
+      "transferMediumType": "transferMediumType",
+      "customerSurname": "customerSurname",
+      "customerName": "customerName",
+      "customerPatronymic": "customerPatronymic",
+      "customerBirthday": "2000-10-13",
+      "customerPassportNumber": "customerPassportNumber",
+      "customerPassportSeries": "customerPassportSeries",
+      "customerMobilePhone": "customerMobilePhone",
+      "customerStatus": "customerStatus",
+      "clientDefinedAttributeList": [
+        {
+          "name": "ЕПК.id",
+          "value": "2435423123142324312",
+          "dataType": "STRING"
+        },
+        {
+          "name": "Уникальный идентификатор пользователя",
+          "value": "cda20b5e-11ff-43c6-abc3-f54c7c305058",
+          "dataType": "STRING"
+        },
+        {
+          "name": "ИНН отправителя",
+          "value": "1324354653423123",
+          "dataType": "STRING"
+        },
+        {
+          "name": "ИНН получателя",
+          "value": "1232453423142534",
+          "dataType": "STRING"
+        },
+        {
+          "name": "1-я подпись Время подписи",
+          "value": "2022-10-13T17:33:15.386",
+          "dataType": "STRING"
+        }
+      ],
+      "channelIndicator": "WEB",
+      "clientDefinedChannelIndicator": "PPRB_BROWSER"
+    }
+  }
+}

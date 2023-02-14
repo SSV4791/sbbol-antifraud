@@ -515,7 +515,6 @@ public class ElectronicReceipt extends BaseEntity {
         this.eventTime = timeStamp;
     }
 
-    @Override
     public String getEpkId() {
         return epkId;
     }

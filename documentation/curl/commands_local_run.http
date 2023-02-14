@@ -1,3 +1,5 @@
+### РПП
+
 POST http://127.0.0.1:8080/antifraud/v2/payment
 Content-Type: application/json-rpc
 
@@ -10,7 +12,7 @@ Content-Type: application/json-rpc
 
 < payment_send.json
 
-###
+### СБП
 
 POST http://127.0.0.1:8080/antifraud/v2/fastpayment
 Content-Type: application/json-rpc
@@ -24,7 +26,7 @@ Content-Type: application/json-rpc
 
 < fastpayment_send.json
 
-###
+### ЭЧ
 
 POST http://127.0.0.1:8080/antifraud/v2/electronicreceipt
 Content-Type: application/json-rpc
@@ -38,16 +40,37 @@ Content-Type: application/json-rpc
 
 < electronicreceipt_send.json
 
-###
+### Партнеры
 
 POST http://127.0.0.1:8080/antifraud/v2/counterparty
 Content-Type: application/json-rpc
 
 < counterparty_send.json
 
-###
+### Кредиты
 
 POST http://127.0.0.1:8080/antifraud/v2/credit
 Content-Type: application/json-rpc
 
 < credit_send.json
+
+### Универсальный API
+
+POST http://127.0.0.1:8080/antifraud/v2/document/saveandsend
+Content-Type: application/json-rpc
+
+< document_saveorupdate.json
+
+###
+
+POST http://127.0.0.1:8080/antifraud/v2/document/saveandsend
+Content-Type: application/json-rpc
+
+< document_send.json
+
+###
+
+POST http://127.0.0.1:8080/antifraud/v2/document/analyze
+Content-Type: application/json-rpc
+
+< document_analyze.json

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ElectronicReceiptOperation;
@@ -15,24 +16,41 @@ import ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ReceiptPayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ReceiptReceiver;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ReceiptSign;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
+import ru.sberbank.pprb.sbbol.antifraud.common.AbstractIntegrationTest;
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.electronicreceipt.ElectronicReceipt;
+import ru.sberbank.pprb.sbbol.antifraud.service.repository.electronicreceipt.ElectronicReceiptRepository;
+
+import java.util.Optional;
 import java.util.UUID;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+import static io.qameta.allure.Allure.parameter;
+import static io.qameta.allure.Allure.step;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static io.qameta.allure.Allure.step;
-import static io.qameta.allure.Allure.parameter;
 
 @ApiTestLayer
-class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
+class ElectronicReceiptDataTest extends AbstractIntegrationTest {
+
+    @Autowired
+    private ElectronicReceiptRepository repository;
+
+    public ElectronicReceiptDataTest() {
+        super("/antifraud/v2/electronicreceipt");
+    }
+
+    private ElectronicReceipt searchElectronicReceipt(UUID docId) {
+        Optional<ElectronicReceipt> searchResult = repository.findFirstByDocId(docId.toString());
+        return searchResult.isEmpty() ? null : searchResult.get();
+    }
 
     @Test
     @AllureId("21601")
     @DisplayName("Создание и редактирование электронного чека")
-    void saveAndUpdateDataTest() throws Throwable {
+    void saveAndUpdateDataTest() {
         ElectronicReceiptOperation expectedCreate = step("Создание запроса для сохранения ЭЧ", () -> {
             final UUID docId = UUID.randomUUID();
             return ElectronicReceiptBuilder.getInstance()
@@ -221,9 +239,9 @@ class ElectronicReceiptDataTest extends ElectronicReceiptIntegrationTest {
         ));
     }
 
-    private void verify(String requestId, UUID docId, ElectronicReceiptOperation expected, ElectronicReceipt actual) {
+    private void verify(UUID requestId, UUID docId, ElectronicReceiptOperation expected, ElectronicReceipt actual) {
         assertAll(() -> assertNotNull(actual),
-                () -> assertEquals(requestId, actual.getRequestId()),
+                () -> assertEquals(requestId.toString(), actual.getRequestId()),
                 () -> assertEquals(expected.getSign().getSignTime(), actual.getEventTime()),
                 () -> assertEquals(expected.getOrgGuid(), actual.getEpkId()),
                 () -> assertEquals(expected.getDigitalId(), actual.getDigitalId()),

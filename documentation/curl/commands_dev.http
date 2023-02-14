@@ -1,6 +1,8 @@
+### ХЧ
+
 GET https://ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru/antifraud/actuator/health/liveness
 
-###
+### РПП
 
 POST https://ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru/antifraud/v2/payment
 Content-Type: application/json-rpc
@@ -14,7 +16,7 @@ Content-Type: application/json-rpc
 
 < payment_send.json
 
-###
+### СБП
 
 POST https://ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru/antifraud/v2/fastpayment
 Content-Type: application/json-rpc
@@ -28,7 +30,7 @@ Content-Type: application/json-rpc
 
 < fastpayment_send.json
 
-###
+### ЭЧ
 
 POST https://ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru/antifraud/v2/electronicreceipt
 Content-Type: application/json-rpc
@@ -42,16 +44,37 @@ Content-Type: application/json-rpc
 
 < electronicreceipt_send.json
 
-###
+### Партнеры
 
 POST https://ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru/antifraud/v2/counterparty
 Content-Type: application/json-rpc
 
 < counterparty_send.json
 
-###
+### Кредиты
 
 POST https://ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru/antifraud/v2/credit
 Content-Type: application/json-rpc
 
 < credit_send.json
+
+### Универсальный API
+
+POST https://ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru/antifraud/v2/document/saveandsend
+Content-Type: application/json-rpc
+
+< document_saveorupdate.json
+
+###
+
+POST https://ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru/antifraud/v2/document/saveandsend
+Content-Type: application/json-rpc
+
+< document_send.json
+
+###
+
+POST https://ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru/antifraud/v2/document/analyze
+Content-Type: application/json-rpc
+
+< document_analyze.json

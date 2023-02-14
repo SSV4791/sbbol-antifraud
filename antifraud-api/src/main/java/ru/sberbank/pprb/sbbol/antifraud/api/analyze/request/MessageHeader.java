@@ -1,14 +1,13 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.analyze.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -20,14 +19,14 @@ public class MessageHeader implements Serializable {
     /**
      * Дата и время формирования события
      */
+    @NotNull(message = "The attribute \"messageHeader.timeStamp\" must be filled")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime timeStamp;
 
     /**
      * Идентификатор метода
      */
+    @NotBlank(message = "The attribute \"messageHeader.requestType\" must be filled")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String requestType;
 
@@ -36,6 +35,9 @@ public class MessageHeader implements Serializable {
                          @JsonProperty("requestType") String requestType) {
         this.timeStamp = timeStamp;
         this.requestType = requestType;
+    }
+
+    public MessageHeader() {
     }
 
     public LocalDateTime getTimeStamp() {
@@ -56,7 +58,7 @@ public class MessageHeader implements Serializable {
 
     @Override
     public String toString() {
-        return "MessageHeader{" +
+        return "{" +
                 "timeStamp=" + timeStamp +
                 ", requestType='" + requestType + '\'' +
                 '}';

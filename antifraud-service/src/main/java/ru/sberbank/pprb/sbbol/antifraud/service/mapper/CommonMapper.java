@@ -4,10 +4,13 @@ import org.mapstruct.Mapping;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.Attribute;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.ClientDefinedAttributeList;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.EventData;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.EventDataList;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
 
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +20,8 @@ import java.util.function.Function;
 public interface CommonMapper<T> {
 
     @Mapping(source = "identificationData.transactionId", target = "transactionId")
+    @Mapping(source = "statusHeader.statusCode", target = "statusCode")
+    @Mapping(source = "statusHeader.reasonCode", target = "reasonCode")
     @Mapping(source = "riskResult.triggeredRule.actionCode", target = "actionCode")
     @Mapping(source = "riskResult.triggeredRule.comment", target = "comment")
     @Mapping(source = "riskResult.triggeredRule.detailledComment", target = "detailledComment")
@@ -35,6 +40,14 @@ public interface CommonMapper<T> {
         return uuid == null ? null : uuid.toString();
     }
 
+    default String enumToString(Enum<?> arg) {
+        return arg == null ? null : arg.name();
+    }
+
+    default LocalDateTime offSetDateTimeToLocalDateTime(OffsetDateTime dateTime) {
+        return dateTime == null ? null : dateTime.atZoneSameInstant(ZoneOffset.of("+03:00")).toLocalDateTime();
+    }
+
     default void createClientDefinedAttributeList(AnalyzeRequest analyzeRequest,
                                                   T operationGet,
                                                   Map<String, Function<T, Object>> criteriaMap,
@@ -51,7 +64,7 @@ public interface CommonMapper<T> {
             }
         }
         if (analyzeRequest.getEventDataList() == null) {
-            analyzeRequest.setEventDataList(new EventData());
+            analyzeRequest.setEventDataList(new EventDataList());
         }
         analyzeRequest.getEventDataList().setClientDefinedAttributeList(new ClientDefinedAttributeList(clientDefinedAttributeList));
     }

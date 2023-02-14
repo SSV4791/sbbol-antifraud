@@ -1,56 +1,113 @@
 package ru.sberbank.pprb.sbbol.antifraud.common;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.googlecode.jsonrpc4j.spring.rest.JsonRpcRestClientWithReporting;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.web.client.RestTemplate;
 import ru.sberbank.pprb.sbbol.antifraud.AntiFraudRunner;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithOutSavingRequest;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendAfterSavingRq;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.Operation;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
+import uk.co.jemos.podam.api.PodamFactory;
+import uk.co.jemos.podam.api.PodamFactoryImpl;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collections;
 
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = {AntiFraudRunner.class}
 )
-@DirtiesContext
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ActiveProfiles("test")
 @ContextConfiguration(initializers = {HibernatePluginCleanerInitializer.class})
 @Import(TestReplicationConfiguration.class)
 public abstract class AbstractIntegrationTest {
 
-    protected static final String HOST = "http://localhost:";
+    private final PodamFactory factory;
+
+    private final String context;
+
+    private JsonRpcRestClientWithReporting jsonRpcRestClient;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Value("${fpis.endpoint}")
+    private String endPoint;
 
     @LocalServerPort
-    protected int port;
+    int port;
 
-    protected static RequestId saveOrUpdateData(JsonRpcRestClientWithReporting createRpcClient, Operation record) throws Throwable {
-        return createRpcClient.invoke(
+    private MockRestServiceServer mockServer;
+
+    public AbstractIntegrationTest(String context) {
+        this.context = context;
+        this.factory = new PodamFactoryImpl();
+    }
+
+    @BeforeAll
+    void setupRestClientAndMockServer() throws MalformedURLException {
+        this.jsonRpcRestClient = new JsonRpcRestClientWithReporting(new URL("http://localhost:" + port + context), objectMapper);
+        this.mockServer = MockRestServiceServer.createServer(restTemplate);
+    }
+
+    @AfterEach
+    void verifyAndResetMockServer() {
+        mockServer.verify();
+        mockServer.reset();
+    }
+
+    protected ObjectMapper objectMapper() {
+        return objectMapper;
+    }
+
+    protected String endPoint() {
+        return endPoint;
+    }
+
+    protected MockRestServiceServer mockServer() {
+        return mockServer;
+    }
+
+    protected PodamFactory podamFactory() {
+        return factory;
+    }
+
+    protected RequestId saveOrUpdate(Operation record) throws Throwable {
+        return jsonRpcRestClient.invoke(
                 "saveOrUpdateData",
                 Collections.singletonMap("dataparams", record),
                 RequestId.class
         );
     }
 
-    protected static AnalyzeResponse sendData(JsonRpcRestClientWithReporting searchRpcClient, SendToAnalyzeRequest request) throws Throwable {
-        return searchRpcClient.invoke(
+    protected AnalyzeResponse send(SendAfterSavingRq request) throws Throwable {
+        return jsonRpcRestClient.invoke(
                 "analyzeOperation",
                 Collections.singletonMap("analyzeparams", request),
                 AnalyzeResponse.class
         );
     }
 
-    protected static AnalyzeResponse sendData(JsonRpcRestClientWithReporting searchRpcClient, AnalyzeWithOutSavingRequest request) throws Throwable {
-        return searchRpcClient.invoke(
+    protected AnalyzeResponse send(AnalyzeWithOutSavingRequest request) throws Throwable {
+        return jsonRpcRestClient.invoke(
                 "analyzeOperation",
                 Collections.singletonMap("analyzeparams", request),
                 AnalyzeResponse.class

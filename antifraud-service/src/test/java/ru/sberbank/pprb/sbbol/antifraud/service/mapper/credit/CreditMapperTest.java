@@ -8,6 +8,8 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.MapperTest;
 import uk.co.jemos.podam.api.PodamFactory;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -22,6 +24,7 @@ public class CreditMapperTest extends MapperTest {
         PodamFactory podamFactory = podamFactory();
         CreditSendToAnalyzeRq request = podamFactory.populatePojo(new CreditSendToAnalyzeRq());
         request.getIdentificationData().setDboOperation(DboOperation.CREDIT_REQ_MMB_PPRB);
+        request.getIdentificationData().setClientTransactionId(UUID.randomUUID());
         AnalyzeRequest analyzeRequest = MAPPER.toAnalyzeRequest(request);
         assertNotNull(analyzeRequest);
 
@@ -33,7 +36,7 @@ public class CreditMapperTest extends MapperTest {
         assertEquals(request.getIdentificationData().getClientTransactionId(), analyzeRequest.getIdentificationData().getClientTransactionId());
         assertEquals(request.getIdentificationData().getTbCode(), analyzeRequest.getIdentificationData().getOrgName());
         assertEquals(request.getIdentificationData().getUserUcpId(), analyzeRequest.getIdentificationData().getUserName());
-        assertEquals(request.getIdentificationData().getDboOperation(), analyzeRequest.getIdentificationData().getDboOperation());
+        assertEquals(request.getIdentificationData().getDboOperation().name(), analyzeRequest.getIdentificationData().getDboOperation());
         assertNotNull(analyzeRequest.getIdentificationData().getRequestId().toString());
         assertEquals(request.getIdentificationData().getUserLoginName(), analyzeRequest.getIdentificationData().getUserLoginName());
 
@@ -49,14 +52,14 @@ public class CreditMapperTest extends MapperTest {
         assertEquals(request.getDeviceRequest().getUserAgent(), analyzeRequest.getDeviceRequest().getUserAgent());
 
         assertNotNull(analyzeRequest.getEventDataList());
-        assertNotNull(analyzeRequest.getEventDataList().getEventDataHeader());
-        assertEquals(request.getEventData().getEventType(), analyzeRequest.getEventDataList().getEventDataHeader().getEventType());
-        assertEquals(request.getEventData().getEventDescription(), analyzeRequest.getEventDataList().getEventDataHeader().getEventDescription());
-        assertEquals(request.getEventData().getClientDefinedEventType(), analyzeRequest.getEventDataList().getEventDataHeader().getClientDefinedEventType());
-        assertEquals(request.getEventData().getTimeOfOccurrence(), analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence());
+        assertNotNull(analyzeRequest.getEventDataList().getEventData());
+        assertEquals(request.getEventData().getEventType(), analyzeRequest.getEventDataList().getEventData().getEventType());
+        assertEquals(request.getEventData().getEventDescription(), analyzeRequest.getEventDataList().getEventData().getEventDescription());
+        assertEquals(request.getEventData().getClientDefinedEventType().name(), analyzeRequest.getEventDataList().getEventData().getClientDefinedEventType());
+        assertEquals(request.getEventData().getTimeOfOccurrence(), analyzeRequest.getEventDataList().getEventData().getTimeOfOccurrence());
         assertEquals(CreditMapper.CAPACITY, analyzeRequest.getEventDataList().getClientDefinedAttributeList().getFact().size());
         assertNotNull(analyzeRequest.getEventDataList().getTransactionData());
-        assertEquals(request.getEventData().getTransactionData().getAmount(), analyzeRequest.getEventDataList().getTransactionData().getAmount().getSum());
+        assertEquals(request.getEventData().getTransactionData().getAmount(), analyzeRequest.getEventDataList().getTransactionData().getAmount().getAmount());
         assertEquals(request.getEventData().getTransactionData().getCurrency(), analyzeRequest.getEventDataList().getTransactionData().getAmount().getCurrency());
         assertNull(analyzeRequest.getEventDataList().getTransactionData().getExecutionSpeed());
         assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountBankType());
@@ -70,14 +73,15 @@ public class CreditMapperTest extends MapperTest {
         assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getRoutingCode());
         assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getTransferMediumType());
 
-        assertEquals(request.getChannelIndicator(), analyzeRequest.getChannelIndicator());
-        assertEquals(request.getClientDefinedChannelIndicator(), analyzeRequest.getClientDefinedChannelIndicator());
+        assertEquals(request.getChannelIndicator().name(), analyzeRequest.getChannelIndicator());
+        assertEquals(request.getClientDefinedChannelIndicator().name(), analyzeRequest.getClientDefinedChannelIndicator());
     }
 
     @Test
     void toAnalyzeRequestWithOutAmountTest() {
         PodamFactory podamFactory = podamFactory();
         CreditSendToAnalyzeRq request = podamFactory.populatePojo(new CreditSendToAnalyzeRq());
+        request.getIdentificationData().setClientTransactionId(UUID.randomUUID());
         request.getIdentificationData().setDboOperation(DboOperation.CREDIT_REQ_MMB_PPRB);
         request.getEventData().getTransactionData().setAmount(null);
         AnalyzeRequest analyzeRequest = MAPPER.toAnalyzeRequest(request);
@@ -85,7 +89,7 @@ public class CreditMapperTest extends MapperTest {
         assertNotNull(analyzeRequest);
         assertNotNull(analyzeRequest.getEventDataList());
         assertNotNull(analyzeRequest.getEventDataList().getTransactionData());
-        assertEquals(0L, analyzeRequest.getEventDataList().getTransactionData().getAmount().getSum());
+        assertEquals(0L, analyzeRequest.getEventDataList().getTransactionData().getAmount().getAmount());
     }
 
 }

@@ -1,5 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt;
 
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.Operation;
 
 import javax.validation.Valid;
@@ -52,6 +53,11 @@ public class ElectronicReceiptOperation implements Operation {
     @Override
     public UUID getDocId() {
         return getDocument() == null ? null : getDocument().getId();
+    }
+
+    @Override
+    public String getDboOperation() {
+        return DboOperation.ELECTRONIC_CHEQUE.name();
     }
 
     public String getOrgGuid() {

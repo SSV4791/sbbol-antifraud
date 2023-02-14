@@ -9,6 +9,8 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.MapperTest;
 import uk.co.jemos.podam.api.PodamFactory;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -24,6 +26,7 @@ public class CounterPartyMapperTest extends MapperTest {
         PodamFactory podamFactory = podamFactory();
         CounterPartySendToAnalyzeRq request = podamFactory.populatePojo(new CounterPartySendToAnalyzeRq());
         request.getIdentificationData().setDboOperation(PARTNERS);
+        request.getIdentificationData().setClientTransactionId(UUID.randomUUID());
         AnalyzeRequest analyzeRequest = MAPPER.toAnalyzeRequest(request);
         assertNotNull(analyzeRequest);
 
@@ -35,7 +38,7 @@ public class CounterPartyMapperTest extends MapperTest {
         assertEquals(request.getIdentificationData().getClientTransactionId(), analyzeRequest.getIdentificationData().getClientTransactionId());
         assertEquals(request.getIdentificationData().getOrgName(), analyzeRequest.getIdentificationData().getOrgName());
         assertEquals(request.getIdentificationData().getUserName(), analyzeRequest.getIdentificationData().getUserName());
-        assertEquals(PARTNERS, analyzeRequest.getIdentificationData().getDboOperation());
+        assertEquals(PARTNERS.name(), analyzeRequest.getIdentificationData().getDboOperation());
         assertNotNull(analyzeRequest.getIdentificationData().getRequestId().toString());
         assertEquals(request.getIdentificationData().getUserLoginName(), analyzeRequest.getIdentificationData().getUserLoginName());
 
@@ -51,15 +54,15 @@ public class CounterPartyMapperTest extends MapperTest {
         assertEquals(request.getDeviceRequest().getUserAgent(), analyzeRequest.getDeviceRequest().getUserAgent());
 
         assertNotNull(analyzeRequest.getEventDataList());
-        assertNotNull(analyzeRequest.getEventDataList().getEventDataHeader());
-        assertEquals(request.getEventData().getEventType(), analyzeRequest.getEventDataList().getEventDataHeader().getEventType());
-        assertEquals(request.getEventData().getEventDescription(), analyzeRequest.getEventDataList().getEventDataHeader().getEventDescription());
-        assertEquals(request.getEventData().getClientDefinedEventType(), analyzeRequest.getEventDataList().getEventDataHeader().getClientDefinedEventType());
-        assertEquals(request.getEventData().getTimeOfOccurrence().plusHours(3), analyzeRequest.getEventDataList().getEventDataHeader().getTimeOfOccurrence());
+        assertNotNull(analyzeRequest.getEventDataList().getEventData());
+        assertEquals(request.getEventData().getEventType(), analyzeRequest.getEventDataList().getEventData().getEventType());
+        assertEquals(request.getEventData().getEventDescription(), analyzeRequest.getEventDataList().getEventData().getEventDescription());
+        assertEquals(request.getEventData().getClientDefinedEventType().name(), analyzeRequest.getEventDataList().getEventData().getClientDefinedEventType());
+        assertEquals(request.getEventData().getTimeOfOccurrence().plusHours(3), analyzeRequest.getEventDataList().getEventData().getTimeOfOccurrence());
         assertEquals(CounterPartyMapper.CAPACITY, analyzeRequest.getEventDataList().getClientDefinedAttributeList().getFact().size());
         assertNotNull(analyzeRequest.getEventDataList().getTransactionData());
         assertNotNull(analyzeRequest.getEventDataList().getTransactionData().getAmount());
-        assertEquals(0, analyzeRequest.getEventDataList().getTransactionData().getAmount().getSum());
+        assertEquals(0, analyzeRequest.getEventDataList().getTransactionData().getAmount().getAmount());
         assertEquals("RUB", analyzeRequest.getEventDataList().getTransactionData().getAmount().getCurrency());
         assertNull(analyzeRequest.getEventDataList().getTransactionData().getExecutionSpeed());
         assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountBankType());
@@ -73,8 +76,8 @@ public class CounterPartyMapperTest extends MapperTest {
         assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getOtherAccountType());
         assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getTransferMediumType());
 
-        assertEquals(request.getChannelIndicator(), analyzeRequest.getChannelIndicator());
-        assertEquals(request.getClientDefinedChannelIndicator(), analyzeRequest.getClientDefinedChannelIndicator());
+        assertEquals(request.getChannelIndicator().name(), analyzeRequest.getChannelIndicator());
+        assertEquals(request.getClientDefinedChannelIndicator().name(), analyzeRequest.getClientDefinedChannelIndicator());
     }
 
     @Test

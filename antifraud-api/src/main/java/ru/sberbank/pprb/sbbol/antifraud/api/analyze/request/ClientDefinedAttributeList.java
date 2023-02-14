@@ -3,22 +3,27 @@ package ru.sberbank.pprb.sbbol.antifraud.api.analyze.request;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.List;
 
 /**
- * Атрибуты, определяющие клиента
+ * Атрибуты, определенные клиентом (custom facts)
  */
 public class ClientDefinedAttributeList implements Serializable {
 
     /**
-     * Список атрибутов, определяющих клиента
+     * Список атрибутов, определенных клиентом (custom facts)
      */
+    @NotEmpty(message = "The attribute \"eventDataList.clientDefinedAttributeList.fact\" must be filled")
     private List<Attribute> fact;
 
     @JsonCreator
     public ClientDefinedAttributeList(@JsonProperty("fact") List<Attribute> fact) {
         this.fact = fact;
+    }
+
+    public ClientDefinedAttributeList() {
     }
 
     public List<Attribute> getFact() {
@@ -35,4 +40,5 @@ public class ClientDefinedAttributeList implements Serializable {
                 "fact=" + fact +
                 '}';
     }
+
 }

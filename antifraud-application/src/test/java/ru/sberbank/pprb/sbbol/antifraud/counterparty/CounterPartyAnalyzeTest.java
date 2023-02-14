@@ -1,21 +1,14 @@
 package ru.sberbank.pprb.sbbol.antifraud.counterparty;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.googlecode.jsonrpc4j.spring.rest.JsonRpcRestClientWithReporting;
 import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.ExpectedCount;
-import org.springframework.test.web.client.MockRestServiceServer;
-import org.springframework.web.client.RestTemplate;
 import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator;
@@ -31,10 +24,8 @@ import ru.sberbank.pprb.sbbol.antifraud.common.AbstractIntegrationTest;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
 
-import java.net.URL;
-import java.util.Collections;
+import java.util.UUID;
 
-import static io.qameta.allure.Allure.step;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -46,20 +37,11 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 @ApiTestLayer
 class CounterPartyAnalyzeTest extends AbstractIntegrationTest {
 
-    @Autowired
-    private RestTemplate restTemplate;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Value("${fpis.endpoint}")
-    private String endPoint;
-
-    private MockRestServiceServer mockServer;
-
     private PodamFactory factory;
 
-    private static JsonRpcRestClientWithReporting jsonRpcRestClient;
+    public CounterPartyAnalyzeTest(){
+        super("/antifraud/v2/counterparty");
+    }
 
     @BeforeAll
     void initPodamFactory() {
@@ -67,35 +49,21 @@ class CounterPartyAnalyzeTest extends AbstractIntegrationTest {
         factory.getStrategy().addOrReplaceTypeManufacturer(DboOperation.class, (str, meta, types) -> DboOperation.PARTNERS);
     }
 
-    @BeforeAll
-    void setup() {
-        jsonRpcRestClient = step("Создание rest-клиента обработки счетов партнеров", () -> new JsonRpcRestClientWithReporting(new URL(HOST + port + "/antifraud/v2/counterparty"), Collections.emptyMap()));
-    }
-
-    @BeforeEach
-    void initMockServer() {
-        mockServer = MockRestServiceServer.createServer(restTemplate);
-    }
-
-    protected static AnalyzeResponse analyze(CounterPartySendToAnalyzeRq request) throws Throwable {
-        return sendData(jsonRpcRestClient, request);
-    }
-
     @Test
     @AllureId("55377")
     @DisplayName("Отправка партнеров на анализ (успешный ответ)")
     void analyzeTest() throws Throwable {
         FullAnalyzeResponse fullAnalyzeResponse = factory.populatePojo(new FullAnalyzeResponse());
-        mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
+        mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
                 .andExpect(method(HttpMethod.POST))
                 .andRespond(withStatus(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(objectMapper.writeValueAsString(fullAnalyzeResponse)));
+                        .body(objectMapper().writeValueAsString(fullAnalyzeResponse)));
 
         CounterPartySendToAnalyzeRq request = factory.populatePojo(new CounterPartySendToAnalyzeRq());
-        AnalyzeResponse response = analyze(request);
+        request.getIdentificationData().setClientTransactionId(UUID.randomUUID());
+        AnalyzeResponse response = send(request);
 
-        mockServer.verify();
         assertAll(
                 () -> assertEquals(fullAnalyzeResponse.getIdentificationData().getTransactionId(), response.getTransactionId()),
                 () -> assertEquals(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getActionCode(), response.getActionCode()),
@@ -109,16 +77,17 @@ class CounterPartyAnalyzeTest extends AbstractIntegrationTest {
     @AllureId("55380")
     @DisplayName("Отправка партнеров на анализ (ответ с ошибкой)")
     void analysisErrorTest() throws JsonProcessingException {
-        mockServer.expect(ExpectedCount.once(), requestTo(endPoint))
+        mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
                 .andExpect(method(HttpMethod.POST))
                 .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(objectMapper.writeValueAsString("INTERNAL_SERVER_ERROR")));
+                        .body(objectMapper().writeValueAsString("INTERNAL_SERVER_ERROR")));
 
-        AnalyzeException ex = assertThrows(AnalyzeException.class, () -> analyze(factory.populatePojo(new CounterPartySendToAnalyzeRq())));
+        CounterPartySendToAnalyzeRq request = factory.populatePojo(new CounterPartySendToAnalyzeRq());
+        request.getIdentificationData().setClientTransactionId(UUID.randomUUID());
+        AnalyzeException ex = assertThrows(AnalyzeException.class, () -> send(request));
         String message = ex.getMessage();
 
-        mockServer.verify();
         assertAll(
                 () -> assertTrue(message.contains("ClientTransactionId")),
                 () -> assertTrue(message.contains("Analysis error"))
@@ -129,7 +98,7 @@ class CounterPartyAnalyzeTest extends AbstractIntegrationTest {
     @AllureId("55382")
     @DisplayName("Валидация модели партнеров (1 уровень вложенности)")
     void validateModel1stLevelTest() {
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> analyze(new CounterPartySendToAnalyzeRq()));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> send(new CounterPartySendToAnalyzeRq()));
         String message = ex.getMessage();
         assertAll(
                 () -> assertTrue(message.contains("ClientTransactionId")),
@@ -149,7 +118,7 @@ class CounterPartyAnalyzeTest extends AbstractIntegrationTest {
         request.setEventData(new CounterPartyEventData());
         request.setChannelIndicator(ChannelIndicator.WEB);
         request.setClientDefinedChannelIndicator(ClientDefinedChannelIndicator.PPRB_BROWSER);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> analyze(request));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> send(request));
         String message = ex.getMessage();
         assertAll(
                 () -> assertTrue(message.contains("ClientTransactionId")),

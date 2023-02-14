@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Данные счета получателя
  */
-public class ReceiverAccount implements Serializable {
+public class OtherAccountData implements Serializable {
 
     /**
      * Наименование получателя (otherAccName)
@@ -96,4 +96,5 @@ public class ReceiverAccount implements Serializable {
                 ", transferMediumType='" + transferMediumType + '\'' +
                 '}';
     }
+
 }

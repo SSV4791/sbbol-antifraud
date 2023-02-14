@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: 1675249941580_create_table_t_document.sql
+      relativeToChangelogFile: true

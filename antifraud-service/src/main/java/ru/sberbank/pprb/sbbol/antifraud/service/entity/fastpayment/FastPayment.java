@@ -499,7 +499,6 @@ public class FastPayment extends BaseEntity {
         this.eventTime = timeStamp;
     }
 
-    @Override
     public String getEpkId() {
         return epkId;
     }
