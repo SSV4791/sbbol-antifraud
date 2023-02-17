@@ -71,7 +71,7 @@ public class DocumentSaveRequest implements Operation {
     /**
      * Информация о мобильном устройстве в формате json
      */
-    @Size(message = "Attribute \"mobSdkData\" cannot contain more than 1024 characters", max = 1024)
+    @Size(message = "Attribute \"mobSdkData\" cannot contain more than 4000 characters", max = 4000)
     private String mobSdkData;
 
     /**

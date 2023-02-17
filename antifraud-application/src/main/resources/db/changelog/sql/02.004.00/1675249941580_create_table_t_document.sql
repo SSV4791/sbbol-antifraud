@@ -16,7 +16,7 @@ CREATE TABLE T_DOCUMENT
     REQUESTID                     UUID,
     USERLOGINNAME                 VARCHAR(50),
     DEVICEPRINT                   VARCHAR(4000),
-    MOBSDKDATA                    VARCHAR(1024),
+    MOBSDKDATA                    VARCHAR(4000),
     HTTPACCEPT                    VARCHAR(3000),
     HTTPREFERRER                  VARCHAR(3000),
     HTTPACCEPTCHARS               VARCHAR(256),

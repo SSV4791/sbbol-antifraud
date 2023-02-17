@@ -78,7 +78,7 @@ public class Document extends BaseEntity {
     /**
      * Информация о мобильном устройстве в формате json
      */
-    @Column(length = 1024)
+    @Column(length = 4000)
     private String mobSdkData;
 
     /**
