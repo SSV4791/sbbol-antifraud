@@ -14,6 +14,7 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -52,6 +53,9 @@ public interface CommonMapper<T> {
                                                   T operationGet,
                                                   Map<String, Function<T, Object>> criteriaMap,
                                                   Map<String, String> descriptionMap) {
+        if (Objects.isNull(operationGet)) {
+            return;
+        }
         List<Attribute> clientDefinedAttributeList = new ArrayList<>(criteriaMap.size());
         for (Map.Entry<String, String> entry : descriptionMap.entrySet()) {
             Object value = criteriaMap.get(entry.getKey()).apply(operationGet);

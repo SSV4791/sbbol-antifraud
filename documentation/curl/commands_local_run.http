@@ -74,3 +74,10 @@ POST http://127.0.0.1:8080/antifraud/v2/document/analyze
 Content-Type: application/json-rpc
 
 < document_analyze.json
+
+### ИПТ
+
+POST http://127.0.0.1:8080/antifraud/v2/ipt
+Content-Type: application/json-rpc
+
+< documentation/curl/ipt_analyze.json
