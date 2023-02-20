@@ -1,7 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.mapper.counterparty;
 
 import org.junit.jupiter.api.Test;
-import ru.dcbqa.allureee.annotations.layers.UnitTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.counterparty.CounterPartySendToAnalyzeRq;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
@@ -16,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation.PARTNERS;
 
-@UnitTestLayer
 public class CounterPartyMapperTest extends MapperTest {
 
     private static final CounterPartyMapper MAPPER = new CounterPartyMapperImpl();

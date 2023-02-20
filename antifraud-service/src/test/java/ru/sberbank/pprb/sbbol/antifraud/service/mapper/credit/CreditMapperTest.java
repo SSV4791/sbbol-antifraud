@@ -1,7 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.mapper.credit;
 
 import org.junit.jupiter.api.Test;
-import ru.dcbqa.allureee.annotations.layers.UnitTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.credit.CreditSendToAnalyzeRq;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
@@ -14,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-@UnitTestLayer
 public class CreditMapperTest extends MapperTest {
 
     private static final CreditMapper MAPPER = new CreditMapperImpl();

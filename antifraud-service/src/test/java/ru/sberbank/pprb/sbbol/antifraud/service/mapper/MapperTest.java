@@ -1,6 +1,7 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.mapper;
 
 import org.junit.jupiter.api.BeforeEach;
+import ru.dcbqa.allureee.annotations.layers.UnitTestLayer;
 import uk.co.jemos.podam.api.AbstractClassInfoStrategy;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
@@ -11,6 +12,7 @@ import java.math.BigInteger;
 /**
  * Абстрактный класс для тестов мапперов MapStruct
  */
+@UnitTestLayer
 public abstract class MapperTest {
 
     private PodamFactory factory;

@@ -2,7 +2,6 @@ package ru.sberbank.pprb.sbbol.antifraud.service.mapper.document;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.dcbqa.allureee.annotations.layers.UnitTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.Attribute;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
@@ -21,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static ru.sberbank.pprb.sbbol.antifraud.service.mapper.document.DocumentMapper.CUSTOM_FACT_DATA_TYPE;
 import static ru.sberbank.pprb.sbbol.antifraud.service.mapper.document.DocumentMapper.SENDER_INN;
 
-@UnitTestLayer
 class DocumentMapperTest extends MapperTest {
 
     private static final DocumentMapper MAPPER = new DocumentMapperImpl();
