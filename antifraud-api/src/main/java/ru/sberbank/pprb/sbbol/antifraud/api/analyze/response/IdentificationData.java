@@ -15,10 +15,13 @@ public class IdentificationData implements Serializable {
      */
     private String clientTransactionId;
 
+    /**
+     * Отправлен ли запрос представителем Customer Service
+     */
     private Boolean delegated;
 
     /**
-     * Код территориального банка, в котором обслуживается организация (tbCode)
+     * Наименование организации системы фрод-мониторинга, которая создается в организациях и группах инструментов. Аналогично коду тербанка.
      */
     private String orgName;
 
@@ -33,22 +36,33 @@ public class IdentificationData implements Serializable {
     private String transactionId;
 
     /**
-     * Логин клиента
+     * Уникальный идентификатор пользователя в СберБизнес
      */
     private String userLoginName;
 
     /**
-     * Уникальный идентификатор клиента (orgGuid)
+     * Уникальный идентификатор клиента в RSA (orgGuid)
      */
     private String userName;
 
     /**
-     * Статус клиента
+     * Статус клиента во ФРОД -мониторинге.
+     * Статус передается при первоначальном создании записи клиента во ФРОД-мониторинге.
+     *
+     * Возможные значения:
+     * • UNVERIFIED - клиент зарегистрирован, но не подтвержден;
+     * • VERIFIED - клиент зарегистрирован и подтвержден;
+     * • LOCKOUT - клиент заблокирован;
+     * • UNLOCKED - клиент разблокирован.
      */
     private String userStatus;
 
     /**
-     * Тип клиента
+     * Тип клиента.
+     *
+     * Возможные значения:
+     * • «PERSISTENT» - пользователь прошел валидацию;
+     * • «NONPERSISTENT» - пользователь не прошел валидацию.
      */
     private String userType;
 

@@ -18,7 +18,7 @@ public class CounterPartyServiceImpl extends AnalyzeWithOutSavingAbstractService
 
     @Override
     public AnalyzeResponse analyzeOperation(CounterPartySendToAnalyzeRq request) {
-        return analyze(request);
+        return (AnalyzeResponse) analyze(request);
     }
 
 }

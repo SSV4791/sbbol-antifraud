@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.HttpStatusCodeException;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithOutSavingRequest;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.Response;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.UnhandledException;
@@ -23,7 +23,7 @@ public class AnalyzeWithOutSavingAbstractService<T extends AnalyzeWithOutSavingR
         this.processor = processor;
     }
 
-    protected AnalyzeResponse analyze(T request) {
+    protected Response analyze(T request) {
         String msg = "ClientTransactionId=" + request.getClientTransactionId() + ", dboOperation=" + request.getDboOperation() + ". ";
         logger.debug("{}Sending data to analyze", msg);
         try {

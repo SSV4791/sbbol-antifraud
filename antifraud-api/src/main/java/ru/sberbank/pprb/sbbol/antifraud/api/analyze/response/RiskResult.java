@@ -11,9 +11,19 @@ import java.io.Serializable;
 public class RiskResult implements Serializable {
 
     /**
-     * Оценка риска
+     * Показатель риска для анализируемого события
+     *
+     * Возможные значения:
+     * Целое значение в диапазоне от 0 до 1000 (включая границы):
+     * 0 – события не мошенничество;
+     * 1000 – события мошенничество.
      */
     private Integer riskScore;
+
+    /**
+     * Группа риска события
+     */
+    private String riskScoreBand;
 
     /**
      * Сработавшее правило
@@ -28,6 +38,14 @@ public class RiskResult implements Serializable {
         this.riskScore = riskScore;
     }
 
+    public String getRiskScoreBand() {
+        return riskScoreBand;
+    }
+
+    public void setRiskScoreBand(String riskScoreBand) {
+        this.riskScoreBand = riskScoreBand;
+    }
+
     public TriggeredRule getTriggeredRule() {
         return triggeredRule;
     }
@@ -40,7 +58,9 @@ public class RiskResult implements Serializable {
     public String toString() {
         return "{" +
                 "riskScore=" + riskScore +
+                ", riskScoreBand='" + riskScoreBand + '\'' +
                 ", triggeredRule=" + triggeredRule +
                 '}';
     }
+
 }

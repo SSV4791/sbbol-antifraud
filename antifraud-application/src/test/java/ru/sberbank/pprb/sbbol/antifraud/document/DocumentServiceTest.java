@@ -10,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.client.ExpectedCount;
 import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.document.DocumentSendToAnalyzeRq;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.document.DocumentSaveRequest;
@@ -95,17 +94,9 @@ public class DocumentServiceTest extends AbstractIntegrationTest {
                 .andRespond(withStatus(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(objectMapper().writeValueAsString(expected)));
-        AnalyzeResponse actual = send(new DocumentSendToAnalyzeRq(saveRequest.getDocId(), saveRequest.getDboOperation()));
 
-        assertAll(
-                () -> assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId()),
-                () -> assertEquals(expected.getStatusHeader().getStatusCode(), actual.getStatusCode()),
-                () -> assertEquals(expected.getStatusHeader().getReasonCode(), actual.getReasonCode()),
-                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode()),
-                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getComment(), actual.getComment()),
-                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment(), actual.getDetailledComment()),
-                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime(), actual.getWaitingTime())
-        );
+        FullAnalyzeResponse actual = sendWithFullResponse(new DocumentSendToAnalyzeRq(saveRequest.getDocId(), saveRequest.getDboOperation()));
+        assertEquals(expected.toString(), actual.toString());
     }
 
     @Test

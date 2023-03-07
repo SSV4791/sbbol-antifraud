@@ -3,7 +3,7 @@ package ru.sberbank.pprb.sbbol.antifraud.service.rpc.document;
 import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImpl;
 import org.springframework.stereotype.Service;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.document.DocumentSendToAnalyzeRq;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.document.DocumentSaveRequest;
 import ru.sberbank.pprb.sbbol.antifraud.rpc.document.DocumentService;
@@ -24,8 +24,8 @@ public class DocumentServiceImpl extends AbstractService<DocumentSaveRequest, Do
     }
 
     @Override
-    public AnalyzeResponse analyzeOperation(DocumentSendToAnalyzeRq request) {
-        return analyze(request);
+    public FullAnalyzeResponse analyzeOperation(DocumentSendToAnalyzeRq request) {
+        return (FullAnalyzeResponse) analyze(request);
     }
 
 }

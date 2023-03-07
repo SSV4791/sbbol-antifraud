@@ -18,7 +18,7 @@ public class CreditServiceImpl extends AnalyzeWithOutSavingAbstractService<Credi
 
     @Override
     public AnalyzeResponse analyzeOperation(CreditSendToAnalyzeRq request) {
-        return analyze(request);
+        return (AnalyzeResponse) analyze(request);
     }
 
 }

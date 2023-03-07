@@ -8,12 +8,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.client.ExpectedCount;
 import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
 import ru.sberbank.pprb.sbbol.antifraud.common.AbstractIntegrationTest;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
@@ -38,17 +36,8 @@ public class DocumentWithOutSavingServiceTest extends AbstractIntegrationTest {
                         .body(objectMapper().writeValueAsString(expected)));
 
         AnalyzeRequest analyzeRequest = podamFactory().populatePojo(new AnalyzeRequest());
-        AnalyzeResponse actual = send(analyzeRequest);
-
-        assertAll(
-                () -> assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId()),
-                () -> assertEquals(expected.getStatusHeader().getStatusCode(), actual.getStatusCode()),
-                () -> assertEquals(expected.getStatusHeader().getReasonCode(), actual.getReasonCode()),
-                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode()),
-                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getComment(), actual.getComment()),
-                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment(), actual.getDetailledComment()),
-                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime(), actual.getWaitingTime())
-        );
+        FullAnalyzeResponse actual = sendWithFullResponse(analyzeRequest);
+        assertEquals(expected.toString(), actual.toString());
     }
 
     @Test

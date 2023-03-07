@@ -18,7 +18,7 @@ public class IptServiceImpl extends AnalyzeWithOutSavingAbstractService<IptSendT
 
     @Override
     public AnalyzeResponse analyzeOperation(IptSendToAnalyzeRq request) {
-        return analyze(request);
+        return (AnalyzeResponse) analyze(request);
     }
 
 }

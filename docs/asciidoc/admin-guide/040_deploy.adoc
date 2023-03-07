@@ -735,13 +735,36 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
   "jsonrpc": "2.0",
   "id": 1,
   "result": {
-    "transactionId": "c9ec0107588b433ea025fcf31443e88c",
-    "actionCode": "ALLOW",
-    "comment": "Короткий комментарий",
-    "detailledComment": "Расширенный комментарий",
-    "waitingTime": "Время ожидания в случае actionCode=REVIEW",
-    "statusCode": "200 OK",
-    "reasonCode": 0
+    "identificationData": {
+      "clientTransactionId": "36ff1f5f-a0d2-4337-a4bd-1f620ac3462b",
+      "delegated": false,
+      "orgName": "orgName",
+      "sessionId": "sessionId",
+      "transactionId": "transactionId",
+      "userLoginName": "userLoginName",
+      "userName": "userName",
+      "userStatus": "VERIFIED",
+      "userType": "PERSISTENT"
+    },
+    "statusHeader": {
+      "reasonCode": 0,
+      "reasonDescription": "Operations were completed successfully",
+      "statusCode": "200"
+    },
+    "riskResult": {
+      "riskScore": 0,
+      "riskScoreBand": "riskScoreBand",
+      "triggeredRule": {
+        "actionCode": "ALLOW",
+        "actionName": "actionName",
+        "actionType": "NONE",
+        "ruleId": "ruleId",
+        "ruleName": "ruleName",
+        "comment": "comment",
+        "detailledComment": "detailledComment",
+        "waitingTime": 0
+      }
+    }
   }
 }
 ----
@@ -869,13 +892,36 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
   "jsonrpc": "2.0",
   "id": 1,
   "result": {
-    "transactionId": "c9ec0107588b433ea025fcf31443e88c",
-    "actionCode": "ALLOW",
-    "comment": "Короткий комментарий",
-    "detailledComment": "Расширенный комментарий",
-    "waitingTime": "Время ожидания в случае actionCode=REVIEW",
-    "statusCode": "200 OK",
-    "reasonCode": 0
+    "identificationData": {
+      "clientTransactionId": "36ff1f5f-a0d2-4337-a4bd-1f620ac3462b",
+      "delegated": false,
+      "orgName": "orgName",
+      "sessionId": "sessionId",
+      "transactionId": "transactionId",
+      "userLoginName": "userLoginName",
+      "userName": "userName",
+      "userStatus": "VERIFIED",
+      "userType": "PERSISTENT"
+    },
+    "statusHeader": {
+      "reasonCode": 0,
+      "reasonDescription": "Operations were completed successfully",
+      "statusCode": "200"
+    },
+    "riskResult": {
+      "riskScore": 0,
+      "riskScoreBand": "riskScoreBand",
+      "triggeredRule": {
+        "actionCode": "ALLOW",
+        "actionName": "actionName",
+        "actionType": "NONE",
+        "ruleId": "ruleId",
+        "ruleName": "ruleName",
+        "comment": "comment",
+        "detailledComment": "detailledComment",
+        "waitingTime": 0
+      }
+    }
   }
 }
 ----
