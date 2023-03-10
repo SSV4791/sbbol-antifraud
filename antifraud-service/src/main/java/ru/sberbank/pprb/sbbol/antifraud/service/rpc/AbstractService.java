@@ -59,7 +59,7 @@ public abstract class AbstractService<T extends Operation, R extends SendAfterSa
             logger.error(errorMsg, e);
             throw new ModelArgumentException(errorMsg, e);
         } catch (ApplicationException e) {
-            logger.error(e.getMessage(), e);
+            logger.warn(e.getMessage(), e);
             throw e;
         } catch (HttpStatusCodeException e) {
             String errorMsg = msg + "Analysis error. Status code: " + e.getStatusCode() + ". " + e.getResponseBodyAsString();
