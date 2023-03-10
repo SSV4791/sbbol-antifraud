@@ -3,7 +3,6 @@ package ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -15,31 +14,26 @@ public class FastPaymentPayer implements Serializable {
     /**
      * Номер счета отправителя (плательщика)
      */
-    @NotBlank(message = "The document.payer.accountNumber attribute must be filled")
     private String accountNumber;
 
     /**
      * ИНН организации
      */
-    @NotBlank(message = "The document.payer.inn attribute must be filled")
     private String inn;
 
     /**
      * Полное наименование организации
      */
-    @NotBlank(message = "The document.payer.financialName attribute must be filled")
     private String financialName;
 
     /**
      * Номер ОСБ
      */
-    @NotBlank(message = "The document.payer.osbNum attribute must be filled")
     private String osbNum;
 
     /**
      * Номер ВСП
      */
-    @NotBlank(message = "The document.payer.vspNum attribute must be filled")
     private String vspNum;
 
     /**
@@ -56,7 +50,6 @@ public class FastPaymentPayer implements Serializable {
     /**
      * БИК SWIFT плательщика
      */
-    @NotBlank(message = "The document.payer.bic attribute must be filled")
     private String bic;
 
     /**

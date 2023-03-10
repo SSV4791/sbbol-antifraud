@@ -10,6 +10,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.credit.CreditMapper;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeAbstractProcessor;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeWithOutSavingProcessor;
+import ru.sberbank.pprb.sbbol.antifraud.service.validator.credit.CreditModelValidator;
 
 @Service
 public class CreditProcessor extends AnalyzeAbstractProcessor implements AnalyzeWithOutSavingProcessor<CreditSendToAnalyzeRq> {
@@ -26,6 +27,7 @@ public class CreditProcessor extends AnalyzeAbstractProcessor implements Analyze
 
     @Override
     public AnalyzeResponse analyze(CreditSendToAnalyzeRq request) throws JsonProcessingException {
+        CreditModelValidator.validate(request);
         return sendToAnalyze(mapper.toAnalyzeRequest(request));
     }
 

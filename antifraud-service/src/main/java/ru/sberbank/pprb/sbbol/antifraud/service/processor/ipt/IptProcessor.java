@@ -10,6 +10,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.ipt.IptMapper;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeAbstractProcessor;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeWithOutSavingProcessor;
+import ru.sberbank.pprb.sbbol.antifraud.service.validator.ipt.IptModelValidator;
 
 @Service
 public class IptProcessor extends AnalyzeAbstractProcessor implements AnalyzeWithOutSavingProcessor<IptSendToAnalyzeRq> {
@@ -26,6 +27,7 @@ public class IptProcessor extends AnalyzeAbstractProcessor implements AnalyzeWit
 
     @Override
     public AnalyzeResponse analyze(IptSendToAnalyzeRq request) throws JsonProcessingException {
+        IptModelValidator.validate(request);
         return sendToAnalyze(mapper.toAnalyzeRequest(request));
     }
 

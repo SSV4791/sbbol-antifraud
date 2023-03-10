@@ -1,5 +1,7 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.analyze.credit;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
@@ -21,6 +23,16 @@ public class CreditMessageHeader implements Serializable {
      * Идентификатор метода
      */
     private String requestType;
+
+    @JsonCreator
+    public CreditMessageHeader(@JsonProperty("timeStamp") LocalDateTime timeStamp,
+                               @JsonProperty("requestType") String requestType) {
+        this.timeStamp = timeStamp;
+        this.requestType = requestType;
+    }
+
+    public CreditMessageHeader() {
+    }
 
     public LocalDateTime getTimeStamp() {
         return timeStamp;

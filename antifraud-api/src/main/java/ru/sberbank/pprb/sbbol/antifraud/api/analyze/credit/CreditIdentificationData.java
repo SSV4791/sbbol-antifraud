@@ -2,7 +2,6 @@ package ru.sberbank.pprb.sbbol.antifraud.api.analyze.credit;
 
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.UUID;
@@ -26,7 +25,6 @@ public class CreditIdentificationData implements Serializable {
     /**
      * Идентификатор ЕПК заемщика ЮЛ/ИП
      */
-    @NotBlank(message = "The attribute \"identificationData.userUcpId\" must be filled")
     private String userUcpId;
 
     /**

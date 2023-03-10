@@ -4,7 +4,6 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.Operation;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
@@ -16,7 +15,6 @@ public class ElectronicReceiptOperation implements Operation {
     /**
      * Уникальный идентификатор клиента (приходит epkId)
      */
-    @NotBlank(message = "The orgGuid attribute must be filled")
     private String orgGuid;
 
     /**
@@ -39,15 +37,12 @@ public class ElectronicReceiptOperation implements Operation {
     /**
      * Данные устройства
      */
-    @Valid
-    @NotNull(message = "The deviceRequest attribute cannot be null")
     private ReceiptDeviceRequest deviceRequest;
 
     /**
      * Данные подписи
      */
     @Valid
-    @NotNull(message = "The sign attribute cannot be null")
     private ReceiptSign sign;
 
     @Override

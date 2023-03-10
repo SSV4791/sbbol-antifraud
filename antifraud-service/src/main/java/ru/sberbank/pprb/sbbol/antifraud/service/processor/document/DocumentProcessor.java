@@ -16,6 +16,7 @@ import ru.sberbank.pprb.sbbol.antifraud.service.mapper.document.DocumentMapper;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeAbstractProcessor;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.Processor;
 import ru.sberbank.pprb.sbbol.antifraud.service.repository.document.DocumentRepository;
+import ru.sberbank.pprb.sbbol.antifraud.service.validator.document.DocumentValidator;
 
 import java.util.Optional;
 
@@ -40,6 +41,7 @@ public class DocumentProcessor extends AnalyzeAbstractProcessor implements Proce
 
     @Override
     public RequestId saveOrUpdate(DocumentSaveRequest request) {
+        DocumentValidator.validate(request);
         Optional<Document> searchResult = repository.findByDocIdAndDboOperation(request.getDocId(), request.getDboOperation());
         Document entity;
         if (searchResult.isPresent()) {

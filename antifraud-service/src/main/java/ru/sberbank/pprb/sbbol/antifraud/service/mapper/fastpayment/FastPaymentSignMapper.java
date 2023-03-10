@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.util.CollectionUtils;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentSign;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 
@@ -36,6 +37,9 @@ public final class FastPaymentSignMapper {
      * @return список моделей подписей
      */
     public static List<FastPaymentSign> convertSigns(List<String> signs) {
+        if (CollectionUtils.isEmpty(signs)) {
+            return null;
+        }
         List<FastPaymentSign> signList = new ArrayList<>(signs.size());
         for (String str : signs) {
             try {

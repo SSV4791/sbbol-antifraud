@@ -15,6 +15,8 @@ import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.fastpayment.FastPayment;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.fastpayment.FastPaymentSignMapper;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Random;
 import java.util.UUID;
 
@@ -211,6 +213,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
         step("Проверка документа и подписи", () ->
                 assertAll(
                         () -> assertOperation(dto, requestId.getId(), entity),
+                        () -> assertUserData(dto, entity),
                         () -> assertDoc(dto.getDocument(), entity),
                         () -> assertFirstSign(dto.getMappedSigns().get(0), entity),
                         () -> assertSenderSign(dto.getMappedSigns().get(1), entity)
@@ -235,6 +238,7 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
         FastPayment entity = step("Получение документа", () -> searchFastPayment(DOC_ID));
         step("Проверка подписи", () -> {
             assertOperation(dto, requestId, entity);
+            assertUserData(dto, entity);
             assertDoc(dto.getDocument(), entity);
             assertFirstSign(dto.getMappedSigns().get(0), entity);
             assertSenderSign(dto.getMappedSigns().get(1), entity);
@@ -247,6 +251,12 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
                 () -> assertEquals(dto.getTimeStamp(), entity.getEventTime()),
                 () -> assertEquals(dto.getOrgGuid(), entity.getEpkId()),
                 () -> assertEquals(dto.getDigitalId(), entity.getDigitalId()),
+                () -> assertEquals(dto.getTimeOfOccurrence(), entity.getTimeOfOccurrence())
+        );
+    }
+
+    private void assertUserData(FastPaymentOperation dto, FastPayment entity) {
+        assertAll(
                 () -> assertEquals(dto.getMappedSigns().get(0).getUserGuid().toString(), entity.getUserGuid()),
                 () -> assertEquals(dto.getMappedSigns().get(0).getTbCode(), entity.getTbCode()),
                 () -> assertEquals(dto.getMappedSigns().get(0).getHttpAccept(), entity.getHttpAccept()),
@@ -259,7 +269,6 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
                 () -> assertEquals(dto.getMappedSigns().get(0).getDevicePrint(), entity.getDevicePrint()),
                 () -> assertEquals(dto.getMappedSigns().get(0).getMobSdkData(), entity.getMobSdkData()),
                 () -> assertEquals(dto.getMappedSigns().get(0).getChannelIndicator(), entity.getChannelIndicator()),
-                () -> assertEquals(dto.getTimeOfOccurrence(), entity.getTimeOfOccurrence()),
                 () -> assertEquals(dto.getMappedSigns().get(0).getPrivateIpAddress(), entity.getPrivateIpAddress()),
                 () -> assertEquals(dto.getMappedSigns().get(0).getClientDefinedChannelIndicator(), entity.getClientDefinedChannelIndicator())
         );
@@ -349,94 +358,6 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
     }
 
     @Test
-    @AllureId("25613")
-    @DisplayName("Валидация ORG_GUID")
-    void validateModelRequiredParamOrgGuid() {
-        FastPaymentOperation operation = step("Создание платежа СБП без OrgGuid",() -> {
-            FastPaymentOperation sbpOperation = createRandomSbpPayment();
-            sbpOperation.setOrgGuid(null);
-            return sbpOperation;
-        });
-        ModelArgumentException ex = step("Получение ошибки", () ->
-                assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation)));
-        step("Проверка что сообщение об ошибке содержит OrgGuid", () -> {
-                String exceptionMessage = ex.getMessage();
-                Assertions.assertTrue(exceptionMessage.contains("orgGuid"), "Should contain orgGuid in message. Message: " + exceptionMessage);
-        });
-    }
-
-    @Test
-    @AllureId("25617")
-    @DisplayName("Проверка подписи СБП пустой (null) подписью")
-    void validateModelRequiredParamEmptySigns() {
-        FastPaymentOperation operation = step("Создание документа СБП" , this::createRandomSbpPayment);
-        step("Подписание пустой подписью", () -> operation.setSigns(null));
-        step("Проверка сообщения об ошибке", () -> {
-            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-            String exceptionMessage = ex.getMessage();
-            Assertions.assertTrue(exceptionMessage.contains("signs"), "Should contain signs in message. Message: " + exceptionMessage);
-        });
-    }
-
-    @Test
-    @AllureId("25616")
-    @DisplayName("Валидация модели СБП на наличие обязательного атрибута userGuid в первой подписи")
-    void validateModelRequiredParamFirstSignUserGuid() {
-        FastPaymentOperation operation = step("Создание документа" , this::createRandomSbpPayment);
-        step("Подписание СБП Первой подписью без userGuid", () -> {
-            operation.getSigns().set(1, FIRST_SIGN_USER_GUID);
-        });
-        step("Проверка сообщения об ошибке", () -> {
-            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-            String exceptionMessage = ex.getMessage();
-            Assertions.assertTrue(exceptionMessage.contains("userGuid"), "Should contain userGuid in message. Message: " + exceptionMessage);
-        });
-    }
-
-    @Test
-    @AllureId("25612")
-    @DisplayName("Валидация модели СБП на наличие логина в единственной подписи")
-    void validateModelRequiredParamSenderSignLogin() {
-        FastPaymentOperation operation = step("Создание документа" , this::createRandomSbpPayment);
-        step("Подписание СБП единственной подписью без логина", () -> operation.getSigns().set(0, SENDER_SIGN_LOGIN));
-        step("Проверка сообщения об ошибке", () -> {
-            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-            String exceptionMessage = ex.getMessage();
-            Assertions.assertTrue(exceptionMessage.contains("SignLogin"), "Should contain SignLogin in message. Message: " + exceptionMessage);
-        });
-    }
-
-    @Test
-    @AllureId("22323")
-    @DisplayName("Проверка подписание единственной подписью без signChannel")
-    void validateModelRequiredParamFirstSignChannel() {
-        FastPaymentOperation operation = step("Создание документа", this::createRandomSbpPayment);
-        step("Подписание СБП единственной подписью без signChannel", () -> {
-            operation.getSigns().set(1, FIRST_SIGN_CHANNEL);
-        });
-        step("Проверка сообщения об ошибке", () -> {
-            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-            String exceptionMessage = ex.getMessage();
-            Assertions.assertTrue(exceptionMessage.contains("firstSignChannel"), "Should contain firstSignChannel in message. Message: " + exceptionMessage);
-        });
-    }
-
-    @Test
-    @AllureId("22325")
-    @DisplayName("Проверка подписания документа без обязательного параметра senderSignChannel")
-    void validateModelRequiredParamSenderSignChannel() {
-        FastPaymentOperation operation = step("Создание документа", this::createRandomSbpPayment);
-        step("Подписание СБП единственной подписью без senderSignChannel", () -> {
-        operation.getSigns().set(0, SENDER_SIGN_CHANNEL);
-        });
-        step("Проверка сообщения об ошибке", () -> {
-            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-            String exceptionMessage = ex.getMessage();
-            Assertions.assertTrue(exceptionMessage.contains("senderSignChannel"), "Should contain senderSignChannel in message. Message: " + exceptionMessage);
-        });
-    }
-
-    @Test
     @DisplayName("Проверка подписи СБП с не валидным значением параметра channelIndicator")
     void channelIndicatorUnknownTypeTest() {
         FastPaymentOperation operation = step("Создание документа", this::createRandomSbpPayment);
@@ -458,78 +379,6 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
             String exceptionMessage = ex.getMessage();
             Assertions.assertTrue(exceptionMessage.contains("ClientDefinedChannelIndicator"), "Should contain clientDefinedChannelIndicator in message. Message: " + exceptionMessage);
         });
-    }
-
-    @Test
-    void illegalChannelIndicatorTest() {
-        FastPaymentOperation operation = createRandomSbpPayment();
-        String sign = "{" +
-                "\"ipAddress\": \"78.245.9.88\", " +
-                "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
-                "\"tbCode\": \"546738\", " +
-                "\"channelIndicator\": \"BRANCH\", " +
-                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
-                "\"signTime\": \"2020-03-23T15:01:15\", " +
-                "\"signLogin\": \"novikova01\", " +
-                "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
-                "\"signPhone\": \"915 168-67-32\", " +
-                "\"signChannel\": \"TOKEN\", " +
-                "\"signType\": \"Единственная подпись\", " +
-                "\"signSource\": \"SMS\", " +
-                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
-                "}";
-        operation.getSigns().add(0, sign);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-        String exceptionMessage = ex.getMessage();
-        Assertions.assertTrue(exceptionMessage.contains("channelIndicator=BRANCH"));
-    }
-
-    @Test
-    void illegalClientDefinedChannelIndicatorForMobileTest() {
-        FastPaymentOperation operation = createRandomSbpPayment();
-        String sign = "{" +
-                "\"ipAddress\": \"78.245.9.88\", " +
-                "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
-                "\"tbCode\": \"546738\", " +
-                "\"channelIndicator\": \"MOBILE\", " +
-                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
-                "\"signTime\": \"2020-03-23T15:01:15\", " +
-                "\"signLogin\": \"novikova01\", " +
-                "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
-                "\"signPhone\": \"915 168-67-32\", " +
-                "\"signChannel\": \"TOKEN\", " +
-                "\"signType\": \"Единственная подпись\", " +
-                "\"signSource\": \"SMS\", " +
-                "\"clientDefinedChannelIndicator\": \"PPRB_BROWSER\"" +
-                "}";
-        operation.getSigns().add(0, sign);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-        String exceptionMessage = ex.getMessage();
-        Assertions.assertTrue(exceptionMessage.contains("clientDefinedChannelIndicator=PPRB_BROWSER"));
-    }
-
-    @Test
-    void illegalClientDefinedChannelIndicatorForWebTest() {
-        FastPaymentOperation operation = createRandomSbpPayment();
-        String sign = "{" +
-                "\"ipAddress\": \"78.245.9.88\", " +
-                "\"userAgent\": \"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)\", " +
-                "\"tbCode\": \"546738\", " +
-                "\"channelIndicator\": \"WEB\", " +
-                "\"userGuid\": \"7c7bd0c1-2504-468e-8410-b4d00522014f\", " +
-                "\"signTime\": \"2020-03-23T15:01:15\", " +
-                "\"signLogin\": \"novikova01\", " +
-                "\"signCryptoprofile\": \"Новикова Ольга Трофимовна\", " +
-                "\"signPhone\": \"915 168-67-32\", " +
-                "\"signChannel\": \"TOKEN\", " +
-                "\"signType\": \"Единственная подпись\", " +
-                "\"signSource\": \"SMS\", " +
-                "\"clientDefinedChannelIndicator\": \"PPRB_MOBSBBOL\"" +
-                "}";
-        operation.getSigns().add(0, sign);
-        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-        String exceptionMessage = ex.getMessage();
-        Assertions.assertTrue(exceptionMessage.contains("clientDefinedChannelIndicator=PPRB_MOBSBBOL"));
     }
 
     @Test
@@ -561,14 +410,14 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
     @DisplayName("Создание СБП c только обязательными параметрами подписи")
     void createDataOnlyWithRequiredSignParams() throws Throwable {
         FastPaymentOperation paymentOperation = step("Создание документа", this::createRandomSbpPayment);
-        step("Подписание документа", () ->{
+        step("Подписание документа", () -> {
             paymentOperation.setDigitalId(null);
             paymentOperation.getDocument().setDestination(null);
             paymentOperation.getSigns().clear();
             paymentOperation.getSigns().add(FIRST_SIGN);
             paymentOperation.getSigns().add(SENDER_SIGN);
         });
-        step("Сохранение документа", () ->{
+        step("Сохранение документа", () -> {
             RequestId requestId = saveOrUpdate(paymentOperation);
             assertNotNull(requestId);
         });
@@ -588,20 +437,21 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
                     .build();
         });
         RequestId requestId = step("Сохранение документа", () -> {
-                    dto.setDigitalId(null);
-                    dto.getDocument().getReceiver().setInn(null);
-                    return saveOrUpdate(dto);
+            dto.setDigitalId(null);
+            dto.getDocument().getReceiver().setInn(null);
+            return saveOrUpdate(dto);
         });
         step("Подписание документа", () -> {
-                    dto.setMappedSigns(FastPaymentSignMapper.convertSigns(dto.getSigns()));
-                    assertNotNull(requestId);
-                });
+            dto.setMappedSigns(FastPaymentSignMapper.convertSigns(dto.getSigns()));
+            assertNotNull(requestId);
+        });
         FastPayment entity = step("Получение документа", () -> searchFastPayment(dto.getDocument().getId()));
         step("Проверка документа и подписи", () -> assertAll(
-                () ->  assertOperation(dto, requestId.getId(), entity),
-                () ->  assertDoc(dto.getDocument(), entity),
-                () ->  assertFirstSign(dto.getMappedSigns().get(0), entity),
-                () ->  assertSenderSign(dto.getMappedSigns().get(1), entity)
+                () -> assertOperation(dto, requestId.getId(), entity),
+                () -> assertUserData(dto, entity),
+                () -> assertDoc(dto.getDocument(), entity),
+                () -> assertFirstSign(dto.getMappedSigns().get(0), entity),
+                () -> assertSenderSign(dto.getMappedSigns().get(1), entity)
         ));
     }
 
@@ -611,25 +461,26 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
     @DisplayName("Сохранение СБП с полным набором полей")
     void saveFastPaymentWithAllFields() throws Throwable {
         FastPaymentOperation dto = step("Создание документа", () -> {
-                    UUID docId = UUID.randomUUID();
-                    Integer docNumber = Math.abs(new Random().nextInt());
-                    return FastPaymentBuilder.getInstance()
-                            .withDocId(docId)
-                            .withDocNumber(docNumber)
-                            .build();
+            UUID docId = UUID.randomUUID();
+            Integer docNumber = Math.abs(new Random().nextInt());
+            return FastPaymentBuilder.getInstance()
+                    .withDocId(docId)
+                    .withDocNumber(docNumber)
+                    .build();
         });
         RequestId requestId = step("Сохранение документа", () -> saveOrUpdate(dto));
         step("Подписание документа", () -> {
-                    dto.setMappedSigns(FastPaymentSignMapper.convertSigns(dto.getSigns()));
-                    assertNotNull(requestId);
-                });
+            dto.setMappedSigns(FastPaymentSignMapper.convertSigns(dto.getSigns()));
+            assertNotNull(requestId);
+        });
 
         FastPayment entity = step("Получение документа", () -> searchFastPayment(dto.getDocument().getId()));
         step("Проверка документа и подписи", () -> assertAll(
-                () ->  assertOperation(dto, requestId.getId(), entity),
-                () ->  assertDoc(dto.getDocument(), entity),
-                () ->  assertFirstSign(dto.getMappedSigns().get(0), entity),
-                () ->  assertSenderSign(dto.getMappedSigns().get(1), entity)
+                () -> assertOperation(dto, requestId.getId(), entity),
+                () -> assertUserData(dto, entity),
+                () -> assertDoc(dto.getDocument(), entity),
+                () -> assertFirstSign(dto.getMappedSigns().get(0), entity),
+                () -> assertSenderSign(dto.getMappedSigns().get(1), entity)
         ));
     }
 
@@ -639,16 +490,16 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
     @DisplayName("Сохраннение СБП без данных")
     void saveFastPaymentWithDontHaveData() throws Throwable {
         FastPaymentOperation dto = step("Создание документа без данных", () -> {
-                    UUID docId = UUID.randomUUID();
-                    Integer docNumber = Math.abs(new Random().nextInt());
-                    return FastPaymentBuilder.getInstance()
-                            .withDocId(docId)
-                            .withDocNumber(docNumber)
-                            .withOtherAccName("Данные от СБП не получены")
-                            .withReceiverInn("Данные от СБП не получены")
-                            .withReceiverAccount("Данные от СБП не получены")
-                            .build();
-                });
+            UUID docId = UUID.randomUUID();
+            Integer docNumber = Math.abs(new Random().nextInt());
+            return FastPaymentBuilder.getInstance()
+                    .withDocId(docId)
+                    .withDocNumber(docNumber)
+                    .withOtherAccName("Данные от СБП не получены")
+                    .withReceiverInn("Данные от СБП не получены")
+                    .withReceiverAccount("Данные от СБП не получены")
+                    .build();
+        });
         RequestId requestId = step("Сохранение документа", () -> saveOrUpdate(dto));
         step("Подписание документа", () -> {
             dto.setMappedSigns(FastPaymentSignMapper.convertSigns(dto.getSigns()));
@@ -656,10 +507,29 @@ class FastPaymentDataTest extends FastPaymentIntegrationTest {
         });
         FastPayment entity = step("Получение документа", () -> searchFastPayment(dto.getDocument().getId()));
         step("Проверка документа и подписи", () -> assertAll(
-                () ->  assertOperation(dto, requestId.getId(), entity),
-                () ->  assertDoc(dto.getDocument(), entity),
-                () ->  assertFirstSign(dto.getMappedSigns().get(0), entity),
-                () ->  assertSenderSign(dto.getMappedSigns().get(1), entity)
+                () -> assertOperation(dto, requestId.getId(), entity),
+                () -> assertUserData(dto, entity),
+                () -> assertDoc(dto.getDocument(), entity),
+                () -> assertFirstSign(dto.getMappedSigns().get(0), entity),
+                () -> assertSenderSign(dto.getMappedSigns().get(1), entity)
         ));
     }
+
+    @Test
+    @DisplayName("Создание СБП с минимальным набором атрибутов")
+    void createDataWithMinAttrsTest() throws Throwable {
+        FastPaymentOperation dto = new FastPaymentOperation();
+        dto.setTimeStamp(LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+        dto.setTimeOfOccurrence(LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+        dto.setDocument(new FastPaymentDocument());
+        dto.getDocument().setId(UUID.randomUUID());
+        RequestId requestId = saveOrUpdate(dto);
+        assertNotNull(requestId);
+        FastPayment entity = searchFastPayment(dto.getDocument().getId());
+        assertAll(
+                () -> assertOperation(dto, requestId.getId(), entity),
+                () -> assertEquals(dto.getDocument().getId().toString(), entity.getDocId())
+        );
+    }
+
 }

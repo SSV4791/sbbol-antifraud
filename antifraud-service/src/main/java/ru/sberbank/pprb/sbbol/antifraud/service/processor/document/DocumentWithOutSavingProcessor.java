@@ -10,6 +10,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.Response;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.document.DocumentMapper;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeAbstractProcessor;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeWithOutSavingProcessor;
+import ru.sberbank.pprb.sbbol.antifraud.service.validator.document.DocumentWithOutSavingValidator;
 
 @Service
 public class DocumentWithOutSavingProcessor extends AnalyzeAbstractProcessor implements AnalyzeWithOutSavingProcessor<AnalyzeRequest> {
@@ -26,6 +27,7 @@ public class DocumentWithOutSavingProcessor extends AnalyzeAbstractProcessor imp
 
     @Override
     public Response analyze(AnalyzeRequest request) throws JsonProcessingException {
+        DocumentWithOutSavingValidator.validate(request);
         mapper.fillAnalyzeRequest(request);
         return sendToAnalyzeWithFullResponse(request);
     }

@@ -9,12 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ElectronicReceiptOperation;
-import ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.Receipt;
-import ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ReceiptDeviceRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ReceiptDocument;
-import ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ReceiptPayer;
-import ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ReceiptReceiver;
-import ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt.ReceiptSign;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.common.AbstractIntegrationTest;
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.electronicreceipt.ElectronicReceipt;
@@ -108,12 +103,7 @@ class ElectronicReceiptDataTest extends AbstractIntegrationTest {
             return ex.getMessage();
         });
         step("Проверка, что в сообщении есть информация о незаполненных полях", () -> {
-            assertAll("Проверка сообщения",
-                    () -> assertTrue(exceptionMessage.contains("orgGuid"), "Should contain 'orgGuid' in message. Message: " + exceptionMessage),
-                    () -> assertTrue(exceptionMessage.contains("document"), "Should contain 'document' in message. Message: " + exceptionMessage),
-                    () -> assertTrue(exceptionMessage.contains("deviceRequest"), "Should contain 'deviceRequest' in message. Message: " + exceptionMessage),
-                    () -> assertTrue(exceptionMessage.contains("sign"), "Should contain 'sign' in message. Message: " + exceptionMessage)
-            );
+            assertTrue(exceptionMessage.contains("document"), "Should contain 'document' in message. Message: " + exceptionMessage);
         });
     }
 
@@ -127,116 +117,9 @@ class ElectronicReceiptDataTest extends AbstractIntegrationTest {
             ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
             return ex.getMessage();
         });
-        step("Проверка корректности сообщения", () -> assertAll("Проверка полученного сообщения на наличие данных",
-                () -> assertTrue(exceptionMessage.contains("document.id"), "Should contain 'document.id' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.number"), "Should contain 'document.number' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.date"), "Should contain 'document.date' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.amount"), "Should contain 'document.amount' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.currency"), "Should contain 'document.currency' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.destination"), "Should contain 'document.destination' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.payer"), "Should contain 'document.payer' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.receiver"), "Should contain 'document.receiver' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.receipt"), "Should contain 'document.receipt' in message. Message: " + exceptionMessage)
-        ));
-    }
-
-    @Test
-    @AllureId("21593")
-    @DisplayName("Проверка наличия обязательных полей в объекте ReceiptPayer")
-    void validateReceiptPayerRequiredParamsTest() {
-        ElectronicReceiptOperation operation = step("Создание электронного чека", () -> ElectronicReceiptBuilder.getInstance().build());
-        String exceptionMessage = step("Сообщение об ошибке", () -> {
-            operation.getDocument().setPayer(new ReceiptPayer());
-            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-            return ex.getMessage();
-        });
-        step("Проверка корректности сообщения", () -> assertAll("Проверка полученного сообщения на наличие данных",
-                () -> assertTrue(exceptionMessage.contains("document.payer.tbCode"), "Should contain 'document.payer.tbCode' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.payer.accountNumber"), "Should contain 'document.payer.accountNumber' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.payer.codeBic"), "Should contain 'document.payer.codeBic' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.payer.name"), "Should contain 'document.payer.name' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.payer.inn"), "Should contain 'document.payer.inn' in message. Message: " + exceptionMessage)
-        ));
-    }
-
-    @Test
-    @AllureId("21600")
-    @DisplayName("Проверка наличия обязательных полей в объекте ReceiptReceiver")
-    void validateReceiptReceiverRequiredParamsTest() {
-        ElectronicReceiptOperation operation = step("Создание электронного чека", () -> ElectronicReceiptBuilder.getInstance().build());
-        String exceptionMessage = step("Сообщение об ошибке", () -> {
-            operation.getDocument().setReceiver(new ReceiptReceiver());
-            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-            return ex.getMessage();
-        });
-        step("Проверка корректности сообщения", () -> assertAll("Проверка полученного сообщения на наличие данных",
-                () -> assertTrue(exceptionMessage.contains("document.receiver.firstName"), "Should contain 'document.receiver.firstName' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.receiver.secondName"), "Should contain 'document.receiver.secondName' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.receiver.birthDay"), "Should contain 'document.receiver.birthDay' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.receiver.dulType"), "Should contain 'document.receiver.dulType' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.receiver.dulSerieNumber"), "Should contain 'document.receiver.dulSerieNumber' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.receiver.dulWhoIssue"), "Should contain 'document.receiver.dulWhoIssue' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.receiver.dulDateIssue"), "Should contain 'document.receiver.dulDateIssue' in message. Message: " + exceptionMessage)
-        ));
-    }
-
-    @Test
-    @AllureId("21603")
-    @DisplayName("Проверка наличия обязательных полей в объекте Receipt")
-    void validateReceiptRequiredParamsTest() {
-        ElectronicReceiptOperation operation = step("Создание электронного чека", () -> ElectronicReceiptBuilder.getInstance().build());
-        String exceptionMessage = step("Получение информации о месте выдачи", () -> {
-            operation.getDocument().setReceipt(new Receipt());
-            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-            return ex.getMessage();
-        });
-        step("Проверка корректности сообщения", () -> assertAll("Проверка полученного сообщения на наличие данных",
-                () -> assertTrue(exceptionMessage.contains("document.receipt.receiptDate"), "Should contain 'document.receipt.receiptDate' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.receipt.receiptTbCode"), "Should contain 'document.receipt.receiptTbCode' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.receipt.receiptOsbNumber"), "Should contain 'document.receipt.receiptOsbNumber' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.receipt.receiptVspNumber"), "Should contain 'document.receipt.receiptVspNumber' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.receipt.receiptPlaceName"), "Should contain 'document.receipt.receiptPlaceName' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("document.receipt.receiptPlaceAddress"), "Should contain 'document.receipt.receiptPlaceAddress' in message. Message: " + exceptionMessage)
-        ));
-    }
-
-    @Test
-    @AllureId("21605")
-    @DisplayName("Проверка наличия обязательных полей в объекте ReceiptDeviceRequest")
-    void validateReceiptDeviceRequestRequiredParamsTest() {
-        ElectronicReceiptOperation operation = step("Создание электронного чека", () -> ElectronicReceiptBuilder.getInstance().build());
-        String exceptionMessage = step("Получение информации о данных устройства", () -> {
-            operation.setDeviceRequest(new ReceiptDeviceRequest());
-            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-            return ex.getMessage();
-        });
-        step("Проверка корректности сообщения", () -> assertAll("Проверка полученного сообщения на наличие данных",
-                () -> assertTrue(exceptionMessage.contains("deviceRequest.devicePrint"), "Should contain 'deviceRequest.devicePrint' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("deviceRequest.ipAddress"), "Should contain 'deviceRequest.ipAddress' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("deviceRequest.userAgent"), "Should contain 'deviceRequest.userAgent' in message. Message: " + exceptionMessage)
-        ));
-    }
-
-    @Test
-    @AllureId("21604")
-    @DisplayName("Проверка наличия обязательных полей в объекте ReceiptSign")
-    void validateReceiptSignRequestRequiredParamsTest() {
-        ElectronicReceiptOperation operation = step("Создание электронного чека", () -> ElectronicReceiptBuilder.getInstance().build());
-        String exceptionMessage = step("Получение информации о данных подписи", () -> {
-            operation.setSign(new ReceiptSign());
-            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(operation));
-            return ex.getMessage();
-        });
-        step("Проверка корректности сообщения", () -> assertAll("Проверка полученного сообщения на наличие данных",
-                () -> assertTrue(exceptionMessage.contains("sign.signNumber"), "Should contain 'sign.signNumber' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("sign.signIpAddress"), "Should contain 'sign.signIpAddress' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("sign.signChannel"), "Should contain 'sign.signChannel' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("sign.signTime"), "Should contain 'sign.signTime' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("sign.signLogin"), "Should contain 'sign.signLogin' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("sign.signType"), "Should contain 'sign.signType' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("sign.signCryptoprofileType"), "Should contain 'sign.signCryptoprofileType' in message. Message: " + exceptionMessage),
-                () -> assertTrue(exceptionMessage.contains("sign.userGuid"), "Should contain 'sign.userGuid' in message. Message: " + exceptionMessage)
-        ));
+        step("Проверка корректности сообщения", () ->
+                assertTrue(exceptionMessage.contains("document.id"), "Should contain 'document.id' in message. Message: " + exceptionMessage)
+        );
     }
 
     private void verify(UUID requestId, UUID docId, ElectronicReceiptOperation expected, ElectronicReceipt actual) {
@@ -301,7 +184,7 @@ class ElectronicReceiptDataTest extends AbstractIntegrationTest {
             );
         }
         if (expected.getSign().getSignNumber() == 2) {
-            assertAll(() -> assertNotEquals(expected.getSign().getSignTime()    , actual.getTimeOfOccurrence()),
+            assertAll(() -> assertNotEquals(expected.getSign().getSignTime(), actual.getTimeOfOccurrence()),
                     () -> assertEquals(expected.getSign().getSignTime(), actual.getSecondSignTime()),
                     () -> assertEquals(expected.getSign().getSignIpAddress(), actual.getSecondSignIp()),
                     () -> assertEquals(expected.getSign().getSignLogin(), actual.getSecondSignLogin()),
@@ -359,7 +242,7 @@ class ElectronicReceiptDataTest extends AbstractIntegrationTest {
         ElectronicReceiptOperation expectedUpdate = step("Редактирование электронного чека", () -> ElectronicReceiptBuilder.getInstance()
                 .withDocId(docId)
                 .build());
-        RequestId requestIdUpdate =step("Обновление ЭЧ", () ->{
+        RequestId requestIdUpdate = step("Обновление ЭЧ", () -> {
             expectedUpdate.setPrivateIpAddress(null);
             expectedUpdate.getSign().setSignNumber(1);
             expectedUpdate.getSign().setSignChannel("SMS");
@@ -379,7 +262,7 @@ class ElectronicReceiptDataTest extends AbstractIntegrationTest {
     @AllureId("25623")
     @DisplayName("Сохранение и редактировние электронного чека с максимальным набором полей")
     void saveAndUpdateElectronicReceiptAllFieldsWithSignNumberTwo() throws Throwable {
-        final UUID docId = step("Подготовка тестовых данных", () -> UUID.randomUUID());
+        final UUID docId = step("Подготовка тестовых данных", UUID::randomUUID);
         // create
         ElectronicReceiptOperation expectedCreate = step("Генерирование электронного чека", () -> ElectronicReceiptBuilder.getInstance()
                 .withDocId(docId)
@@ -399,7 +282,7 @@ class ElectronicReceiptDataTest extends AbstractIntegrationTest {
         ElectronicReceiptOperation expectedUpdate = step("Редактирование электронного чека", () -> ElectronicReceiptBuilder.getInstance()
                 .withDocId(docId)
                 .build());
-        RequestId requestIdUpdate =step("Изменения в документе", () -> {
+        RequestId requestIdUpdate = step("Изменения в документе", () -> {
             expectedUpdate.getSign().setSignNumber(2);
             expectedUpdate.getSign().setSignChannel("TOKEN");
             return saveOrUpdate(expectedUpdate);
@@ -425,13 +308,27 @@ class ElectronicReceiptDataTest extends AbstractIntegrationTest {
                     .build();
         });
         ModelArgumentException ex = step("Сохранение электронного чека с ошибками", () -> {
-            expectedCreate.setOrgGuid(null);
+            expectedCreate.setDocument(null);
             return assertThrows(ModelArgumentException.class, () -> saveOrUpdate(expectedCreate));
         });
         step("Проверка отображения сообщения об ошибке", () -> {
             String exceptionMessage = ex.getMessage();
-            assertTrue(exceptionMessage.contains("The orgGuid attribute must be filled"),"Wrong exception message" + exceptionMessage);
+            assertTrue(exceptionMessage.contains("The document attribute cannot be null"), "Wrong exception message" + exceptionMessage);
         });
+    }
+
+    @Test
+    @DisplayName("Создание электронного чека c минимальным набором атрибутов")
+    void saveDataWithMinAttrsTest() throws Throwable {
+        ElectronicReceiptOperation expected = new ElectronicReceiptOperation();
+        expected.setDocument(new ReceiptDocument());
+        expected.getDocument().setId(UUID.randomUUID());
+        RequestId requestId = saveOrUpdate(expected);
+        assertNotNull(requestId);
+        assertNotNull(requestId.getId());
+        ElectronicReceipt actual = searchElectronicReceipt(expected.getDocument().getId());
+        assertNotNull(actual);
+        assertEquals(expected.getDocument().getId().toString(), actual.getDocId());
     }
 
 }

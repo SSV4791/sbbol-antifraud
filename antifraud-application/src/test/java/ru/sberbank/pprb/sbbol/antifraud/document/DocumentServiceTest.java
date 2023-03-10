@@ -8,6 +8,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.ExpectedCount;
+import org.springframework.util.CollectionUtils;
 import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.document.DocumentSendToAnalyzeRq;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
@@ -20,6 +21,7 @@ import ru.sberbank.pprb.sbbol.antifraud.common.AbstractIntegrationTest;
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.document.Document;
 import ru.sberbank.pprb.sbbol.antifraud.service.repository.document.DocumentRepository;
 
+import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.UUID;
@@ -140,6 +142,54 @@ public class DocumentServiceTest extends AbstractIntegrationTest {
         assertEquals("DocId=" + saveRequest.getDocId() + ", dboOperation=" + saveRequest.getDboOperation() + ". Analysis error. Status code: 500 INTERNAL_SERVER_ERROR. ERROR", msg);
     }
 
+    @Test
+    @DisplayName("Сохранение с минимальным набором атрибутов (универсальный API)")
+    void saveDataWithMinAttrsTest() throws Throwable {
+        DocumentSaveRequest expected = createSaveRqWithMinAttrs();
+        RequestId savedRequestId = saveOrUpdate(expected);
+        assertNotNull(savedRequestId);
+        assertNotNull(savedRequestId.getId());
+
+        Optional<Document> result = documentRepository.findByDocIdAndDboOperation(expected.getDocId(), expected.getDboOperation());
+        assertTrue(result.isPresent());
+        Document actual = result.get();
+        assertEquals(savedRequestId.getId(), actual.getRequestId());
+        verify(expected, actual);
+    }
+
+    @Test
+    @DisplayName("Отправка данных на анализ после сохранения с минимальным набором атрибутов (универсальный API)")
+    void analyzeOperationWithMinAttrsTest() throws Throwable {
+        DocumentSaveRequest saveRequest = createSaveRqWithMinAttrs();
+        RequestId savedRequestId = saveOrUpdate(saveRequest);
+        assertNotNull(savedRequestId);
+        assertNotNull(savedRequestId.getId());
+
+        FullAnalyzeResponse expected = podamFactory().populatePojo(new FullAnalyzeResponse());
+        mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(objectMapper().writeValueAsString(expected)));
+
+        FullAnalyzeResponse actual = sendWithFullResponse(new DocumentSendToAnalyzeRq(saveRequest.getDocId(), saveRequest.getDboOperation()));
+        assertEquals(expected.toString(), actual.toString());
+    }
+
+    private DocumentSaveRequest createSaveRqWithMinAttrs() {
+        DocumentSaveRequest request = new DocumentSaveRequest();
+        request.setTimestamp(OffsetDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+        request.setRequestType(RandomStringUtils.random(5));
+        request.setDocId(UUID.randomUUID());
+        request.setDboOperation(RandomStringUtils.random(5));
+        request.setEventType(RandomStringUtils.random(5));
+        request.setClientDefinedEventType(RandomStringUtils.random(5));
+        request.setTimeOfOccurrence(OffsetDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+        request.setChannelIndicator(RandomStringUtils.random(5));
+        request.setClientDefinedChannelIndicator(RandomStringUtils.random(5));
+        return request;
+    }
+
     private void verify(DocumentSaveRequest expected, Document actual) {
         assertAll(
                 () -> assertEquals(expected.getTimestamp(), actual.getTimestamp()),
@@ -173,7 +223,11 @@ public class DocumentServiceTest extends AbstractIntegrationTest {
                 () -> assertEquals(expected.getOtherAccountOwnershipType(), actual.getOtherAccountOwnershipType()),
                 () -> assertEquals(expected.getOtherAccountType(), actual.getOtherAccountType()),
                 () -> assertEquals(expected.getTransferMediumType(), actual.getTransferMediumType()),
-                () -> assertEquals(expected.getClientDefinedAttributeList().size(), actual.getClientDefinedAttributeList().size()),
+                () -> {
+                    if (!CollectionUtils.isEmpty(expected.getClientDefinedAttributeList())) {
+                        assertEquals(expected.getClientDefinedAttributeList().size(), actual.getClientDefinedAttributeList().size());
+                    }
+                },
                 () -> assertEquals(expected.getChannelIndicator(), actual.getChannelIndicator()),
                 () -> assertEquals(expected.getClientDefinedChannelIndicator(), actual.getClientDefinedChannelIndicator()),
                 () -> assertEquals(expected.getCustomerSurname(), actual.getCustomerSurname()),

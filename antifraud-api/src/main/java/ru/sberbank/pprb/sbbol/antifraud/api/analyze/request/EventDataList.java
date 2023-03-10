@@ -33,8 +33,6 @@ public class EventDataList implements Serializable {
     /**
      * Атрибуты, определенные клиентом (custom facts)
      */
-    @Valid
-    @NotNull(message = "The attribute \"eventDataList.clientDefinedAttributeList\" must be filled")
     private ClientDefinedAttributeList clientDefinedAttributeList;
 
     public EventData getEventData() {

@@ -18,16 +18,22 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.IdentificationData;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.RiskResult;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.TriggeredRule;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentDocument;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment.FastPaymentOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import static io.qameta.allure.Allure.addAttachment;
 import static io.qameta.allure.Allure.step;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
@@ -57,10 +63,10 @@ class FastPaymentAnalyzeTest extends FastPaymentIntegrationTest {
         step("Проверка результата ответа", () -> {
             assertAll(
                     () -> assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId()),
-                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode() , actual.getActionCode() ),
-                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getComment() , actual.getComment() ),
-                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment() , actual.getDetailledComment() ),
-                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime() , actual.getWaitingTime() )
+                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode()),
+                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getComment(), actual.getComment()),
+                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment(), actual.getDetailledComment()),
+                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime(), actual.getWaitingTime())
             );
         });
 
@@ -109,6 +115,35 @@ class FastPaymentAnalyzeTest extends FastPaymentIntegrationTest {
     void clientDefinedEventTypeTest() {
         ClientDefinedEventType sbp = step("Получаем тип события", () -> DboOperation.SBP_B2C.getClientDefinedEventType());
         step("Проверяем тип события", () -> assertSame(ClientDefinedEventType.SBP, sbp));
+    }
+
+    @Test
+    @DisplayName("Отправка запроса на проверку СБП с минимальным набором атрибутов")
+    void sendRequestWithMinAttrsTest() throws Throwable {
+        FastPaymentOperation dto = new FastPaymentOperation();
+        dto.setTimeStamp(LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+        dto.setTimeOfOccurrence(LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+        dto.setDocument(new FastPaymentDocument());
+        dto.getDocument().setId(UUID.randomUUID());
+        RequestId requestId = saveOrUpdate(dto);
+        assertNotNull(requestId);
+
+        FullAnalyzeResponse expected = createAnalyzeResponse();
+        mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(objectMapper().writeValueAsString(expected)));
+
+        SendToAnalyzeRequest request = new SendToAnalyzeRequest(dto.getDocId());
+        AnalyzeResponse actual = send(request);
+        assertAll(
+                () -> assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId()),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode()),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getComment(), actual.getComment()),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment(), actual.getDetailledComment()),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime(), actual.getWaitingTime())
+        );
     }
 
     private FullAnalyzeResponse createAnalyzeResponse() {

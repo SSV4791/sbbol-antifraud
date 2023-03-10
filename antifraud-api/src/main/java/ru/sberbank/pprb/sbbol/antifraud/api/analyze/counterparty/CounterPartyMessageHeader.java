@@ -32,6 +32,9 @@ public class CounterPartyMessageHeader implements Serializable {
         this.requestType = requestType;
     }
 
+    public CounterPartyMessageHeader() {
+    }
+
     public LocalDateTime getTimeStamp() {
         return timeStamp;
     }

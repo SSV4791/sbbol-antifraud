@@ -23,12 +23,14 @@ public class DocumentSaveRequest implements Operation {
      * Дата и время формирования события
      */
     @JsonSerialize(using = OffsetDateTimeSerializer.class)
+    @NotNull(message = "The attribute \"timestamp\" must be filled")
     private OffsetDateTime timestamp;
 
     /**
      * Идентификатор метода
      */
     @Size(message = "Attribute \"requestType\" cannot contain more than 30 characters", max = 30)
+    @NotBlank(message = "The attribute \"requestType\" must be filled")
     private String requestType;
 
     /**
@@ -120,6 +122,7 @@ public class DocumentSaveRequest implements Operation {
      * Тип события
      */
     @Size(message = "Attribute \"eventType\" cannot contain more than 40 characters", max = 40)
+    @NotBlank(message = "The attribute \"eventType\" must be filled")
     private String eventType;
 
     /**
@@ -132,12 +135,14 @@ public class DocumentSaveRequest implements Operation {
      * Тип устройства, через которое работает пользователь
      */
     @Size(message = "Attribute \"clientDefinedEventType\" cannot contain more than 40 characters", max = 40)
+    @NotBlank(message = "The attribute \"clientDefinedEventType\" must be filled")
     private String clientDefinedEventType;
 
     /**
      * Время создания запроса
      */
     @JsonSerialize(using = OffsetDateTimeSerializer.class)
+    @NotNull(message = "The attribute \"timeOfOccurrence\" must be filled")
     private OffsetDateTime timeOfOccurrence;
 
     /**
@@ -214,12 +219,14 @@ public class DocumentSaveRequest implements Operation {
      * Тип канала связи, через который осуществляется связь клиента с банком
      */
     @Size(message = "Attribute \"channelIndicator\" cannot contain more than 15 characters", max = 15)
+    @NotBlank(message = "The attribute \"channelIndicator\" must be filled")
     private String channelIndicator;
 
     /**
      * Дополнительная информация об используемом канале передачи данных
      */
     @Size(message = "Attribute \"clientDefinedChannelIndicator\" cannot contain more than 15 characters", max = 15)
+    @NotBlank(message = "The attribute \"clientDefinedChannelIndicator\" must be filled")
     private String clientDefinedChannelIndicator;
 
     /**

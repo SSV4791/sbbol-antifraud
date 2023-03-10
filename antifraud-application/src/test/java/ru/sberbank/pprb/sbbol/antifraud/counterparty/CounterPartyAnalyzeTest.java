@@ -2,6 +2,7 @@ package ru.sberbank.pprb.sbbol.antifraud.counterparty;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.qameta.allure.AllureId;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,9 +13,11 @@ import org.springframework.test.web.client.ExpectedCount;
 import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedEventType;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.counterparty.CounterPartyEventData;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.counterparty.CounterPartyIdentificationData;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.counterparty.CounterPartyMessageHeader;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.counterparty.CounterPartySendToAnalyzeRq;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
@@ -101,7 +104,6 @@ class CounterPartyAnalyzeTest extends AbstractIntegrationTest {
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> send(new CounterPartySendToAnalyzeRq()));
         String message = ex.getMessage();
         assertAll(
-                () -> assertTrue(message.contains("ClientTransactionId")),
                 () -> assertTrue(message.contains("identificationData")),
                 () -> assertTrue(message.contains("eventData")),
                 () -> assertTrue(message.contains("channelIndicator")),
@@ -115,18 +117,47 @@ class CounterPartyAnalyzeTest extends AbstractIntegrationTest {
     void validateModel2ndLevelTest() {
         CounterPartySendToAnalyzeRq request = new CounterPartySendToAnalyzeRq();
         request.setIdentificationData(new CounterPartyIdentificationData());
+        request.setMessageHeader(new CounterPartyMessageHeader());
         request.setEventData(new CounterPartyEventData());
         request.setChannelIndicator(ChannelIndicator.WEB);
         request.setClientDefinedChannelIndicator(ClientDefinedChannelIndicator.PPRB_BROWSER);
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> send(request));
         String message = ex.getMessage();
         assertAll(
-                () -> assertTrue(message.contains("ClientTransactionId")),
                 () -> assertTrue(message.contains("identificationData.clientTransactionId")),
-                () -> assertTrue(message.contains("identificationData.userName")),
                 () -> assertTrue(message.contains("identificationData.dboOperation")),
                 () -> assertTrue(message.contains("eventData.eventType")),
                 () -> assertTrue(message.contains("eventData.clientDefinedEventType"))
+        );
+    }
+
+    @Test
+    @DisplayName("Отправка партнеров на анализ с минимальным набором атрибутов (успешный ответ)")
+    void analyzeWithMinAttrsTest() throws Throwable {
+        FullAnalyzeResponse fullAnalyzeResponse = factory.populatePojo(new FullAnalyzeResponse());
+        mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(objectMapper().writeValueAsString(fullAnalyzeResponse)));
+
+        CounterPartySendToAnalyzeRq request = new CounterPartySendToAnalyzeRq();
+        request.setIdentificationData(new CounterPartyIdentificationData());
+        request.getIdentificationData().setClientTransactionId(UUID.randomUUID());
+        request.getIdentificationData().setDboOperation(DboOperation.PARTNERS);
+        request.setEventData(new CounterPartyEventData());
+        request.getEventData().setEventType(RandomStringUtils.random(5));
+        request.getEventData().setClientDefinedEventType(ClientDefinedEventType.BROWSER_APPROVAL);
+        request.setChannelIndicator(ChannelIndicator.WEB);
+        request.setClientDefinedChannelIndicator(ClientDefinedChannelIndicator.PPRB_BROWSER);
+        AnalyzeResponse response = send(request);
+
+        assertAll(
+                () -> assertEquals(fullAnalyzeResponse.getIdentificationData().getTransactionId(), response.getTransactionId()),
+                () -> assertEquals(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getActionCode(), response.getActionCode()),
+                () -> assertEquals(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getComment(), response.getComment()),
+                () -> assertEquals(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getDetailledComment(), response.getDetailledComment()),
+                () -> assertEquals(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getWaitingTime(), response.getWaitingTime())
         );
     }
 

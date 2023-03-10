@@ -10,11 +10,9 @@ import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.payment.Payment;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.CommonMapper;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
 
 @Mapper(componentModel = "spring", imports = DboOperation.class)
@@ -548,19 +546,7 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
     // Требование ФП ИС прибавлять 3 часа для приведения времени к МСК. По согласованию данные атрибуты приходят в 0 тайм зоне
     @AfterMapping
     protected void add3HoursToTime(@MappingTarget AnalyzeRequest analyzeRequest) {
-        if (Objects.nonNull(analyzeRequest.getMessageHeader().getTimeStamp())) {
-            analyzeRequest.getMessageHeader().setTimeStamp(analyzeRequest.getMessageHeader().getTimeStamp().plusHours(3));
-        }
-        if (Objects.nonNull(analyzeRequest.getEventDataList().getEventData().getTimeOfOccurrence())) {
-            analyzeRequest.getEventDataList().getEventData().setTimeOfOccurrence(analyzeRequest.getEventDataList().getEventData().getTimeOfOccurrence().plusHours(3));
-        }
-        analyzeRequest.getEventDataList().getClientDefinedAttributeList().getFact().stream()
-                .filter(attribute -> attribute.getName().equals(DESCRIPTION_MAP.get(FIRST_SIGN_TIME)) ||
-                        attribute.getName().equals(DESCRIPTION_MAP.get(SECOND_SIGN_TIME)) ||
-                        attribute.getName().equals(DESCRIPTION_MAP.get(THIRD_SIGN_TIME)) ||
-                        attribute.getName().equals(DESCRIPTION_MAP.get(SENDER_SIGN_TIME)))
-                .filter(attribute -> Objects.nonNull(attribute.getValue()))
-                .forEach(attribute -> attribute.setValue(LocalDateTime.parse(attribute.getValue()).plusHours(3).toString()));
+        addHoursToTime(analyzeRequest, DESCRIPTION_MAP, 3);
     }
 
 }
