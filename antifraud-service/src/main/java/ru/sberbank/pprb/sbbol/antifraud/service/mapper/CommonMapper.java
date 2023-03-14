@@ -20,6 +20,12 @@ import java.util.function.Function;
 
 public interface CommonMapper<T> {
 
+    String SINGLE_SIGN_TIME = "singleSignTime";
+    String FIRST_SIGN_TIME = "firstSignTime";
+    String SECOND_SIGN_TIME = "secondSignTime";
+    String THIRD_SIGN_TIME = "thirdSignTime";
+    String SENDER_SIGN_TIME = "senderSignTime";
+
     @Mapping(source = "identificationData.transactionId", target = "transactionId")
     @Mapping(source = "statusHeader.statusCode", target = "statusCode")
     @Mapping(source = "statusHeader.reasonCode", target = "reasonCode")
@@ -71,6 +77,27 @@ public interface CommonMapper<T> {
             analyzeRequest.setEventDataList(new EventDataList());
         }
         analyzeRequest.getEventDataList().setClientDefinedAttributeList(new ClientDefinedAttributeList(clientDefinedAttributeList));
+    }
+
+    default void addHoursToTime(AnalyzeRequest analyzeRequest, Map<String, String> descriptionMap, int hours) {
+        if (Objects.nonNull(analyzeRequest.getEventDataList()) && Objects.nonNull(analyzeRequest.getEventDataList().getEventData()) &&
+                Objects.nonNull(analyzeRequest.getEventDataList().getEventData().getTimeOfOccurrence())) {
+            analyzeRequest.getEventDataList().getEventData().setTimeOfOccurrence(analyzeRequest.getEventDataList().getEventData().getTimeOfOccurrence().plusHours(hours));
+        }
+        if (Objects.nonNull(analyzeRequest.getMessageHeader()) && Objects.nonNull(analyzeRequest.getMessageHeader().getTimeStamp())) {
+            analyzeRequest.getMessageHeader().setTimeStamp(analyzeRequest.getMessageHeader().getTimeStamp().plusHours(hours));
+        }
+        if (Objects.nonNull(analyzeRequest.getEventDataList()) && Objects.nonNull(analyzeRequest.getEventDataList().getClientDefinedAttributeList()) &&
+                Objects.nonNull(analyzeRequest.getEventDataList().getClientDefinedAttributeList().getFact())) {
+            analyzeRequest.getEventDataList().getClientDefinedAttributeList().getFact().stream()
+                    .filter(attribute -> attribute.getName().equals(descriptionMap.get(FIRST_SIGN_TIME)) ||
+                            attribute.getName().equals(descriptionMap.get(SECOND_SIGN_TIME)) ||
+                            attribute.getName().equals(descriptionMap.get(THIRD_SIGN_TIME)) ||
+                            attribute.getName().equals(descriptionMap.get(SENDER_SIGN_TIME)) ||
+                            attribute.getName().equals(descriptionMap.get(SINGLE_SIGN_TIME)))
+                    .filter(attribute -> Objects.nonNull(attribute.getValue()))
+                    .forEach(attribute -> attribute.setValue(LocalDateTime.parse(attribute.getValue()).plusHours(hours).toString()));
+        }
     }
 
 }

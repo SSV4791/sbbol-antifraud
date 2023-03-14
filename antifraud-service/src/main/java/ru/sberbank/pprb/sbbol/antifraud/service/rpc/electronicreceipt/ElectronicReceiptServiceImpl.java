@@ -25,7 +25,7 @@ public class ElectronicReceiptServiceImpl extends AbstractService<ElectronicRece
 
     @Override
     public AnalyzeResponse analyzeOperation(SendToAnalyzeRequest request) {
-        return analyze(request);
+        return (AnalyzeResponse) analyze(request);
     }
 
 }

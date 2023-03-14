@@ -25,7 +25,7 @@ public class FastPaymentServiceImpl extends AbstractService<FastPaymentOperation
 
     @Override
     public AnalyzeResponse analyzeOperation(SendToAnalyzeRequest request) {
-        return analyze(request);
+        return (AnalyzeResponse) analyze(request);
     }
 
 }

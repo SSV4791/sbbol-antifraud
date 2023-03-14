@@ -201,6 +201,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
         Payment entity = step("Получение документа", () -> searchPayment(dto.getDocument().getId()));
         step("Проверка документа", () -> assertAll(
                 () -> assertOperation(dto, requestId.getId(), entity),
+                () -> assertUserData(dto, entity),
                 () -> assertDoc(dto.getDocument(), entity),
                 () -> assertFirstSign(dto.getMappedSigns().get(0), entity),
                 () -> assertSecondSign(dto.getMappedSigns().get(1), entity),
@@ -214,9 +215,9 @@ class PaymentDataTest extends PaymentIntegrationTest {
     @DisplayName("Изменение созданного РПП")
     void updateData() {
         PaymentOperation dto = step("Подготовка тестовых данных", () -> PaymentBuilder.getInstance()
-                    .withDocId(DOC_ID)
-                    .withDocNumber(1)
-                    .build());
+                .withDocId(DOC_ID)
+                .withDocNumber(1)
+                .build());
         RequestId actual = step("Сохраняем документ", () -> saveOrUpdate(dto));
         step("Добавляем подпись документу", () -> {
             dto.setMappedSigns(PaymentSignMapper.convertSigns(dto.getSigns()));
@@ -226,6 +227,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
         Payment entity = step("Получаем документ", () -> searchPayment(DOC_ID));
         step("Проверяем подпись", () -> assertAll(
                 () -> assertOperation(dto, requestId, entity),
+                () -> assertUserData(dto, entity),
                 () -> assertDoc(dto.getDocument(), entity),
                 () -> assertFirstSign(dto.getMappedSigns().get(0), entity),
                 () -> assertSecondSign(dto.getMappedSigns().get(1), entity),
@@ -242,6 +244,12 @@ class PaymentDataTest extends PaymentIntegrationTest {
                 () -> assertEquals(dto.getTimeStamp(), entity.getEventTime(), "Дата и время формирования события не совпадают"),
                 () -> assertEquals(dto.getOrgGuid(), entity.getEpkId(), "ЕПК Id не совпадает"),
                 () -> assertEquals(dto.getDigitalId(), entity.getDigitalId(), "Digital ID не совпадает"),
+                () -> assertEquals(dto.getTimeOfOccurrence(), entity.getTimeOfOccurrence(), "Время создания запроса не совпадает")
+        );
+    }
+
+    private void assertUserData(PaymentOperation dto, Payment entity) {
+        assertAll(
                 () -> assertEquals(dto.getMappedSigns().get(0).getUserGuid().toString(), entity.getUserGuid(), "Уникальный идентификатор пользователя не совпадает"),
                 () -> assertEquals(dto.getMappedSigns().get(0).getTbCode(), entity.getTbCode(), "Код тербанка не совпадает"),
                 () -> assertEquals(dto.getMappedSigns().get(0).getHttpAccept(), entity.getHttpAccept(), "Значение заголовка Accept HTTP-запроса не совпадает"),
@@ -254,7 +262,6 @@ class PaymentDataTest extends PaymentIntegrationTest {
                 () -> assertEquals(dto.getMappedSigns().get(0).getDevicePrint(), entity.getDevicePrint(), "Слепок устройства не совпадает"),
                 () -> assertEquals(dto.getMappedSigns().get(0).getMobSdkData(), entity.getMobSdkData(), "Информация о мобильном устройстве в формате JSON не совпадает"),
                 () -> assertEquals(dto.getMappedSigns().get(0).getChannelIndicator(), entity.getChannelIndicator(), "Тип канала связи, через который осуществляется связь клиента с банком, не совпадает"),
-                () -> assertEquals(dto.getTimeOfOccurrence(), entity.getTimeOfOccurrence(), "Время создания запроса не совпадает"),
                 () -> assertEquals(dto.getMappedSigns().get(0).getPrivateIpAddress(), entity.getPrivateIpAddress(), "Локальный IP адрес сервера не совпадает"),
                 () -> assertEquals(dto.getMappedSigns().get(0).getClientDefinedChannelIndicator(), entity.getClientDefinedChannelIndicator(), "Дополнительная информация об используемом канале передачи данных не совпадает")
         );
@@ -303,55 +310,55 @@ class PaymentDataTest extends PaymentIntegrationTest {
 
     private void assertSecondSign(PaymentSign secondSign, Payment entity) {
         assertAll(
-                () -> assertEquals(secondSign.getSignTime(), entity.getSecondSignTime(),"2-я подпись Время подписи не совпадает"),
-                () -> assertEquals(secondSign.getIpAddress(), entity.getSecondSignIp(),"2-я подпись IP адрес не совпадает"),
-                () -> assertEquals(secondSign.getSignLogin(), entity.getSecondSignLogin(),"2-я подпись Логин не совпадает"),
-                () -> assertEquals(secondSign.getSignCryptoprofile(), entity.getSecondSignCryptoprofile(),"2-я подпись Наименование криптопрофиля не совпадает"),
-                () -> assertEquals(secondSign.getSignCryptoprofileType(), entity.getSecondSignCryptoprofileType(),"2-я подпись Тип криптопрофиля не совпадает"),
-                () -> assertEquals(secondSign.getSignChannel(), entity.getSecondSignChannel(),"2-я подпись Канал подписи не совпадает"),
-                () -> assertEquals(secondSign.getSignToken(), entity.getSecondSignToken(),"2-я подпись Данные Токена не совпадает"),
-                () -> assertEquals(secondSign.getSignType(), entity.getSecondSignType(),"2-я подпись Тип подписи не совпадает"),
-                () -> assertEquals(secondSign.getSignImsi(), entity.getSecondSignImsi(),"2-я подпись IMSI не совпадает"),
-                () -> assertEquals(secondSign.getSignCertId(), entity.getSecondSignCertId(),"2-я подпись Идентификатор сертификата не совпадает"),
-                () -> assertEquals(secondSign.getSignPhone(), entity.getSecondSignPhone(),"2-я подпись Номер телефона не совпадает"),
-                () -> assertEquals(secondSign.getSignEmail(), entity.getSecondSignEmail(),"2-я подпись Адрес электронной почты не совпадает"),
-                () -> assertEquals(secondSign.getSignSource(), entity.getSecondSignSource(),"2-я подпись Канал не совпадает")
+                () -> assertEquals(secondSign.getSignTime(), entity.getSecondSignTime(), "2-я подпись Время подписи не совпадает"),
+                () -> assertEquals(secondSign.getIpAddress(), entity.getSecondSignIp(), "2-я подпись IP адрес не совпадает"),
+                () -> assertEquals(secondSign.getSignLogin(), entity.getSecondSignLogin(), "2-я подпись Логин не совпадает"),
+                () -> assertEquals(secondSign.getSignCryptoprofile(), entity.getSecondSignCryptoprofile(), "2-я подпись Наименование криптопрофиля не совпадает"),
+                () -> assertEquals(secondSign.getSignCryptoprofileType(), entity.getSecondSignCryptoprofileType(), "2-я подпись Тип криптопрофиля не совпадает"),
+                () -> assertEquals(secondSign.getSignChannel(), entity.getSecondSignChannel(), "2-я подпись Канал подписи не совпадает"),
+                () -> assertEquals(secondSign.getSignToken(), entity.getSecondSignToken(), "2-я подпись Данные Токена не совпадает"),
+                () -> assertEquals(secondSign.getSignType(), entity.getSecondSignType(), "2-я подпись Тип подписи не совпадает"),
+                () -> assertEquals(secondSign.getSignImsi(), entity.getSecondSignImsi(), "2-я подпись IMSI не совпадает"),
+                () -> assertEquals(secondSign.getSignCertId(), entity.getSecondSignCertId(), "2-я подпись Идентификатор сертификата не совпадает"),
+                () -> assertEquals(secondSign.getSignPhone(), entity.getSecondSignPhone(), "2-я подпись Номер телефона не совпадает"),
+                () -> assertEquals(secondSign.getSignEmail(), entity.getSecondSignEmail(), "2-я подпись Адрес электронной почты не совпадает"),
+                () -> assertEquals(secondSign.getSignSource(), entity.getSecondSignSource(), "2-я подпись Канал не совпадает")
         );
     }
 
     private void assertThirdSign(PaymentSign thirdSign, Payment entity) {
         assertAll(
-                () -> assertEquals(thirdSign.getSignTime(), entity.getThirdSignTime(),"3-я подпись Время подписи не совпадает"),
-                () -> assertEquals(thirdSign.getIpAddress(), entity.getThirdSignIp(),"3-я подпись IP адрес не совпадает"),
-                () -> assertEquals(thirdSign.getSignLogin(), entity.getThirdSignLogin(),"3-я подпись Логин не совпадает"),
-                () -> assertEquals(thirdSign.getSignCryptoprofile(), entity.getThirdSignCryptoprofile(),"3-я подпись Наименование криптопрофиля не совпадает"),
-                () -> assertEquals(thirdSign.getSignCryptoprofileType(), entity.getThirdSignCryptoprofileType(),"3-я подпись Тип криптопрофиля не совпадает"),
-                () -> assertEquals(thirdSign.getSignChannel(), entity.getThirdSignChannel(),"3-я подпись Канал подписи не совпадает"),
-                () -> assertEquals(thirdSign.getSignToken(), entity.getThirdSignToken(),"3-я подпись Данные Токена не совпадает"),
-                () -> assertEquals(thirdSign.getSignType(), entity.getThirdSignType(),"3-я подпись Тип подписи не совпадает"),
-                () -> assertEquals(thirdSign.getSignImsi(), entity.getThirdSignImsi(),"3-я подпись IMSI не совпадает"),
-                () -> assertEquals(thirdSign.getSignCertId(), entity.getThirdSignCertId(),"3-я подпись Идентификатор сертификата не совпадает"),
-                () -> assertEquals(thirdSign.getSignPhone(), entity.getThirdSignPhone(),"3-я подпись Номер телефона не совпадает"),
-                () -> assertEquals(thirdSign.getSignEmail(), entity.getThirdSignEmail(),"3-я подпись Адрес электронной почты не совпадает"),
-                () -> assertEquals(thirdSign.getSignSource(), entity.getThirdSignSource(),"3-я подпись Канал не совпадает")
+                () -> assertEquals(thirdSign.getSignTime(), entity.getThirdSignTime(), "3-я подпись Время подписи не совпадает"),
+                () -> assertEquals(thirdSign.getIpAddress(), entity.getThirdSignIp(), "3-я подпись IP адрес не совпадает"),
+                () -> assertEquals(thirdSign.getSignLogin(), entity.getThirdSignLogin(), "3-я подпись Логин не совпадает"),
+                () -> assertEquals(thirdSign.getSignCryptoprofile(), entity.getThirdSignCryptoprofile(), "3-я подпись Наименование криптопрофиля не совпадает"),
+                () -> assertEquals(thirdSign.getSignCryptoprofileType(), entity.getThirdSignCryptoprofileType(), "3-я подпись Тип криптопрофиля не совпадает"),
+                () -> assertEquals(thirdSign.getSignChannel(), entity.getThirdSignChannel(), "3-я подпись Канал подписи не совпадает"),
+                () -> assertEquals(thirdSign.getSignToken(), entity.getThirdSignToken(), "3-я подпись Данные Токена не совпадает"),
+                () -> assertEquals(thirdSign.getSignType(), entity.getThirdSignType(), "3-я подпись Тип подписи не совпадает"),
+                () -> assertEquals(thirdSign.getSignImsi(), entity.getThirdSignImsi(), "3-я подпись IMSI не совпадает"),
+                () -> assertEquals(thirdSign.getSignCertId(), entity.getThirdSignCertId(), "3-я подпись Идентификатор сертификата не совпадает"),
+                () -> assertEquals(thirdSign.getSignPhone(), entity.getThirdSignPhone(), "3-я подпись Номер телефона не совпадает"),
+                () -> assertEquals(thirdSign.getSignEmail(), entity.getThirdSignEmail(), "3-я подпись Адрес электронной почты не совпадает"),
+                () -> assertEquals(thirdSign.getSignSource(), entity.getThirdSignSource(), "3-я подпись Канал не совпадает")
         );
     }
 
     private void assertSenderSign(PaymentSign senderSign, Payment entity) {
         assertAll(
-                () -> assertEquals(senderSign.getSignTime(), entity.getSenderSignTime(),"Отправивший Время подписи не совпадает"),
-                () -> assertEquals(senderSign.getIpAddress(), entity.getSenderIp(),"Отправивший IP адрес не совпадает"),
-                () -> assertEquals(senderSign.getSignLogin(), entity.getSenderLogin(),"Отправивший Логин не совпадает"),
-                () -> assertEquals(senderSign.getSignCryptoprofile(), entity.getSenderCryptoprofile(),"Отправивший Наименование криптопрофиля не совпадает"),
-                () -> assertEquals(senderSign.getSignCryptoprofileType(), entity.getSenderCryptoprofileType(),"Отправивший Тип криптопрофиля не совпадает"),
-                () -> assertEquals(senderSign.getSignChannel(), entity.getSenderSignChannel(),"Отправивший Канал подписи не совпадает"),
-                () -> assertEquals(senderSign.getSignToken(), entity.getSenderToken(),"Отправивший Данные Токена не совпадает"),
-                () -> assertEquals(senderSign.getSignType(), entity.getSenderSignType(),"Отправивший Тип подписи не совпадает"),
-                () -> assertEquals(senderSign.getSignImsi(), entity.getSenderSignImsi(),"Отправивший IMSI не совпадает"),
-                () -> assertEquals(senderSign.getSignCertId(), entity.getSenderCertId(),"Отправивший Идентификатор сертификата не совпадает"),
-                () -> assertEquals(senderSign.getSignPhone(), entity.getSenderPhone(),"Отправивший Номер телефона не совпадает"),
-                () -> assertEquals(senderSign.getSignEmail(), entity.getSenderEmail(),"Отправивший Адрес электронной почты не совпадает"),
-                () -> assertEquals(senderSign.getSignSource(), entity.getSenderSource(),"Отправивший Канал не совпадает")
+                () -> assertEquals(senderSign.getSignTime(), entity.getSenderSignTime(), "Отправивший Время подписи не совпадает"),
+                () -> assertEquals(senderSign.getIpAddress(), entity.getSenderIp(), "Отправивший IP адрес не совпадает"),
+                () -> assertEquals(senderSign.getSignLogin(), entity.getSenderLogin(), "Отправивший Логин не совпадает"),
+                () -> assertEquals(senderSign.getSignCryptoprofile(), entity.getSenderCryptoprofile(), "Отправивший Наименование криптопрофиля не совпадает"),
+                () -> assertEquals(senderSign.getSignCryptoprofileType(), entity.getSenderCryptoprofileType(), "Отправивший Тип криптопрофиля не совпадает"),
+                () -> assertEquals(senderSign.getSignChannel(), entity.getSenderSignChannel(), "Отправивший Канал подписи не совпадает"),
+                () -> assertEquals(senderSign.getSignToken(), entity.getSenderToken(), "Отправивший Данные Токена не совпадает"),
+                () -> assertEquals(senderSign.getSignType(), entity.getSenderSignType(), "Отправивший Тип подписи не совпадает"),
+                () -> assertEquals(senderSign.getSignImsi(), entity.getSenderSignImsi(), "Отправивший IMSI не совпадает"),
+                () -> assertEquals(senderSign.getSignCertId(), entity.getSenderCertId(), "Отправивший Идентификатор сертификата не совпадает"),
+                () -> assertEquals(senderSign.getSignPhone(), entity.getSenderPhone(), "Отправивший Номер телефона не совпадает"),
+                () -> assertEquals(senderSign.getSignEmail(), entity.getSenderEmail(), "Отправивший Адрес электронной почты не совпадает"),
+                () -> assertEquals(senderSign.getSignSource(), entity.getSenderSource(), "Отправивший Канал не совпадает")
         );
     }
 
@@ -427,6 +434,7 @@ class PaymentDataTest extends PaymentIntegrationTest {
             paymentOperation.setTimeStamp(LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
             paymentOperation.setDocument(new PaymentDocument());
             paymentOperation.getDocument().setId(UUID.randomUUID());
+            paymentOperation.setTimeOfOccurrence(LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
             return paymentOperation;
         });
         RequestId requestId = step("Сохраняем документ", () -> saveOrUpdate(dto));
@@ -445,13 +453,13 @@ class PaymentDataTest extends PaymentIntegrationTest {
     @AllureId("25620")
     void savePaymentWithAllFields() {
         PaymentOperation dto = step("Подготовка тестовых данных", () -> {
-                    UUID docId = UUID.randomUUID();
-                    Integer docNumber = Math.abs(new Random().nextInt());
-                    return PaymentBuilder.getInstance()
-                            .withDocId(docId)
-                            .withDocNumber(docNumber)
-                            .build();
-                });
+            UUID docId = UUID.randomUUID();
+            Integer docNumber = Math.abs(new Random().nextInt());
+            return PaymentBuilder.getInstance()
+                    .withDocId(docId)
+                    .withDocNumber(docNumber)
+                    .build();
+        });
         RequestId requestId = step("Сохраняем документ", () -> saveOrUpdate(dto));
         step("Добавляем подпись документу", () -> {
             dto.setMappedSigns(PaymentSignMapper.convertSigns(dto.getSigns()));
@@ -461,12 +469,29 @@ class PaymentDataTest extends PaymentIntegrationTest {
         Payment entity = step("Получаем документ", () -> searchPayment(dto.getDocument().getId()));
         step("Проверяем подпись", () -> {
             assertOperation(dto, requestId.getId(), entity);
+            assertUserData(dto, entity);
             assertDoc(dto.getDocument(), entity);
             assertFirstSign(dto.getMappedSigns().get(0), entity);
             assertSecondSign(dto.getMappedSigns().get(1), entity);
             assertThirdSign(dto.getMappedSigns().get(2), entity);
             assertSenderSign(dto.getMappedSigns().get(3), entity);
         });
+    }
+
+    @Test
+    @DisplayName("Создание РПП с минимальным набором атрибутов")
+    void createDataWithMinAttrsTest() throws Throwable {
+        PaymentOperation dto = new PaymentOperation();
+        dto.setTimeStamp(LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+        dto.setDocument(new PaymentDocument());
+        dto.getDocument().setId(UUID.randomUUID());
+        RequestId requestId = saveOrUpdate(dto);
+        assertNotNull(requestId);
+        Payment entity = searchPayment(dto.getDocument().getId());
+        assertAll(
+                () -> assertOperation(dto, requestId.getId(), entity),
+                () -> assertEquals(dto.getDocument().getId().toString(), entity.getDocId())
+        );
     }
 
 }

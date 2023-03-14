@@ -6,7 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.Response;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.document.DocumentSaveRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
@@ -16,6 +16,7 @@ import ru.sberbank.pprb.sbbol.antifraud.service.mapper.document.DocumentMapper;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeAbstractProcessor;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.Processor;
 import ru.sberbank.pprb.sbbol.antifraud.service.repository.document.DocumentRepository;
+import ru.sberbank.pprb.sbbol.antifraud.service.validator.document.DocumentValidator;
 
 import java.util.Optional;
 
@@ -40,6 +41,7 @@ public class DocumentProcessor extends AnalyzeAbstractProcessor implements Proce
 
     @Override
     public RequestId saveOrUpdate(DocumentSaveRequest request) {
+        DocumentValidator.validate(request);
         Optional<Document> searchResult = repository.findByDocIdAndDboOperation(request.getDocId(), request.getDboOperation());
         Document entity;
         if (searchResult.isPresent()) {
@@ -53,8 +55,8 @@ public class DocumentProcessor extends AnalyzeAbstractProcessor implements Proce
     }
 
     @Override
-    public AnalyzeResponse send(DocumentSendToAnalyzeRq request) throws JsonProcessingException {
-        return sendToAnalyze(createAnalyzeRequest(request));
+    public Response send(DocumentSendToAnalyzeRq request) throws JsonProcessingException {
+        return sendToAnalyzeWithFullResponse(createAnalyzeRequest(request));
     }
 
     private AnalyzeRequest createAnalyzeRequest(DocumentSendToAnalyzeRq request) {

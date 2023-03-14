@@ -5,8 +5,6 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -19,7 +17,6 @@ public class ReceiptSign implements Serializable {
     /**
      * Номер подписи для логики обработки
      */
-    @NotNull(message = "The sign.signNumber attribute must be filled")
     @Min(value = 1, message = "The sign.signNumber attribute cannot be less than 1")
     @Max(value = 2, message = "The sign.signNumber attribute cannot be greater than 2")
     private Integer signNumber;
@@ -27,32 +24,27 @@ public class ReceiptSign implements Serializable {
     /**
      * IP-адрес подписавшего
      */
-    @NotBlank(message = "The sign.signIpAddress attribute must be filled")
     private String signIpAddress;
 
     /**
      * Канал подписи
      */
-    @NotBlank(message = "The sign.signChannel attribute must be filled")
     private String signChannel;
 
     /**
      * Дата и время подписи
      */
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @NotNull(message = "The sign.signTime attribute must be filled")
     private LocalDateTime signTime;
 
     /**
      * Логин
      */
-    @NotBlank(message = "The sign.signLogin attribute must be filled")
     private String signLogin;
 
     /**
      * Тип подписи
      */
-    @NotBlank(message = "The sign.signType attribute must be filled")
     private String signType;
 
     /**
@@ -63,7 +55,6 @@ public class ReceiptSign implements Serializable {
     /**
      * Тип криптопрофиля
      */
-    @NotBlank(message = "The sign.signCryptoprofileType attribute must be filled")
     private String signCryptoprofileType;
 
     /**
@@ -94,7 +85,6 @@ public class ReceiptSign implements Serializable {
     /**
      * Уникальный идентификатор пользователя
      */
-    @NotNull(message = "The sign.userGuid attribute must be filled")
     private UUID userGuid;
 
     public Integer getSignNumber() {

@@ -23,6 +23,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.IdentificationData;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.RiskResult;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.TriggeredRule;
+import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentDocument;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
@@ -38,6 +39,7 @@ import static io.qameta.allure.Allure.parameter;
 import static io.qameta.allure.Allure.step;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
@@ -64,12 +66,12 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
         });
         step("Проверка результата ответа", () -> {
             assertAll(
-                () -> assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId(),"Идентификатор транзакции не совпадает"),
-                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode(),"Рекомендуемое действие не совпадает"),
-                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getComment(), actual.getComment(),"Короткий комментарий по сработавшему правилу, передаваемый в СББОЛ, не совпадает"),
-                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment(), actual.getDetailledComment(),"Расширенный комментарий по сработавшему правилу, передаваемый в СББОЛ, не совпадает"),
-                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime(), actual.getWaitingTime(),"Время (в часах) в течение которого СББОЛ ожидает ответ от АС ФМ не совпадает")
-        );
+                    () -> assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId(), "Идентификатор транзакции не совпадает"),
+                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode(), "Рекомендуемое действие не совпадает"),
+                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getComment(), actual.getComment(), "Короткий комментарий по сработавшему правилу, передаваемый в СББОЛ, не совпадает"),
+                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment(), actual.getDetailledComment(), "Расширенный комментарий по сработавшему правилу, передаваемый в СББОЛ, не совпадает"),
+                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime(), actual.getWaitingTime(), "Время (в часах) в течение которого СББОЛ ожидает ответ от АС ФМ не совпадает")
+            );
         });
     }
 
@@ -79,6 +81,7 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
         paymentOperation.setTimeStamp(LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
         paymentOperation.setDocument(new PaymentDocument());
         paymentOperation.getDocument().setId(UUID.randomUUID());
+        paymentOperation.setTimeOfOccurrence(LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
         saveOrUpdate(paymentOperation);
 
         FullAnalyzeResponse expected = createAnalyzeResponse();
@@ -91,11 +94,11 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
         AnalyzeResponse actual = send(new SendToAnalyzeRequest(paymentOperation.getDocId()));
         deletePaymentByDocId(paymentOperation.getDocId());
         assertAll(
-                () -> assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId(),"Идентификатор транзакции не совпадает"),
-                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode(),"Рекомендуемое действие не совпадает"),
-                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getComment(), actual.getComment(),"Короткий комментарий по сработавшему правилу, передаваемый в СББОЛ, не совпадает"),
-                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment(), actual.getDetailledComment(),"Расширенный комментарий по сработавшему правилу, передаваемый в СББОЛ, не совпадает"),
-                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime(), actual.getWaitingTime(),"Время (в часах) в течение которого СББОЛ ожидает ответ от АС ФМ не совпадает")
+                () -> assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId(), "Идентификатор транзакции не совпадает"),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode(), "Рекомендуемое действие не совпадает"),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getComment(), actual.getComment(), "Короткий комментарий по сработавшему правилу, передаваемый в ППРБ, не совпадает"),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment(), actual.getDetailledComment(), "Расширенный комментарий по сработавшему правилу, передаваемый в ППРБ, не совпадает"),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime(), actual.getWaitingTime(), "Время (в часах) в течение которого ППРБ ожидает ответ от АС ФМ не совпадает")
         );
     }
 
@@ -104,10 +107,10 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
     @DisplayName("Валидация запроса отправки РПП на анализ")
     void validateModelRequiredParamDocId() {
         String exceptionMessage = step("Создание РПП без docID и получение сообщения об ошибке", () -> {
-                    SendToAnalyzeRequest request = new SendToAnalyzeRequest(null);
-                    ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> send(request));
-                    return ex.getMessage();
-                });
+            SendToAnalyzeRequest request = new SendToAnalyzeRequest(null);
+            ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> send(request));
+            return ex.getMessage();
+        });
         step("Проверка сообщения об ошибке об отсутсвии docID", () -> Assertions.assertTrue(exceptionMessage.contains("docId"), "Should contain docId in message. Message: " + exceptionMessage));
     }
 
@@ -146,6 +149,35 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
         parameter("Тип события", expected);
         ClientDefinedEventType actual = step("Получаем тип события", () -> DboOperation.PAYMENT_DT_0401060.getClientDefinedEventType(channelIndicator, clientDefinedChannelIndicator));
         step("Проверяем тип события " + expected, () -> assertSame(expected, actual));
+    }
+
+    @Test
+    @DisplayName("Отправка запроса на проверку РПП с минимальным набором атрибутов")
+    void sendRequestWithMinAttrsTest() throws Throwable {
+        PaymentOperation dto = new PaymentOperation();
+        dto.setTimeStamp(LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+        dto.setTimeOfOccurrence(LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+        dto.setDocument(new PaymentDocument());
+        dto.getDocument().setId(UUID.randomUUID());
+        RequestId requestId = saveOrUpdate(dto);
+        assertNotNull(requestId);
+
+        FullAnalyzeResponse expected = createAnalyzeResponse();
+        mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(objectMapper().writeValueAsString(expected)));
+
+        SendToAnalyzeRequest request = new SendToAnalyzeRequest(dto.getDocId());
+        AnalyzeResponse actual = send(request);
+        assertAll(
+                () -> assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId(), "Идентификатор транзакции не совпадает"),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode(), "Рекомендуемое действие не совпадает"),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getComment(), actual.getComment(), "Короткий комментарий по сработавшему правилу, передаваемый в СББОЛ, не совпадает"),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment(), actual.getDetailledComment(), "Расширенный комментарий по сработавшему правилу, передаваемый в СББОЛ, не совпадает"),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime(), actual.getWaitingTime(), "Время (в часах) в течение которого СББОЛ ожидает ответ от АС ФМ не совпадает")
+        );
     }
 
     private static Stream<Arguments> provideClientEventTypes() {

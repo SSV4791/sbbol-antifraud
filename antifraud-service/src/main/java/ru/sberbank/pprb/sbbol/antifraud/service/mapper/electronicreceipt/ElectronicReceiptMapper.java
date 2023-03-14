@@ -434,6 +434,9 @@ public abstract class ElectronicReceiptMapper implements CommonMapper<Electronic
     
     @AfterMapping
     protected void fillSigns(ElectronicReceiptOperation dto, @MappingTarget ElectronicReceipt entity) {
+        if (dto.getSign() == null) {
+            return;
+        }
         if (dto.getSign().getSignNumber() == 1) {
             entity.setTimeOfOccurrence(dto.getSign().getSignTime());
             entity.setFirstSignTime(dto.getSign().getSignTime());

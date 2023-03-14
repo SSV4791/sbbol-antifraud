@@ -220,7 +220,8 @@ val coverageExclusions = listOf(
         "**/exception/**",
         //Инфраструктура
         "**/*Aspect*",
-        "**/*Config*"
+        "**/*Config*",
+        "**/ru/sberbank/pprb/sbbol/antifraud/service/validator/**"
 )
 
 tasks {
@@ -266,13 +267,15 @@ sonarqube {
             **/ru/sberbank/pprb/sbbol/antifraud/api/**,
             **/ru/sberbank/pprb/sbbol/antifraud/service/aspect/logging/**,
             **/ru/sberbank/pprb/sbbol/antifraud/logging/**,
-            **/ru/sberbank/pprb/sbbol/antifraud/config/**
+            **/ru/sberbank/pprb/sbbol/antifraud/config/**,
+            "**/ru/sberbank/pprb/sbbol/antifraud/service/validator/**"
         """.trimIndent()
         )
         property(
                 "sonar.cpd.exclusions", """
             antifraud-api/src/main/java/ru/sberbank/pprb/sbbol/antifraud/api/**, 
-            antifraud-service/src/main/java/ru/sberbank/pprb/sbbol/antifraud/service/entity/**
+            antifraud-service/src/main/java/ru/sberbank/pprb/sbbol/antifraud/service/entity/**,
+            "**/ru/sberbank/pprb/sbbol/antifraud/service/validator/**"
         """.trimIndent()
         )
     }

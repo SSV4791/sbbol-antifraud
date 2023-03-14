@@ -3,8 +3,6 @@ package ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -17,37 +15,31 @@ public class Receipt implements Serializable {
      * Планируемая дата получения ДС в ВСП
      */
     @JsonSerialize(using = LocalDateSerializer.class)
-    @NotNull(message = "The document.receipt.receiptDate attribute must be filled")
     private LocalDate receiptDate;
 
     /**
      * Код ТБ выдачи ДС
      */
-    @NotBlank(message = "The document.receipt.receiptTbCode attribute must be filled")
     private String receiptTbCode;
 
     /**
      * Номер ОСБ выдачи ДС
      */
-    @NotBlank(message = "The document.receipt.receiptOsbNumber attribute must be filled")
     private String receiptOsbNumber;
 
     /**
      * Номер ВСП выдачи ДС
      */
-    @NotBlank(message = "The document.receipt.receiptVspNumber attribute must be filled")
     private String receiptVspNumber;
 
     /**
      * Место выдачи, наименование
      */
-    @NotBlank(message = "The document.receipt.receiptPlaceName attribute must be filled")
     private String receiptPlaceName;
 
     /**
      * Место выдачи, адрес
      */
-    @NotBlank(message = "The document.receipt.receiptPlaceAddress attribute must be filled")
     private String receiptPlaceAddress;
 
     public LocalDate getReceiptDate() {

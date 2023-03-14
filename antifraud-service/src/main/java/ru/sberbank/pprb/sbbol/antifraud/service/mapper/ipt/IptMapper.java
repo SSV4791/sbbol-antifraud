@@ -10,11 +10,9 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.DeviceRequest;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.CommonMapper;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -344,25 +342,10 @@ public abstract class IptMapper implements CommonMapper<IptClientDefinedAttribut
         CommonMapper.super.createClientDefinedAttributeList(analyzeRequest, request.getClientDefinedAttributeList(), CRITERIA_MAP, DESCRIPTION_MAP);
     }
 
+    // Требование ФП ИС прибавлять 3 часа для приведения времени к МСК. По согласованию данные атрибуты приходят в 0 тайм зоне
     @AfterMapping
     protected void add3HoursToTime(@MappingTarget AnalyzeRequest analyzeRequest) {
-        if (Objects.nonNull(analyzeRequest.getMessageHeader()) && Objects.nonNull(analyzeRequest.getMessageHeader().getTimeStamp())) {
-            analyzeRequest.getMessageHeader().setTimeStamp(analyzeRequest.getMessageHeader().getTimeStamp().plusHours(3));
-        }
-        if (Objects.nonNull(analyzeRequest.getEventDataList()) && Objects.nonNull(analyzeRequest.getEventDataList().getEventData()) &&
-                Objects.nonNull(analyzeRequest.getEventDataList().getEventData().getTimeOfOccurrence())) {
-            analyzeRequest.getEventDataList().getEventData().setTimeOfOccurrence(analyzeRequest.getEventDataList().getEventData().getTimeOfOccurrence().plusHours(3));
-        }
-        if (Objects.nonNull(analyzeRequest.getEventDataList()) && Objects.nonNull(analyzeRequest.getEventDataList().getClientDefinedAttributeList()) &&
-                Objects.nonNull(analyzeRequest.getEventDataList().getClientDefinedAttributeList().getFact())) {
-            analyzeRequest.getEventDataList().getClientDefinedAttributeList().getFact().stream()
-                    .filter(attribute -> attribute.getName().equals(DESCRIPTION_MAP.get(FIRST_SIGN_TIME)) ||
-                            attribute.getName().equals(DESCRIPTION_MAP.get(SECOND_SIGN_TIME)) ||
-                            attribute.getName().equals(DESCRIPTION_MAP.get(THIRD_SIGN_TIME)) ||
-                            attribute.getName().equals(DESCRIPTION_MAP.get(SINGLE_SIGN_TIME)))
-                    .filter(attribute -> Objects.nonNull(attribute.getValue()))
-                    .forEach(attribute -> attribute.setValue(LocalDateTime.parse(attribute.getValue()).plusHours(3).toString()));
-        }
+        addHoursToTime(analyzeRequest, DESCRIPTION_MAP, 3);
     }
 
 }

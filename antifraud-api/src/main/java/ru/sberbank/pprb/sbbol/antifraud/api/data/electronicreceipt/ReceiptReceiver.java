@@ -3,8 +3,6 @@ package ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -16,13 +14,11 @@ public class ReceiptReceiver implements Serializable {
     /**
      * Имя получателя ДС
      */
-    @NotBlank(message = "The document.receiver.firstName attribute must be filled")
     private String firstName;
 
     /**
      * Фамилия получателя ДС
      */
-    @NotBlank(message = "The document.receiver.secondName attribute must be filled")
     private String secondName;
 
     /**
@@ -34,32 +30,27 @@ public class ReceiptReceiver implements Serializable {
      * Дата рождения получателя ДС
      */
     @JsonSerialize(using = LocalDateSerializer.class)
-    @NotNull(message = "The document.receiver.birthDay attribute must be filled")
     private LocalDate birthDay;
 
     /**
      * Тип документа, удостоверяющего личность получателя ДС
      */
-    @NotBlank(message = "The document.receiver.dulType attribute must be filled")
     private String dulType;
 
     /**
      * Серия и номер
      */
-    @NotBlank(message = "The document.receiver.dulSerieNumber attribute must be filled")
     private String dulSerieNumber;
 
     /**
      * Кем выдан
      */
-    @NotBlank(message = "The document.receiver.dulWhoIssue attribute must be filled")
     private String dulWhoIssue;
 
     /**
      * Дата выдачи
      */
     @JsonSerialize(using = LocalDateSerializer.class)
-    @NotNull(message = "The document.receiver.dulDateIssue attribute must be filled")
     private LocalDate dulDateIssue;
 
     /**

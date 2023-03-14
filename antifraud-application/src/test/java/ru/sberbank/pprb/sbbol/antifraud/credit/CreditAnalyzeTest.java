@@ -1,6 +1,7 @@
 package ru.sberbank.pprb.sbbol.antifraud.credit;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -100,7 +101,6 @@ public class CreditAnalyzeTest extends AbstractIntegrationTest {
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> send(new CreditSendToAnalyzeRq()));
         String message = ex.getMessage();
         assertAll(
-                () -> assertTrue(message.contains("ClientTransactionId")),
                 () -> assertTrue(message.contains("identificationData")),
                 () -> assertTrue(message.contains("eventData")),
                 () -> assertTrue(message.contains("channelIndicator")),
@@ -120,12 +120,40 @@ public class CreditAnalyzeTest extends AbstractIntegrationTest {
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> send(request));
         String message = ex.getMessage();
         assertAll(
-                () -> assertTrue(message.contains("ClientTransactionId")),
                 () -> assertTrue(message.contains("identificationData.clientTransactionId")),
-                () -> assertTrue(message.contains("identificationData.userUcpId")),
                 () -> assertTrue(message.contains("identificationData.dboOperation")),
                 () -> assertTrue(message.contains("eventData.eventType")),
                 () -> assertTrue(message.contains("eventData.clientDefinedEventType"))
+        );
+    }
+
+    @Test
+    @DisplayName("Отправка на анализ заявок на кредит или банковских гарантий с минимальным набором атрибутов (успешный ответ)")
+    void analyzeWithMinAttrsTest() throws Throwable {
+        FullAnalyzeResponse fullAnalyzeResponse = factory.populatePojo(new FullAnalyzeResponse());
+        mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(objectMapper().writeValueAsString(fullAnalyzeResponse)));
+
+        CreditSendToAnalyzeRq request = new CreditSendToAnalyzeRq();
+        request.setIdentificationData(new CreditIdentificationData());
+        request.getIdentificationData().setClientTransactionId(UUID.randomUUID());
+        request.getIdentificationData().setDboOperation(DboOperation.PARTNERS);
+        request.setEventData(new CreditEventData());
+        request.getEventData().setEventType(RandomStringUtils.random(5));
+        request.getEventData().setClientDefinedEventType(ClientDefinedEventType.BROWSER_APPROVAL);
+        request.setChannelIndicator(ChannelIndicator.WEB);
+        request.setClientDefinedChannelIndicator(ClientDefinedChannelIndicator.PPRB_BROWSER);
+        AnalyzeResponse response = send(request);
+
+        assertAll(
+                () -> assertEquals(fullAnalyzeResponse.getIdentificationData().getTransactionId(), response.getTransactionId()),
+                () -> assertEquals(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getActionCode(), response.getActionCode()),
+                () -> assertEquals(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getComment(), response.getComment()),
+                () -> assertEquals(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getDetailledComment(), response.getDetailledComment()),
+                () -> assertEquals(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getWaitingTime(), response.getWaitingTime())
         );
     }
 

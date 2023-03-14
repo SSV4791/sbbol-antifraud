@@ -2,7 +2,6 @@ package ru.sberbank.pprb.sbbol.antifraud.api.analyze.counterparty;
 
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.UUID;
@@ -27,7 +26,6 @@ public class CounterPartyIdentificationData implements Serializable {
     /**
      * Уникальный идентификатор клиента (orgGuid)
      */
-    @NotBlank(message = "The attribute \"identificationData.userName\" must be filled")
     private String userName;
 
     /**

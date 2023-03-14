@@ -39,109 +39,112 @@ public final class PaymentModelValidator extends ModelValidator {
      * @param payment модель РПП для валидации
      */
     public static void validate(PaymentOperation payment) {
-        logWarn(payment.getOrgGuid(), payment.getDocId(), "orgGuid");
-        logWarn(payment.getTimeOfOccurrence(), payment.getDocId(), "timeOfOccurrence");
-        logWarn(payment.getDigitalId(), payment.getDocId(), "digitalId");
-        validateDocument(payment.getDocument(), payment.getDocId());
-        if (CollectionUtils.isEmpty(payment.getSigns())) {
-            logWarn(null, payment.getDocId(), "signs");
+        logWarn(payment.getTimeStamp(), payment.getDocId(), payment.getDboOperation(), "timeStamp");
+        logWarn(payment.getOrgGuid(), payment.getDocId(), payment.getDboOperation(), "orgGuid");
+        logWarn(payment.getDigitalId(), payment.getDocId(), payment.getDboOperation(), "digitalId");
+        logWarn(payment.getTimeOfOccurrence(), payment.getDocId(), payment.getDboOperation(), "timeOfOccurrence");
+        validateDocument(payment.getDocument(), payment.getDocId(), payment.getDboOperation());
+        if (!CollectionUtils.isEmpty(payment.getSigns())) {
+            validateSigns(payment.getMappedSigns(), payment.getDocId(), payment.getDboOperation());
         } else {
-            validateSigns(payment.getMappedSigns(), payment.getDocId());
+            logWarn(null, payment.getDocId(), payment.getDboOperation(), "signs");
         }
     }
 
-    private static void validateDocument(PaymentDocument document, UUID docId) {
-        logWarn(document.getNumber(), docId, "document.number");
-        logWarn(document.getDate(), docId, "document.date");
-        logWarn(document.getAmount(), docId, "document.amount");
-        logWarn(document.getCurrency(), docId, "document.currency");
-        logWarn(document.getDestination(), docId, "document.destination");
-        logWarn(document.getExecutionSpeed(), docId, "document.executionSpeed");
-        logWarn(document.getOtherAccBankType(), docId, "document.otherAccBankType");
-        logWarn(document.getOtherAccOwnershipType(), docId, "document.otherAccOwnershipType");
-        logWarn(document.getTransferMediumType(), docId, "document.transferMediumType");
-        logWarn(document.getPayer(), docId, "document.payer");
-        validatePayer(document.getPayer(), docId);
-        logWarn(document.getReceiver(), docId, "document.receiver");
-        validateReceiver(document.getReceiver(), docId);
-    }
-
-    private static void validatePayer(PaymentPayer payer, UUID docId) {
-        if (Objects.nonNull(payer)) {
-            logWarn(payer.getAccountNumber(), docId, "document.payer.accountNumber");
-            logWarn(payer.getInn(), docId, "document.payer.inn");
+    private static void validateDocument(PaymentDocument document, UUID docId, String dboOperation) {
+        logWarn(document.getNumber(), docId, dboOperation, "document.number");
+        logWarn(document.getDate(), docId, dboOperation, "document.date");
+        logWarn(document.getAmount(), docId, dboOperation, "document.amount");
+        logWarn(document.getCurrency(), docId, dboOperation, "document.currency");
+        logWarn(document.getDestination(), docId, dboOperation, "document.destination");
+        logWarn(document.getExecutionSpeed(), docId, dboOperation, "document.executionSpeed");
+        logWarn(document.getOtherAccBankType(), docId, dboOperation, "document.otherAccBankType");
+        logWarn(document.getOtherAccOwnershipType(), docId, dboOperation, "document.otherAccOwnershipType");
+        logWarn(document.getTransferMediumType(), docId, dboOperation, "document.transferMediumType");
+        if (Objects.nonNull(document.getPayer())) {
+            validatePayer(document.getPayer(), docId, dboOperation);
+        } else {
+            logWarn(document.getPayer(), docId, dboOperation, "document.payer");
+        }
+        if (Objects.nonNull(document.getReceiver())) {
+            validateReceiver(document.getReceiver(), docId, dboOperation);
+        } else {
+            logWarn(document.getReceiver(), docId, dboOperation, "document.receiver");
         }
     }
 
-    private static void validateReceiver(PaymentReceiver receiver, UUID docId) {
-        if (Objects.nonNull(receiver)) {
-            logWarn(receiver.getOtherAccName(), docId, "document.receiver.otherAccName");
-            logWarn(receiver.getOtherBicCode(), docId, "document.receiver.otherBicCode");
-            logWarn(receiver.getInn(), docId, "document.receiver.inn");
-            logWarn(receiver.getBalAccNumber(), docId, "document.receiver.balAccNumber");
-            logWarn(receiver.getOtherAccType(), docId, "document.receiver.otherAccType");
-        }
+    private static void validatePayer(PaymentPayer payer, UUID docId, String dboOperation) {
+        logWarn(payer.getAccountNumber(), docId, dboOperation, "document.payer.accountNumber");
+        logWarn(payer.getInn(), docId, dboOperation, "document.payer.inn");
     }
 
-    private static void validateSigns(List<PaymentSign> signs, UUID docId) {
-        validateFirstSignUserData(signs.get(0), docId);
+    private static void validateReceiver(PaymentReceiver receiver, UUID docId, String dboOperation) {
+        logWarn(receiver.getOtherAccName(), docId, dboOperation, "document.receiver.otherAccName");
+        logWarn(receiver.getOtherBicCode(), docId, dboOperation, "document.receiver.otherBicCode");
+        logWarn(receiver.getInn(), docId, dboOperation, "document.receiver.inn");
+        logWarn(receiver.getBalAccNumber(), docId, dboOperation, "document.receiver.balAccNumber");
+        logWarn(receiver.getOtherAccType(), docId, dboOperation, "document.receiver.otherAccType");
+    }
+
+    private static void validateSigns(List<PaymentSign> signs, UUID docId, String dboOperation) {
+        validateFirstSignUserData(signs.get(0), docId, dboOperation);
         for (int i = 0; i < signs.size() - 1; i++) {
-            validateSign(signs.get(i), signNameSwitcher(i), docId);
+            validateSign(signs.get(i), signNameSwitcher(i), docId, dboOperation);
         }
-        validateSign(signs.get(signs.size() - 1), "senderSign", docId);
+        validateSign(signs.get(signs.size() - 1), "senderSign", docId, dboOperation);
     }
 
-    private static void validateFirstSignUserData(PaymentSign sign, UUID docId) {
-        logWarn(sign.getHttpAccept(), docId, "httpAccept");
-        logWarn(sign.getHttpReferer(), docId, "httpReferer");
-        logWarn(sign.getHttpAcceptChars(), docId, "httpAcceptChars");
-        logWarn(sign.getHttpAcceptEncoding(), docId, "httpAcceptEncoding");
-        logWarn(sign.getHttpAcceptLanguage(), docId, "httpAcceptLanguage");
-        logWarn(sign.getIpAddress(), docId, "ipAddress");
-        logWarn(sign.getPrivateIpAddress(), docId, "privateIpAddress");
-        logWarn(sign.getTbCode(), docId, "tbCode");
-        logWarn(sign.getUserAgent(), docId, "userAgent");
+    private static void validateFirstSignUserData(PaymentSign sign, UUID docId, String dboOperation) {
+        logWarn(sign.getHttpAccept(), docId, dboOperation, "httpAccept");
+        logWarn(sign.getHttpReferer(), docId, dboOperation, "httpReferer");
+        logWarn(sign.getHttpAcceptChars(), docId, dboOperation, "httpAcceptChars");
+        logWarn(sign.getHttpAcceptEncoding(), docId, dboOperation, "httpAcceptEncoding");
+        logWarn(sign.getHttpAcceptLanguage(), docId, dboOperation, "httpAcceptLanguage");
+        logWarn(sign.getIpAddress(), docId, dboOperation, "ipAddress");
+        logWarn(sign.getPrivateIpAddress(), docId, dboOperation, "privateIpAddress");
+        logWarn(sign.getTbCode(), docId, dboOperation, "tbCode");
+        logWarn(sign.getUserAgent(), docId, dboOperation, "userAgent");
         if (sign.getDevicePrint() == null && sign.getMobSdkData() == null) {
-            logWarn(sign.getDevicePrint(), docId, "devicePrint or mobSdkData");
+            logWarn(sign.getDevicePrint(), docId, dboOperation, "devicePrint and mobSdkData");
         }
-        logWarn(sign.getUserGuid(), docId, "userGuid");
-        logWarn(sign.getChannelIndicator(), docId, "channelIndicator");
-        logWarn(sign.getClientDefinedChannelIndicator(), docId, "clientDefinedChannelIndicator");
+        logWarn(sign.getUserGuid(), docId, dboOperation, "userGuid");
+        logWarn(sign.getChannelIndicator(), docId, dboOperation, "channelIndicator");
+        logWarn(sign.getClientDefinedChannelIndicator(), docId, dboOperation, "clientDefinedChannelIndicator");
         if (sign.getChannelIndicator() != null && sign.getClientDefinedChannelIndicator() != null) {
-            checkChannelIndicators(sign.getChannelIndicator(), sign.getClientDefinedChannelIndicator(), docId);
+            checkChannelIndicators(sign.getChannelIndicator(), sign.getClientDefinedChannelIndicator(), docId, dboOperation);
         }
     }
-    
-    private static void checkChannelIndicators(ChannelIndicator channelIndicator, ClientDefinedChannelIndicator clientDefinedChannelIndicator, UUID docId) {
+
+    private static void checkChannelIndicators(ChannelIndicator channelIndicator, ClientDefinedChannelIndicator clientDefinedChannelIndicator, UUID docId, String dboOperation) {
         if (WEB == channelIndicator && PPRB_BROWSER != clientDefinedChannelIndicator) {
-            logWarn("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channelIndicator=" + channelIndicator, docId);
+            logWarn("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channelIndicator=" + channelIndicator, docId, dboOperation);
         }
         if (MOBILE == channelIndicator && PPRB_MOBSBBOL != clientDefinedChannelIndicator) {
-            logWarn("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channelIndicator=" + channelIndicator, docId);
+            logWarn("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channelIndicator=" + channelIndicator, docId, dboOperation);
         }
         if (BRANCH == channelIndicator && PPRB_OFFICE != clientDefinedChannelIndicator) {
-            logWarn("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channelIndicator=" + channelIndicator, docId);
+            logWarn("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channelIndicator=" + channelIndicator, docId, dboOperation);
         }
         if (OTHER == channelIndicator && PPRB_UPG_1C != clientDefinedChannelIndicator &&
                 PPRB_UPG_SBB != clientDefinedChannelIndicator && PPRB_UPG_CORP != clientDefinedChannelIndicator) {
-            logWarn("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channelIndicator=" + channelIndicator, docId);
+            logWarn("Illegal clientDefinedChannelIndicator=" + clientDefinedChannelIndicator + " for channelIndicator=" + channelIndicator, docId, dboOperation);
         }
     }
 
-    private static void validateSign(PaymentSign sign, String signName, UUID docId) {
-        logWarnSign(sign.getSignTime(), docId, signName, "Time");
-        logWarnSign(sign.getIpAddress(), docId, signName, "Ip");
-        logWarnSign(sign.getSignLogin(), docId, signName, "Login");
-        logWarnSign(sign.getSignCryptoprofile(), docId, signName, "Cryptoprofile");
-        logWarnSign(sign.getSignCryptoprofileType(), docId, signName, "CryptoprofileType");
-        logWarnSign(sign.getChannelIndicator(), docId, signName, "Channel");
-        logWarnSign(sign.getSignToken(), docId, signName, "Token");
-        logWarnSign(sign.getSignType(), docId, signName, "Type");
-        logWarnSign(sign.getSignImsi(), docId, signName, "Imsi");
-        logWarnSign(sign.getSignCertId(), docId, signName, "CertId");
-        logWarnSign(sign.getSignPhone(), docId, signName, "Phone");
-        logWarnSign(sign.getSignEmail(), docId, signName, "Email");
-        logWarnSign(sign.getSignSource(), docId, signName, "Source");
+    private static void validateSign(PaymentSign sign, String signName, UUID docId, String dboOperation) {
+        logWarnSign(sign.getSignTime(), docId, dboOperation, signName, "Time");
+        logWarnSign(sign.getIpAddress(), docId, dboOperation, signName, "Ip");
+        logWarnSign(sign.getSignLogin(), docId, dboOperation, signName, "Login");
+        logWarnSign(sign.getSignCryptoprofile(), docId, dboOperation, signName, "Cryptoprofile");
+        logWarnSign(sign.getSignCryptoprofileType(), docId, dboOperation, signName, "CryptoprofileType");
+        logWarnSign(sign.getChannelIndicator(), docId, dboOperation, signName, "Channel");
+        logWarnSign(sign.getSignToken(), docId, dboOperation, signName, "Token");
+        logWarnSign(sign.getSignType(), docId, dboOperation, signName, "Type");
+        logWarnSign(sign.getSignImsi(), docId, dboOperation, signName, "Imsi");
+        logWarnSign(sign.getSignCertId(), docId, dboOperation, signName, "CertId");
+        logWarnSign(sign.getSignPhone(), docId, dboOperation, signName, "Phone");
+        logWarnSign(sign.getSignEmail(), docId, dboOperation, signName, "Email");
+        logWarnSign(sign.getSignSource(), docId, dboOperation, signName, "Source");
     }
 
 }

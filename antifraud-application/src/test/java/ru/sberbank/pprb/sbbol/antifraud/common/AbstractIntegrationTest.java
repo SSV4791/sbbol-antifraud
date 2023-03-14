@@ -18,6 +18,7 @@ import ru.sberbank.pprb.sbbol.antifraud.AntiFraudRunner;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithOutSavingRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendAfterSavingRq;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.Operation;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import uk.co.jemos.podam.api.PodamFactory;
@@ -111,6 +112,22 @@ public abstract class AbstractIntegrationTest {
                 "analyzeOperation",
                 Collections.singletonMap("analyzeparams", request),
                 AnalyzeResponse.class
+        );
+    }
+
+    protected FullAnalyzeResponse sendWithFullResponse(SendAfterSavingRq request) throws Throwable {
+        return jsonRpcRestClient.invoke(
+                "analyzeOperation",
+                Collections.singletonMap("analyzeparams", request),
+                FullAnalyzeResponse.class
+        );
+    }
+
+    protected FullAnalyzeResponse sendWithFullResponse(AnalyzeWithOutSavingRequest request) throws Throwable {
+        return jsonRpcRestClient.invoke(
+                "analyzeOperation",
+                Collections.singletonMap("analyzeparams", request),
+                FullAnalyzeResponse.class
         );
     }
 

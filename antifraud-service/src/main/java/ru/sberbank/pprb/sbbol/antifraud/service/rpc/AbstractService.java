@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.HttpStatusCodeException;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendAfterSavingRq;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.Response;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.Operation;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
@@ -47,7 +47,7 @@ public abstract class AbstractService<T extends Operation, R extends SendAfterSa
         }
     }
 
-    protected AnalyzeResponse analyze(R request) {
+    protected Response analyze(R request) {
         String msg = "DocId=" + request.getDocId() + (request.getDboOperation() != null ? (", dboOperation=" + request.getDboOperation()) : "") + ". ";
         logger.debug("{}Sending data to analyze. {}", msg, request);
         try {
@@ -59,7 +59,7 @@ public abstract class AbstractService<T extends Operation, R extends SendAfterSa
             logger.error(errorMsg, e);
             throw new ModelArgumentException(errorMsg, e);
         } catch (ApplicationException e) {
-            logger.error(e.getMessage(), e);
+            logger.warn(e.getMessage(), e);
             throw e;
         } catch (HttpStatusCodeException e) {
             String errorMsg = msg + "Analysis error. Status code: " + e.getStatusCode() + ". " + e.getResponseBodyAsString();

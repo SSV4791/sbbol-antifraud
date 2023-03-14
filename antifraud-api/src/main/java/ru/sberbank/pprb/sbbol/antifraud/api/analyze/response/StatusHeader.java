@@ -4,13 +4,31 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.io.Serializable;
 
+/**
+ * Заголовок со статусом операций
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class StatusHeader implements Serializable {
 
+    /**
+     * Дополнительный код возникшей ошибки
+     */
     private Integer reasonCode;
 
+    /**
+     * Строка с описанием ошибки, или "Operations were completed successfully"
+     */
     private String reasonDescription;
 
+    /**
+     * Статус операции
+     *
+     * Возможные значения:
+     * • 200 – операция завершена успешно;
+     * • 300 – при обработке запросов возникли предупреждения;
+     * • 500 – операция не выполнена из-за системных ошибок, ошибка приложения RSA, необходимо обратиться в службу технической поддержки;
+     * • 510 – операция не выполнена из-за ошибок запроса, данные в запросе некорректны, возможно, неверен список передаваемых элементов.
+     */
     private String statusCode;
 
     public Integer getReasonCode() {

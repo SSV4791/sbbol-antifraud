@@ -10,25 +10,25 @@ public abstract class ModelValidator {
 
     private static final Logger logger = LoggerFactory.getLogger(ModelValidator.class);
 
-    private static final String MESSAGE = "DocId={}. The attribute must be filled: {}";
+    private static final String MESSAGE = "DocId={}, dboOperation={}. The attribute not filled: {}";
     private static final String SIGN_MESSAGE = MESSAGE + "{}";
 
     protected ModelValidator() {
     }
 
-    protected static void logWarn(Object param, UUID docId, String name) {
+    protected static void logWarn(Object param, UUID docId, String dboOperation, String name) {
         if (param == null) {
-            logger.warn(MESSAGE, docId, name);
+            logger.warn(MESSAGE, docId, dboOperation, name);
         }
     }
 
-    protected static void logWarn(String message, UUID docId) {
-        logger.warn("DocId={}. {}", docId, message);
+    protected static void logWarn(String message, UUID docId, String dboOperation) {
+        logger.warn("DocId={}, dboOperation={}. {}", docId, dboOperation, message);
     }
 
-    protected static void logWarnSign(Object param, UUID docId, String signName, String paramName) {
+    protected static void logWarnSign(Object param, UUID docId, String dboOperation, String signName, String paramName) {
         if (param == null) {
-            logger.warn(SIGN_MESSAGE, docId, signName, paramName);
+            logger.warn(SIGN_MESSAGE, docId, dboOperation, signName, paramName);
         }
     }
 

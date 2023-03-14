@@ -25,7 +25,7 @@ public class PaymentServiceImpl extends AbstractService<PaymentOperation, SendTo
 
     @Override
     public AnalyzeResponse analyzeOperation(SendToAnalyzeRequest request) {
-        return analyze(request);
+        return (AnalyzeResponse) analyze(request);
     }
 
 }

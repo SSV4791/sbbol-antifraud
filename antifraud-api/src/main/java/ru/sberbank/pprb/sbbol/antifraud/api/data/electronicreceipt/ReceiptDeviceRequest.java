@@ -1,6 +1,5 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.data.electronicreceipt;
 
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -11,7 +10,6 @@ public class ReceiptDeviceRequest implements Serializable {
     /**
      * Слепок устройства. Значения из скрипта rsa.js
      */
-    @NotBlank(message = "The deviceRequest.devicePrint attribute must be filled")
     private String devicePrint;
 
     /**
@@ -42,13 +40,11 @@ public class ReceiptDeviceRequest implements Serializable {
     /**
      * IP адрес из HTTP-запроса
      */
-    @NotBlank(message = "The deviceRequest.ipAddress attribute must be filled")
     private String ipAddress;
 
     /**
      * Значение заголовка User-Agent HTTP-запроса
      */
-    @NotBlank(message = "The deviceRequest.userAgent attribute must be filled")
     private String userAgent;
 
     public String getDevicePrint() {

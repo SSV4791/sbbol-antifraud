@@ -6,8 +6,6 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.DboOperation;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.Operation;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,7 +26,6 @@ public class FastPaymentOperation implements Operation {
     /**
      * Уникальный идентификатор клиента
      */
-    @NotBlank(message = "The orgGuid attribute must be filled")
     private String orgGuid;
 
     /**
@@ -53,8 +50,7 @@ public class FastPaymentOperation implements Operation {
     /**
      * Список данных по подписям в виде json-строк
      */
-    @NotEmpty(message = "The signs attribute must be filled")
-    private List<@NotBlank(message = "Sign attribute cannot be null or blank") String> signs;
+    private List<String> signs;
 
     /**
      * Список данных по подписям, приведенных к модели подписи

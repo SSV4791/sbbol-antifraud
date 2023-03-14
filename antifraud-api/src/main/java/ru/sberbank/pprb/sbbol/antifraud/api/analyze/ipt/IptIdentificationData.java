@@ -13,7 +13,6 @@ public class IptIdentificationData implements Serializable {
     /**
      * ЕПК.ID получателя
      */
-    @NotBlank(message = "The attribute \"identificationData.userName\" must be filled")
     private String userName;
 
     /**

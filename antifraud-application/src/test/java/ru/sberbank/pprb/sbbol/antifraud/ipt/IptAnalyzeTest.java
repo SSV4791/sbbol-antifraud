@@ -1,6 +1,7 @@
 package ru.sberbank.pprb.sbbol.antifraud.ipt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
@@ -10,12 +11,15 @@ import org.springframework.test.web.client.ExpectedCount;
 import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ipt.IptEventData;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ipt.IptIdentificationData;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ipt.IptMessageHeader;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ipt.IptSendToAnalyzeRq;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.common.AbstractIntegrationTest;
+
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -82,8 +86,6 @@ public class IptAnalyzeTest extends AbstractIntegrationTest {
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> send(new IptSendToAnalyzeRq()));
         String message = ex.getMessage();
         assertAll(
-                () -> assertTrue(message.contains("ClientTransactionId=null")),
-                () -> assertTrue(message.contains("dboOperation=null")),
                 () -> assertTrue(message.contains("identificationData")),
                 () -> assertTrue(message.contains("eventData")),
                 () -> assertTrue(message.contains("channelIndicator")),
@@ -95,20 +97,48 @@ public class IptAnalyzeTest extends AbstractIntegrationTest {
     @DisplayName("Валидация модели ИПТ (2 уровень вложенности)")
     void validateModel2ndLevelTest() {
         IptSendToAnalyzeRq request = new IptSendToAnalyzeRq();
+        request.setMessageHeader(new IptMessageHeader());
         request.setIdentificationData(new IptIdentificationData());
         request.setEventData(new IptEventData());
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> send(request));
         String message = ex.getMessage();
         assertAll(
-                () -> assertTrue(message.contains("ClientTransactionId=" + request.getClientTransactionId())),
-                () -> assertTrue(message.contains("dboOperation=" + request.getDboOperation())),
-                () -> assertTrue(message.contains("identificationData.userName")),
                 () -> assertTrue(message.contains("identificationData.clientTransactionId")),
                 () -> assertTrue(message.contains("identificationData.dboOperation")),
                 () -> assertTrue(message.contains("eventData.eventType")),
-                () -> assertTrue(message.contains("eventData.clientDefinedEventType")),
-                () -> assertTrue(message.contains("channelIndicator")),
-                () -> assertTrue(message.contains("clientDefinedChannelIndicator"))
+                () -> assertTrue(message.contains("eventData.clientDefinedEventType"))
+        );
+    }
+
+    @Test
+    @DisplayName("Отправка на анализ ИПТ с минимальным набором атрибутов (успешный ответ)")
+    void analyzeWithMinAttrTest() throws Throwable {
+        FullAnalyzeResponse fullAnalyzeResponse = podamFactory().populatePojo(new FullAnalyzeResponse());
+        mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(objectMapper().writeValueAsString(fullAnalyzeResponse)));
+
+        IptSendToAnalyzeRq request = new IptSendToAnalyzeRq();
+        request.setIdentificationData(new IptIdentificationData());
+        request.getIdentificationData().setClientTransactionId(UUID.randomUUID());
+        request.getIdentificationData().setDboOperation(RandomStringUtils.random(5));
+        request.setEventData(new IptEventData());
+        request.getEventData().setEventType(RandomStringUtils.random(5));
+        request.getEventData().setClientDefinedEventType(RandomStringUtils.random(5));
+        request.setChannelIndicator(RandomStringUtils.random(5));
+        request.setClientDefinedChannelIndicator(RandomStringUtils.random(5));
+        AnalyzeResponse response = send(request);
+
+        assertAll(
+                () -> assertEquals(fullAnalyzeResponse.getIdentificationData().getTransactionId(), response.getTransactionId()),
+                () -> assertEquals(fullAnalyzeResponse.getStatusHeader().getStatusCode(), response.getStatusCode()),
+                () -> assertEquals(fullAnalyzeResponse.getStatusHeader().getReasonCode(), response.getReasonCode()),
+                () -> assertEquals(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getActionCode(), response.getActionCode()),
+                () -> assertEquals(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getComment(), response.getComment()),
+                () -> assertEquals(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getDetailledComment(), response.getDetailledComment()),
+                () -> assertEquals(fullAnalyzeResponse.getRiskResult().getTriggeredRule().getWaitingTime(), response.getWaitingTime())
         );
     }
 

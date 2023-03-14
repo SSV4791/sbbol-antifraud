@@ -3,7 +3,7 @@ package ru.sberbank.pprb.sbbol.antifraud.service.processor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.validation.annotation.Validated;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithOutSavingRequest;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.Response;
 
 import javax.validation.Valid;
 
@@ -20,6 +20,6 @@ public interface AnalyzeWithOutSavingProcessor<T extends AnalyzeWithOutSavingReq
      * @return результат анализа данных
      * @throws JsonProcessingException ошибка при преобразовании в JSON
      */
-    AnalyzeResponse analyze(@Valid T request) throws JsonProcessingException;
+    Response analyze(@Valid T request) throws JsonProcessingException;
 
 }

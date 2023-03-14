@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
 
 /**
- * Модель ответа для исполненных РПП с результатами анализа операции
+ * Модель ответа с результатами анализа операции
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AnalyzeResponse implements Serializable {
+public class AnalyzeResponse implements Response {
 
     /**
      * Идентификатор транзакции. Формируется системой «ФРОД-мониторинг» автоматически при вставке транзакции

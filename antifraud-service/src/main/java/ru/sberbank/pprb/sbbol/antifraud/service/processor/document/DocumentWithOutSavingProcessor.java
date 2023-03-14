@@ -5,11 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.Response;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.document.DocumentMapper;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeAbstractProcessor;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeWithOutSavingProcessor;
+import ru.sberbank.pprb.sbbol.antifraud.service.validator.document.DocumentWithOutSavingValidator;
 
 @Service
 public class DocumentWithOutSavingProcessor extends AnalyzeAbstractProcessor implements AnalyzeWithOutSavingProcessor<AnalyzeRequest> {
@@ -25,9 +26,10 @@ public class DocumentWithOutSavingProcessor extends AnalyzeAbstractProcessor imp
     }
 
     @Override
-    public AnalyzeResponse analyze(AnalyzeRequest request) throws JsonProcessingException {
+    public Response analyze(AnalyzeRequest request) throws JsonProcessingException {
+        DocumentWithOutSavingValidator.validate(request);
         mapper.fillAnalyzeRequest(request);
-        return sendToAnalyze(request);
+        return sendToAnalyzeWithFullResponse(request);
     }
 
 }

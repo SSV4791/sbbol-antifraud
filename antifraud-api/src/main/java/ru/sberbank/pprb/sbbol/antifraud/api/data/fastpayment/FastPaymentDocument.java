@@ -3,8 +3,6 @@ package ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -30,19 +28,16 @@ public class FastPaymentDocument implements Serializable {
      * Дата документа
      */
     @JsonSerialize(using = LocalDateSerializer.class)
-    @NotNull(message = "The document.date attribute must be filled")
     private LocalDate date;
 
     /**
      * Сумма перевода
      */
-    @NotNull(message = "The document.amount attribute must be filled")
     private Long amount;
 
     /**
      * Буквенный код валюты перевода в соответствии со стандартом ISO
      */
-    @NotBlank(message = "The document.currency attribute must be filled")
     private String currency;
 
     /**
@@ -53,21 +48,16 @@ public class FastPaymentDocument implements Serializable {
     /**
      * Идентификатор Операции ОПКЦ СБП
      */
-    @NotBlank(message = "The document.idOperationOPKC attribute must be filled")
     private String idOperationOPKC;
 
     /**
      * Данные плательщика
      */
-    @Valid
-    @NotNull(message = "Document.payer attribute cannot be null")
     private FastPaymentPayer payer;
 
     /**
      * Данные получателя
      */
-    @Valid
-    @NotNull(message = "Document.receiver attribute cannot be null")
     private FastPaymentReceiver receiver;
 
     public UUID getId() {

@@ -1,5 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.document;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
@@ -8,12 +9,17 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.client.ExpectedCount;
 import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.EventData;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.EventDataList;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.IdentificationData;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.MessageHeader;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
 import ru.sberbank.pprb.sbbol.antifraud.common.AbstractIntegrationTest;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
@@ -29,7 +35,7 @@ public class DocumentWithOutSavingServiceTest extends AbstractIntegrationTest {
 
     @Test
     @DisplayName("Отправка данных на анализ без сохранения (универсальный API)")
-    void analyzeOperationTest() throws Throwable {
+    void analyzeOperationWithOutSavingTest() throws Throwable {
         FullAnalyzeResponse expected = podamFactory().populatePojo(new FullAnalyzeResponse());
         mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
                 .andExpect(method(HttpMethod.POST))
@@ -38,22 +44,13 @@ public class DocumentWithOutSavingServiceTest extends AbstractIntegrationTest {
                         .body(objectMapper().writeValueAsString(expected)));
 
         AnalyzeRequest analyzeRequest = podamFactory().populatePojo(new AnalyzeRequest());
-        AnalyzeResponse actual = send(analyzeRequest);
-
-        assertAll(
-                () -> assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId()),
-                () -> assertEquals(expected.getStatusHeader().getStatusCode(), actual.getStatusCode()),
-                () -> assertEquals(expected.getStatusHeader().getReasonCode(), actual.getReasonCode()),
-                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode()),
-                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getComment(), actual.getComment()),
-                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment(), actual.getDetailledComment()),
-                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime(), actual.getWaitingTime())
-        );
+        FullAnalyzeResponse actual = sendWithFullResponse(analyzeRequest);
+        assertEquals(expected.toString(), actual.toString());
     }
 
     @Test
     @DisplayName("Ошибка от ФП ИС при отправке данных на анализ без сохранения (универсальный API)")
-    void analyzeOperationHttpStatusCodeErrorTest() {
+    void analyzeOperationWithOutSavingHttpStatusCodeErrorTest() {
         mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
                 .andExpect(method(HttpMethod.POST))
                 .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -65,6 +62,32 @@ public class DocumentWithOutSavingServiceTest extends AbstractIntegrationTest {
 
         String msg = ex.getMessage();
         assertEquals("ClientTransactionId=" + analyzeRequest.getClientTransactionId() + ", dboOperation=" + analyzeRequest.getDboOperation() + ". Analysis error. Status code: 500 INTERNAL_SERVER_ERROR. ERROR", msg);
+    }
+
+    @Test
+    @DisplayName("Отправка данных на анализ без сохранения с минимальным набором атрибутов (универсальный API)")
+    void analyzeOperationWithOutSavingWithMinAttrsTest() throws Throwable {
+        FullAnalyzeResponse expected = podamFactory().populatePojo(new FullAnalyzeResponse());
+        mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(objectMapper().writeValueAsString(expected)));
+
+        AnalyzeRequest analyzeRequest = new AnalyzeRequest();
+        analyzeRequest.setMessageHeader(new MessageHeader(LocalDateTime.now(), RandomStringUtils.random(5)));
+        analyzeRequest.setIdentificationData(new IdentificationData());
+        analyzeRequest.getIdentificationData().setClientTransactionId(UUID.randomUUID());
+        analyzeRequest.getIdentificationData().setDboOperation(RandomStringUtils.random(5));
+        analyzeRequest.setEventDataList(new EventDataList());
+        analyzeRequest.getEventDataList().setEventData(new EventData());
+        analyzeRequest.getEventDataList().getEventData().setEventType(RandomStringUtils.random(5));
+        analyzeRequest.getEventDataList().getEventData().setClientDefinedEventType(RandomStringUtils.random(5));
+        analyzeRequest.getEventDataList().getEventData().setTimeOfOccurrence(LocalDateTime.now());
+        analyzeRequest.setChannelIndicator(RandomStringUtils.random(5));
+        analyzeRequest.setClientDefinedChannelIndicator(RandomStringUtils.random(5));
+        FullAnalyzeResponse actual = sendWithFullResponse(analyzeRequest);
+        assertEquals(expected.toString(), actual.toString());
     }
 
 }

@@ -1,6 +1,5 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.data.fastpayment;
 
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -11,13 +10,11 @@ public class FastPaymentReceiver implements Serializable {
     /**
      * Наименование получателя платежа
      */
-    @NotBlank(message = "The document.receiver.otherAccName attribute must be filled")
     private String otherAccName;
 
     /**
      * БИК банка получателя
      */
-    @NotBlank(message = "The document.receiver.otherBicCode attribute must be filled")
     private String otherBicCode;
 
     /**
@@ -43,7 +40,6 @@ public class FastPaymentReceiver implements Serializable {
     /**
      * Идентификатор Банка Получателя
      */
-    @NotBlank(message = "The document.receiver.bankId attribute must be filled")
     private String bankId;
 
     /**
@@ -59,13 +55,11 @@ public class FastPaymentReceiver implements Serializable {
     /**
      * Номер телефона получателя
      */
-    @NotBlank(message = "The document.receiver.phoneNumber attribute must be filled")
     private String phoneNumber;
 
     /**
      * Счет получателя
      */
-    @NotBlank(message = "The document.receiver.account attribute must be filled")
     private String account;
 
     public String getOtherAccName() {

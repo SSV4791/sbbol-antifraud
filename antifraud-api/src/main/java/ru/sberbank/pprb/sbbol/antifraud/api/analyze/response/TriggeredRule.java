@@ -19,12 +19,19 @@ public class TriggeredRule implements Serializable {
     private String actionCode;
 
     /**
-     * Наименование действия
+     * Название действия, которое сработало при обработке правила
      */
     private String actionName;
 
     /**
-     * Тип действия
+     * Тип применяемого действия в соответствии с рекомендуемой политикой.
+     *
+     * Возможные значения:
+     * • STRICT - примите меры, только если сам actionCode более строгие, чем рекомендуемая политика;
+     * • LIGHT - примите меры, только если сам actionCode легче, чем рекомендуемая политика;
+     * • OVERRIDE - всегда используйте фактический actionCode, независимо от рекомендуемой политики;
+     * • LOG - не принимать меры, но залогировать событие;
+     * • NONE – не принимать меры, не логировать событие.
      */
     private String actionType;
 
@@ -39,17 +46,17 @@ public class TriggeredRule implements Serializable {
     private String ruleName;
 
     /**
-     * Короткий комментарий по сработавшему правилу, передаваемый в СББОЛ
+     * Короткий комментарий по сработавшему правилу, передаваемый в ППРБ
      */
     private String comment;
 
     /**
-     * Расширенный комментарий по сработавшему правилу, передаваемый в СББОЛ
+     * Расширенный комментарий по сработавшему правилу, передаваемый в ППРБ
      */
     private String detailledComment;
 
     /**
-     * Время (в часах) в течение которого СББОЛ ожидает ответ от АС ФМ в случае actionCode=REVIEW
+     * Время (в часах) в течение которого ППРБ ожидает ответ от АС ФМ в случае actionCode=REVIEW
      */
     private Integer waitingTime;
 
@@ -130,4 +137,5 @@ public class TriggeredRule implements Serializable {
                 ", waitingTime=" + waitingTime +
                 '}';
     }
+
 }
