@@ -189,12 +189,12 @@ canary_suffix: main
 fluentbit:
   module_id: pprb4-digital-fraud
   limits:
-    cpu: 100m
-    memory: 100Mi
+    cpu: 200m
+    memory: 256Mi
     ephemeral_storage: 600Mi
   requests:
-    cpu: 100m
-    memory: 100Mi
+    cpu: 200m
+    memory: 256Mi
     ephemeral_storage: 600Mi
 
 app_journal:

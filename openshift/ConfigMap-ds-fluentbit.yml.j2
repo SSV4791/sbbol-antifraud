@@ -9,15 +9,21 @@ data:
         Flush        1
         Daemon       Off
         Parsers_File /fluent-bit/etc/parsers.conf
+        HTTP_Server  On
+        HTTP_Listen  0.0.0.0
+        HTTP_PORT    2020
     [INPUT]
         Name tail
+        Tag file.tail
         Path /app/logs/*.json
-        Mem_Buf_Limit 5MB
+        Mem_Buf_Limit 10MB
         Skip_Long_Lines On
+        Refresh_Interval 2
+        Rotate_Wait 1
+        Read_from_Head Off
+        DB /app/logs/kube.db
         Parser custom
     [FILTER]
-{# возможно, здесь нужно сослаться на параметры из деплойментконфига, или перенести параметры оттуда сюда #}
-{# но пока оставили так, ибо как-то работает #}
         Name modify
         Match *
         Add cluster ${cluster}
@@ -27,24 +33,15 @@ data:
         Add nodeId ${nodeId}
         Add standId ${standId}
     [OUTPUT]
-        Name http
-        Match *
-        # Hostname сервиса приема событий
-        # Например: logger-endpoint-demo-http-ci00641491-idevlg-pprbtsloggertest.apps.test-ose.ca.sbrf.ru
-{# берем нулевой элемент массива #}
-        Host {{ int.pprb.fluentbit.v1_0[0].host }}
-        Port 80
-        # Метод сервиса приема событий
-        URI /v1/events
-        # Параметры для защищенного соединения
-        #tls On/Off
-        #tls.verify On/Off
-        #tls.ca_file /fluent-bit/ssl/certname.pem
-        Format json
-        json_date_key timestamp
-    [OUTPUT]
         Name stdout
         Match *
+    [OUTPUT]
+        Name kafka
+        Match file.tail
+        Brokers {% for address in int_entry.kafka_tengri %}{{ address.host }}:{{ address.port }}{% if not loop.last %},{% endif %}{% endfor %}
+
+        Topics CI03045533.as_antifraud_logs
+        rdkafka.security.protocol PLAINTEXT
   parsers.conf: |-
     [PARSER]
         Name custom
