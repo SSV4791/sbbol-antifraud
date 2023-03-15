@@ -4,6 +4,7 @@ docker:
     postgres: docker-internal.registry-ci.delta.sbrf.ru/ci02281165/ci03069386/postgres:13-alpine
 
 credentials:
+  service: TUZ_DCBMSC5
   sonar: sonar-token
   checkmarx: TUZ_00170030-sast
   openshift_token: os-token
