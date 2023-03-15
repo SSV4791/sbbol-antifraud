@@ -7,7 +7,7 @@ secman:
           os:
             vaultUrl: "https://t.secrets.delta.sbrf.ru"
             vaultCredentialId: approle_dev_dcb-delta
-            path: CI00149046_CI00363109/A/SBBOL/JEN/DEV/KV/ST_OpenShiftToken_ci02281165-antifraud
+            path: CI02281165_CI02352957/A/SBBOL/JEN/DEV/KV/ST_OpenShiftToken_ci02281165-antifraud
   openshift:
     enabled: true
     address: t.secrets.delta.sbrf.ru

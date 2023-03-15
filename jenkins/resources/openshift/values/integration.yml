@@ -24,16 +24,6 @@ int:
           protocol: TCP
           resolution: STATIC
 
-    fluentbit:
-      v1_0:
-        - name: fluent-bit-ott
-          host: sbtatlas.sigma.sbrf.ru
-          port: '443'
-          istio_mesh_port: '80'
-          protocol: TLS
-          mtls: true
-          ott: true
-
     appjournal:
       v1_0:
         - name: appjournal1
@@ -45,7 +35,6 @@ int:
           protocol: TCP
           url: dummy
           resolution: STATIC
-
         - name: appjournal6
           host: 6sbtatlas.sigma.sbrf.ru
           ip: 10.128.11.11
@@ -56,6 +45,189 @@ int:
           protocol: TCP
           url: dummy
           resolution: STATIC
+
+    kafka_tengri:
+      v1_0:
+        - name: tvlds-tgr000533
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          host: tvlds-tgr000533.delta.sbrf.ru
+          ip: 10.49.146.241
+          port: 9093
+          egress_port: 3000
+        - name: tvlds-tgr000532
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          host: tvlds-tgr000532.delta.sbrf.ru
+          ip: 10.49.147.63
+          port: 9093
+          egress_port: 3001
+        - name: tvlds-tgr000531
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          host: tvlds-tgr000531.delta.sbrf.ru
+          ip: 10.49.146.123
+          port: 9093
+          egress_port: 3002
+        - name: tvlds-tgr000530
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          host: tvlds-tgr000530.delta.sbrf.ru
+          ip: 10.49.147.191
+          port: 9093
+          egress_port: 3003
+        - name: tvlds-tgr000529
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          host: tvlds-tgr000529.delta.sbrf.ru
+          ip: 10.49.147.212
+          port: 9093
+          egress_port: 3004
+        - name: tvlds-tgr000527
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          host: tvlds-tgr000527.delta.sbrf.ru
+          ip: 10.49.147.32
+          port: 9093
+          egress_port: 3005
+        - name: tvlds-tgr000408
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          host: tvlds-tgr000408.delta.sbrf.ru
+          ip: 10.49.147.208
+          port: 9093
+          egress_port: 3006
+        - name: tvlds-tgr000391
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          host: tvlds-tgr000391.delta.sbrf.ru
+          ip: 10.49.147.108
+          port: 9093
+          egress_port: 3007
+        - name: tvlds-tgr000389
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          host: tvlds-tgr000389.delta.sbrf.ru
+          ip: 10.49.146.136
+          port: 9093
+          egress_port: 3008
+        - name: tvlds-tgr000388
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          host: tvlds-tgr000388.delta.sbrf.ru
+          ip: 10.49.147.1
+          port: 9093
+          egress_port: 3009
+        - name: tvlds-tgr000356
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          host: tvlds-tgr000356.delta.sbrf.ru
+          ip: 10.49.147.103
+          port: 9093
+          egress_port: 3010
+        - name: tvlds-tgr000332
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          host: tvlds-tgr000332.delta.sbrf.ru
+          ip: 10.49.146.42
+          port: 9093
+          egress_port: 3011
+        - name: tvlds-tgr000328
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          host: tvlds-tgr000328.delta.sbrf.ru
+          ip: 10.49.146.183
+          port: 9093
+          egress_port: 3012
+        - name: tvlds-tgr000304
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          host: tvlds-tgr000304.delta.sbrf.ru
+          ip: 10.49.146.76
+          port: 9093
+          egress_port: 3013
+        - name: tvlds-tgr000303
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          host: tvlds-tgr000303.delta.sbrf.ru
+          ip: 10.49.147.30
+          port: 9093
+          egress_port: 3014
+        - name: tvlds-tgr000300
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          host: tvlds-tgr000300.delta.sbrf.ru
+          ip: 10.49.146.132
+          port: 9093
+          egress_port: 3015
+        - name: tvlds-tgr000299
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          host: tvlds-tgr000299.delta.sbrf.ru
+          ip: 10.49.147.172
+          port: 9093
+          egress_port: 3016
+        - name: tvlds-tgr000298
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          host: tvlds-tgr000298.delta.sbrf.ru
+          ip: 10.49.146.202
+          port: 9093
+          egress_port: 3017
+        - name: tvlds-tgr000297
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          host: tvlds-tgr000297.delta.sbrf.ru
+          ip: 10.49.147.164
+          port: 9093
+          egress_port: 3018
+        - name: tvlds-tgr000296
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          host: tvlds-tgr000296.delta.sbrf.ru
+          ip: 10.49.147.112
+          port: 9093
+          egress_port: 3019
 
     CI1099171_antifraud_integration_service:
       v1_0:
@@ -78,15 +250,24 @@ int:
         port: 8443
       - host: 10.53.96.30
         port: 8443
-
-  dynatrace:
-    latest:
-      servers:
-        - host: tkles-mvp000199.vm.esrt.cloud.sbrf.ru
-          ip: 10.53.90.60
-          port: 9999
-          egress_port: 9999
-        - host: tkles-mvp000228.vm.esrt.cloud.sbrf.ru
-          ip: 10.53.90.149
-          port: 9999
-          egress_port: 9999
+    v2_0:
+      - name: ott-1
+        protocol: TCP
+        resolution: STATIC
+        ott: false
+        mtls: false
+        host: tvlsw-pprb00043.delta.sbrf.ru
+        ip: 10.36.44.129
+        port: 8443
+        via_egress: false
+        url: https://tvlsw-pprb00043.delta.sbrf.ru:8443/ott-service/rest/token
+      - name: ott-2
+        protocol: TCP
+        resolution: STATIC
+        ott: false
+        mtls: false
+        host: tvlsw-pprb00044.delta.sbrf.ru
+        ip: 10.36.103.251
+        port: 8443
+        via_egress: false
+        url: https://tvlsw-pprb00044.delta.sbrf.ru:8443/ott-service/rest/token

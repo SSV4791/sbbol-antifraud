@@ -83,7 +83,7 @@ spec:
       containers:
         - name: app
 # app_docker_image проставляется при сборке архива с конфигами
-          image: {{ registry_area | default("registry.ca.sbrf.ru/sigma") }}/{app_docker_image}
+          image: {{ registry_area_app | default("registry.ca.sbrf.ru/sigma") }}/{app_docker_image}
           imagePullPolicy: Always
           securityContext:
             readOnlyRootFilesystem: true
@@ -160,19 +160,18 @@ spec:
               memory: {{ os_project.requests.memory | default("500Mi") }}
               ephemeral-storage: {{ os_project.requests.ephemeral_storage | default("512Mi") }}
         - name: fluentbit
-          image: {{ registry_area | default("registry.ca.sbrf.ru/sigma") }}/pprb/ci00641491/ci02469991_logger/fluent-bit@sha256:767f20b9246a0209cd3236c2e53419d96df2f4f013ce59d634b1fd581ee8c951
+          image: {{ registry_area_app | default("registry.ca.sbrf.ru/sigma") }}/ci02587203/ci02809205_tengri/fluent-bit@sha256:e38955b3495fe6a40b0506326c1d8458e2f03ad67747406af75f3719678b6036
           imagePullPolicy: Always
           securityContext:
             readOnlyRootFilesystem: true
           resources:
             limits:
-              ## TODO: hardcode now, ${fluentBitEnvCluster} and ${MODULE_NAME} and others
-              cpu: {{ fluentbit.limits.cpu | default("50m") }}
-              memory: {{ fluentbit.limits.memory | default("32Mi") }}
+              cpu: {{ fluentbit.limits.cpu | default("200m") }}
+              memory: {{ fluentbit.limits.memory | default("256Mi") }}
               ephemeral-storage: {{ fluentbit.limits.ephemeral_storage | default("2Gi") }}
             requests:
-              cpu: {{ fluentbit.requests.cpu | default("50m") }}
-              memory: {{ fluentbit.requests.memory | default("32Mi") }}
+              cpu: {{ fluentbit.requests.cpu | default("200m") }}
+              memory: {{ fluentbit.requests.memory | default("256Mi") }}
               ephemeral-storage: {{ fluentbit.requests.ephemeral_storage | default("2Gi") }}
           env:
             - name: service
@@ -204,7 +203,8 @@ spec:
               mountPath: /app/logs
             - mountPath: /fluent-bit/etc
               name: ds-fluentbit
-              readOnly: true
+            - mountPath: '/tmp'
+              name: fluentbit-tmp
       volumes:
         - name: app-config
           configMap:
@@ -253,3 +253,5 @@ spec:
           configMap:
             name: waiting-secrets-{{ canary_suffix }}
             defaultMode: 0400
+        - name: fluentbit-tmp
+          emptyDir: {}
