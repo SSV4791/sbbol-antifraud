@@ -39,15 +39,16 @@ public final class PaymentModelValidator extends ModelValidator {
      * @param payment модель РПП для валидации
      */
     public static void validate(PaymentOperation payment) {
-        logWarn(payment.getTimeStamp(), payment.getDocId(), payment.getDboOperation(), "timeStamp");
-        logWarn(payment.getOrgGuid(), payment.getDocId(), payment.getDboOperation(), "orgGuid");
-        logWarn(payment.getDigitalId(), payment.getDocId(), payment.getDboOperation(), "digitalId");
-        logWarn(payment.getTimeOfOccurrence(), payment.getDocId(), payment.getDboOperation(), "timeOfOccurrence");
-        validateDocument(payment.getDocument(), payment.getDocId(), payment.getDboOperation());
+        UUID clientTransactionId = payment.getDocument().getId();
+        logWarn(payment.getTimeStamp(), clientTransactionId, payment.getDboOperation(), "timeStamp");
+        logWarn(payment.getOrgGuid(), clientTransactionId, payment.getDboOperation(), "orgGuid");
+        logWarn(payment.getDigitalId(), clientTransactionId, payment.getDboOperation(), "digitalId");
+        logWarn(payment.getTimeOfOccurrence(), clientTransactionId, payment.getDboOperation(), "timeOfOccurrence");
+        validateDocument(payment.getDocument(), clientTransactionId, payment.getDboOperation());
         if (!CollectionUtils.isEmpty(payment.getSigns())) {
-            validateSigns(payment.getMappedSigns(), payment.getDocId(), payment.getDboOperation());
+            validateSigns(payment.getMappedSigns(), clientTransactionId, payment.getDboOperation());
         } else {
-            logWarn(null, payment.getDocId(), payment.getDboOperation(), "signs");
+            logWarn(null, clientTransactionId, payment.getDboOperation(), "signs");
         }
     }
 

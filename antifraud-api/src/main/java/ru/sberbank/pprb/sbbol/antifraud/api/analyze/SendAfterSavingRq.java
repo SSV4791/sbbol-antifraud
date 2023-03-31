@@ -1,7 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.analyze;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 /**
  * Общий интерфейс для запросов отправки данных на анализ после предварительного сохранения
@@ -13,7 +12,7 @@ public interface SendAfterSavingRq extends Serializable {
      *
      * @return идентификатор документа
      */
-    UUID getDocId();
+    String getDocId();
 
     /**
      * Получить тип операции

@@ -61,8 +61,8 @@ public class ElectronicReceiptProcessor extends AnalyzeAbstractProcessor impleme
         return sendToAnalyze(createAnalyzeRequest(request.getDocId()));
     }
 
-    private AnalyzeRequest createAnalyzeRequest(UUID docId) {
-        Optional<ElectronicReceipt> searchResult = repository.findFirstByDocId(docId.toString());
+    private AnalyzeRequest createAnalyzeRequest(String docId) {
+        Optional<ElectronicReceipt> searchResult = repository.findFirstByDocId(docId);
         if (searchResult.isEmpty()) {
             throw new ApplicationException("DocId=" + docId + ". Electronic receipt not found");
         }

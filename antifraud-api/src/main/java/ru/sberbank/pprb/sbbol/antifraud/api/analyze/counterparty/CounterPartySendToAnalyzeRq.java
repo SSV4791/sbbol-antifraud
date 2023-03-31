@@ -6,7 +6,6 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicato
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.UUID;
 
 /**
  * Запрос отправки на анализ данных по счету доверенного контрагента (партнера) или
@@ -56,8 +55,8 @@ public class CounterPartySendToAnalyzeRq implements AnalyzeWithOutSavingRequest 
     private ClientDefinedChannelIndicator clientDefinedChannelIndicator;
 
     @Override
-    public UUID getClientTransactionId() {
-        return getIdentificationData() == null ? null : getIdentificationData().getClientTransactionId();
+    public String getClientTransactionId() {
+        return (getIdentificationData() == null || getIdentificationData().getClientTransactionId() == null) ? null : getIdentificationData().getClientTransactionId().toString();
     }
 
     @Override

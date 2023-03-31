@@ -9,7 +9,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Модель платежного поручения СБП
@@ -58,8 +57,8 @@ public class FastPaymentOperation implements Operation {
     private List<FastPaymentSign> mappedSigns;
 
     @Override
-    public UUID getDocId() {
-        return getDocument() == null ? null : getDocument().getId();
+    public String getDocId() {
+        return getDocument() == null ? null : getDocument().getId().toString();
     }
 
     @Override

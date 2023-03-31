@@ -22,6 +22,16 @@ public abstract class ModelValidator {
         }
     }
 
+    protected static void logWarn(String message, String docId, String dboOperation) {
+        logger.warn("DocId={}, dboOperation={}. {}", docId, dboOperation, message);
+    }
+
+    protected static void logWarn(Object param, String docId, String dboOperation, String name) {
+        if (param == null) {
+            logger.warn(MESSAGE, docId, dboOperation, name);
+        }
+    }
+
     protected static void logWarn(String message, UUID docId, String dboOperation) {
         logger.warn("DocId={}, dboOperation={}. {}", docId, dboOperation, message);
     }

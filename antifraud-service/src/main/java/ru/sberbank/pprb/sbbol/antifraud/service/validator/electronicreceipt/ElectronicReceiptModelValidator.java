@@ -21,19 +21,20 @@ public class ElectronicReceiptModelValidator extends ModelValidator {
     }
 
     public static void validate(ElectronicReceiptOperation operation) {
-        logWarn(operation.getOrgGuid(), operation.getDocId(), operation.getDboOperation(), "orgGuid");
-        logWarn(operation.getDigitalId(), operation.getDocId(), operation.getDboOperation(), "digitalId");
-        logWarn(operation.getPrivateIpAddress(), operation.getDocId(), operation.getDboOperation(), "privateIpAddress");
-        validateDocument(operation.getDocument(), operation.getDocId(), operation.getDboOperation());
+        UUID clientTransactionId = operation.getDocument().getId();
+        logWarn(operation.getOrgGuid(), clientTransactionId, operation.getDboOperation(), "orgGuid");
+        logWarn(operation.getDigitalId(), clientTransactionId, operation.getDboOperation(), "digitalId");
+        logWarn(operation.getPrivateIpAddress(), clientTransactionId, operation.getDboOperation(), "privateIpAddress");
+        validateDocument(operation.getDocument(), clientTransactionId, operation.getDboOperation());
         if (Objects.nonNull(operation.getDeviceRequest())) {
-            validateDeviceRequest(operation.getDeviceRequest(), operation.getDocId(), operation.getDboOperation());
+            validateDeviceRequest(operation.getDeviceRequest(), clientTransactionId, operation.getDboOperation());
         } else {
-            logWarn(operation.getDeviceRequest(), operation.getDocId(), operation.getDboOperation(), "deviceRequest");
+            logWarn(operation.getDeviceRequest(), clientTransactionId, operation.getDboOperation(), "deviceRequest");
         }
         if (Objects.nonNull(operation.getSign())) {
-            validateSign(operation.getSign(), operation.getDocId(), operation.getDboOperation());
+            validateSign(operation.getSign(), clientTransactionId, operation.getDboOperation());
         } else {
-            logWarn(operation.getSign(), operation.getDocId(), operation.getDboOperation(), "sign");
+            logWarn(operation.getSign(), clientTransactionId, operation.getDboOperation(), "sign");
         }
     }
 

@@ -77,7 +77,7 @@ public class DocumentWithOutSavingServiceTest extends AbstractIntegrationTest {
         AnalyzeRequest analyzeRequest = new AnalyzeRequest();
         analyzeRequest.setMessageHeader(new MessageHeader(LocalDateTime.now(), RandomStringUtils.random(5)));
         analyzeRequest.setIdentificationData(new IdentificationData());
-        analyzeRequest.getIdentificationData().setClientTransactionId(UUID.randomUUID());
+        analyzeRequest.getIdentificationData().setClientTransactionId(UUID.randomUUID().toString());
         analyzeRequest.getIdentificationData().setDboOperation(RandomStringUtils.random(5));
         analyzeRequest.setEventDataList(new EventDataList());
         analyzeRequest.getEventDataList().setEventData(new EventData());

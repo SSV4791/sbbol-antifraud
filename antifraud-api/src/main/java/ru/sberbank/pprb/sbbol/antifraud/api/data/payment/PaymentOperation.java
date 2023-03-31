@@ -9,7 +9,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Модель платежного поручения
@@ -57,8 +56,8 @@ public class PaymentOperation implements Operation {
     private List<PaymentSign> mappedSigns;
 
     @Override
-    public UUID getDocId() {
-        return getDocument() == null ? null : getDocument().getId();
+    public String getDocId() {
+        return getDocument() == null ? null : getDocument().getId().toString();
     }
 
     @Override

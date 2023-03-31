@@ -58,17 +58,15 @@ class FastPaymentAnalyzeTest extends FastPaymentIntegrationTest {
                             .body(objectMapper().writeValueAsString(expectedResponse)));
             return expectedResponse;
         });
-        SendToAnalyzeRequest request = step("Отправка запроса на анализ", () -> new SendToAnalyzeRequest(DOC_ID));
+        SendToAnalyzeRequest request = step("Отправка запроса на анализ", () -> new SendToAnalyzeRequest(DOC_ID.toString()));
         AnalyzeResponse actual = step("Получение ответа с результатом анализа", () -> send(request));
-        step("Проверка результата ответа", () -> {
-            assertAll(
-                    () -> assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId()),
-                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode()),
-                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getComment(), actual.getComment()),
-                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment(), actual.getDetailledComment()),
-                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime(), actual.getWaitingTime())
-            );
-        });
+        step("Проверка результата ответа", () -> assertAll(
+                () -> assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId()),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode()),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getComment(), actual.getComment()),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment(), actual.getDetailledComment()),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime(), actual.getWaitingTime())
+        ));
 
     }
 
@@ -92,18 +90,18 @@ class FastPaymentAnalyzeTest extends FastPaymentIntegrationTest {
             mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
                     .andExpect(method(HttpMethod.POST))
                     .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
-            return new SendToAnalyzeRequest(DOC_ID);
+            return new SendToAnalyzeRequest(DOC_ID.toString());
         });
         String exceptionMessage = step("Получение сообщения об ошибке", () -> {
             AnalyzeException ex = assertThrows(AnalyzeException.class, () -> send(request));
             return ex.getMessage();
         });
-        step("Проверка сообщения об ошибке", () -> Assertions.assertTrue(exceptionMessage.contains(request.getDocId().toString())));
+        step("Проверка сообщения об ошибке", () -> Assertions.assertTrue(exceptionMessage.contains(request.getDocId())));
     }
 
     @Test
     void fastPaymentNotFoundTest() {
-        UUID docId = UUID.randomUUID();
+        String docId = UUID.randomUUID().toString();
         ApplicationException ex = assertThrows(ApplicationException.class, () -> send(new SendToAnalyzeRequest(docId)));
         String message = ex.getMessage();
         Assertions.assertTrue(message.contains("DocId=" + docId + ". Fast payment not found"));

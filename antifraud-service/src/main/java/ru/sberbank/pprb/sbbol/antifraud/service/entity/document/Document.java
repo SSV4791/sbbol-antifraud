@@ -38,7 +38,7 @@ public class Document extends BaseEntity {
     /**
      * ID документа
      */
-    private UUID docId;
+    private String docId;
 
     /**
      * Код территориального банка, в котором обслуживается организация
@@ -313,11 +313,11 @@ public class Document extends BaseEntity {
         this.requestType = requestType;
     }
 
-    public UUID getDocId() {
+    public String getDocId() {
         return docId;
     }
 
-    public void setDocId(UUID clientTransactionId) {
+    public void setDocId(String clientTransactionId) {
         this.docId = clientTransactionId;
     }
 

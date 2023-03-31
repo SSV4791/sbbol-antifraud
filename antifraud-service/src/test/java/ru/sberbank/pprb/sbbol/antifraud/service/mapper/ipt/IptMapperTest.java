@@ -29,7 +29,7 @@ public class IptMapperTest extends MapperTest {
                 () -> assertEquals(request.getMessageHeader().getTimeStamp().plusHours(3), analyzeRequest.getMessageHeader().getTimeStamp()),
                 () -> assertEquals(request.getMessageHeader().getRequestType(), analyzeRequest.getMessageHeader().getRequestType()),
                 () -> assertNotNull(analyzeRequest.getIdentificationData()),
-                () -> assertEquals(request.getIdentificationData().getClientTransactionId(), analyzeRequest.getIdentificationData().getClientTransactionId()),
+                () -> assertEquals(request.getIdentificationData().getClientTransactionId().toString(), analyzeRequest.getIdentificationData().getClientTransactionId()),
                 () -> assertEquals(request.getIdentificationData().getOrgName(), analyzeRequest.getIdentificationData().getOrgName()),
                 () -> assertEquals(request.getIdentificationData().getUserName(), analyzeRequest.getIdentificationData().getUserName()),
                 () -> assertEquals(request.getIdentificationData().getDboOperation(), analyzeRequest.getIdentificationData().getDboOperation()),

@@ -5,7 +5,6 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithOutSavingRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.UUID;
 
 
 /**
@@ -52,7 +51,7 @@ public class AnalyzeRequest implements AnalyzeWithOutSavingRequest {
     private String clientDefinedChannelIndicator;
 
     @Override
-    public UUID getClientTransactionId() {
+    public String getClientTransactionId() {
         return getIdentificationData() == null ? null : getIdentificationData().getClientTransactionId();
     }
 

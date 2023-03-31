@@ -31,7 +31,7 @@ public class CreditMapperTest extends MapperTest {
         assertEquals(request.getMessageHeader().getRequestType(), analyzeRequest.getMessageHeader().getRequestType());
 
         assertNotNull(analyzeRequest.getIdentificationData());
-        assertEquals(request.getIdentificationData().getClientTransactionId(), analyzeRequest.getIdentificationData().getClientTransactionId());
+        assertEquals(request.getIdentificationData().getClientTransactionId().toString(), analyzeRequest.getIdentificationData().getClientTransactionId());
         assertEquals(request.getIdentificationData().getTbCode(), analyzeRequest.getIdentificationData().getOrgName());
         assertEquals(request.getIdentificationData().getUserUcpId(), analyzeRequest.getIdentificationData().getUserName());
         assertEquals(request.getIdentificationData().getDboOperation().name(), analyzeRequest.getIdentificationData().getDboOperation());

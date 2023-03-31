@@ -18,33 +18,34 @@ import java.util.UUID;
 public class CreditModelValidator extends ModelValidator {
 
     public static void validate(CreditSendToAnalyzeRq request) {
+        UUID clientTransactionId = request.getIdentificationData().getClientTransactionId();
         if (Objects.nonNull(request.getMessageHeader())) {
-            validateMessageHeader(request.getMessageHeader(), request.getClientTransactionId(), request.getDboOperation());
+            validateMessageHeader(request.getMessageHeader(), clientTransactionId, request.getDboOperation());
         } else {
-            logWarn(request.getMessageHeader(), request.getClientTransactionId(), request.getDboOperation(), "messageHeader");
+            logWarn(request.getMessageHeader(), clientTransactionId, request.getDboOperation(), "messageHeader");
         }
         if (Objects.nonNull(request.getIdentificationData())) {
-            validateIdentificationData(request.getIdentificationData(), request.getClientTransactionId(), request.getDboOperation());
+            validateIdentificationData(request.getIdentificationData(), clientTransactionId, request.getDboOperation());
         } else {
-            logWarn(request.getIdentificationData(), request.getClientTransactionId(), request.getDboOperation(), "identificationData");
+            logWarn(request.getIdentificationData(), clientTransactionId, request.getDboOperation(), "identificationData");
         }
         if (Objects.nonNull(request.getDeviceRequest())) {
-            validateDeviceRequest(request.getDeviceRequest(), request.getClientTransactionId(), request.getDboOperation());
+            validateDeviceRequest(request.getDeviceRequest(), clientTransactionId, request.getDboOperation());
         } else {
-            logWarn(request.getDeviceRequest(), request.getClientTransactionId(), request.getDboOperation(), "deviceRequest");
+            logWarn(request.getDeviceRequest(), clientTransactionId, request.getDboOperation(), "deviceRequest");
         }
         if (Objects.nonNull(request.getEventData())) {
-            validateEventData(request.getEventData(), request.getClientTransactionId(), request.getDboOperation());
+            validateEventData(request.getEventData(), clientTransactionId, request.getDboOperation());
         } else {
-            logWarn(request.getEventData(), request.getClientTransactionId(), request.getDboOperation(), "eventData");
+            logWarn(request.getEventData(), clientTransactionId, request.getDboOperation(), "eventData");
         }
         if (Objects.nonNull(request.getClientDefinedAttributeList())) {
-            validateClientDefinedAttributeList(request.getClientDefinedAttributeList(), request.getClientTransactionId(), request.getDboOperation());
+            validateClientDefinedAttributeList(request.getClientDefinedAttributeList(), clientTransactionId, request.getDboOperation());
         } else {
-            logWarn(request.getClientDefinedAttributeList(), request.getClientTransactionId(), request.getDboOperation(), "clientDefinedAttributeList");
+            logWarn(request.getClientDefinedAttributeList(), clientTransactionId, request.getDboOperation(), "clientDefinedAttributeList");
         }
-        logWarn(request.getChannelIndicator(), request.getClientTransactionId(), request.getDboOperation(), "channelIndicator");
-        logWarn(request.getClientDefinedChannelIndicator(), request.getClientTransactionId(), request.getDboOperation(), "clientDefinedChannelIndicator");
+        logWarn(request.getChannelIndicator(), clientTransactionId, request.getDboOperation(), "channelIndicator");
+        logWarn(request.getClientDefinedChannelIndicator(), clientTransactionId, request.getDboOperation(), "clientDefinedChannelIndicator");
     }
 
     private static void validateMessageHeader(CreditMessageHeader messageHeader, UUID docId, String dboOperation) {
