@@ -46,7 +46,7 @@ int:
           url: dummy
           resolution: STATIC
 
-    kafka_tengri:
+    ci2809205_kafka_tengri:
       v1_0:
         - name: tvlds-tgr000533
           protocol: TCP

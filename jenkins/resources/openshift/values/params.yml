@@ -4,10 +4,10 @@ integration_entries:
   - "{{ int.pprb.db_main.v1_0 }}"
   - "{{ int.pprb.db_si.v1_0 }}"
   - "{{ int.pprb.CI1099171_antifraud_integration_service.v1_0 }}"
-  - "{{ int.pprb.kafka_tengri.v1_0 }}"
+  - "{{ int.pprb.ci2809205_kafka_tengri.v1_0 }}"
 
 int_entry:
   ott: "{{ int.ott.v2_0 }}"
   antifraud:
     fpis: "{{ int.pprb.CI1099171_antifraud_integration_service.v1_0 }}"
-  kafka_tengri: "{{ int.pprb.kafka_tengri.v1_0 }}"
+  kafka_tengri: "{{ int.pprb.ci2809205_kafka_tengri.v1_0 }}"
