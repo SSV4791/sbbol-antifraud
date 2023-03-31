@@ -22,7 +22,6 @@ public class DocumentSaveRequest implements Operation {
      * Дата и время формирования события
      */
     @JsonSerialize(using = OffsetDateTimeSerializer.class)
-    @NotNull(message = "The attribute \"timestamp\" must be filled")
     private OffsetDateTime timestamp;
 
     /**
