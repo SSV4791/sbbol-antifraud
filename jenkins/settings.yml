@@ -14,6 +14,12 @@ credentials:
 project_name: antifraud
 allure_project_id: '37'
 
+liquibase:
+  changelog:
+    path: antifraud-application/src/main/resources/db/changelog/changelog.yaml
+  defaults_file:
+    path: jenkins/liquibase/liquibase.properties
+
 pr_check:
   liquibase:
     match:
@@ -21,13 +27,6 @@ pr_check:
         - 'buildSrc/'
         - 'antifraud-application/src/main/resources/db/changelog'
         - 'jenkins/liquibase/liquibase.properties'
-    executable:
-      download_uri: https://nexus.sigma.sbrf.ru/nexus/service/local/repositories/SBT_CI_distr_repo/content/SBBOL_UFS/liquibase/3.7.0-postgres/liquibase-3.7.0-postgres-bin.tar.gz
-    changelog:
-      path: antifraud-application/src/main/resources/db/changelog/changelog.yaml
-    defaults_file:
-      path: jenkins/liquibase/liquibase.properties
-    command_type: 'update'
   openshift:
     workdir: openshift
     match:

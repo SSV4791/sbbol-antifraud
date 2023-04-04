@@ -4,17 +4,12 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.Amount;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.Attribute;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.ClientDefinedAttributeList;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.DeviceRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.EventDataList;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.IdentificationData;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.MyAccountData;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.OtherAccountData;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.TransactionData;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.document.DocumentSaveRequest;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.document.Document;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.CommonMapper;
 
@@ -93,34 +88,9 @@ public interface DocumentMapper extends CommonMapper<Document> {
         identData.setUserName(identData.getUserName() == null ? "" : identData.getUserName());
         identData.setOrgName(identData.getOrgName() == null ? "" : identData.getOrgName());
 
-        if (request.getDeviceRequest() == null) {
-            request.setDeviceRequest(new DeviceRequest());
-        }
-        request.getDeviceRequest().setIpAddress(request.getDeviceRequest().getIpAddress() == null ? "" : request.getDeviceRequest().getIpAddress());
-
         if (request.getEventDataList() == null) {
             request.setEventDataList(new EventDataList());
         }
-        if (request.getEventDataList().getTransactionData() == null) {
-            request.getEventDataList().setTransactionData(new TransactionData());
-        }
-        if (request.getEventDataList().getTransactionData().getAmount() == null) {
-            request.getEventDataList().getTransactionData().setAmount(new Amount());
-        }
-        Amount amount = request.getEventDataList().getTransactionData().getAmount();
-        request.getEventDataList().getTransactionData().getAmount().setAmount(amount.getAmount() == null ? 0L : amount.getAmount());
-        request.getEventDataList().getTransactionData().getAmount().setCurrency(amount.getCurrency() == null ? "" : amount.getCurrency());
-        if (request.getEventDataList().getTransactionData().getMyAccountData() == null) {
-            request.getEventDataList().getTransactionData().setMyAccountData(new MyAccountData());
-        }
-        MyAccountData myAccountData = request.getEventDataList().getTransactionData().getMyAccountData();
-        request.getEventDataList().getTransactionData().getMyAccountData().setAccountNumber(myAccountData.getAccountNumber() == null ? "" : myAccountData.getAccountNumber());
-        if (request.getEventDataList().getTransactionData().getOtherAccountData() == null) {
-            request.getEventDataList().getTransactionData().setOtherAccountData(new OtherAccountData());
-        }
-        OtherAccountData otherAccountData = request.getEventDataList().getTransactionData().getOtherAccountData();
-        request.getEventDataList().getTransactionData().getOtherAccountData().setAccountNumber(otherAccountData.getAccountNumber() == null ? "" : otherAccountData.getAccountNumber());
-
         if (request.getEventDataList().getClientDefinedAttributeList() == null) {
             request.getEventDataList().setClientDefinedAttributeList(new ClientDefinedAttributeList(new ArrayList<>()));
         } else if (request.getEventDataList().getClientDefinedAttributeList().getFact() == null) {

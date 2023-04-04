@@ -63,8 +63,8 @@ public class FastPaymentProcessor extends AnalyzeAbstractProcessor implements Pr
         return sendToAnalyze(createFastPaymentAnalyzeRequest(request.getDocId()));
     }
 
-    private AnalyzeRequest createFastPaymentAnalyzeRequest(UUID docId) {
-        Optional<FastPayment> searchResult = repository.findFirstByDocId(docId.toString());
+    private AnalyzeRequest createFastPaymentAnalyzeRequest(String docId) {
+        Optional<FastPayment> searchResult = repository.findFirstByDocId(docId);
         if (searchResult.isEmpty()) {
             throw new ApplicationException("DocId=" + docId + ". Fast payment not found");
         }

@@ -3,8 +3,7 @@ package ru.sberbank.pprb.sbbol.antifraud.api.analyze;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.validation.constraints.NotNull;
-import java.util.UUID;
+import javax.validation.constraints.NotBlank;
 
 /**
  * Запрос отправки на анализ документа по идентификатору
@@ -14,11 +13,11 @@ public class SendToAnalyzeRequest implements SendAfterSavingRq {
     /**
      * Уникальный идентификатор документа
      */
-    @NotNull(message = "The docId attribute must be filled")
-    private UUID docId;
+    @NotBlank(message = "The docId attribute must be filled")
+    private String docId;
 
     @JsonCreator
-    public SendToAnalyzeRequest(@JsonProperty("docId") UUID docId) {
+    public SendToAnalyzeRequest(@JsonProperty("docId") String docId) {
         this.docId = docId;
     }
 
@@ -28,11 +27,11 @@ public class SendToAnalyzeRequest implements SendAfterSavingRq {
     }
 
     @Override
-    public UUID getDocId() {
+    public String getDocId() {
         return docId;
     }
 
-    public void setDocId(UUID docId) {
+    public void setDocId(String docId) {
         this.docId = docId;
     }
 

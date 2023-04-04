@@ -5,7 +5,6 @@ import ru.sberbank.pprb.sbbol.antifraud.api.data.Operation;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.UUID;
 
 /**
  * Модель электронного чека
@@ -46,8 +45,8 @@ public class ElectronicReceiptOperation implements Operation {
     private ReceiptSign sign;
 
     @Override
-    public UUID getDocId() {
-        return getDocument() == null ? null : getDocument().getId();
+    public String getDocId() {
+        return (getDocument() == null || getDocument().getId() == null) ? null : getDocument().getId().toString();
     }
 
     @Override

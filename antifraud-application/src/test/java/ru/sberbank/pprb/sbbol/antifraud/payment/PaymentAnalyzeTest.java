@@ -61,7 +61,7 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
                     .andRespond(withStatus(HttpStatus.OK)
                             .contentType(MediaType.APPLICATION_JSON)
                             .body(objectMapper().writeValueAsString(expected)));
-            SendToAnalyzeRequest request = new SendToAnalyzeRequest(DOC_ID);
+            SendToAnalyzeRequest request = new SendToAnalyzeRequest(DOC_ID.toString());
             return send(request);
         });
         step("Проверка результата ответа", () -> {
@@ -122,7 +122,7 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
             mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
                     .andExpect(method(HttpMethod.POST))
                     .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
-            return new SendToAnalyzeRequest(DOC_ID);
+            return new SendToAnalyzeRequest(DOC_ID.toString());
         });
         String exceptionMessage = step("Получение сообщения об ошибке", () -> {
             AnalyzeException ex = assertThrows(AnalyzeException.class, () -> send(request));
@@ -133,7 +133,7 @@ class PaymentAnalyzeTest extends PaymentIntegrationTest {
 
     @Test
     void paymentNotFoundTest() {
-        UUID docId = UUID.randomUUID();
+        String docId = UUID.randomUUID().toString();
         ApplicationException ex = assertThrows(ApplicationException.class, () -> send(new SendToAnalyzeRequest(docId)));
         String message = ex.getMessage();
         Assertions.assertTrue(message.contains("DocId=" + docId + ". Payment not found"));

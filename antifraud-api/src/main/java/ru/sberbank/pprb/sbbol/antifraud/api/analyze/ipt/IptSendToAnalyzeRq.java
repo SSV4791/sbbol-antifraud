@@ -5,7 +5,6 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithOutSavingRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.UUID;
 
 /**
  * Запрос отправки данных на анализ в ФП ИС/ФМ ЮЛ по продукту Исходящие платежные требования
@@ -54,13 +53,13 @@ public class IptSendToAnalyzeRq implements AnalyzeWithOutSavingRequest {
     private IptClientDefinedAttributeList clientDefinedAttributeList;
 
     @Override
-    public UUID getClientTransactionId() {
-        return getIdentificationData() == null ? null : getIdentificationData().getClientTransactionId();
+    public String getClientTransactionId() {
+        return (getIdentificationData() == null || getIdentificationData().getClientTransactionId() == null) ? null : getIdentificationData().getClientTransactionId().toString();
     }
 
     @Override
     public String getDboOperation() {
-        return getIdentificationData() == null ? null : getIdentificationData().getDboOperation();
+        return (getIdentificationData() == null || getIdentificationData().getDboOperation() == null) ? null : getIdentificationData().getDboOperation();
     }
 
     public IptMessageHeader getMessageHeader() {

@@ -33,7 +33,7 @@ public class CounterPartyMapperTest extends MapperTest {
         assertEquals(request.getMessageHeader().getRequestType(), analyzeRequest.getMessageHeader().getRequestType());
 
         assertNotNull(analyzeRequest.getIdentificationData());
-        assertEquals(request.getIdentificationData().getClientTransactionId(), analyzeRequest.getIdentificationData().getClientTransactionId());
+        assertEquals(request.getIdentificationData().getClientTransactionId().toString(), analyzeRequest.getIdentificationData().getClientTransactionId());
         assertEquals(request.getIdentificationData().getOrgName(), analyzeRequest.getIdentificationData().getOrgName());
         assertEquals(request.getIdentificationData().getUserName(), analyzeRequest.getIdentificationData().getUserName());
         assertEquals(PARTNERS.name(), analyzeRequest.getIdentificationData().getDboOperation());

@@ -104,7 +104,7 @@ public class DocumentServiceTest extends AbstractIntegrationTest {
     @Test
     @DisplayName("Ошибка при попытке отправить данные без предварительного сохранения (универсальный API)")
     void documentNotFoundErrorTest() {
-        DocumentSendToAnalyzeRq request = new DocumentSendToAnalyzeRq(UUID.randomUUID(), RandomStringUtils.random(8));
+        DocumentSendToAnalyzeRq request = new DocumentSendToAnalyzeRq(UUID.randomUUID().toString(), RandomStringUtils.random(8));
         ApplicationException ex = assertThrows(ApplicationException.class, () -> send(request));
 
         String msg = ex.getMessage();
@@ -180,7 +180,7 @@ public class DocumentServiceTest extends AbstractIntegrationTest {
         DocumentSaveRequest request = new DocumentSaveRequest();
         request.setTimestamp(OffsetDateTime.now().truncatedTo(ChronoUnit.MILLIS));
         request.setRequestType(RandomStringUtils.random(5));
-        request.setDocId(UUID.randomUUID());
+        request.setDocId(UUID.randomUUID().toString());
         request.setDboOperation(RandomStringUtils.random(5));
         request.setEventType(RandomStringUtils.random(5));
         request.setClientDefinedEventType(RandomStringUtils.random(5));

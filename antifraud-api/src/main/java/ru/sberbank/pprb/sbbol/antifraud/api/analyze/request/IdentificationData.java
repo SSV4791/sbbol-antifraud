@@ -14,7 +14,7 @@ public class IdentificationData implements Serializable {
      * ID документа (docId)
      */
     @NotNull(message = "The attribute \"identificationData.clientTransactionId\" must be filled")
-    private UUID clientTransactionId;
+    private String clientTransactionId;
 
     /**
      * Код территориального банка, в котором обслуживается организация (tbCode)
@@ -42,11 +42,11 @@ public class IdentificationData implements Serializable {
      */
     private String userLoginName;
 
-    public UUID getClientTransactionId() {
+    public String getClientTransactionId() {
         return clientTransactionId;
     }
 
-    public void setClientTransactionId(UUID clientTransactionId) {
+    public void setClientTransactionId(String clientTransactionId) {
         this.clientTransactionId = clientTransactionId;
     }
 

@@ -12,7 +12,6 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.TransactionData;
 import ru.sberbank.pprb.sbbol.antifraud.service.validator.ModelValidator;
 
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * Сервис валидации наличия полей в запросе на отправку данных в ФП ИС/ФМ ЮЛ (универсальный API)
@@ -44,12 +43,12 @@ public class DocumentWithOutSavingValidator extends ModelValidator {
         logWarn(request.getClientDefinedChannelIndicator(), request.getClientTransactionId(), request.getDboOperation(), "clientDefinedChannelIndicator");
     }
 
-    private static void validateMessageHeader(MessageHeader messageHeader, UUID docId, String dboOperation) {
+    private static void validateMessageHeader(MessageHeader messageHeader, String docId, String dboOperation) {
         logWarn(messageHeader.getRequestType(), docId, dboOperation, "messageHeader.requestType");
         logWarn(messageHeader.getTimeStamp(), docId, dboOperation, "messageHeader.timeStamp");
     }
 
-    private static void validateIdentificationData(IdentificationData identificationData, UUID docId, String dboOperation) {
+    private static void validateIdentificationData(IdentificationData identificationData, String docId, String dboOperation) {
         logWarn(identificationData.getUserName(), docId, dboOperation, "identificationData.userName");
         logWarn(identificationData.getClientTransactionId(), docId, dboOperation, "identificationData.clientTransactionId");
         logWarn(identificationData.getUserLoginName(), docId, dboOperation, "identificationData.userLoginName");
@@ -57,7 +56,7 @@ public class DocumentWithOutSavingValidator extends ModelValidator {
         logWarn(identificationData.getDboOperation(), docId, dboOperation, "identificationData.dboOperation");
     }
 
-    private static void validateDeviceRequest(DeviceRequest deviceRequest, UUID docId, String dboOperation) {
+    private static void validateDeviceRequest(DeviceRequest deviceRequest, String docId, String dboOperation) {
         if (Objects.isNull(deviceRequest.getDevicePrint()) && Objects.isNull(deviceRequest.getMobSdkData())) {
             logWarn(null, docId, dboOperation, "deviceRequest.devicePrint and deviceRequest.mobSdkData");
         }
@@ -70,7 +69,7 @@ public class DocumentWithOutSavingValidator extends ModelValidator {
         logWarn(deviceRequest.getUserAgent(), docId, dboOperation, "deviceRequest.userAgent");
     }
 
-    private static void validateEventDataList(EventDataList eventDataList, UUID docId, String dboOperation) {
+    private static void validateEventDataList(EventDataList eventDataList, String docId, String dboOperation) {
         if (Objects.nonNull(eventDataList.getEventData())) {
             validateEventData(eventDataList.getEventData(), docId, dboOperation);
         } else {
@@ -95,14 +94,14 @@ public class DocumentWithOutSavingValidator extends ModelValidator {
         }
     }
 
-    private static void validateEventData(EventData eventData, UUID docId, String dboOperation) {
+    private static void validateEventData(EventData eventData, String docId, String dboOperation) {
         logWarn(eventData.getEventType(), docId, dboOperation, "eventDataList.eventData.eventType");
         logWarn(eventData.getClientDefinedEventType(), docId, dboOperation, "eventDataList.eventData.clientDefinedEventType");
         logWarn(eventData.getEventDescription(), docId, dboOperation, "eventDataList.eventData.eventDescription");
         logWarn(eventData.getTimeOfOccurrence(), docId, dboOperation, "eventDataList.eventData.timeOfOccurrence");
     }
 
-    private static void validateTransactionData(TransactionData transactionData, UUID docId, String dboOperation) {
+    private static void validateTransactionData(TransactionData transactionData, String docId, String dboOperation) {
         logWarn(transactionData.getAmount().getAmount(), docId, dboOperation, "eventDataList.transactionData.amount.amount");
         logWarn(transactionData.getAmount().getCurrency(), docId, dboOperation, "eventDataList.transactionData.amount.currency");
         logWarn(transactionData.getExecutionSpeed(), docId, dboOperation, "eventDataList.transactionData.executionSpeed");
@@ -124,7 +123,7 @@ public class DocumentWithOutSavingValidator extends ModelValidator {
         }
     }
 
-    private static void validateCustomersDataList(CustomersDataList customersDataList, UUID docId, String dboOperation) {
+    private static void validateCustomersDataList(CustomersDataList customersDataList, String docId, String dboOperation) {
         if (Objects.nonNull(customersDataList.getCustomer())) {
             logWarn(customersDataList.getCustomer().getSurname(), docId, dboOperation, "eventDataList.customersDataList.customer.surname");
             logWarn(customersDataList.getCustomer().getName(), docId, dboOperation, "eventDataList.customersDataList.customer.name");

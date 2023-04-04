@@ -63,8 +63,8 @@ public class PaymentProcessor extends AnalyzeAbstractProcessor implements Proces
         return sendToAnalyze(createPaymentAnalyzeRequest(request.getDocId()));
     }
 
-    private AnalyzeRequest createPaymentAnalyzeRequest(UUID docId) {
-        Optional<Payment> searchResult = repository.findFirstByDocId(docId.toString());
+    private AnalyzeRequest createPaymentAnalyzeRequest(String docId) {
+        Optional<Payment> searchResult = repository.findFirstByDocId(docId);
         if (searchResult.isEmpty()) {
             throw new ApplicationException("DocId=" + docId + ". Payment not found");
         }

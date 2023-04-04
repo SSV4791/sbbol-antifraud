@@ -67,17 +67,14 @@ class ElectronicReceiptAnalyzeTest extends AbstractIntegrationTest {
                             .body(objectMapper().writeValueAsString(expectedResponse)));
             return expectedResponse;
         });
-        AnalyzeResponse actual = step("Отправка", () -> send(new SendToAnalyzeRequest(DOC_ID)));
-        step("Проверка результата", () -> {
-            assertAll(
-                    () -> assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId(), "Идентификатор транзакции не совпадает"),
-                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode(), "Рекомендуемое действие в соответсвии со сработавшим правилом не совпадает"),
-                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getComment(), actual.getComment(), "Короткий комментарий по сработавшему правилу, передаваемый в СББОЛ не совпадает"),
-                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment(), actual.getDetailledComment(), "Расширенный комментарий по сработавшему правилу, передаваемый в СББОЛ, не совпадает"),
-                    () -> assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime(), actual.getWaitingTime(), "Время (в часах) в течение которого СББОЛ ожидает ответ от АС ФМ не совпадает")
-            );
-
-        });
+        AnalyzeResponse actual = step("Отправка", () -> send(new SendToAnalyzeRequest(DOC_ID.toString())));
+        step("Проверка результата", () -> assertAll(
+                () -> assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId(), "Идентификатор транзакции не совпадает"),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode(), "Рекомендуемое действие в соответсвии со сработавшим правилом не совпадает"),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getComment(), actual.getComment(), "Короткий комментарий по сработавшему правилу, передаваемый в СББОЛ не совпадает"),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getDetailledComment(), actual.getDetailledComment(), "Расширенный комментарий по сработавшему правилу, передаваемый в СББОЛ, не совпадает"),
+                () -> assertEquals(expected.getRiskResult().getTriggeredRule().getWaitingTime(), actual.getWaitingTime(), "Время (в часах) в течение которого СББОЛ ожидает ответ от АС ФМ не совпадает")
+        ));
     }
 
     @Test
@@ -96,7 +93,7 @@ class ElectronicReceiptAnalyzeTest extends AbstractIntegrationTest {
     @AllureId("21599")
     @DisplayName("Попытка отправки на анализ ЭЧ отсутствующего в БД")
     void operationNotFoundTest() {
-        SendToAnalyzeRequest request = step("Создание ЭЧ с невалидным docId", () -> new SendToAnalyzeRequest(UUID.randomUUID()));
+        SendToAnalyzeRequest request = step("Создание ЭЧ с невалидным docId", () -> new SendToAnalyzeRequest(UUID.randomUUID().toString()));
         String exceptionMessage = step("Получение сообщения об ошибке", () -> {
             ApplicationException ex = assertThrows(ApplicationException.class, () -> send(request));
             return ex.getMessage();
@@ -112,13 +109,13 @@ class ElectronicReceiptAnalyzeTest extends AbstractIntegrationTest {
             mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
                     .andExpect(method(HttpMethod.POST))
                     .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
-            return new SendToAnalyzeRequest(DOC_ID);
+            return new SendToAnalyzeRequest(DOC_ID.toString());
         });
         String exceptionMessage = step("Получение сообщения об ошибке", () -> {
             AnalyzeException ex = assertThrows(AnalyzeException.class, () -> send(request));
             return ex.getMessage();
         });
-        step("Проверка сообщения об ошибке", () -> Assertions.assertTrue(exceptionMessage.contains(request.getDocId().toString())));
+        step("Проверка сообщения об ошибке", () -> Assertions.assertTrue(exceptionMessage.contains(request.getDocId())));
     }
 
     @Test

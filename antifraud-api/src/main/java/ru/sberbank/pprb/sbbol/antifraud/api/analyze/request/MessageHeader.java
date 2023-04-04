@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -19,7 +18,6 @@ public class MessageHeader implements Serializable {
     /**
      * Дата и время формирования события
      */
-    @NotNull(message = "The attribute \"messageHeader.timeStamp\" must be filled")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime timeStamp;
 

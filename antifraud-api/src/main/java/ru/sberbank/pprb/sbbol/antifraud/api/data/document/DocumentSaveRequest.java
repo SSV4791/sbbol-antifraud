@@ -12,7 +12,6 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Модель сохранения данных (универсальный API)
@@ -23,7 +22,6 @@ public class DocumentSaveRequest implements Operation {
      * Дата и время формирования события
      */
     @JsonSerialize(using = OffsetDateTimeSerializer.class)
-    @NotNull(message = "The attribute \"timestamp\" must be filled")
     private OffsetDateTime timestamp;
 
     /**
@@ -37,7 +35,7 @@ public class DocumentSaveRequest implements Operation {
      * ID документа
      */
     @NotNull(message = "The attribute \"docId\" must be filled")
-    private UUID docId;
+    private String docId;
 
     /**
      * Код территориального банка, в котором обслуживается организация
@@ -294,11 +292,11 @@ public class DocumentSaveRequest implements Operation {
     }
 
     @Override
-    public UUID getDocId() {
+    public String getDocId() {
         return docId;
     }
 
-    public void setDocId(UUID docId) {
+    public void setDocId(String docId) {
         this.docId = docId;
     }
 
