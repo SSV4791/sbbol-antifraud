@@ -38,9 +38,12 @@ test*.txt
 **/temp/
 
 # формируются после прохождения тестов.
-allure-results
+allure-results/
 .qa
 
 # openshift drafts
 openshift/params.yml
 openshift/istio
+
+# tests
+**/vectors/

@@ -21,6 +21,23 @@ liquibase:
     path: jenkins/liquibase/liquibase.properties
 
 pr_check:
+  vector:
+    compare:
+      release_uri: 'https://nexus-ci.delta.sbrf.ru/repository/maven-distr/CI02473994/CI03045533/D-02.004.00_0019/CI03045533-D-02.004.00_0019-distrib.zip'
+    workdir: vectors
+    match:
+      files:
+        - 'antifraud-service/src/main/java/ru/sberbank/pprb/sbbol/antifraud/service/entity'
+        - 'antifraud-application/src/test/java/ru/sberbank/pprb/sbbol/antifraud/changevector'
+    command: >-
+      ./gradlew
+      -PtokenName=${env.TOKEN_NAME}
+      -PtokenPassword=${env.TOKEN_PASSWORD}
+      -Dgradle.wrapperUser=${env.TOKEN_NAME}
+      -Dgradle.wrapperPassword=${env.TOKEN_PASSWORD}
+      -Dtest.results.enabled=true
+      -Dtest-layer=unit
+      applyVectorTest --info
   liquibase:
     match:
       files:
@@ -115,7 +132,7 @@ release:
       -Pversion=${env.VERSION}
       -Dbuild.link=${env.BUILD_URL}
       -Dbuild.type=release
-      build -x test --parallel --info
+      build -x test generateVectorTest --parallel --info
   run_backend_tests: true
   test:
     allure_dir: build/allure-results
@@ -145,7 +162,7 @@ release:
         build qaReporterUpload sonarCoverage --parallel --info
   jobs:
     test_release:
-      wait: true
+      wait: false
   default_values:
     type: release
     checkmarx: true

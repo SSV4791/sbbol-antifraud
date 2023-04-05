@@ -1,5 +1,4 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension;
 
 plugins {
@@ -73,15 +72,6 @@ allprojects {
 allure {
     autoconfigure = true
     version = allureVersion
-}
-
-val test by tasks.getting(Test::class) {
-    useJUnitPlatform()
-    testLogging {
-        events("passed", "skipped", "failed")
-        exceptionFormat = TestExceptionFormat.FULL
-    }
-    systemProperty("file.encoding", "UTF-8")
 }
 
 java {
@@ -179,6 +169,17 @@ tasks.register<Zip>("fullDistrib") {
     }
     from("${rootDir}/antifraud-application/src/main/resources/db/changelog/") {
         into("liquibase")
+    }
+    from("${rootDir}/gradle") {
+        include("dependency-locks/*")
+        into("locks")
+    }
+    from("${rootDir}/gradle/wrapper") {
+        include("gradle-wrapper.properties")
+        into("locks")
+    }
+    from("${rootDir}/vectors/") {
+        into("vectors")
     }
 }
 

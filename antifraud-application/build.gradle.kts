@@ -44,6 +44,8 @@ dependencies {
         exclude("com.h2database", "h2")
     }
 
+    // генерация случайно заполненных pojo
+    testImplementation("org.jeasy:easy-random-core:4.3.0")
     testImplementation("uk.co.jemos.podam:podam:7.2.9.RELEASE")
 
     testImplementation(group = "ru.dcbqa.allureee.annotations", name = "dcb-allure-annotations", version = "1.3.+")
@@ -68,9 +70,20 @@ dependencies {
     testImplementation(group = "au.com.dius.pact.provider", name = "junit5spring", version = pactVersion)
 }
 
+tasks.register<Test>("generateVectorTest") {
+    useJUnitPlatform()
+    filter { includeTestsMatching("**changevector.generate.*") }
+}
+tasks.register<Test>("applyVectorTest") {
+    useJUnitPlatform()
+    filter { includeTestsMatching("**changevector.apply.*") }
+}
+
 tasks.test {
     useJUnitPlatform()
+    exclude("**/changevector/**")
     systemProperty ("allure.results.directory", "${rootProject.buildDir}/allure-results")
+    systemProperty("file.encoding", "UTF-8")
     testLogging {
         events("passed", "skipped", "failed")
     }
