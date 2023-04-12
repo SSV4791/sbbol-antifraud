@@ -37,13 +37,13 @@ secman:
           secrets:
             appJournal.properties: appJournal.properties
       ingress:
-        istio-ingressgateway-ca-certs:
+        ca-certs:
           type: file
           secrets:
             chain.pem: chain.pem
           volume:
             mount: /etc/istio/ingressgateway-ca-certs
-          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-ca-certs
+          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/general_storage/ca-certs
         istio-ingressgateway-certs:
           type: file
           secrets:
@@ -52,13 +52,6 @@ secman:
           volume:
             mount: /etc/istio/ingressgateway-certs
           path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-certs
-        istio-ingressgateway-ca-geo-certs:
-          type: file
-          secrets:
-            chain.pem: chain.pem
-          volume:
-            mount: /etc/istio/istio-ingressgateway-ca-geo-certs
-          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-ca-geo-certs
         istio-ingressgateway-geo-certs:
           type: file
           secrets:
@@ -67,13 +60,6 @@ secman:
           volume:
             mount: /etc/istio/istio-ingressgateway-geo-certs
           path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-geo-certs
-        istio-ingressgateway-ca-ott-geo-certs:
-          type: file
-          secrets:
-            chain.pem: chain.pem
-          volume:
-            mount: /etc/istio/istio-ingressgateway-ca-ott-geo-certs
-          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-ca-ott-geo-certs
         istio-ingressgateway-ott-geo-certs:
           type: file
           secrets:
@@ -82,13 +68,6 @@ secman:
           volume:
             mount: /etc/istio/istio-ingressgateway-ott-geo-certs
           path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-ott-geo-certs
-        istio-ingressgateway-ca-hc-certs:
-          type: file
-          secrets:
-            chain.pem: chain.pem
-          volume:
-            mount: /etc/istio/istio-ingressgateway-ca-hc-certs
-          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-ca-hc-certs
         istio-ingressgateway-hc-certs:
           type: file
           secrets:
@@ -98,13 +77,13 @@ secman:
             mount: /etc/istio/istio-ingressgateway-hc-certs
           path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-hc-certs
       egress:
-        istio-egressgateway-ca-certs:
+        ca-certs:
           type: file
           secrets:
             chain.pem: chain.pem
           volume:
             mount: /etc/istio/egressgateway-ca-certs
-          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-egressgateway-ca-certs
+          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/general_storage/ca-certs
         istio-egressgateway-certs:
           type: file
           secrets:
