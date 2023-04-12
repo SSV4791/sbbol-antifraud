@@ -1,0 +1,10 @@
+rate_limits:
+  routes:
+    mtlsgeo:
+      header: synapse-consumerid
+      unit: second
+      value: 2000
+    ottgeo:
+      header: synapse-consumerid
+      unit: second
+      value: 2000

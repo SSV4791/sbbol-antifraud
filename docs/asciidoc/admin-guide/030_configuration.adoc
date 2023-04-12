@@ -57,7 +57,7 @@ os_project:
         - host: ingress-ci02281165-antifraud-geo-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru
           port: 5441
           containerPort: 8080
-          name: mtls-geo
+          name: mtlsgeo
           certificates:
             ca: "{{ secrets['istio-ingressgateway-ca-geo-certs'].volume.mount }}"
             cert: "{{ secrets['istio-ingressgateway-geo-certs'].volume.mount }}"
@@ -71,7 +71,7 @@ os_project:
         - host: ingress-ci02281165-antifraud-geo-ott.apps.dev-terra000006-idm.ocp.delta.sbrf.ru
           port: 5442
           containerPort: 8080
-          name: ott-geo
+          name: ottgeo
           certificates:
             ca: "{{ secrets['istio-ingressgateway-ca-ott-geo-certs'].volume.mount }}"
             cert: "{{ secrets['istio-ingressgateway-ott-geo-certs'].volume.mount }}"
@@ -854,6 +854,26 @@ secrets:
       OTT_CERTSTORE_PWD: "{{ OTT_CERTSTORE_PWD }}"
       OTT_TRUST_STORE_PWD: "{{ OTT_TRUST_STORE_PWD }}"
     deployment: app
+----
+====
+
+==== Настройка RateLimits
+
+.rate-limits.yml
+[%collapsible]
+====
+[source,properties]
+----
+rate_limits:
+  routes:
+    mtlsgeo:
+      header: synapse-consumerid
+      unit: second
+      value: 2000
+    ottgeo:
+      header: synapse-consumerid
+      unit: second
+      value: 2000
 ----
 ====
 
