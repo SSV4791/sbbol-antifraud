@@ -44,36 +44,36 @@ os_project:
           containerPort: 8080
           name: mtls
           certificates:
-            ca: "{{ secrets['istio-ingressgateway-ca-certs'].volume.mount }}"
-            cert: "{{ secrets['istio-ingressgateway-certs'].volume.mount }}"
+            ca: "{{ secman.openshift.inject_secrets.ingress['ca-certs'].volume.mount }}"
+            cert: "{{ secman.openshift.inject_secrets.ingress['istio-ingressgateway-certs'].volume.mount }}"
         - host: ingress-ci02281165-antifraud-geo-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru
           port: 5441
           containerPort: 8080
-          name: mtls-geo
+          name: mtlsgeo
           certificates:
-            ca: "{{ secrets['istio-ingressgateway-ca-geo-certs'].volume.mount }}"
-            cert: "{{ secrets['istio-ingressgateway-geo-certs'].volume.mount }}"
+            ca: "{{ secman.openshift.inject_secrets.ingress['ca-certs'].volume.mount }}"
+            cert: "{{ secman.openshift.inject_secrets.ingress['istio-ingressgateway-geo-certs'].volume.mount }}"
         - host: ingress-ci02281165-antifraud-ott.apps.dev-terra000006-idm.ocp.delta.sbrf.ru
           port: 5444
           containerPort: 8080
           name: ott
           certificates:
-            ca: "{{ secrets['istio-ingressgateway-ca-certs'].volume.mount }}"
-            cert: "{{ secrets['istio-ingressgateway-certs'].volume.mount }}"
+            ca: "{{ secman.openshift.inject_secrets.ingress['ca-certs'].volume.mount }}"
+            cert: "{{ secman.openshift.inject_secrets.ingress['istio-ingressgateway-certs'].volume.mount }}"
         - host: ingress-ci02281165-antifraud-geo-ott.apps.dev-terra000006-idm.ocp.delta.sbrf.ru
           port: 5442
           containerPort: 8080
-          name: ott-geo
+          name: ottgeo
           certificates:
-            ca: "{{ secrets['istio-ingressgateway-ca-ott-geo-certs'].volume.mount }}"
-            cert: "{{ secrets['istio-ingressgateway-ott-geo-certs'].volume.mount }}"
+            ca: "{{ secman.openshift.inject_secrets.ingress['ca-certs'].volume.mount }}"
+            cert: "{{ secman.openshift.inject_secrets.ingress['istio-ingressgateway-ott-geo-certs'].volume.mount }}"
         - host: ingress-ci02281165-antifraud-geo-hc.apps.dev-terra000006-idm.ocp.delta.sbrf.ru
           port: 5446
           containerPort: 8080
           name: healthcheck
           certificates:
-            ca: "{{ secrets['istio-ingressgateway-ca-hc-certs'].volume.mount }}"
-            cert: "{{ secrets['istio-ingressgateway-hc-certs'].volume.mount }}"
+            ca: "{{ secman.openshift.inject_secrets.ingress['ca-certs'].volume.mount }}"
+            cert: "{{ secman.openshift.inject_secrets.ingress['istio-ingressgateway-hc-certs'].volume.mount }}"
       ott:
         key_store: dev-antifraud.p12
         trust_store: sigma_ott_trust.p12
