@@ -14,6 +14,10 @@ openshift:
   os_host: "dev-terra000006-idm.ocp.delta.sbrf.ru"
   io_control_panel: ci02281165-control-plane
   mesh_discovery_address: istiod-basic-install.ci02281165-control-plane.svc
+  grl:
+    host: edm-rate-limiter-ci02281165.apps.dev-terra000006-idm.ocp.delta.sbrf.ru
+    port: 443
+    enabled: true
 
 os_project:
   host: "https://api.dev-terra000006-idm.ocp.delta.sbrf.ru:6443"

@@ -5,9 +5,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.query.criteria.LiteralHandlingMode;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.Status;
-import org.springframework.boot.actuate.jdbc.DataSourceHealthIndicator;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +17,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
@@ -87,21 +83,6 @@ public class DataSourceConfiguration {
         transactionManager.setDataSource(mainDataSource());
         transactionManager.setSessionFactory(sessionFactory);
         return transactionManager;
-    }
-
-    @Bean
-    public DataSourceHealthIndicator dataSourceHealthIndicator(DataSource mainDataSource, SessionFactory sessionFactory,
-                                                               @Qualifier("readOnlyTransactionTemplate") TransactionTemplate template) {
-        return new DataSourceHealthIndicator(mainDataSource) {
-            @Override
-            protected void doHealthCheck(Health.Builder builder) {
-                template.executeWithoutResult(consumer -> {
-                    boolean valid = sessionFactory.getCurrentSession().doReturningWork(c -> c.isValid(0));
-                    builder.withDetail("validationQuery", "isValid()");
-                    builder.status((valid) ? Status.UP : Status.DOWN);
-                });
-            }
-        };
     }
 
     @Bean

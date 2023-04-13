@@ -18,13 +18,15 @@ dependencies {
     }
     implementation("org.glassfish.ha:ha-api:3.1.12@jar")
     implementation("net.logstash.logback:logstash-logback-encoder:6.3")
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework:spring-orm:5.3.5")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("sbp.integration.orm:sbp-hibernate-standin:$standinPluginVersion")
     implementation("org.liquibase:liquibase-core")
+    // библиотека для автоматизации health-check
+    // https://confluence.sberbank.ru/display/RND/Healthcheck+in+microservices
+    implementation("ru.sbrf.sbbol.starters:http-healthcheck-starter:4.1")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
