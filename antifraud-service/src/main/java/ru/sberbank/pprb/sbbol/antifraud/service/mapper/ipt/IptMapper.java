@@ -225,7 +225,7 @@ public abstract class IptMapper implements CommonMapper<IptClientDefinedAttribut
         descriptionMap.put(PAYEE_MOBILE_PHONE, "Номер мобильного телефона");
         descriptionMap.put(OSB_CODE, "Номер ОСБ");
         descriptionMap.put(VSP_CODE, "Номер ВСП");
-        descriptionMap.put(DBO_CODE, "Код операции ДБО");
+        descriptionMap.put(DBO_CODE, "Операция ДБО");
         descriptionMap.put(DOC_NUMBER, "Номер платежного документа");
         descriptionMap.put(CLIENT_NAME, "Наименование клиента");
         descriptionMap.put(PAYEE_BANK_BIC, "Бик банка, где открыт расчетный счет организации");
@@ -247,7 +247,7 @@ public abstract class IptMapper implements CommonMapper<IptClientDefinedAttribut
         descriptionMap.put(VAT_VALUE, "Значение ставки НДС");
         descriptionMap.put(PAYEE_BANK_CITY, "Город");
         descriptionMap.put(PAYER_KPP, "КПП получателя");
-        descriptionMap.put(PAYEE_BANK_CORR_ACC, "Корр. счет Плательщика");
+        descriptionMap.put(PAYEE_BANK_CORR_ACC, "Корр. Плательщика");
         descriptionMap.put(PAYEE_NAME, "Наименование получателя");
         descriptionMap.put(PAYEE_INN, "ИНН плательщика");
         descriptionMap.put(CHANNEL, "Канал источник создания");
