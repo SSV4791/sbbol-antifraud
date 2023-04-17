@@ -146,7 +146,7 @@ release:
         -Dgradle.wrapperPassword=${env.TOKEN_PASSWORD}
         -Pversion=${env.VERSION}
         -Dtest-layer=unit,api,web,configuration,cdcConsumer,cdcProvider
-        -Dpact.url=${env.PACT_BROKER_URL}
+        -Dpactbroker.url=${env.PACT_BROKER_URL}
         -Dpactbroker.auth.username=${env.PACT_USER}
         -Dpactbroker.auth.password='${env.PACT_PASSWORD}'
         -Dpact.pacticipant.version=${env.VERSION}
