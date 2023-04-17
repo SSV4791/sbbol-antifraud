@@ -1,5 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.analyze.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithOutSavingRequest;
 
 import javax.validation.Valid;
@@ -50,11 +51,13 @@ public class AnalyzeRequest implements AnalyzeWithOutSavingRequest {
     @NotBlank(message = "The attribute \"clientDefinedChannelIndicator\" must be filled")
     private String clientDefinedChannelIndicator;
 
+    @JsonIgnore
     @Override
     public String getClientTransactionId() {
         return getIdentificationData() == null ? null : getIdentificationData().getClientTransactionId();
     }
 
+    @JsonIgnore
     @Override
     public String getDboOperation() {
         return getIdentificationData() == null ? null : getIdentificationData().getDboOperation();

@@ -152,7 +152,7 @@ public abstract class IptMapper implements CommonMapper<IptClientDefinedAttribut
         criteriaMap.put(VAT_VALUE, IptClientDefinedAttributeList::getVatValue);
         criteriaMap.put(PAYEE_BANK_CITY, IptClientDefinedAttributeList::getPayeeBankCity);
         criteriaMap.put(PAYER_KPP, IptClientDefinedAttributeList::getPayerKpp);
-        criteriaMap.put(PAYEE_BANK_CORR_ACC, IptClientDefinedAttributeList::getPayerBankCorrAcc);
+        criteriaMap.put(PAYEE_BANK_CORR_ACC, IptClientDefinedAttributeList::getPayeeBankCorrAcc);
         criteriaMap.put(PAYEE_NAME, IptClientDefinedAttributeList::getPayeeName);
         criteriaMap.put(PAYEE_INN, IptClientDefinedAttributeList::getPayeeInn);
         criteriaMap.put(CHANNEL, IptClientDefinedAttributeList::getChannel);
