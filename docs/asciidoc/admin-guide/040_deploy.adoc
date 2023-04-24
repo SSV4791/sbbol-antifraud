@@ -683,6 +683,28 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
           "dataType": "STRING"
         }
       ],
+      "customersDataList": [
+        {
+          "surname": "surname",
+          "name": "name",
+          "patronymic": "patronymic",
+          "birthday": "2000-10-13",
+          "passportNumber": "passportNumber",
+          "passportSeries": "passportSeries",
+          "mobilePhone": "mobilePhone",
+          "status": "status"
+        },
+        {
+          "surname": "surname",
+          "name": "name",
+          "patronymic": "patronymic",
+          "birthday": "2000-10-13",
+          "passportNumber": "passportNumber",
+          "passportSeries": "passportSeries",
+          "mobilePhone": "mobilePhone",
+          "status": "status"
+        }
+      ],
       "channelIndicator": "WEB",
       "clientDefinedChannelIndicator": "PPRB_BROWSER"
     }
@@ -831,16 +853,28 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
           }
         },
         "customersDataList": {
-          "customer": {
-            "surname": "surname",
-            "name": "name",
-            "patronymic": "patronymic",
-            "birthday": "2000-10-13",
-            "passportNumber": "passportNumber",
-            "passportSeries": "passportSeries",
-            "mobilePhone": "mobilePhone",
-            "status": "status"
-          }
+          "customer": [
+            {
+              "surname": "surname",
+              "name": "name",
+              "patronymic": "patronymic",
+              "birthday": "2000-10-13",
+              "passportNumber": "passportNumber",
+              "passportSeries": "passportSeries",
+              "mobilePhone": "mobilePhone",
+              "status": "status"
+            },
+            {
+              "surname": "surname",
+              "name": "name",
+              "patronymic": "patronymic",
+              "birthday": "2000-10-13",
+              "passportNumber": "passportNumber",
+              "passportSeries": "passportSeries",
+              "mobilePhone": "mobilePhone",
+              "status": "status"
+            }
+          ]
         },
         "clientDefinedAttributeList": {
           "fact": [

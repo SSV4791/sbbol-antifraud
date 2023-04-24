@@ -35,14 +35,6 @@
       "otherAccountOwnershipType": "ownershipType",
       "otherAccountType": "otherAccountType",
       "transferMediumType": "transferMediumType",
-      "customerSurname": "customerSurname",
-      "customerName": "customerName",
-      "customerPatronymic": "customerPatronymic",
-      "customerBirthday": "2000-10-13",
-      "customerPassportNumber": "customerPassportNumber",
-      "customerPassportSeries": "customerPassportSeries",
-      "customerMobilePhone": "customerMobilePhone",
-      "customerStatus": "customerStatus",
       "clientDefinedAttributeList": [
         {
           "name": "ЕПК.id",
@@ -68,6 +60,28 @@
           "name": "1-я подпись Время подписи",
           "value": "2022-10-13T17:33:15.386",
           "dataType": "STRING"
+        }
+      ],
+      "customersDataList": [
+        {
+          "surname": "surname",
+          "name": "name",
+          "patronymic": "patronymic",
+          "birthday": "2000-10-13",
+          "passportNumber": "passportNumber",
+          "passportSeries": "passportSeries",
+          "mobilePhone": "mobilePhone",
+          "status": "status"
+        },
+        {
+          "surname": "surname",
+          "name": "name",
+          "patronymic": "patronymic",
+          "birthday": "2000-10-13",
+          "passportNumber": "passportNumber",
+          "passportSeries": "passportSeries",
+          "mobilePhone": "mobilePhone",
+          "status": "status"
         }
       ],
       "channelIndicator": "WEB",
