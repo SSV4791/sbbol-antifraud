@@ -101,14 +101,7 @@ class DocumentMapperTest extends MapperTest {
                 () -> assertEquals(document.getClientDefinedAttributeList().size(), analyzeRequest.getEventDataList().getClientDefinedAttributeList().getFact().size()),
                 () -> assertEquals(document.getChannelIndicator(), analyzeRequest.getChannelIndicator()),
                 () -> assertEquals(document.getClientDefinedChannelIndicator(), analyzeRequest.getClientDefinedChannelIndicator()),
-                () -> assertEquals(document.getCustomerSurname(), analyzeRequest.getEventDataList().getCustomersDataList().getCustomer().getSurname()),
-                () -> assertEquals(document.getCustomerName(), analyzeRequest.getEventDataList().getCustomersDataList().getCustomer().getName()),
-                () -> assertEquals(document.getCustomerPatronymic(), analyzeRequest.getEventDataList().getCustomersDataList().getCustomer().getPatronymic()),
-                () -> assertEquals(document.getCustomerBirthday(), analyzeRequest.getEventDataList().getCustomersDataList().getCustomer().getBirthday()),
-                () -> assertEquals(document.getCustomerPassportNumber(), analyzeRequest.getEventDataList().getCustomersDataList().getCustomer().getPassportNumber()),
-                () -> assertEquals(document.getCustomerPassportSeries(), analyzeRequest.getEventDataList().getCustomersDataList().getCustomer().getPassportSeries()),
-                () -> assertEquals(document.getCustomerMobilePhone(), analyzeRequest.getEventDataList().getCustomersDataList().getCustomer().getMobilePhone()),
-                () -> assertEquals(document.getCustomerStatus(), analyzeRequest.getEventDataList().getCustomersDataList().getCustomer().getStatus())
+                () -> assertEquals(document.getCustomersDataList().size(), analyzeRequest.getEventDataList().getCustomersDataList().getCustomer().size())
         );
     }
 
@@ -204,14 +197,7 @@ class DocumentMapperTest extends MapperTest {
                 () -> assertEquals(saveRequest.getClientDefinedAttributeList(), document.getClientDefinedAttributeList()),
                 () -> assertEquals(saveRequest.getChannelIndicator(), document.getChannelIndicator()),
                 () -> assertEquals(saveRequest.getClientDefinedChannelIndicator(), document.getClientDefinedChannelIndicator()),
-                () -> assertEquals(saveRequest.getCustomerSurname(), document.getCustomerSurname()),
-                () -> assertEquals(saveRequest.getCustomerName(), document.getCustomerName()),
-                () -> assertEquals(saveRequest.getCustomerPatronymic(), document.getCustomerPatronymic()),
-                () -> assertEquals(saveRequest.getCustomerBirthday(), document.getCustomerBirthday()),
-                () -> assertEquals(saveRequest.getCustomerPassportNumber(), document.getCustomerPassportNumber()),
-                () -> assertEquals(saveRequest.getCustomerPassportSeries(), document.getCustomerPassportSeries()),
-                () -> assertEquals(saveRequest.getCustomerMobilePhone(), document.getCustomerMobilePhone()),
-                () -> assertEquals(saveRequest.getCustomerStatus(), document.getCustomerStatus())
+                () -> assertEquals(saveRequest.getCustomersDataList(), document.getCustomersDataList())
         );
     }
 

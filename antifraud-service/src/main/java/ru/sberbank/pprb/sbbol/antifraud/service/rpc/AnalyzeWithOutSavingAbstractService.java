@@ -25,7 +25,7 @@ public class AnalyzeWithOutSavingAbstractService<T extends AnalyzeWithOutSavingR
 
     protected Response analyze(T request) {
         String msg = "ClientTransactionId=" + request.getClientTransactionId() + ", dboOperation=" + request.getDboOperation() + ". ";
-        logger.debug("{}Sending data to analyze", msg);
+        logger.debug("{}Sending data to analyze. {}", msg, request);
         try {
             return processor.analyze(request);
         } catch (ConstraintViolationException e) {

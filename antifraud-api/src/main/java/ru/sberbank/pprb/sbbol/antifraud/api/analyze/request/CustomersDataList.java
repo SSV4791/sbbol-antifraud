@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Данные клиента
@@ -11,23 +12,23 @@ import java.io.Serializable;
 public class CustomersDataList implements Serializable {
 
     /**
-     * Клиент
+     * Список клиентов
      */
-    private Customer customer;
+    private List<Customer> customer;
 
     @JsonCreator
-    public CustomersDataList(@JsonProperty("customer") Customer customer) {
+    public CustomersDataList(@JsonProperty("customer") List<Customer> customer) {
         this.customer = customer;
     }
 
     public CustomersDataList() {
     }
 
-    public Customer getCustomer() {
+    public List<Customer> getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(List<Customer> customer) {
         this.customer = customer;
     }
 

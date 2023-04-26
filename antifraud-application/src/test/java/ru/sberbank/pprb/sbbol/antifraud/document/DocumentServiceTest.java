@@ -228,16 +228,11 @@ public class DocumentServiceTest extends AbstractIntegrationTest {
                         assertEquals(expected.getClientDefinedAttributeList().size(), actual.getClientDefinedAttributeList().size());
                     }
                 },
-                () -> assertEquals(expected.getChannelIndicator(), actual.getChannelIndicator()),
-                () -> assertEquals(expected.getClientDefinedChannelIndicator(), actual.getClientDefinedChannelIndicator()),
-                () -> assertEquals(expected.getCustomerSurname(), actual.getCustomerSurname()),
-                () -> assertEquals(expected.getCustomerName(), actual.getCustomerName()),
-                () -> assertEquals(expected.getCustomerPatronymic(), actual.getCustomerPatronymic()),
-                () -> assertEquals(expected.getCustomerBirthday(), actual.getCustomerBirthday()),
-                () -> assertEquals(expected.getCustomerPassportNumber(), actual.getCustomerPassportNumber()),
-                () -> assertEquals(expected.getCustomerPassportSeries(), actual.getCustomerPassportSeries()),
-                () -> assertEquals(expected.getCustomerMobilePhone(), actual.getCustomerMobilePhone()),
-                () -> assertEquals(expected.getCustomerStatus(), actual.getCustomerStatus())
+                () -> {
+                    if (!CollectionUtils.isEmpty(expected.getCustomersDataList())) {
+                        assertEquals(expected.getCustomersDataList().size(), actual.getCustomersDataList().size());
+                    }
+                }
         );
     }
 

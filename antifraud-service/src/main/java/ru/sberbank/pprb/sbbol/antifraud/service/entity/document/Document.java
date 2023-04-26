@@ -4,12 +4,12 @@ import com.vladmihalcea.hibernate.type.json.JsonType;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.Attribute;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.Customer;
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -230,52 +230,9 @@ public class Document extends BaseEntity {
     @Column(length = 15)
     private String clientDefinedChannelIndicator;
 
-    /**
-     * Фамилия клиента
-     */
-    @Column(length = 100)
-    private String customerSurname;
-
-    /**
-     * Имя клиента
-     */
-    @Column(length = 100)
-    private String customerName;
-
-    /**
-     * Отчество клиента
-     */
-    @Column(length = 100)
-    private String customerPatronymic;
-
-    /**
-     * Дата рождения клиента
-     */
-    private LocalDate customerBirthday;
-
-    /**
-     * Номер паспорта клиента
-     */
-    @Column(length = 30)
-    private String customerPassportNumber;
-
-    /**
-     * Серия паспорта клиента
-     */
-    @Column(length = 30)
-    private String customerPassportSeries;
-
-    /**
-     * Номер мобильного телефона клиента
-     */
-    @Column(length = 50)
-    private String customerMobilePhone;
-
-    /**
-     * Статус клиента
-     */
-    @Column(length = 30)
-    private String customerStatus;
+    @Type(type = "json")
+    @Column(columnDefinition = "json")
+    private List<Customer> customersDataList;
 
     @Override
     public boolean equals(Object obj) {
@@ -577,68 +534,12 @@ public class Document extends BaseEntity {
         this.clientDefinedChannelIndicator = clientDefinedChannelIndicator;
     }
 
-    public String getCustomerSurname() {
-        return customerSurname;
+    public List<Customer> getCustomersDataList() {
+        return customersDataList;
     }
 
-    public void setCustomerSurname(String customerSurname) {
-        this.customerSurname = customerSurname;
-    }
-
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-
-    public String getCustomerPatronymic() {
-        return customerPatronymic;
-    }
-
-    public void setCustomerPatronymic(String customerPatronymic) {
-        this.customerPatronymic = customerPatronymic;
-    }
-
-    public LocalDate getCustomerBirthday() {
-        return customerBirthday;
-    }
-
-    public void setCustomerBirthday(LocalDate customerBirthday) {
-        this.customerBirthday = customerBirthday;
-    }
-
-    public String getCustomerPassportNumber() {
-        return customerPassportNumber;
-    }
-
-    public void setCustomerPassportNumber(String customerPassportNumber) {
-        this.customerPassportNumber = customerPassportNumber;
-    }
-
-    public String getCustomerPassportSeries() {
-        return customerPassportSeries;
-    }
-
-    public void setCustomerPassportSeries(String customerPassportSeries) {
-        this.customerPassportSeries = customerPassportSeries;
-    }
-
-    public String getCustomerMobilePhone() {
-        return customerMobilePhone;
-    }
-
-    public void setCustomerMobilePhone(String customerMobilePhone) {
-        this.customerMobilePhone = customerMobilePhone;
-    }
-
-    public String getCustomerStatus() {
-        return customerStatus;
-    }
-
-    public void setCustomerStatus(String customerStatus) {
-        this.customerStatus = customerStatus;
+    public void setCustomersDataList(List<Customer> customersDataList) {
+        this.customersDataList = customersDataList;
     }
 
 }

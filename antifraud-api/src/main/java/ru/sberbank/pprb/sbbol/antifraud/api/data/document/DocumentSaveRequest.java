@@ -1,15 +1,14 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.data.document;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.OffsetDateTimeSerializer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.Attribute;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.Customer;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.Operation;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -228,52 +227,9 @@ public class DocumentSaveRequest implements Operation {
     private String clientDefinedChannelIndicator;
 
     /**
-     * Фамилия клиента
+     * Список клиентов
      */
-    @Size(message = "Attribute \"customerSurname\" cannot contain more than 100 characters", max = 100)
-    private String customerSurname;
-
-    /**
-     * Имя клиента
-     */
-    @Size(message = "Attribute \"customerName\" cannot contain more than 100 characters", max = 100)
-    private String customerName;
-
-    /**
-     * Отчество клиента
-     */
-    @Size(message = "Attribute \"customerPatronymic\" cannot contain more than 100 characters", max = 100)
-    private String customerPatronymic;
-
-    /**
-     * Дата рождения клиента
-     */
-    @JsonSerialize(using = LocalDateSerializer.class)
-    private LocalDate customerBirthday;
-
-    /**
-     * Номер паспорта клиента
-     */
-    @Size(message = "Attribute \"customerPassportNumber\" cannot contain more than 30 characters", max = 30)
-    private String customerPassportNumber;
-
-    /**
-     * Серия паспорта клиента
-     */
-    @Size(message = "Attribute \"customerPassportSeries\" cannot contain more than 30 characters", max = 30)
-    private String customerPassportSeries;
-
-    /**
-     * Номер мобильного телефона клиента
-     */
-    @Size(message = "Attribute \"customerMobilePhone\" cannot contain more than 50 characters", max = 50)
-    private String customerMobilePhone;
-
-    /**
-     * Статус клиента
-     */
-    @Size(message = "Attribute \"customerStatus\" cannot contain more than 30 characters", max = 30)
-    private String customerStatus;
+    private List<Customer> customersDataList;
 
     public OffsetDateTime getTimestamp() {
         return timestamp;
@@ -549,68 +505,12 @@ public class DocumentSaveRequest implements Operation {
         this.clientDefinedChannelIndicator = clientDefinedChannelIndicator;
     }
 
-    public String getCustomerSurname() {
-        return customerSurname;
+    public List<Customer> getCustomersDataList() {
+        return customersDataList;
     }
 
-    public void setCustomerSurname(String customerSurname) {
-        this.customerSurname = customerSurname;
-    }
-
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-
-    public String getCustomerPatronymic() {
-        return customerPatronymic;
-    }
-
-    public void setCustomerPatronymic(String customerPatronymic) {
-        this.customerPatronymic = customerPatronymic;
-    }
-
-    public LocalDate getCustomerBirthday() {
-        return customerBirthday;
-    }
-
-    public void setCustomerBirthday(LocalDate customerBirthday) {
-        this.customerBirthday = customerBirthday;
-    }
-
-    public String getCustomerPassportNumber() {
-        return customerPassportNumber;
-    }
-
-    public void setCustomerPassportNumber(String customerPassportNumber) {
-        this.customerPassportNumber = customerPassportNumber;
-    }
-
-    public String getCustomerPassportSeries() {
-        return customerPassportSeries;
-    }
-
-    public void setCustomerPassportSeries(String customerPassportSeries) {
-        this.customerPassportSeries = customerPassportSeries;
-    }
-
-    public String getCustomerMobilePhone() {
-        return customerMobilePhone;
-    }
-
-    public void setCustomerMobilePhone(String customerMobilePhone) {
-        this.customerMobilePhone = customerMobilePhone;
-    }
-
-    public String getCustomerStatus() {
-        return customerStatus;
-    }
-
-    public void setCustomerStatus(String customerStatus) {
-        this.customerStatus = customerStatus;
+    public void setCustomersDataList(List<Customer> customersDataList) {
+        this.customersDataList = customersDataList;
     }
 
     @Override
@@ -618,7 +518,7 @@ public class DocumentSaveRequest implements Operation {
         return "DocumentSaveRequest{" +
                 "timestamp=" + timestamp +
                 ", requestType='" + requestType + '\'' +
-                ", docId=" + docId +
+                ", docId='" + docId + '\'' +
                 ", orgName='" + orgName + '\'' +
                 ", userName='" + userName + '\'' +
                 ", dboOperation='" + dboOperation + '\'' +
@@ -650,14 +550,7 @@ public class DocumentSaveRequest implements Operation {
                 ", clientDefinedAttributeList=" + clientDefinedAttributeList +
                 ", channelIndicator='" + channelIndicator + '\'' +
                 ", clientDefinedChannelIndicator='" + clientDefinedChannelIndicator + '\'' +
-                ", customerSurname='" + customerSurname + '\'' +
-                ", customerName='" + customerName + '\'' +
-                ", customerPatronymic='" + customerPatronymic + '\'' +
-                ", customerBirthday=" + customerBirthday +
-                ", customerPassportNumber='" + customerPassportNumber + '\'' +
-                ", customerPassportSeries='" + customerPassportSeries + '\'' +
-                ", customerMobilePhone='" + customerMobilePhone + '\'' +
-                ", customerStatus='" + customerStatus + '\'' +
+                ", customersDataList=" + customersDataList +
                 '}';
     }
 

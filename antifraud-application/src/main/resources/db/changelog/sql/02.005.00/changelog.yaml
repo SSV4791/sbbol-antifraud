@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: 1682066426847_t_document_add_customersdatalist.sql
+      relativeToChangelogFile: true

@@ -47,16 +47,9 @@ public class DocumentValidator extends ModelValidator {
         if (CollectionUtils.isEmpty(request.getClientDefinedAttributeList())) {
             logWarn(null, request.getDocId(), request.getDboOperation(), "clientDefinedAttributeList");
         }
-        logWarn(request.getChannelIndicator(), request.getDocId(), request.getDboOperation(), "channelIndicator");
-        logWarn(request.getClientDefinedChannelIndicator(), request.getDocId(), request.getDboOperation(), "clientDefinedChannelIndicator");
-        logWarn(request.getCustomerSurname(), request.getDocId(), request.getDboOperation(), "customerSurname");
-        logWarn(request.getCustomerName(), request.getDocId(), request.getDboOperation(), "customerName");
-        logWarn(request.getCustomerPatronymic(), request.getDocId(), request.getDboOperation(), "customerPatronymic");
-        logWarn(request.getCustomerBirthday(), request.getDocId(), request.getDboOperation(), "customerBirthday");
-        logWarn(request.getCustomerPassportNumber(), request.getDocId(), request.getDboOperation(), "customerPassportNumber");
-        logWarn(request.getCustomerPassportSeries(), request.getDocId(), request.getDboOperation(), "customerPassportSeries");
-        logWarn(request.getCustomerMobilePhone(), request.getDocId(), request.getDboOperation(), "customerMobilePhone");
-        logWarn(request.getCustomerStatus(), request.getDocId(), request.getDboOperation(), "customerStatus");
+        if (CollectionUtils.isEmpty(request.getCustomersDataList())) {
+            logWarn(null, request.getDocId(), request.getDboOperation(), "customersDataList");
+        }
     }
 
 }

@@ -53,16 +53,28 @@
           }
         },
         "customersDataList": {
-          "customer": {
-            "surname": "surname",
-            "name": "name",
-            "patronymic": "patronymic",
-            "birthday": "2000-10-13",
-            "passportNumber": "passportNumber",
-            "passportSeries": "passportSeries",
-            "mobilePhone": "mobilePhone",
-            "status": "status"
-          }
+          "customer": [
+            {
+              "surname": "surname",
+              "name": "name",
+              "patronymic": "patronymic",
+              "birthday": "2000-10-13",
+              "passportNumber": "passportNumber",
+              "passportSeries": "passportSeries",
+              "mobilePhone": "mobilePhone",
+              "status": "status"
+            },
+            {
+              "surname": "surname",
+              "name": "name",
+              "patronymic": "patronymic",
+              "birthday": "2000-10-13",
+              "passportNumber": "passportNumber",
+              "passportSeries": "passportSeries",
+              "mobilePhone": "mobilePhone",
+              "status": "status"
+            }
+          ]
         },
         "clientDefinedAttributeList": {
           "fact": [

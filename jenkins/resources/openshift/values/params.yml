@@ -1,5 +1,5 @@
 ---
-integration_entries:
+system_integration_entries:
   - "{{ int.pprb.appjournal.v1_0 }}"
   - "{{ int.pprb.db_main.v1_0 }}"
   - "{{ int.pprb.db_si.v1_0 }}"
@@ -11,3 +11,5 @@ int_entry:
   antifraud:
     fpis: "{{ int.pprb.CI1099171_antifraud_integration_service.v1_0 }}"
   kafka_tengri: "{{ int.pprb.ci2809205_kafka_tengri.v1_0 }}"
+
+integration_entries: "{{ system_integration_entries + (infra_integration_entries | default([])) }}"

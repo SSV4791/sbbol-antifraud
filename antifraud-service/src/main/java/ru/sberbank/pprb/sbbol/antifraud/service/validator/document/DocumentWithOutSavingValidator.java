@@ -2,7 +2,6 @@ package ru.sberbank.pprb.sbbol.antifraud.service.validator.document;
 
 import org.springframework.util.CollectionUtils;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.CustomersDataList;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.DeviceRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.EventData;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.EventDataList;
@@ -81,7 +80,9 @@ public class DocumentWithOutSavingValidator extends ModelValidator {
             logWarn(eventDataList.getTransactionData(), docId, dboOperation, "eventDataList.transactionData");
         }
         if (Objects.nonNull(eventDataList.getCustomersDataList())) {
-            validateCustomersDataList(eventDataList.getCustomersDataList(), docId, dboOperation);
+            if (CollectionUtils.isEmpty(eventDataList.getCustomersDataList().getCustomer())) {
+                logWarn(null, docId, dboOperation, "eventDataList.customersDataList.customer");
+            }
         } else {
             logWarn(eventDataList.getCustomersDataList(), docId, dboOperation, "eventDataList.customersDataList");
         }
@@ -120,21 +121,6 @@ public class DocumentWithOutSavingValidator extends ModelValidator {
             logWarn(transactionData.getOtherAccountData().getTransferMediumType(), docId, dboOperation, "eventDataList.transactionData.otherAccountData.transferMediumType");
         } else {
             logWarn(transactionData.getOtherAccountData(), docId, dboOperation, "eventDataList.transactionData.otherAccountData");
-        }
-    }
-
-    private static void validateCustomersDataList(CustomersDataList customersDataList, String docId, String dboOperation) {
-        if (Objects.nonNull(customersDataList.getCustomer())) {
-            logWarn(customersDataList.getCustomer().getSurname(), docId, dboOperation, "eventDataList.customersDataList.customer.surname");
-            logWarn(customersDataList.getCustomer().getName(), docId, dboOperation, "eventDataList.customersDataList.customer.name");
-            logWarn(customersDataList.getCustomer().getPatronymic(), docId, dboOperation, "eventDataList.customersDataList.customer.patronymic");
-            logWarn(customersDataList.getCustomer().getBirthday(), docId, dboOperation, "eventDataList.customersDataList.customer.birthday");
-            logWarn(customersDataList.getCustomer().getPassportNumber(), docId, dboOperation, "eventDataList.customersDataList.customer.passportNumber");
-            logWarn(customersDataList.getCustomer().getPassportSeries(), docId, dboOperation, "eventDataList.customersDataList.customer.passportSeries");
-            logWarn(customersDataList.getCustomer().getMobilePhone(), docId, dboOperation, "eventDataList.customersDataList.customer.mobilePhone");
-            logWarn(customersDataList.getCustomer().getStatus(), docId, dboOperation, "eventDataList.customersDataList.customer.status");
-        } else {
-            logWarn(customersDataList.getCustomer(), docId, dboOperation, "eventDataList.customersDataList.customer");
         }
     }
 
