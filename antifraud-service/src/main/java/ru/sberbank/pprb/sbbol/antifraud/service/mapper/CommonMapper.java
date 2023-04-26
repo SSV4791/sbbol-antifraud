@@ -20,6 +20,7 @@ import java.util.function.Function;
 
 public interface CommonMapper<T> {
 
+    String CUSTOM_FACT_DATA_TYPE = "STRING";
     String SINGLE_SIGN_TIME = "singleSignTime";
     String FIRST_SIGN_TIME = "firstSignTime";
     String SECOND_SIGN_TIME = "secondSignTime";
@@ -69,7 +70,7 @@ public interface CommonMapper<T> {
                 Attribute attribute = new Attribute();
                 attribute.setName(entry.getValue());
                 attribute.setValue(value.toString());
-                attribute.setDataType("STRING");
+                attribute.setDataType(CUSTOM_FACT_DATA_TYPE);
                 clientDefinedAttributeList.add(attribute);
             }
         }

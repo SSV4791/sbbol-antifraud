@@ -12,6 +12,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Сервис маппинга подписей
@@ -25,6 +26,7 @@ public final class FastPaymentSignMapper {
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        objectMapper.setTimeZone(TimeZone.getDefault());
     }
 
     private FastPaymentSignMapper() {
