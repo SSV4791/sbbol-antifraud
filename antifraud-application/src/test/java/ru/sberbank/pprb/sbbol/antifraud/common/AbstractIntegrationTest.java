@@ -21,6 +21,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.Operation;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
+import uk.co.jemos.podam.api.AbstractClassInfoStrategy;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
 
@@ -37,8 +38,6 @@ import java.util.Collections;
 @ContextConfiguration(initializers = {HibernatePluginCleanerInitializer.class})
 @Import(TestReplicationConfiguration.class)
 public abstract class AbstractIntegrationTest {
-
-    private final PodamFactory factory;
 
     private final String context;
 
@@ -60,7 +59,6 @@ public abstract class AbstractIntegrationTest {
 
     public AbstractIntegrationTest(String context) {
         this.context = context;
-        this.factory = new PodamFactoryImpl();
     }
 
     @BeforeAll
@@ -73,6 +71,12 @@ public abstract class AbstractIntegrationTest {
     void verifyAndResetMockServer() {
         mockServer.verify();
         mockServer.reset();
+    }
+
+    protected void addExcludedFields(PodamFactory podamFactory, Class<?> pojoClass, String... fieldNames) {
+        for (String fieldName : fieldNames) {
+            ((AbstractClassInfoStrategy) podamFactory.getClassStrategy()).addExcludedField(pojoClass, fieldName);
+        }
     }
 
     protected ObjectMapper objectMapper() {
@@ -88,7 +92,7 @@ public abstract class AbstractIntegrationTest {
     }
 
     protected PodamFactory podamFactory() {
-        return factory;
+        return new PodamFactoryImpl();
     }
 
     protected RequestId saveOrUpdate(Operation record) throws Throwable {

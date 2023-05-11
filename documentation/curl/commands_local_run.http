@@ -12,6 +12,20 @@ Content-Type: application/json-rpc
 
 < payment_send.json
 
+### РПП v3
+
+POST http://127.0.0.1:8080/antifraud/v3/payment
+Content-Type: application/json-rpc
+
+< paymentv3_saveorupdate.json
+
+###
+
+POST http://127.0.0.1:8080/antifraud/v3/payment
+Content-Type: application/json-rpc
+
+< payment_send.json
+
 ### СБП
 
 POST http://127.0.0.1:8080/antifraud/v2/fastpayment
