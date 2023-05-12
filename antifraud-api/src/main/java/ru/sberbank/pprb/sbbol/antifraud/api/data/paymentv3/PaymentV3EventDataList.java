@@ -22,11 +22,13 @@ public class PaymentV3EventDataList implements Serializable {
     /**
      * Данные транзакции
      */
+    @Valid
     private PaymentV3TransactionData transactionData;
 
     /**
      * Атрибуты, определенные клиентом (custom facts)
      */
+    @Valid
     private PaymentV3ClientDefinedAttributeList clientDefinedAttributeList;
 
     @JsonCreator

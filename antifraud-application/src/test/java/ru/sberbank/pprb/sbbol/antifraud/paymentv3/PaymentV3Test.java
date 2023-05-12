@@ -1,7 +1,7 @@
 package ru.sberbank.pprb.sbbol.antifraud.paymentv3;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.ExpectedCount;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.Attribute;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
@@ -20,9 +21,11 @@ import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.common.AbstractIntegrationTest;
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.paymentv3.PaymentV3;
+import ru.sberbank.pprb.sbbol.antifraud.service.mapper.paymentv3.PaymentV3Sign;
 import ru.sberbank.pprb.sbbol.antifraud.service.repository.paymentv3.PaymentV3Repository;
 import uk.co.jemos.podam.api.PodamFactory;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -70,13 +73,7 @@ public class PaymentV3Test extends AbstractIntegrationTest {
     @Test
     @DisplayName("Создание РПП c помощью API v3")
     void createEntity() throws Throwable {
-        PodamFactory podamFactory = podamFactory();
-        addExcludedFields(podamFactory, PaymentOperationV3.class, "signs");
-        PaymentOperationV3 dto = podamFactory.populatePojo(new PaymentOperationV3());
-        dto.setSigns(List.of(
-                new PaymentV3TypedSign(0, SIGN),
-                new PaymentV3TypedSign(3, SIGN)
-        ));
+        PaymentOperationV3 dto = createPaymentOperationV3();
         RequestId requestId = saveOrUpdate(dto);
         assertNotNull(requestId);
         Optional<PaymentV3> result = repository.findFirstByDocId(dto.getDocId());
@@ -87,13 +84,7 @@ public class PaymentV3Test extends AbstractIntegrationTest {
     @Test
     @DisplayName("Обновление РПП c помощью API v3")
     void updateEntity() throws Throwable {
-        PodamFactory podamFactory = podamFactory();
-        addExcludedFields(podamFactory, PaymentOperationV3.class, "signs");
-        PaymentOperationV3 dto = podamFactory.populatePojo(new PaymentOperationV3());
-        dto.setSigns(List.of(
-                new PaymentV3TypedSign(0, SIGN),
-                new PaymentV3TypedSign(3, SIGN)
-        ));
+        PaymentOperationV3 dto = createPaymentOperationV3();
         RequestId requestId1 = saveOrUpdate(dto);
         assertNotNull(requestId1);
         dto.setChannelIndicator(RandomStringUtils.random(5));
@@ -107,25 +98,97 @@ public class PaymentV3Test extends AbstractIntegrationTest {
     @Test
     @DisplayName("Валидация сообщения при сохранении РПП c помощью API v3")
     void validateModelTest() {
-        PaymentOperationV3 dto = podamFactory().populatePojo(new PaymentOperationV3());
+        PodamFactory podamFactory = podamFactory();
+        PaymentOperationV3 dto = podamFactory.populatePojo(new PaymentOperationV3());
+        addExcludedFields(podamFactory, PaymentOperationV3.class, "signs");
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(dto));
-        Assertions.assertTrue(ex.getMessage().contains("signs"), "Should contain signs in message. Message: " + ex.getMessage());
+        assertTrue(ex.getMessage().contains("signs"), "Should contain signs in message. Message: " + ex.getMessage());
+    }
+
+    @Test
+    @DisplayName("Валидация размера полей в подписи при сохранении РПП c помощью API v3")
+    void validateSignFieldSizeTest() throws JsonProcessingException {
+        PaymentV3Sign sign = new PaymentV3Sign();
+        sign.setSignTime(LocalDateTime.now());
+        sign.setSignIp(RandomStringUtils.random(16));
+        sign.setSignLogin(RandomStringUtils.random(256));
+        sign.setSignCryptoprofile(RandomStringUtils.random(256));
+        sign.setSignCryptoprofileType(RandomStringUtils.random(256));
+        sign.setSignToken(RandomStringUtils.random(256));
+        sign.setSignType(RandomStringUtils.random(256));
+        sign.setSignImsi(RandomStringUtils.random(129));
+        sign.setSignCertId(RandomStringUtils.random(256));
+        sign.setSignPhone(RandomStringUtils.random(14));
+        sign.setSignEmail(RandomStringUtils.random(321));
+        sign.setSignChannel(RandomStringUtils.random(101));
+        sign.setSignSource(RandomStringUtils.random(101));
+        sign.setSignDigitalUserId(RandomStringUtils.random(2001));
+        sign.setSignMacAddress(RandomStringUtils.random(2001));
+        sign.setSignGeoLocation(RandomStringUtils.random(2001));
+        sign.setSignPkProperty(RandomStringUtils.random(2001));
+        String str = objectMapper().writeValueAsString(sign);
+
+        PodamFactory podamFactory = podamFactory();
+        PaymentOperationV3 dto = podamFactory.populatePojo(new PaymentOperationV3());
+        addExcludedFields(podamFactory, PaymentOperationV3.class, "signs");
+        dto.setSigns(List.of(new PaymentV3TypedSign(1, str)));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(dto));
+        assertAll(
+                () -> assertTrue(ex.getMessage().contains("Attribute \"signIp\" cannot contain more than 15 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"signLogin\" cannot contain more than 255 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"signCryptoprofile\" cannot contain more than 255 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"signCryptoprofileType\" cannot contain more than 255 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"signToken\" cannot contain more than 255 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"signType\" cannot contain more than 255 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"signImsi\" cannot contain more than 128 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"signCertId\" cannot contain more than 255 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"signPhone\" cannot contain more than 13 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"signEmail\" cannot contain more than 320 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"signChannel\" cannot contain more than 100 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"signSource\" cannot contain more than 100 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"signDigitalUserId\" cannot contain more than 2000 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"signMacAddress\" cannot contain more than 2000 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"signGeoLocation\" cannot contain more than 2000 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"signPkProperty\" cannot contain more than 2000 characters"))
+        );
+    }
+
+    @Test
+    @DisplayName("Валидация кол-ва элементов в CF при сохранении РПП c помощью API v3")
+    void validateCustomFactsSizeTest() {
+        PaymentOperationV3 dto = createPaymentOperationV3();
+        PodamFactory podamFactory = podamFactory();
+        for (int i = 0; i < 121; i++) {
+            dto.getEventDataList().getClientDefinedAttributeList().getFact().add(podamFactory.populatePojo(new Attribute()));
+        }
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(dto));
+        assertTrue(ex.getMessage().contains("Attribute \"eventDataList.clientDefinedAttributeList.fact\" cannot contain more than 120 elements"));
+    }
+
+    @Test
+    @DisplayName("Валидация размера полей элемента из CF при сохранении РПП c помощью API v3")
+    void validateCustomFactsFieldsSizeTest() {
+        PaymentOperationV3 dto = createPaymentOperationV3();
+        Attribute attribute = dto.getEventDataList().getClientDefinedAttributeList().getFact().get(0);
+        attribute.setName(RandomStringUtils.random(51));
+        attribute.setValue(RandomStringUtils.random(2001));
+        attribute.setDataType(RandomStringUtils.random(9));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(dto));
+        assertAll(
+                () -> assertTrue(ex.getMessage().contains("Attribute \"name\" cannot contain more than 50 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"value\" cannot contain more than 2000 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"dataType\" cannot contain more than 8 characters"))
+        );
     }
 
     @Test
     @DisplayName("Отправка РПП в ФП ИС c помощью API v3")
     void sendToAnalyzeTest() throws Throwable {
-        PodamFactory podamFactory = podamFactory();
-        addExcludedFields(podamFactory, PaymentOperationV3.class, "signs");
-        PaymentOperationV3 dto = podamFactory.populatePojo(new PaymentOperationV3());
-        dto.setSigns(List.of(
-                new PaymentV3TypedSign(0, SIGN),
-                new PaymentV3TypedSign(3, SIGN)
-        ));
+        PaymentOperationV3 dto = createPaymentOperationV3();
         RequestId requestId = saveOrUpdate(dto);
         assertNotNull(requestId);
 
-        FullAnalyzeResponse expected = podamFactory.populatePojo(new FullAnalyzeResponse());
+        FullAnalyzeResponse expected = podamFactory().populatePojo(new FullAnalyzeResponse());
         mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
                 .andExpect(method(HttpMethod.POST))
                 .andRespond(withStatus(HttpStatus.OK)
@@ -141,12 +204,27 @@ public class PaymentV3Test extends AbstractIntegrationTest {
         String docId = UUID.randomUUID().toString();
         ApplicationException ex = assertThrows(ApplicationException.class, () -> send(new SendToAnalyzeRequest(docId)));
         String message = ex.getMessage();
-        Assertions.assertTrue(message.contains("DocId=" + docId + ". PaymentV3 not found"));
+        assertTrue(message.contains("DocId=" + docId + ". PaymentV3 not found"));
     }
 
     @Test
     @DisplayName("Получение ошибки от смежной АС при отправке на анализ РПП c помощью API v3")
     void analyzeErrorTest() throws Throwable {
+        PaymentOperationV3 dto = createPaymentOperationV3();
+        RequestId requestId = saveOrUpdate(dto);
+        assertNotNull(requestId);
+
+        FullAnalyzeResponse expected = podamFactory().populatePojo(new FullAnalyzeResponse());
+        mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(objectMapper().writeValueAsString(expected)));
+        AnalyzeException ex = assertThrows(AnalyzeException.class, () -> send(new SendToAnalyzeRequest(dto.getDocId())));
+        assertTrue(ex.getMessage().contains(dto.getDocId()));
+    }
+
+    private PaymentOperationV3 createPaymentOperationV3() {
         PodamFactory podamFactory = podamFactory();
         addExcludedFields(podamFactory, PaymentOperationV3.class, "signs");
         PaymentOperationV3 dto = podamFactory.populatePojo(new PaymentOperationV3());
@@ -154,17 +232,7 @@ public class PaymentV3Test extends AbstractIntegrationTest {
                 new PaymentV3TypedSign(0, SIGN),
                 new PaymentV3TypedSign(3, SIGN)
         ));
-        RequestId requestId = saveOrUpdate(dto);
-        assertNotNull(requestId);
-
-        FullAnalyzeResponse expected = podamFactory.populatePojo(new FullAnalyzeResponse());
-        mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
-                .andExpect(method(HttpMethod.POST))
-                .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(objectMapper().writeValueAsString(expected)));
-        AnalyzeException ex = assertThrows(AnalyzeException.class, () -> send(new SendToAnalyzeRequest(dto.getDocId())));
-        Assertions.assertTrue(ex.getMessage().contains(dto.getDocId()));
+        return dto;
     }
 
     private void validateEntity(PaymentOperationV3 dto, PaymentV3 entity) {

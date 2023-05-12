@@ -31,6 +31,7 @@ public class PaymentOperationV3 implements Operation {
     /**
      * Данные устройства
      */
+    @Valid
     private PaymentV3DeviceRequest deviceRequest;
 
     /**
