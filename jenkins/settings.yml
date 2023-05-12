@@ -23,7 +23,7 @@ liquibase:
 pr_check:
   vector:
     compare:
-      release_uri: ''
+      release_uri: 'https://nexus-ci.delta.sbrf.ru/repository/maven-distr/CI02473994/CI03045533/D-02.005.00_0001/CI03045533-D-02.005.00_0001-distrib.zip'
     workdir: vectors
     match:
       files:

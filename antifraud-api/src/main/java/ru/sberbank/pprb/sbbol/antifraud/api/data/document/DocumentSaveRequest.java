@@ -6,6 +6,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.Attribute;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.Customer;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.Operation;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -210,7 +211,8 @@ public class DocumentSaveRequest implements Operation {
     /**
      * Список атрибутов, определенных клиентом (custom facts)
      */
-    private List<Attribute> clientDefinedAttributeList;
+    @Size(message = "Attribute \"clientDefinedAttributeList\" cannot contain more than 120 elements", max = 120)
+    private List<@Valid Attribute> clientDefinedAttributeList;
 
     /**
      * Тип канала связи, через который осуществляется связь клиента с банком
@@ -229,7 +231,8 @@ public class DocumentSaveRequest implements Operation {
     /**
      * Список клиентов
      */
-    private List<Customer> customersDataList;
+    @Size(message = "Attribute \"customersDataList\" cannot contain more than 10 elements", max = 10)
+    private List<@Valid Customer> customersDataList;
 
     public OffsetDateTime getTimestamp() {
         return timestamp;

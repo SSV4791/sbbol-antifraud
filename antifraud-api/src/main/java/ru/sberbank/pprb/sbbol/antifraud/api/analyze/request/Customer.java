@@ -3,6 +3,7 @@ package ru.sberbank.pprb.sbbol.antifraud.api.analyze.request;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -14,16 +15,19 @@ public class Customer implements Serializable {
     /**
      * Фамилия
      */
+    @Size(message = "Attribute \"surname\" cannot contain more than 100 characters", max = 100)
     private String surname;
 
     /**
      * Имя
      */
+    @Size(message = "Attribute \"name\" cannot contain more than 100 characters", max = 100)
     private String name;
 
     /**
      * Отчество
      */
+    @Size(message = "Attribute \"patronymic\" cannot contain more than 100 characters", max = 100)
     private String patronymic;
 
     /**
@@ -35,21 +39,25 @@ public class Customer implements Serializable {
     /**
      * Номер паспорта
      */
+    @Size(message = "Attribute \"passportNumber\" cannot contain more than 30 characters", max = 30)
     private String passportNumber;
 
     /**
      * Серия паспорта
      */
+    @Size(message = "Attribute \"passportSeries\" cannot contain more than 30 characters", max = 30)
     private String passportSeries;
 
     /**
      * Номер мобильного телефона
      */
+    @Size(message = "Attribute \"mobilePhone\" cannot contain more than 50 characters", max = 50)
     private String mobilePhone;
 
     /**
      * Статус
      */
+    @Size(message = "Attribute \"status\" cannot contain more than 50 characters", max = 50)
     private String status;
 
     public String getSurname() {

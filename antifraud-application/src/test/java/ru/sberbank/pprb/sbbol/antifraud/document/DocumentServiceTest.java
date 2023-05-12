@@ -11,6 +11,8 @@ import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.util.CollectionUtils;
 import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.document.DocumentSendToAnalyzeRq;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.Attribute;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.Customer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.document.DocumentSaveRequest;
@@ -20,6 +22,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.common.AbstractIntegrationTest;
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.document.Document;
 import ru.sberbank.pprb.sbbol.antifraud.service.repository.document.DocumentRepository;
+import uk.co.jemos.podam.api.PodamFactory;
 
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
@@ -79,6 +82,70 @@ public class DocumentServiceTest extends AbstractIntegrationTest {
                 () -> assertTrue(msg.contains("The attribute \"docId\" must be filled")),
                 () -> assertTrue(msg.contains("The attribute \"dboOperation\" must be filled")),
                 () -> assertTrue(msg.contains("Attribute \"currency\" cannot contain more than 3 characters"))
+        );
+    }
+
+    @Test
+    @DisplayName("Валидация кол-ва элементов в CF при сохранении (универсальный API)")
+    void validateCustomFactsSizeTest() {
+        PodamFactory podamFactory = podamFactory();
+        DocumentSaveRequest expected = podamFactory.populatePojo(new DocumentSaveRequest());
+        for (int i = 0; i < 121; i++) {
+            expected.getClientDefinedAttributeList().add(podamFactory.populatePojo(new Attribute()));
+        }
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(expected));
+        assertTrue(ex.getMessage().contains("Attribute \"clientDefinedAttributeList\" cannot contain more than 120 elements"));
+    }
+
+    @Test
+    @DisplayName("Валидация размера полей элемента из CF при сохранении (универсальный API)")
+    void validateCustomFactsFieldsSizeTest() {
+        DocumentSaveRequest expected = podamFactory().populatePojo(new DocumentSaveRequest());
+        Attribute attribute = expected.getClientDefinedAttributeList().get(0);
+        attribute.setName(RandomStringUtils.random(51));
+        attribute.setValue(RandomStringUtils.random(2001));
+        attribute.setDataType(RandomStringUtils.random(9));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(expected));
+        assertAll(
+                () -> assertTrue(ex.getMessage().contains("Attribute \"name\" cannot contain more than 50 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"value\" cannot contain more than 2000 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"dataType\" cannot contain more than 8 characters"))
+        );
+    }
+
+    @Test
+    @DisplayName("Валидация кол-ва элементов в customersDataList при сохранении (универсальный API)")
+    void validateCustomersSizeTest() {
+        PodamFactory podamFactory = podamFactory();
+        DocumentSaveRequest expected = podamFactory.populatePojo(new DocumentSaveRequest());
+        for (int i = 0; i < 121; i++) {
+            expected.getCustomersDataList().add(podamFactory.populatePojo(new Customer()));
+        }
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(expected));
+        assertTrue(ex.getMessage().contains("Attribute \"customersDataList\" cannot contain more than 10 elements"));
+    }
+
+    @Test
+    @DisplayName("Валидация размера полей элемента из customersDataList при сохранении (универсальный API)")
+    void validateCustomerFieldsSizeTest() {
+        DocumentSaveRequest expected = podamFactory().populatePojo(new DocumentSaveRequest());
+        Customer customer = expected.getCustomersDataList().get(0);
+        customer.setSurname(RandomStringUtils.random(101));
+        customer.setName(RandomStringUtils.random(101));
+        customer.setPatronymic(RandomStringUtils.random(101));
+        customer.setPassportNumber(RandomStringUtils.random(31));
+        customer.setPassportSeries(RandomStringUtils.random(31));
+        customer.setMobilePhone(RandomStringUtils.random(51));
+        customer.setStatus(RandomStringUtils.random(51));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(expected));
+        assertAll(
+                () -> assertTrue(ex.getMessage().contains("Attribute \"surname\" cannot contain more than 100 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"name\" cannot contain more than 100 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"patronymic\" cannot contain more than 100 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"passportNumber\" cannot contain more than 30 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"passportSeries\" cannot contain more than 30 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"mobilePhone\" cannot contain more than 50 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"status\" cannot contain more than 50 characters"))
         );
     }
 

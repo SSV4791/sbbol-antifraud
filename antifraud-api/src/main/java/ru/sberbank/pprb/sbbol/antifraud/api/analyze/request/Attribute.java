@@ -3,6 +3,7 @@ package ru.sberbank.pprb.sbbol.antifraud.api.analyze.request;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -13,16 +14,19 @@ public class Attribute implements Serializable {
     /**
      * Описание поля
      */
+    @Size(message = "Attribute \"name\" cannot contain more than 50 characters", max = 50)
     private String name;
 
     /**
      * Значение поля
      */
+    @Size(message = "Attribute \"value\" cannot contain more than 2000 characters", max = 2000)
     private String value;
 
     /**
      * Тип данных, всегда STRING
      */
+    @Size(message = "Attribute \"dataType\" cannot contain more than 8 characters", max = 8)
     private String dataType;
 
     @JsonCreator
