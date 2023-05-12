@@ -1,5 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.mapper.paymentv3;
 
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -16,51 +17,61 @@ public class PaymentV3Sign implements Serializable {
     /**
      * IP-адрес
      */
+    @Size(message = "Attribute \"signIp\" cannot contain more than 15 characters", max = 15)
     private String signIp;
 
     /**
      * Логин
      */
+    @Size(message = "Attribute \"signLogin\" cannot contain more than 255 characters", max = 255)
     private String signLogin;
 
     /**
      * Наименование криптопрофиля
      */
+    @Size(message = "Attribute \"signCryptoprofile\" cannot contain more than 255 characters", max = 255)
     private String signCryptoprofile;
 
     /**
      * Тип криптопрофиля
      */
+    @Size(message = "Attribute \"signCryptoprofileType\" cannot contain more than 255 characters", max = 255)
     private String signCryptoprofileType;
 
     /**
      * Данные токена
      */
+    @Size(message = "Attribute \"signToken\" cannot contain more than 255 characters", max = 255)
     private String signToken;
 
     /**
      * Тип подписи
      */
+    @Size(message = "Attribute \"signType\" cannot contain more than 255 characters", max = 255)
     private String signType;
 
     /**
      * IMSI
      */
+    @Size(message = "Attribute \"signImsi\" cannot contain more than 128 characters", max = 128)
     private String signImsi;
 
     /**
      * Идентификатор личного сертификата
      */
+    @Size(message = "Attribute \"signCertId\" cannot contain more than 255 characters", max = 255)
     private String signCertId;
 
     /**
      * Номер телефона
      */
+    @Size(message = "Attribute \"signPhone\" cannot contain more than 13 characters", max = 13)
     private String signPhone;
 
     /**
      * Адрес электронной почты
      */
+    @Size(message = "Attribute \"signEmail\" cannot contain more than 320 characters", max = 320)
     private String signEmail;
 
     /**
@@ -68,31 +79,37 @@ public class PaymentV3Sign implements Serializable {
      * Может принимать значения:
      * SMS, TOKEN, CLOUD
      */
+    @Size(message = "Attribute \"signChannel\" cannot contain more than 100 characters", max = 100)
     private String signChannel;
 
     /**
      * Канал. Может принимать значения: MOBSBBOL, BROWSER_DCB
      */
+    @Size(message = "Attribute \"signSource\" cannot contain more than 100 characters", max = 100)
     private String signSource;
 
     /**
      * Идентификатор пользователя
      */
+    @Size(message = "Attribute \"signDigitalUserId\" cannot contain more than 2000 characters", max = 2000)
     private String signDigitalUserId;
 
     /**
      * MAC адрес
      */
+    @Size(message = "Attribute \"signMacAddress\" cannot contain more than 2000 characters", max = 2000)
     private String signMacAddress;
 
     /**
      * Данные о геолокации
      */
+    @Size(message = "Attribute \"signGeoLocation\" cannot contain more than 2000 characters", max = 2000)
     private String signGeoLocation;
 
     /**
      * Свойства компьютера
      */
+    @Size(message = "Attribute \"signPkProperty\" cannot contain more than 2000 characters", max = 2000)
     private String signPkProperty;
 
     public LocalDateTime getSignTime() {

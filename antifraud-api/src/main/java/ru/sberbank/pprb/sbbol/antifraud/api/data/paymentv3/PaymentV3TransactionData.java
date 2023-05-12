@@ -1,5 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.data.paymentv3;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -11,16 +12,19 @@ public class PaymentV3TransactionData implements Serializable {
     /**
      * Данные суммы перевода
      */
+    @Valid
     private PaymentV3Amount amount;
 
     /**
      * Данные счета плательщика
      */
+    @Valid
     private PaymentV3MyAccountData myAccountData;
 
     /**
      * Данные счета получателя
      */
+    @Valid
     private PaymentV3OtherAccountData otherAccountData;
 
     /**

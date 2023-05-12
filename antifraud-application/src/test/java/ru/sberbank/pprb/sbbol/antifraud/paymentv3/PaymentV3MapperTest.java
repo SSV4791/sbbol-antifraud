@@ -1,12 +1,16 @@
-package ru.sberbank.pprb.sbbol.antifraud.service.mapper.paymentv3;
+package ru.sberbank.pprb.sbbol.antifraud.paymentv3;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ru.dcbqa.allureee.annotations.layers.UnitTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.paymentv3.PaymentOperationV3;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.paymentv3.PaymentV3TypedSign;
+import ru.sberbank.pprb.sbbol.antifraud.common.AbstractIntegrationTest;
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.paymentv3.PaymentV3;
-import ru.sberbank.pprb.sbbol.antifraud.service.mapper.MapperTest;
+import ru.sberbank.pprb.sbbol.antifraud.service.mapper.paymentv3.PaymentV3Mapper;
+import ru.sberbank.pprb.sbbol.antifraud.service.mapper.paymentv3.PaymentV3MapperImpl;
 import uk.co.jemos.podam.api.PodamFactory;
 
 import java.time.LocalDateTime;
@@ -19,7 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class PaymentV3MapperTest extends MapperTest {
+@UnitTestLayer
+public class PaymentV3MapperTest extends AbstractIntegrationTest {
 
     private static final PaymentV3Mapper MAPPER = new PaymentV3MapperImpl();
 
@@ -67,7 +72,12 @@ public class PaymentV3MapperTest extends MapperTest {
             }
             """;
 
+    public PaymentV3MapperTest() {
+        super("/antifraud/v3/payment");
+    }
+
     @Test
+    @DisplayName("Создание entity из dto (РПП API v3)")
     void toEntityTest() {
         PodamFactory podamFactory = podamFactory();
         addExcludedFields(podamFactory, PaymentOperationV3.class, "signs");
@@ -88,6 +98,7 @@ public class PaymentV3MapperTest extends MapperTest {
     }
 
     @Test
+    @DisplayName("Обновление entity из dto (РПП API v3)")
     void updateFromDtoTest() {
         PodamFactory podamFactory = podamFactory();
         addExcludedFields(podamFactory, PaymentOperationV3.class, "signs");
@@ -104,6 +115,7 @@ public class PaymentV3MapperTest extends MapperTest {
     }
 
     @Test
+    @DisplayName("Создание запроса на анализ в ФП ИС из entity (РПП API v3)")
     void toAnalyzeRequestTest() {
         PodamFactory podamFactory = podamFactory();
         PaymentV3 entity = podamFactory.populatePojo(new PaymentV3());
