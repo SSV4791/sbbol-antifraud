@@ -535,7 +535,7 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
     @Mapping(source = "otherBicCode", target = "eventDataList.transactionData.otherAccountData.routingCode")
     @Mapping(source = "otherAccOwnershipType", target = "eventDataList.transactionData.otherAccountData.otherAccountOwnershipType")
     @Mapping(source = "otherAccType", target = "eventDataList.transactionData.otherAccountData.otherAccountType")
-    @Mapping(source = "transferMediumType", target = "eventDataList.transactionData.otherAccountData.transferMediumType")
+    @Mapping(source = "transferMediumType", target = "eventDataList.transactionData.transferMediumType")
     public abstract AnalyzeRequest toAnalyzeRequest(Payment payment);
 
     @AfterMapping

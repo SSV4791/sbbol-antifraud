@@ -66,7 +66,7 @@ public interface DocumentMapper extends CommonMapper<Document> {
     @Mapping(target = "eventDataList.transactionData.otherAccountData.routingCode", source = "routingCode")
     @Mapping(target = "eventDataList.transactionData.otherAccountData.otherAccountOwnershipType", source = "otherAccountOwnershipType")
     @Mapping(target = "eventDataList.transactionData.otherAccountData.otherAccountType", source = "otherAccountType")
-    @Mapping(target = "eventDataList.transactionData.otherAccountData.transferMediumType", source = "transferMediumType")
+    @Mapping(target = "eventDataList.transactionData.transferMediumType", source = "transferMediumType")
     @Mapping(target = "eventDataList.clientDefinedAttributeList.fact", source = "clientDefinedAttributeList")
     @Mapping(target = "eventDataList.customersDataList.customer", source = "customersDataList")
     AnalyzeRequest toAnalyzeRequest(Document entity);

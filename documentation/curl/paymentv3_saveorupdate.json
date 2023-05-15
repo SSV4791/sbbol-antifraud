@@ -46,11 +46,11 @@
             "accountNumber": "45678667897655789978",
             "routingCode": "040012002",
             "otherAccountOwnershipType": "ME_TO_YOU",
-            "otherAccountType": "BILLER",
-            "transferMediumType": "WIRE"
+            "otherAccountType": "BILLER"
           },
           "executionSpeed": "FEW_HOURS",
-          "otherAccountBankType": "OTHER_BANK"
+          "otherAccountBankType": "OTHER_BANK",
+          "transferMediumType": "WIRE"
         },
         "clientDefinedAttributeList": {
           "fact": [

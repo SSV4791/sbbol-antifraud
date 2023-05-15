@@ -38,12 +38,6 @@ public class PaymentV3OtherAccountData implements Serializable {
     @Size(message = "Attribute \"eventDataList.transactionData.otherAccountData.otherAccountType\" cannot contain more than 20 characters", max = 20)
     private String otherAccountType;
 
-    /**
-     * Метод перевода средств между пользователем и получателем
-     */
-    @Size(message = "Attribute \"eventDataList.transactionData.otherAccountData.transferMediumType\" cannot contain more than 30 characters", max = 30)
-    private String transferMediumType;
-
     public String getAccountName() {
         return accountName;
     }
@@ -84,14 +78,6 @@ public class PaymentV3OtherAccountData implements Serializable {
         this.otherAccountType = otherAccountType;
     }
 
-    public String getTransferMediumType() {
-        return transferMediumType;
-    }
-
-    public void setTransferMediumType(String transferMediumType) {
-        this.transferMediumType = transferMediumType;
-    }
-
     @Override
     public String toString() {
         return "{" +
@@ -100,7 +86,6 @@ public class PaymentV3OtherAccountData implements Serializable {
                 ", routingCode='" + routingCode + '\'' +
                 ", otherAccountOwnershipType='" + otherAccountOwnershipType + '\'' +
                 ", otherAccountType='" + otherAccountType + '\'' +
-                ", transferMediumType='" + transferMediumType + '\'' +
                 '}';
     }
 

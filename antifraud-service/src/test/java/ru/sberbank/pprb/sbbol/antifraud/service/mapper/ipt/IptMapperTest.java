@@ -65,7 +65,7 @@ public class IptMapperTest extends MapperTest {
                 () -> assertEquals(request.getEventData().getTransactionData().getOtherAccountData().getRoutingCode(), analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getRoutingCode()),
                 () -> assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getOtherAccountType()),
                 () -> assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getOtherAccountOwnershipType()),
-                () -> assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getTransferMediumType()),
+                () -> assertNull(analyzeRequest.getEventDataList().getTransactionData().getTransferMediumType()),
                 () -> assertEquals(request.getChannelIndicator(), analyzeRequest.getChannelIndicator()),
                 () -> assertEquals(request.getClientDefinedChannelIndicator(), analyzeRequest.getClientDefinedChannelIndicator())
         );

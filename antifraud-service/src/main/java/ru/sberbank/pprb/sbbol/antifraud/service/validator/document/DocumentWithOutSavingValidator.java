@@ -118,7 +118,7 @@ public class DocumentWithOutSavingValidator extends ModelValidator {
             logWarn(transactionData.getOtherAccountData().getRoutingCode(), docId, dboOperation, "eventDataList.transactionData.otherAccountData.routingCode");
             logWarn(transactionData.getOtherAccountData().getOtherAccountOwnershipType(), docId, dboOperation, "eventDataList.transactionData.otherAccountData.otherAccountOwnershipType");
             logWarn(transactionData.getOtherAccountData().getOtherAccountType(), docId, dboOperation, "eventDataList.transactionData.otherAccountData.otherAccountType");
-            logWarn(transactionData.getOtherAccountData().getTransferMediumType(), docId, dboOperation, "eventDataList.transactionData.otherAccountData.transferMediumType");
+            logWarn(transactionData.getTransferMediumType(), docId, dboOperation, "eventDataList.transactionData.transferMediumType");
         } else {
             logWarn(transactionData.getOtherAccountData(), docId, dboOperation, "eventDataList.transactionData.otherAccountData");
         }

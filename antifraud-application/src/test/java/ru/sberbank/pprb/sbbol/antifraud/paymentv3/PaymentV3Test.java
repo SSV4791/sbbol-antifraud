@@ -268,7 +268,7 @@ public class PaymentV3Test extends AbstractIntegrationTest {
                 () -> assertEquals(dto.getEventDataList().getTransactionData().getOtherAccountData().getRoutingCode(), entity.getRoutingCode()),
                 () -> assertEquals(dto.getEventDataList().getTransactionData().getOtherAccountData().getOtherAccountOwnershipType(), entity.getOtherAccOwnershipType()),
                 () -> assertEquals(dto.getEventDataList().getTransactionData().getOtherAccountData().getOtherAccountType(), entity.getOtherAccountType()),
-                () -> assertEquals(dto.getEventDataList().getTransactionData().getOtherAccountData().getTransferMediumType(), entity.getTransferMediumType()),
+                () -> assertEquals(dto.getEventDataList().getTransactionData().getTransferMediumType(), entity.getTransferMediumType()),
                 () -> assertEquals(dto.getChannelIndicator(), entity.getChannelIndicator()),
                 () -> assertEquals(dto.getClientDefinedChannelIndicator(), entity.getClientDefinedChannelIndicator()),
                 () -> assertEquals(dto.getSigns().size() * 17 + dto.getEventDataList().getClientDefinedAttributeList().getFact().size(), entity.getCustomFacts().size())
