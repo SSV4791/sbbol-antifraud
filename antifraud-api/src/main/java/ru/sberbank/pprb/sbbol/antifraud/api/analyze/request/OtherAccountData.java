@@ -32,11 +32,6 @@ public class OtherAccountData implements Serializable {
      */
     private String otherAccountType;
 
-    /**
-     * Метод перевода средств между пользователем и получателем
-     */
-    private String transferMediumType;
-
     public String getAccountName() {
         return accountName;
     }
@@ -77,14 +72,6 @@ public class OtherAccountData implements Serializable {
         this.otherAccountType = otherAccountType;
     }
 
-    public String getTransferMediumType() {
-        return transferMediumType;
-    }
-
-    public void setTransferMediumType(String transferMediumType) {
-        this.transferMediumType = transferMediumType;
-    }
-
     @Override
     public String toString() {
         return "{" +
@@ -93,7 +80,6 @@ public class OtherAccountData implements Serializable {
                 ", routingCode='" + routingCode + '\'' +
                 ", otherAccountOwnershipType='" + otherAccountOwnershipType + '\'' +
                 ", otherAccountType='" + otherAccountType + '\'' +
-                ", transferMediumType='" + transferMediumType + '\'' +
                 '}';
     }
 

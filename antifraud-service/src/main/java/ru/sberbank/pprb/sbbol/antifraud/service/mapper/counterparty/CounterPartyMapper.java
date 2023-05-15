@@ -152,7 +152,7 @@ public abstract class CounterPartyMapper implements CommonMapper<CounterPartyCli
     @Mapping(target = "eventDataList.transactionData.otherAccountData.routingCode", ignore = true)
     @Mapping(target = "eventDataList.transactionData.otherAccountData.otherAccountOwnershipType", ignore = true)
     @Mapping(target = "eventDataList.transactionData.otherAccountData.otherAccountType", ignore = true)
-    @Mapping(target = "eventDataList.transactionData.otherAccountData.transferMediumType", ignore = true)
+    @Mapping(target = "eventDataList.transactionData.transferMediumType", ignore = true)
     @Mapping(target = "eventDataList.transactionData.amount.amount", expression = "java(0L)")
     @Mapping(target = "eventDataList.transactionData.amount.currency", constant = "RUB")
     @Mapping(target = "eventDataList.transactionData.myAccountData.accountNumber", constant = "")

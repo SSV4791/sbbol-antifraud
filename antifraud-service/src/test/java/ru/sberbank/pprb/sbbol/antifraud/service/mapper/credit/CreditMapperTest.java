@@ -69,7 +69,7 @@ public class CreditMapperTest extends MapperTest {
         assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getOtherAccountType());
         assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getOtherAccountOwnershipType());
         assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getRoutingCode());
-        assertNull(analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getTransferMediumType());
+        assertNull(analyzeRequest.getEventDataList().getTransactionData().getTransferMediumType());
 
         assertEquals(request.getChannelIndicator().name(), analyzeRequest.getChannelIndicator());
         assertEquals(request.getClientDefinedChannelIndicator().name(), analyzeRequest.getClientDefinedChannelIndicator());
