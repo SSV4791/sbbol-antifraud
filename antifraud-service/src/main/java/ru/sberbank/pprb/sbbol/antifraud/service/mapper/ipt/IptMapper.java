@@ -324,7 +324,7 @@ public abstract class IptMapper implements CommonMapper<IptClientDefinedAttribut
     @Mapping(target = "eventDataList.transactionData.otherAccountData.routingCode", source = "eventData.transactionData.otherAccountData.routingCode")
     @Mapping(target = "eventDataList.transactionData.otherAccountData.otherAccountOwnershipType", ignore = true)
     @Mapping(target = "eventDataList.transactionData.otherAccountData.otherAccountType", ignore = true)
-    @Mapping(target = "eventDataList.transactionData.transferMediumType", ignore = true)
+    @Mapping(target = "eventDataList.transactionData.otherAccountData.transferMediumType", ignore = true)
     @Mapping(target = "eventDataList.customersDataList", ignore = true)
     @Mapping(target = "eventDataList.clientDefinedAttributeList", ignore = true)
     public abstract AnalyzeRequest toAnalyzeRequest(IptSendToAnalyzeRq request);

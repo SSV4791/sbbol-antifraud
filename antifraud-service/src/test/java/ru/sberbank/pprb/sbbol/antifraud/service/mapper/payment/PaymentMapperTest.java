@@ -120,7 +120,7 @@ class PaymentMapperTest extends MapperTest {
         assertEquals(payment.getOtherBicCode(), analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getRoutingCode());
         assertEquals(payment.getOtherAccOwnershipType(), analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getOtherAccountOwnershipType());
         assertEquals(payment.getOtherAccType(), analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getOtherAccountType());
-        assertEquals(payment.getTransferMediumType(), analyzeRequest.getEventDataList().getTransactionData().getTransferMediumType());
+        assertEquals(payment.getTransferMediumType(), analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getTransferMediumType());
 
         assertNotNull(analyzeRequest.getEventDataList().getClientDefinedAttributeList());
         assertEquals(PaymentMapper.CAPACITY, analyzeRequest.getEventDataList().getClientDefinedAttributeList().getFact().size());

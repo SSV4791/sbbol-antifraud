@@ -178,11 +178,11 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
             "accountNumber": "45678667897655789978",
             "routingCode": "040012002",
             "otherAccountOwnershipType": "ME_TO_YOU",
-            "otherAccountType": "BILLER"
+            "otherAccountType": "BILLER",
+            "transferMediumType": "WIRE"
           },
           "executionSpeed": "FEW_HOURS",
-          "otherAccountBankType": "OTHER_BANK",
-          "transferMediumType": "WIRE"
+          "otherAccountBankType": "OTHER_BANK"
         },
         "clientDefinedAttributeList": {
           "fact": [
@@ -991,7 +991,6 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
           },
           "executionSpeed": "executionSpeed",
           "otherAccountBankType": "otherAccountBankType",
-          "transferMediumType": "transferMediumType",
           "myAccountData": {
             "accountNumber": "accountNumber"
           },
@@ -1000,7 +999,8 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
             "accountNumber": "accountNumber",
             "routingCode": "routingCode",
             "otherAccountOwnershipType": "otherAccountOwnershipType",
-            "otherAccountType": "otherAccountType"
+            "otherAccountType": "otherAccountType",
+            "transferMediumType": "transferMediumType"
           }
         },
         "customersDataList": {
