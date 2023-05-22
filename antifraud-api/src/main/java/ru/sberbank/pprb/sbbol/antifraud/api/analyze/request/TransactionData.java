@@ -25,11 +25,6 @@ public class TransactionData implements Serializable {
     private String otherAccountBankType;
 
     /**
-     * Метод перевода средств между пользователем и получателем
-     */
-    private String transferMediumType;
-
-    /**
      * Данные счета плательщика
      */
     private MyAccountData myAccountData;
@@ -80,14 +75,6 @@ public class TransactionData implements Serializable {
         this.otherAccountData = otherAccountData;
     }
 
-    public String getTransferMediumType() {
-        return transferMediumType;
-    }
-
-    public void setTransferMediumType(String transferMediumType) {
-        this.transferMediumType = transferMediumType;
-    }
-
     @Override
     public String toString() {
         return "{" +
@@ -96,7 +83,6 @@ public class TransactionData implements Serializable {
                 ", otherAccountBankType='" + otherAccountBankType + '\'' +
                 ", myAccountData=" + myAccountData +
                 ", otherAccountData=" + otherAccountData +
-                ", transferMediumType='" + transferMediumType + '\'' +
                 '}';
     }
 

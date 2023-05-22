@@ -40,7 +40,6 @@
           },
           "executionSpeed": "executionSpeed",
           "otherAccountBankType": "otherAccountBankType",
-          "transferMediumType": "transferMediumType",
           "myAccountData": {
             "accountNumber": "accountNumber"
           },
@@ -49,7 +48,8 @@
             "accountNumber": "accountNumber",
             "routingCode": "routingCode",
             "otherAccountOwnershipType": "otherAccountOwnershipType",
-            "otherAccountType": "otherAccountType"
+            "otherAccountType": "otherAccountType",
+            "transferMediumType": "transferMediumType"
           }
         },
         "customersDataList": {

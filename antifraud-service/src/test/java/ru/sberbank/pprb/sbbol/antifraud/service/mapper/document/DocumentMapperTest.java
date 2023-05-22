@@ -95,7 +95,7 @@ class DocumentMapperTest extends MapperTest {
                 () -> assertEquals(document.getRoutingCode(), analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getRoutingCode()),
                 () -> assertEquals(document.getOtherAccountOwnershipType(), analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getOtherAccountOwnershipType()),
                 () -> assertEquals(document.getOtherAccountType(), analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getOtherAccountType()),
-                () -> assertEquals(document.getTransferMediumType(), analyzeRequest.getEventDataList().getTransactionData().getTransferMediumType()),
+                () -> assertEquals(document.getTransferMediumType(), analyzeRequest.getEventDataList().getTransactionData().getOtherAccountData().getTransferMediumType()),
                 () -> assertNotNull(analyzeRequest.getEventDataList().getClientDefinedAttributeList()),
                 () -> assertNotNull(analyzeRequest.getEventDataList().getClientDefinedAttributeList().getFact()),
                 () -> assertEquals(document.getClientDefinedAttributeList().size(), analyzeRequest.getEventDataList().getClientDefinedAttributeList().getFact().size()),
