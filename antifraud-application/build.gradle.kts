@@ -91,4 +91,9 @@ tasks.test {
     }
 }
 
+// отключаем генерацию *-plain.jar
+val jar: Task by tasks.getting {
+    enabled = false
+}
+
 description = "antifraud-application"
