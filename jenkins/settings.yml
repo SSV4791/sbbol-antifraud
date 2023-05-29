@@ -103,7 +103,6 @@ pr_check:
       -Dtest.results.enabled=true
       -Dtest-layer=unit,api,web,configuration
       -Dpactbroker.url=${env.PACT_BROKER_URL}
-      -Dallure.link=${Const.ALLURE_ENTRYPOINT_URL}jobrun/${launch.jobRunId}
       -Dbuild.link=${env.BUILD_URL}
       -Dbuild.type=prCheck
       qaReporterUpload sonarCoverage --info
@@ -155,7 +154,6 @@ release:
         -Dpactbroker.consumerversionselectors.tags=antifraud:${params.branch}
         -Dbuild.link=${env.BUILD_URL}
         -Dbuild.type=release
-        -Dallure.link=${Const.ALLURE_ENTRYPOINT_URL}jobrun/${launch.jobRunId}
         -Dsonar.login=${env.SONAR_TOKEN}
         -Dsonar.host.url=https://sbt-sonarqube.sigma.sbrf.ru/
         -Dsonar.projectKey=ru.sberbank.pprb.sbbol.antifraud
