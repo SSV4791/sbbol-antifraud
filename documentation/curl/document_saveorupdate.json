@@ -68,9 +68,9 @@
           "name": "name",
           "patronymic": "patronymic",
           "birthday": "2000-10-13",
-          "passportNumber": "passportNumber",
-          "passportSeries": "passportSeries",
-          "mobilePhone": "mobilePhone",
+          "passport_number": "passportNumber",
+          "passport_series": "passportSeries",
+          "mobile_phone": "mobilePhone",
           "status": "status"
         },
         {
@@ -78,9 +78,9 @@
           "name": "name",
           "patronymic": "patronymic",
           "birthday": "2000-10-13",
-          "passportNumber": "passportNumber",
-          "passportSeries": "passportSeries",
-          "mobilePhone": "mobilePhone",
+          "passport_number": "passportNumber",
+          "passport_series": "passportSeries",
+          "mobile_phone": "mobilePhone",
           "status": "status"
         }
       ],

@@ -61,6 +61,7 @@ public abstract class PaymentV3Mapper implements CommonMapper<PaymentV3> {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "version", ignore = true)
     @Mapping(target = "lastChangeDate", ignore = true)
+    @Mapping(target = "requestId", ignore = true)
     @Mapping(target = "requestType", source = "messageHeader.requestType")
     @Mapping(target = "timestamp", source = "messageHeader.timeStamp")
     @Mapping(target = "username", source = "identificationData.userName")

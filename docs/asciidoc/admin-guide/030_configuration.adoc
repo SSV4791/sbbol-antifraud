@@ -56,36 +56,36 @@ os_project:
           containerPort: 8080
           name: mtls
           certificates:
-            ca: "{{ secrets['istio-ingressgateway-ca-certs'].volume.mount }}"
-            cert: "{{ secrets['istio-ingressgateway-certs'].volume.mount }}"
+            ca: "{{ secman.openshift.inject_secrets.ingress['ca-certs'].volume.mount }}"
+            cert: "{{ secman.openshift.inject_secrets.ingress['istio-ingressgateway-certs'].volume.mount }}"
         - host: ingress-ci02281165-antifraud-geo-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru
           port: 5441
           containerPort: 8080
           name: mtlsgeo
           certificates:
-            ca: "{{ secrets['istio-ingressgateway-ca-geo-certs'].volume.mount }}"
-            cert: "{{ secrets['istio-ingressgateway-geo-certs'].volume.mount }}"
+            ca: "{{ secman.openshift.inject_secrets.ingress['ca-certs'].volume.mount }}"
+            cert: "{{ secman.openshift.inject_secrets.ingress['istio-ingressgateway-geo-certs'].volume.mount }}"
         - host: ingress-ci02281165-antifraud-ott.apps.dev-terra000006-idm.ocp.delta.sbrf.ru
           port: 5444
           containerPort: 8080
           name: ott
           certificates:
-            ca: "{{ secrets['istio-ingressgateway-ca-certs'].volume.mount }}"
-            cert: "{{ secrets['istio-ingressgateway-certs'].volume.mount }}"
+            ca: "{{ secman.openshift.inject_secrets.ingress['ca-certs'].volume.mount }}"
+            cert: "{{ secman.openshift.inject_secrets.ingress['istio-ingressgateway-certs'].volume.mount }}"
         - host: ingress-ci02281165-antifraud-geo-ott.apps.dev-terra000006-idm.ocp.delta.sbrf.ru
           port: 5442
           containerPort: 8080
           name: ottgeo
           certificates:
-            ca: "{{ secrets['istio-ingressgateway-ca-ott-geo-certs'].volume.mount }}"
-            cert: "{{ secrets['istio-ingressgateway-ott-geo-certs'].volume.mount }}"
+            ca: "{{ secman.openshift.inject_secrets.ingress['ca-certs'].volume.mount }}"
+            cert: "{{ secman.openshift.inject_secrets.ingress['istio-ingressgateway-ott-geo-certs'].volume.mount }}"
         - host: ingress-ci02281165-antifraud-geo-hc.apps.dev-terra000006-idm.ocp.delta.sbrf.ru
           port: 5446
           containerPort: 8080
           name: healthcheck
           certificates:
-            ca: "{{ secrets['istio-ingressgateway-ca-hc-certs'].volume.mount }}"
-            cert: "{{ secrets['istio-ingressgateway-hc-certs'].volume.mount }}"
+            ca: "{{ secman.openshift.inject_secrets.ingress['ca-certs'].volume.mount }}"
+            cert: "{{ secman.openshift.inject_secrets.ingress['istio-ingressgateway-hc-certs'].volume.mount }}"
       ott:
         key_store: dev-antifraud.p12
         trust_store: sigma_ott_trust.p12
@@ -331,13 +331,13 @@ secman:
           secrets:
             appJournal.properties: appJournal.properties
       ingress:
-        istio-ingressgateway-ca-certs:
+        ca-certs:
           type: file
           secrets:
             chain.pem: chain.pem
           volume:
             mount: /etc/istio/ingressgateway-ca-certs
-          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-ca-certs
+          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/general_storage/ca-certs
         istio-ingressgateway-certs:
           type: file
           secrets:
@@ -346,13 +346,6 @@ secman:
           volume:
             mount: /etc/istio/ingressgateway-certs
           path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-certs
-        istio-ingressgateway-ca-geo-certs:
-          type: file
-          secrets:
-            chain.pem: chain.pem
-          volume:
-            mount: /etc/istio/istio-ingressgateway-ca-geo-certs
-          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-ca-geo-certs
         istio-ingressgateway-geo-certs:
           type: file
           secrets:
@@ -361,13 +354,6 @@ secman:
           volume:
             mount: /etc/istio/istio-ingressgateway-geo-certs
           path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-geo-certs
-        istio-ingressgateway-ca-ott-geo-certs:
-          type: file
-          secrets:
-            chain.pem: chain.pem
-          volume:
-            mount: /etc/istio/istio-ingressgateway-ca-ott-geo-certs
-          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-ca-ott-geo-certs
         istio-ingressgateway-ott-geo-certs:
           type: file
           secrets:
@@ -376,13 +362,6 @@ secman:
           volume:
             mount: /etc/istio/istio-ingressgateway-ott-geo-certs
           path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-ott-geo-certs
-        istio-ingressgateway-ca-hc-certs:
-          type: file
-          secrets:
-            chain.pem: chain.pem
-          volume:
-            mount: /etc/istio/istio-ingressgateway-ca-hc-certs
-          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-ca-hc-certs
         istio-ingressgateway-hc-certs:
           type: file
           secrets:
@@ -392,13 +371,13 @@ secman:
             mount: /etc/istio/istio-ingressgateway-hc-certs
           path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-ingressgateway-hc-certs
       egress:
-        istio-egressgateway-ca-certs:
+        ca-certs:
           type: file
           secrets:
             chain.pem: chain.pem
           volume:
             mount: /etc/istio/egressgateway-ca-certs
-          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/ci02281165-antifraud/istio-egressgateway-ca-certs
+          path: CI02281165_CI02352957/A/SBBOL/OSH/DEV/KV/general_storage/ca-certs
         istio-egressgateway-certs:
           type: file
           secrets:
@@ -425,7 +404,7 @@ secman:
 ====
 [source]
 ----
-integration_entries:
+system_integration_entries:
   - "{{ int.pprb.appjournal.v1_0 }}"
   - "{{ int.pprb.db_main.v1_0 }}"
   - "{{ int.pprb.db_si.v1_0 }}"
@@ -437,6 +416,8 @@ int_entry:
   antifraud:
     fpis: "{{ int.pprb.CI1099171_antifraud_integration_service.v1_0 }}"
   kafka_tengri: "{{ int.pprb.ci2809205_kafka_tengri.v1_0 }}"
+
+integration_entries: "{{ system_integration_entries + (infra_integration_entries | default([])) }}"
 ----
 ====
 
@@ -708,87 +689,6 @@ int:
 === Секреты OSE
 
 Стандартные для фабрик секреты
-
-==== Сертификаты для Istio
-
-.secrets.yml
-[%collapsible]
-====
-[source,properties]
-----
-  istio-ingressgateway-ca-certs:
-    source: file
-    files:
-      chain.pem: files/test-ca-chain.pem
-    deployment: ingress-gateway
-    volume:
-      mount: /etc/istio/ingressgateway-ca-certs
-  istio-ingressgateway-certs:
-    source: encrypted-file
-    files:
-      tls.crt: files/antifraud.pem
-      tls.key: files/antifraud.key
-    deployment: ingress-gateway
-    volume:
-      mount: /etc/istio/ingressgateway-certs
-  istio-ingressgateway-ca-geo-certs:
-    source: file
-    files:
-      chain.pem: files/test-ca-chain.pem
-    deployment: ingress-gateway
-    volume:
-      mount: /etc/istio/istio-ingressgateway-ca-geo-certs
-  istio-ingressgateway-geo-certs:
-    source: encrypted-file
-    files:
-      tls.crt: files/wildcard-apps-dev-gen.pem
-      tls.key: files/wildcard-apps-dev-gen.key
-    deployment: ingress-gateway
-    volume:
-      mount: /etc/istio/istio-ingressgateway-geo-certs
-  istio-ingressgateway-ca-ott-geo-certs:
-    source: file
-    files:
-      chain.pem: files/test-ca-chain.pem
-    deployment: ingress-gateway
-    volume:
-      mount: /etc/istio/istio-ingressgateway-ca-ott-geo-certs
-  istio-ingressgateway-ott-geo-certs:
-    source: encrypted-file
-    files:
-      tls.crt: files/wildcard-apps-dev-gen.pem
-      tls.key: files/wildcard-apps-dev-gen.key
-    deployment: ingress-gateway
-    volume:
-      mount: /etc/istio/istio-ingressgateway-ott-geo-certs
-  istio-ingressgateway-ca-hc-certs:
-    source: file
-    files:
-      chain.pem: files/test-ca-chain.pem
-    deployment: ingress-gateway
-    volume:
-      mount: /etc/istio/istio-ingressgateway-ca-hc-certs
-  istio-ingressgateway-hc-certs:
-    source: encrypted-file
-    files:
-      tls.crt: files/antifraud.pem
-      tls.key: files/antifraud.key
-    deployment: ingress-gateway
-    volume:
-      mount: /etc/istio/istio-ingressgateway-hc-certs
-  istio-egressgateway-ca-certs:
-    source: file
-    files:
-      chain.pem: files/test-ca-chain.pem
-    deployment: istio-egressgateway
-  istio-egressgateway-certs:
-    source: encrypted-file
-    files:
-      tls.crt: files/antifraud.pem
-      tls.key: files/antifraud.pem
-    deployment: istio-egressgateway
-----
-====
 
 ==== Секреты БД
 

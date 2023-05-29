@@ -5,11 +5,11 @@ plugins {
     `java-library`
     idea
     jacoco
-    id("org.springframework.boot") version "2.4.4"
+    id("org.springframework.boot") version "2.5.1" apply false
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("org.sonarqube") version "3.2.0"
     id("ru.sbt.meta.meta-gradle-plugin")
-    id("ru.sbrf.build.gradle.qa.reporter") version "3.2.+"
+    id("ru.sbrf.build.gradle.qa.reporter") version "3.3.4"
     id("io.qameta.allure") version "2.8.1"
     `maven-publish`
 }
@@ -147,11 +147,6 @@ tasks {
     }
 }
 
-// отключаем генерацию *-plain.jar
-val jar: Task by tasks.getting {
-    enabled = false
-}
-
 tasks.register<Zip>("fullDistrib") {
     destinationDirectory.set(file("${rootProject.buildDir}"))
     archiveFileName.set("${rootProject.name}.zip")
@@ -283,14 +278,6 @@ sonarqube {
 }
 
 project.tasks["sonarqube"].dependsOn("qaReporterUpload")
-
-tasks.getByName<BootJar>("bootJar") {
-    enabled = false
-}
-
-tasks.getByName<Jar>("jar") {
-    enabled = true
-}
 
 qaReporter {
     projectKey.set("sbbol-antifraud")
