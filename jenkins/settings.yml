@@ -102,6 +102,7 @@ pr_check:
       -Dsonar.pullrequest.base=${pullRequest.toRef.displayId}
       -Dtest.results.enabled=true
       -Dtest-layer=unit,api,web,configuration
+      -Dpactbroker.url=${env.PACT_BROKER_URL}
       -Dallure.link=${Const.ALLURE_ENTRYPOINT_URL}jobrun/${launch.jobRunId}
       -Dbuild.link=${env.BUILD_URL}
       -Dbuild.type=prCheck

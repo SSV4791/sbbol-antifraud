@@ -799,14 +799,6 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
       "otherAccountOwnershipType": "ownershipType",
       "otherAccountType": "otherAccountType",
       "transferMediumType": "transferMediumType",
-      "customerSurname": "customerSurname",
-      "customerName": "customerName",
-      "customerPatronymic": "customerPatronymic",
-      "customerBirthday": "2000-10-13",
-      "customerPassportNumber": "customerPassportNumber",
-      "customerPassportSeries": "customerPassportSeries",
-      "customerMobilePhone": "customerMobilePhone",
-      "customerStatus": "customerStatus",
       "clientDefinedAttributeList": [
         {
           "name": "ЕПК.id",
@@ -840,9 +832,9 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
           "name": "name",
           "patronymic": "patronymic",
           "birthday": "2000-10-13",
-          "passportNumber": "passportNumber",
-          "passportSeries": "passportSeries",
-          "mobilePhone": "mobilePhone",
+          "passport_number": "passportNumber",
+          "passport_series": "passportSeries",
+          "mobile_phone": "mobilePhone",
           "status": "status"
         },
         {
@@ -850,9 +842,9 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
           "name": "name",
           "patronymic": "patronymic",
           "birthday": "2000-10-13",
-          "passportNumber": "passportNumber",
-          "passportSeries": "passportSeries",
-          "mobilePhone": "mobilePhone",
+          "passport_number": "passportNumber",
+          "passport_series": "passportSeries",
+          "mobile_phone": "mobilePhone",
           "status": "status"
         }
       ],
@@ -1010,9 +1002,9 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
               "name": "name",
               "patronymic": "patronymic",
               "birthday": "2000-10-13",
-              "passportNumber": "passportNumber",
-              "passportSeries": "passportSeries",
-              "mobilePhone": "mobilePhone",
+              "passport_number": "passportNumber",
+              "passport_series": "passportSeries",
+              "mobile_phone": "mobilePhone",
               "status": "status"
             },
             {
@@ -1020,9 +1012,9 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
               "name": "name",
               "patronymic": "patronymic",
               "birthday": "2000-10-13",
-              "passportNumber": "passportNumber",
-              "passportSeries": "passportSeries",
-              "mobilePhone": "mobilePhone",
+              "passport_number": "passportNumber",
+              "passport_series": "passportSeries",
+              "mobile_phone": "mobilePhone",
               "status": "status"
             }
           ]

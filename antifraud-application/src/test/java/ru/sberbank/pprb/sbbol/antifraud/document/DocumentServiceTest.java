@@ -142,9 +142,9 @@ public class DocumentServiceTest extends AbstractIntegrationTest {
                 () -> assertTrue(ex.getMessage().contains("Attribute \"surname\" cannot contain more than 100 characters")),
                 () -> assertTrue(ex.getMessage().contains("Attribute \"name\" cannot contain more than 100 characters")),
                 () -> assertTrue(ex.getMessage().contains("Attribute \"patronymic\" cannot contain more than 100 characters")),
-                () -> assertTrue(ex.getMessage().contains("Attribute \"passportNumber\" cannot contain more than 30 characters")),
-                () -> assertTrue(ex.getMessage().contains("Attribute \"passportSeries\" cannot contain more than 30 characters")),
-                () -> assertTrue(ex.getMessage().contains("Attribute \"mobilePhone\" cannot contain more than 50 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"passport_number\" cannot contain more than 30 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"passport_series\" cannot contain more than 30 characters")),
+                () -> assertTrue(ex.getMessage().contains("Attribute \"mobile_phone\" cannot contain more than 50 characters")),
                 () -> assertTrue(ex.getMessage().contains("Attribute \"status\" cannot contain more than 50 characters"))
         );
     }

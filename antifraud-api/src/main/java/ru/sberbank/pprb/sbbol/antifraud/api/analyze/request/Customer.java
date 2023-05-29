@@ -1,5 +1,7 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.analyze.request;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
@@ -39,19 +41,22 @@ public class Customer implements Serializable {
     /**
      * Номер паспорта
      */
-    @Size(message = "Attribute \"passportNumber\" cannot contain more than 30 characters", max = 30)
+    @JsonAlias("passport_number")
+    @Size(message = "Attribute \"passport_number\" cannot contain more than 30 characters", max = 30)
     private String passportNumber;
 
     /**
      * Серия паспорта
      */
-    @Size(message = "Attribute \"passportSeries\" cannot contain more than 30 characters", max = 30)
+    @JsonAlias("passport_series")
+    @Size(message = "Attribute \"passport_series\" cannot contain more than 30 characters", max = 30)
     private String passportSeries;
 
     /**
      * Номер мобильного телефона
      */
-    @Size(message = "Attribute \"mobilePhone\" cannot contain more than 50 characters", max = 50)
+    @JsonAlias("mobile_phone")
+    @Size(message = "Attribute \"mobile_phone\" cannot contain more than 50 characters", max = 50)
     private String mobilePhone;
 
     /**
@@ -92,6 +97,7 @@ public class Customer implements Serializable {
         this.birthday = birthday;
     }
 
+    @JsonProperty("passport_number")
     public String getPassportNumber() {
         return passportNumber;
     }
@@ -100,6 +106,7 @@ public class Customer implements Serializable {
         this.passportNumber = passportNumber;
     }
 
+    @JsonProperty("passport_series")
     public String getPassportSeries() {
         return passportSeries;
     }
@@ -108,6 +115,7 @@ public class Customer implements Serializable {
         this.passportSeries = passportSeries;
     }
 
+    @JsonProperty("mobile_phone")
     public String getMobilePhone() {
         return mobilePhone;
     }
