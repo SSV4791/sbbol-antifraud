@@ -79,7 +79,7 @@
         "clientDefinedAttributeList": {
           "fact": [
             {
-              "name": "ЕПК.id",
+              "name": "ЕПК.ID",
               "value": "2435423123142324312",
               "dataType": "STRING"
             },

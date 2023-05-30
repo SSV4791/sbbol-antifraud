@@ -801,7 +801,7 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
       "transferMediumType": "transferMediumType",
       "clientDefinedAttributeList": [
         {
-          "name": "ЕПК.id",
+          "name": "ЕПК.ID",
           "value": "2435423123142324312",
           "dataType": "STRING"
         },
@@ -1022,7 +1022,7 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
         "clientDefinedAttributeList": {
           "fact": [
             {
-              "name": "ЕПК.id",
+              "name": "ЕПК.ID",
               "value": "2435423123142324312",
               "dataType": "STRING"
             },
