@@ -152,7 +152,7 @@ public abstract class PaymentMapper implements CommonMapper<Payment> {
         CRITERIA_MAP = Collections.unmodifiableMap(criteriaMap);
 
         Map<String, String> descriptionMap = new HashMap<>(CAPACITY);
-        descriptionMap.put(EPK_ID, "ЕПК.id");
+        descriptionMap.put(EPK_ID, "ЕПК.ID");
         descriptionMap.put(DIGITAL_ID, "Личный кабинет");
         descriptionMap.put(USER_GUID, "Уникальный идентификатор пользователя");
         descriptionMap.put(DOC_NUMBER, "Номер платежного документа");

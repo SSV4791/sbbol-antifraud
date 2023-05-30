@@ -41,7 +41,7 @@ public class PaymentV3 extends BaseEntity {
     private OffsetDateTime timestamp;
 
     /**
-     * Уникальный идентификатор организации ЕПК.Id
+     * Уникальный идентификатор организации ЕПК.ID
      */
     @Column(length = 50)
     private String username;

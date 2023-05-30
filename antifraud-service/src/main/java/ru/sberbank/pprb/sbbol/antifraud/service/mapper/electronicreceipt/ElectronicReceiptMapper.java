@@ -154,7 +154,7 @@ public abstract class ElectronicReceiptMapper implements CommonMapper<Electronic
         CRITERIA_MAP = Collections.unmodifiableMap(criteriaMap);
 
         Map<String, String> descriptionMap = new HashMap<>(CAPACITY);
-        descriptionMap.put(EPK_ID, "ЕПК.id");
+        descriptionMap.put(EPK_ID, "ЕПК.ID");
         descriptionMap.put(DIGITAL_ID, "Личный кабинет");
         descriptionMap.put(PRIVATE_IP_ADDRESS, "Локальный IP адрес");
         descriptionMap.put(USER_GUID, "Уникальный идентификатор пользователя");

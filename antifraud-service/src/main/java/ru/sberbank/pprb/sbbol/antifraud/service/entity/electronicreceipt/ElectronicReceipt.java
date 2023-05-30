@@ -33,7 +33,7 @@ public class ElectronicReceipt extends BaseEntity {
     private LocalDateTime eventTime;
 
     /**
-     * ЕПК.Id
+     * ЕПК.ID
      */
     @Column(length = 64)
     private String epkId;
