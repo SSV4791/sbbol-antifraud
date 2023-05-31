@@ -44,8 +44,7 @@ public class PaymentOperationV3 implements Operation {
     /**
      * Списрк подписей
      */
-    @NotEmpty(message = "The attribute \"signs\" must be filled")
-    private List<@Valid @NotNull(message = "The attribute \"signs.sign\" must be filled") PaymentV3TypedSign> signs;
+    private List<@Valid PaymentV3TypedSign> signs;
 
     /**
      * Тип канала связи, через который осуществляется связь клиента с банком:

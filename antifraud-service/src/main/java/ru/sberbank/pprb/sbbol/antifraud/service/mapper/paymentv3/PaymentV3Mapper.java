@@ -138,6 +138,10 @@ public abstract class PaymentV3Mapper implements CommonMapper<PaymentV3> {
 
     @AfterMapping
     protected void addSignsInCustomFacts(@MappingTarget PaymentV3 entity, PaymentOperationV3 dto) {
+        if (dto.getSigns() == null) {
+            return;
+        }
+
         boolean isSenderSignAdded = false;
         boolean isFirstSignAdded = false;
         boolean isSecondSignAdded = false;
