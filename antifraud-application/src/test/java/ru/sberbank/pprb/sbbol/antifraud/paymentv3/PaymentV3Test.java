@@ -99,10 +99,11 @@ public class PaymentV3Test extends AbstractIntegrationTest {
     @DisplayName("Валидация сообщения при сохранении РПП c помощью API v3")
     void validateModelTest() {
         PodamFactory podamFactory = podamFactory();
-        PaymentOperationV3 dto = podamFactory.populatePojo(new PaymentOperationV3());
         addExcludedFields(podamFactory, PaymentOperationV3.class, "signs");
+        PaymentOperationV3 dto = podamFactory.populatePojo(new PaymentOperationV3());
+        dto.setChannelIndicator(null);
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(dto));
-        assertTrue(ex.getMessage().contains("signs"), "Should contain signs in message. Message: " + ex.getMessage());
+        assertTrue(ex.getMessage().contains("channelIndicator"), "Should contain \"channelIndicator\" in message. Message: " + ex.getMessage());
     }
 
     @Test
@@ -129,8 +130,8 @@ public class PaymentV3Test extends AbstractIntegrationTest {
         String str = objectMapper().writeValueAsString(sign);
 
         PodamFactory podamFactory = podamFactory();
-        PaymentOperationV3 dto = podamFactory.populatePojo(new PaymentOperationV3());
         addExcludedFields(podamFactory, PaymentOperationV3.class, "signs");
+        PaymentOperationV3 dto = podamFactory.populatePojo(new PaymentOperationV3());
         dto.setSigns(List.of(new PaymentV3TypedSign(1, str)));
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(dto));
         assertAll(

@@ -1,9 +1,9 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.entity.paymentv3;
 
-import com.vladmihalcea.hibernate.type.json.JsonType;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.Attribute;
+import ru.sberbank.pprb.sbbol.antifraud.service.entity.AttributeListType;
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.BaseEntity;
 
 import javax.persistence.Column;
@@ -20,7 +20,7 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "T_PAYMENTOPERATIONV3")
-@TypeDef(name = "json", typeClass = JsonType.class)
+@TypeDef(name = "attributeList", typeClass = AttributeListType.class)
 public class PaymentV3 extends BaseEntity {
 
     /**
@@ -227,8 +227,8 @@ public class PaymentV3 extends BaseEntity {
     /**
      * Массив пользовательских данных
      */
-    @Type(type = "json")
-    @Column(columnDefinition = "json")
+    @Type(type = "attributeList")
+    @Column(columnDefinition = "text")
     private List<Attribute> customFacts;
 
     @Override
