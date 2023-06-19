@@ -14,6 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
+import ru.dcbqa.allureee.annotations.export.customfield.JiraAC;
 import ru.sberbank.pprb.sbbol.antifraud.AntiFraudRunner;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithOutSavingRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendAfterSavingRq;
@@ -37,6 +38,7 @@ import java.util.Collections;
 @ActiveProfiles("test")
 @ContextConfiguration(initializers = {HibernatePluginCleanerInitializer.class})
 @Import(TestReplicationConfiguration.class)
+@JiraAC("ППРБ ЮЛ История операций События антифрода [CI03045533]")
 public abstract class AbstractIntegrationTest {
 
     private final String context;
