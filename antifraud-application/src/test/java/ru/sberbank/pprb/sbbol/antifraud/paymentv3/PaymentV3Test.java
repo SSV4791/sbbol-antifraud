@@ -1,6 +1,7 @@
 package ru.sberbank.pprb.sbbol.antifraud.paymentv3;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.qameta.allure.AllureId;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.ExpectedCount;
+import ru.dcbqa.allureee.annotations.export.customfield.JiraAC;
+import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.Attribute;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
@@ -26,6 +29,7 @@ import ru.sberbank.pprb.sbbol.antifraud.service.repository.paymentv3.PaymentV3Re
 import uk.co.jemos.podam.api.PodamFactory;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,6 +43,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 
+@ApiTestLayer
 public class PaymentV3Test extends AbstractIntegrationTest {
 
     private static final String SIGN = """
@@ -71,6 +76,7 @@ public class PaymentV3Test extends AbstractIntegrationTest {
     }
 
     @Test
+    @AllureId("68995")
     @DisplayName("Создание РПП c помощью API v3")
     void createEntity() throws Throwable {
         PaymentOperationV3 dto = createPaymentOperationV3();
@@ -82,6 +88,7 @@ public class PaymentV3Test extends AbstractIntegrationTest {
     }
 
     @Test
+    @AllureId("68996")
     @DisplayName("Обновление РПП c помощью API v3")
     void updateEntity() throws Throwable {
         PaymentOperationV3 dto = createPaymentOperationV3();
@@ -96,6 +103,7 @@ public class PaymentV3Test extends AbstractIntegrationTest {
     }
 
     @Test
+    @AllureId("68997")
     @DisplayName("Валидация сообщения при сохранении РПП c помощью API v3")
     void validateModelTest() {
         PodamFactory podamFactory = podamFactory();
@@ -107,6 +115,7 @@ public class PaymentV3Test extends AbstractIntegrationTest {
     }
 
     @Test
+    @AllureId("69843")
     @DisplayName("Валидация размера полей в подписи при сохранении РПП c помощью API v3")
     void validateSignFieldSizeTest() throws JsonProcessingException {
         PaymentV3Sign sign = new PaymentV3Sign();
@@ -155,6 +164,7 @@ public class PaymentV3Test extends AbstractIntegrationTest {
     }
 
     @Test
+    @AllureId("69844")
     @DisplayName("Валидация кол-ва элементов в CF при сохранении РПП c помощью API v3")
     void validateCustomFactsSizeTest() {
         PaymentOperationV3 dto = createPaymentOperationV3();
@@ -167,6 +177,7 @@ public class PaymentV3Test extends AbstractIntegrationTest {
     }
 
     @Test
+    @AllureId("69841")
     @DisplayName("Валидация размера полей элемента из CF при сохранении РПП c помощью API v3")
     void validateCustomFactsFieldsSizeTest() {
         PaymentOperationV3 dto = createPaymentOperationV3();
@@ -183,6 +194,7 @@ public class PaymentV3Test extends AbstractIntegrationTest {
     }
 
     @Test
+    @AllureId("68998")
     @DisplayName("Отправка РПП в ФП ИС c помощью API v3")
     void sendToAnalyzeTest() throws Throwable {
         PaymentOperationV3 dto = createPaymentOperationV3();
@@ -200,6 +212,7 @@ public class PaymentV3Test extends AbstractIntegrationTest {
     }
 
     @Test
+    @AllureId("68994")
     @DisplayName("РПП не найдено при отправке в ФП ИС c помощью API v3")
     void entityNotFoundTest() {
         String docId = UUID.randomUUID().toString();
@@ -209,6 +222,7 @@ public class PaymentV3Test extends AbstractIntegrationTest {
     }
 
     @Test
+    @AllureId("68999")
     @DisplayName("Получение ошибки от смежной АС при отправке на анализ РПП c помощью API v3")
     void analyzeErrorTest() throws Throwable {
         PaymentOperationV3 dto = createPaymentOperationV3();
@@ -240,7 +254,7 @@ public class PaymentV3Test extends AbstractIntegrationTest {
         assertAll(
                 () -> assertNotNull(entity.getRequestId()),
                 () -> assertEquals(dto.getMessageHeader().getRequestType(), entity.getRequestType()),
-                () -> assertEquals(dto.getMessageHeader().getTimeStamp(), entity.getTimestamp()),
+                () -> assertEquals(dto.getMessageHeader().getTimeStamp().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")), entity.getTimestamp().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"))),
                 () -> assertEquals(dto.getIdentificationData().getUserName(), entity.getUsername()),
                 () -> assertEquals(dto.getIdentificationData().getClientTransactionId(), entity.getDocId()),
                 () -> assertEquals(dto.getIdentificationData().getOrgName(), entity.getOrgName()),
@@ -258,8 +272,7 @@ public class PaymentV3Test extends AbstractIntegrationTest {
                 () -> assertEquals(dto.getEventDataList().getEventData().getEventType(), entity.getEventType()),
                 () -> assertEquals(dto.getEventDataList().getEventData().getClientDefinedEventType(), entity.getClientDefinedEventType()),
                 () -> assertEquals(dto.getEventDataList().getEventData().getEventDescription(), entity.getEventDescription()),
-                () -> assertEquals(dto.getEventDataList().getEventData().getTimeOfOccurrence(), entity.getTimeOfOccurrence()),
-                () -> assertEquals(dto.getEventDataList().getTransactionData().getAmount().getAmount(), entity.getAmount()),
+                () -> assertEquals(dto.getEventDataList().getEventData().getTimeOfOccurrence().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")), entity.getTimeOfOccurrence().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"))),                () -> assertEquals(dto.getEventDataList().getTransactionData().getAmount().getAmount(), entity.getAmount()),
                 () -> assertEquals(dto.getEventDataList().getTransactionData().getAmount().getCurrency(), entity.getCurrency()),
                 () -> assertEquals(dto.getEventDataList().getTransactionData().getExecutionSpeed(), entity.getExecutionSpeed()),
                 () -> assertEquals(dto.getEventDataList().getTransactionData().getOtherAccountBankType(), entity.getOtherAccountBankType()),
