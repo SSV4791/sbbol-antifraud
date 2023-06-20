@@ -156,6 +156,7 @@ release:
         -Dbuild.type=release
         -Dsonar.login=${env.SONAR_TOKEN}
         -Dsonar.host.url=https://sbt-sonarqube.sigma.sbrf.ru/
+        -Dallure.link=http://10.53.86.68:8080/jobrun/${launch.jobRunId}
         -Dsonar.projectKey=ru.sberbank.pprb.sbbol.antifraud
         -Dsonar.branch.name=${params.branch}
         build qaReporterUpload sonarCoverage --parallel --info
@@ -167,3 +168,4 @@ release:
     checkmarx: true
     params_folder: release/02.004.00
     istio_tag: '2.4'
+
