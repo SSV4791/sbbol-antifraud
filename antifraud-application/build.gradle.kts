@@ -41,7 +41,7 @@ dependencies {
     testImplementation("org.testcontainers:postgresql:1.17.3")
 
     // заглушка для тестирования репликации между БД
-    testImplementation("sbp.integration.orm:orm-tests-common:$standinPluginVersion") {
+    testImplementation("sbp.integration.orm:orm-tests-common:4.3.2") {
         exclude("com.vaadin.external.google", "android-json")
         exclude("com.h2database", "h2")
     }
