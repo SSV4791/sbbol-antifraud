@@ -214,7 +214,7 @@ standin:
       retry_timeout: 600000
   plugin:
     configuration:
-      replication_strategy: STANDIN_LOCKS
+      replication_strategy: PARTITION_LOCKS
       serializer_type: BINARY_KRYO
       partition_lock_mode: NONE
       partition_multiplying_mode: FORBIDDEN
