@@ -111,7 +111,7 @@ subprojects {
             repositories {
                 maven {
                     name = "api"
-                    url = uri(project.properties["libReleaseRepositoryUrl"]!!)
+                    url = uri(project.properties["libRepositoryUrl"]!!)
                     isAllowInsecureProtocol = true
                     credentials {
                         username = tokenName
