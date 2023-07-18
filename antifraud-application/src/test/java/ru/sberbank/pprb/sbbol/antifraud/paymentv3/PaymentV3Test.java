@@ -10,9 +10,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.ExpectedCount;
-import ru.dcbqa.allureee.annotations.export.customfield.JiraAC;
 import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.document.DocumentSendToAnalyzeRq;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.Attribute;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
@@ -82,7 +81,7 @@ public class PaymentV3Test extends AbstractIntegrationTest {
         PaymentOperationV3 dto = createPaymentOperationV3();
         RequestId requestId = saveOrUpdate(dto);
         assertNotNull(requestId);
-        Optional<PaymentV3> result = repository.findFirstByDocId(dto.getDocId());
+        Optional<PaymentV3> result = repository.findFirstByDocIdAndDboOperation(dto.getDocId(), dto.getDboOperation());
         assertTrue(result.isPresent());
         validateEntity(dto, result.get());
     }
@@ -97,7 +96,7 @@ public class PaymentV3Test extends AbstractIntegrationTest {
         dto.setChannelIndicator(RandomStringUtils.random(5));
         RequestId requestId2 = saveOrUpdate(dto);
         assertEquals(requestId1.getId(), requestId2.getId());
-        Optional<PaymentV3> result = repository.findFirstByDocId(dto.getDocId());
+        Optional<PaymentV3> result = repository.findFirstByDocIdAndDboOperation(dto.getDocId(), dto.getDboOperation());
         assertTrue(result.isPresent());
         validateEntity(dto, result.get());
     }
@@ -207,7 +206,7 @@ public class PaymentV3Test extends AbstractIntegrationTest {
                 .andRespond(withStatus(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(objectMapper().writeValueAsString(expected)));
-        AnalyzeResponse actual = send(new SendToAnalyzeRequest(dto.getDocId()));
+        AnalyzeResponse actual = send(new DocumentSendToAnalyzeRq(dto.getDocId(), dto.getDboOperation()));
         assertNotNull(actual);
     }
 
@@ -216,9 +215,10 @@ public class PaymentV3Test extends AbstractIntegrationTest {
     @DisplayName("РПП не найдено при отправке в ФП ИС c помощью API v3")
     void entityNotFoundTest() {
         String docId = UUID.randomUUID().toString();
-        ApplicationException ex = assertThrows(ApplicationException.class, () -> send(new SendToAnalyzeRequest(docId)));
+        String dboOperation = "SBP";
+        ApplicationException ex = assertThrows(ApplicationException.class, () -> send(new DocumentSendToAnalyzeRq(docId, dboOperation)));
         String message = ex.getMessage();
-        assertTrue(message.contains("DocId=" + docId + ". PaymentV3 not found"));
+        assertTrue(message.contains("DocId=" + docId + ", dboOperation=" + dboOperation + ". PaymentV3 not found"));
     }
 
     @Test
@@ -235,7 +235,7 @@ public class PaymentV3Test extends AbstractIntegrationTest {
                 .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR)
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(objectMapper().writeValueAsString(expected)));
-        AnalyzeException ex = assertThrows(AnalyzeException.class, () -> send(new SendToAnalyzeRequest(dto.getDocId())));
+        AnalyzeException ex = assertThrows(AnalyzeException.class, () -> send(new DocumentSendToAnalyzeRq(dto.getDocId(), dto.getDboOperation())));
         assertTrue(ex.getMessage().contains(dto.getDocId()));
     }
 

@@ -13,8 +13,9 @@ public interface PaymentV3Repository extends JpaRepository<PaymentV3, String> {
      * Запрос на поиск документа по docId
      *
      * @param docId идентификатор документа
-     * @return запись с заданным docId (в виде <code>Optional</code>)
+     * @param dboOperation код операции ДБО
+     * @return запись с заданным docId и dboOperation (в виде <code>Optional</code>)
      */
-    Optional<PaymentV3> findFirstByDocId(String docId);
+    Optional<PaymentV3> findFirstByDocIdAndDboOperation(String docId, String dboOperation);
 
 }

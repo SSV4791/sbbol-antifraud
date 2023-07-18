@@ -24,7 +24,7 @@ Content-Type: application/json-rpc
 POST http://127.0.0.1:8080/antifraud/v3/payment
 Content-Type: application/json-rpc
 
-< payment_send.json
+< paymentV3_send.json
 
 ### СБП
 
