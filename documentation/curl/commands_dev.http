@@ -28,7 +28,7 @@ Content-Type: application/json-rpc
 POST https://ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru/antifraud/v3/payment
 Content-Type: application/json-rpc
 
-< payment_send.json
+< paymentV3_send.json
 
 ### СБП
 

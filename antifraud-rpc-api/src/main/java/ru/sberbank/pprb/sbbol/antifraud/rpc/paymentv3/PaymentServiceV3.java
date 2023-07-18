@@ -7,7 +7,7 @@ import com.googlecode.jsonrpc4j.JsonRpcErrors;
 import com.googlecode.jsonrpc4j.JsonRpcParam;
 import com.googlecode.jsonrpc4j.JsonRpcService;
 import org.apache.commons.lang.UnhandledException;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.document.DocumentSendToAnalyzeRq;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.paymentv3.PaymentOperationV3;
@@ -49,6 +49,6 @@ public interface PaymentServiceV3 {
             @JsonRpcError(exception = AnalyzeException.class, code = -32001),
             @JsonRpcError(exception = UnhandledException.class, code = -32001)
     })
-    AnalyzeResponse analyzeOperation(@JsonRpcParam(value = "analyzeparams") SendToAnalyzeRequest request);
+    AnalyzeResponse analyzeOperation(@JsonRpcParam(value = "analyzeparams") DocumentSendToAnalyzeRq request);
 
 }
