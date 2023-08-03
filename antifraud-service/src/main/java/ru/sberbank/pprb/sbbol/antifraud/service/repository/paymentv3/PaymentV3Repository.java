@@ -18,4 +18,6 @@ public interface PaymentV3Repository extends JpaRepository<PaymentV3, String> {
      */
     Optional<PaymentV3> findFirstByDocIdAndDboOperation(String docId, String dboOperation);
 
+    Optional<PaymentV3> findFirstByDocId(String docId);
+
 }
