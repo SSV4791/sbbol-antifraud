@@ -191,7 +191,7 @@ public abstract class PaymentV3Mapper implements CommonMapper<PaymentV3> {
         String signPhone = signName + "Номер телефона";
         String signEmail = signName + "Адрес электронной почты";
         String signSource = signName + "Канал";
-        String signDigitalUserId = signName + "digitalUserId";
+        String signDigitalUserId = "Отправивший ".equals(signName) ? "digitalUserId" : (signName + "digitalUserId");
         String signMacAddress = signName + "MAC адрес";
         String signGeoLocation = signName + "Данные о геолокации";
         String signPkProperty = signName + "Свойства компьютера";
