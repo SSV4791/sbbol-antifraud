@@ -218,7 +218,7 @@ public class PaymentV3Test extends AbstractIntegrationTest {
         String dboOperation = "SBP";
         ApplicationException ex = assertThrows(ApplicationException.class, () -> send(new DocumentSendToAnalyzeRq(docId, dboOperation)));
         String message = ex.getMessage();
-        assertTrue(message.contains("DocId=" + docId + ", dboOperation=" + dboOperation + ". Payment not found"));
+        assertTrue(message.contains("DocId=" + docId + ", dboOperation=" + dboOperation + " entity not found"));
     }
 
     @Test

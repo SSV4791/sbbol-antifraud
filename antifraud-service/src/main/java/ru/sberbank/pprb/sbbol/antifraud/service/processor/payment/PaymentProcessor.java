@@ -9,6 +9,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.payment.Payment;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.payment.PaymentMapper;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.payment.PaymentSignMapper;
+import ru.sberbank.pprb.sbbol.antifraud.service.processor.ApiVersion;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.CommonPaymentAnalyzeProcessor;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.Processor;
 import ru.sberbank.pprb.sbbol.antifraud.service.repository.payment.PaymentRepository;
@@ -52,7 +53,7 @@ public class PaymentProcessor implements Processor<PaymentOperation, SendToAnaly
 
     @Override
     public AnalyzeResponse send(SendToAnalyzeRequest request) throws JsonProcessingException {
-        return processor.send(request);
+        return processor.send(request, ApiVersion.PAYMENT_V2);
     }
 
 }
