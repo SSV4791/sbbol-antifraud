@@ -8,6 +8,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.paymentv3.PaymentOperationV3;
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.paymentv3.PaymentV3;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.paymentv3.PaymentV3Mapper;
+import ru.sberbank.pprb.sbbol.antifraud.service.processor.ApiVersion;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.CommonPaymentAnalyzeProcessor;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.Processor;
 import ru.sberbank.pprb.sbbol.antifraud.service.repository.paymentv3.PaymentV3Repository;
@@ -49,7 +50,7 @@ public class PaymentV3Processor implements Processor<PaymentOperationV3, Documen
 
     @Override
     public AnalyzeResponse send(DocumentSendToAnalyzeRq request) throws JsonProcessingException {
-        return processor.send(request);
+        return processor.send(request, ApiVersion.PAYMENT_V3);
     }
 
 }
