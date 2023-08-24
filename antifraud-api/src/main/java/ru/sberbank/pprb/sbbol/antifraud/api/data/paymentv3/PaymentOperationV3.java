@@ -65,7 +65,7 @@ public class PaymentOperationV3 implements Operation {
      * "PPRB_UPG_1C", "PPRB_UPG_SBB", "PPRB_UPG_CORP", "PPRB_SBBAPI" для channelIndicator="OTHER"
      */
     @NotBlank(message = "The attribute \"clientDefinedChannelIndicator\" must be filled")
-    @Size(message = "Attribute \"channelIndicator\" cannot contain more than 15 characters", max = 15)
+    @Size(message = "Attribute \"clientDefinedChannelIndicator\" cannot contain more than 512 characters", max = 512)
     private String clientDefinedChannelIndicator;
 
     @Override

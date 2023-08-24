@@ -224,7 +224,7 @@ public class DocumentSaveRequest implements Operation {
     /**
      * Дополнительная информация об используемом канале передачи данных
      */
-    @Size(message = "Attribute \"clientDefinedChannelIndicator\" cannot contain more than 15 characters", max = 15)
+    @Size(message = "Attribute \"clientDefinedChannelIndicator\" cannot contain more than 512 characters", max = 512)
     @NotBlank(message = "The attribute \"clientDefinedChannelIndicator\" must be filled")
     private String clientDefinedChannelIndicator;
 
