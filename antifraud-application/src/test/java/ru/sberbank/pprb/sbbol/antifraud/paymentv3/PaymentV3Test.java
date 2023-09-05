@@ -79,6 +79,7 @@ public class PaymentV3Test extends AbstractIntegrationTest {
     @DisplayName("Создание РПП c помощью API v3")
     void createEntity() throws Throwable {
         PaymentOperationV3 dto = createPaymentOperationV3();
+        dto.setClientDefinedChannelIndicator(RandomStringUtils.random(512));
         RequestId requestId = saveOrUpdate(dto);
         assertNotNull(requestId);
         Optional<PaymentV3> result = repository.findFirstByDocIdAndDboOperation(dto.getDocId(), dto.getDboOperation());
@@ -111,6 +112,18 @@ public class PaymentV3Test extends AbstractIntegrationTest {
         dto.setChannelIndicator(null);
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(dto));
         assertTrue(ex.getMessage().contains("channelIndicator"), "Should contain \"channelIndicator\" in message. Message: " + ex.getMessage());
+    }
+
+    @Test
+    @AllureId("119997")
+    @DisplayName("Валидация размера clientDefinedChannelIndicator РПП API v3")
+    void validateClientDefinedChannelIndicator() throws Throwable {
+        PodamFactory podamFactory = podamFactory();
+        addExcludedFields(podamFactory, PaymentOperationV3.class, "signs");
+        PaymentOperationV3 dto = podamFactory.populatePojo(new PaymentOperationV3());
+        dto.setClientDefinedChannelIndicator(RandomStringUtils.random(513));
+        ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(dto));
+        assertTrue(ex.getMessage().contains("clientDefinedChannelIndicator"), "Attribute \"clientDefinedChannelIndicator\" cannot contain more than 512 characters");
     }
 
     @Test
