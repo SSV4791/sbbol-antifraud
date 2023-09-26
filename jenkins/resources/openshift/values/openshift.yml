@@ -119,10 +119,7 @@ os_project:
             memory: 128Mi
     egress:
       pods: 2
-      http:
-        port: 8080
-      mtls:
-        port: 8443
+      egress_base_port: 11000
       fluentbit:
         resources:
           requests:
