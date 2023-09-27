@@ -23,7 +23,7 @@ liquibase:
 pr_check:
   vector:
     compare:
-      release_uri: 'https://nexus-ci.delta.sbrf.ru/repository/maven-distr/CI02473994/CI03045533/D-02.005.00_0001/CI03045533-D-02.005.00_0001-distrib.zip'
+      release_uri: 'https://nexus-ci.delta.sbrf.ru/repository/maven-distr/CI02473994/CI03045533/D-02.005.00_0017/CI03045533-D-02.005.00_0017-distrib.zip'
     workdir: vectors
     match:
       files:
@@ -108,8 +108,8 @@ pr_check:
       qaReporterUpload sonarCoverage --info
 
 release:
-  version_pattern: '02\.005\.\d{2}_\d{4}'
-  version_init: 02.005.00_0000
+  version_pattern: '02\.006\.\d{2}_\d{4}'
+  version_init: 02.006.00_0000
   repository: maven-distr-dev  # необходим для releasePipe для выкачки предсобранных артефатов
   artifact_id: CI03045533
   group_id: CI02473994
@@ -163,9 +163,11 @@ release:
   jobs:
     test_release:
       wait: false
+    vectorRelease:
+      wait: false
   default_values:
     type: release
     checkmarx: true
     params_folder: release/02.004.00
-    istio_tag: '2.4'
+    istio_tag: '2.5'
 

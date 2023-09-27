@@ -57,6 +57,7 @@ spec:
 {% endfor %}
 {% endif %}
       labels:
+        secman: application-pod
         app: {{ os_project.name }}-{{ suffix_app_label }}
         version: {{ version | default('v1') }}
 {% if secman.openshift.enabled is not defined or secman.openshift.enabled | bool %}
