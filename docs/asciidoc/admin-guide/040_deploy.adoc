@@ -21,7 +21,7 @@
 
 [source,bash]
 ----
-curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/actuator/health -H "Content-Type: application/json" --cacert chain.pem --cert cert.pem --key cert.key
+curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/actuator/health -H "Content-Type: application/json-rpc" --cacert chain.pem --cert cert.pem --key cert.key
 ----
 
 Пример ответа:
@@ -83,7 +83,7 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
 
 [source,bash]
 ----
-curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/payment -d "@payment_saveorupdate.json" -H "Content-Type: application/json" -X POST --cacert chain.pem --cert cert.pem --key cert.key
+curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/payment -d "@payment_saveorupdate.json" -H "Content-Type: application/json-rpc" -X POST --cacert chain.pem --cert cert.pem --key cert.key
 ----
 
 Пример ответа:
@@ -114,7 +114,7 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
 
 [source,bash]
 ----
-curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/payment -d "@paymentfeed_analyze.json" -H "Content-Type: application/json" -X POST --cacert chain.pem --cert cert.pem --key cert.key
+curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/payment -d "@paymentfeed_analyze.json" -H "Content-Type: application/json-rpc" -X POST --cacert chain.pem --cert cert.pem --key cert.key
 ----
 
 Пример ответа:
@@ -234,7 +234,7 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
 
 [source,bash]
 ----
-curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v3/payment -d "@paymentv3_saveorupdate.json" -H "Content-Type: application/json" -X POST --cacert chain.pem --cert cert.pem --key cert.key
+curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v3/payment -d "@paymentv3_saveorupdate.json" -H "Content-Type: application/json-rpc" -X POST --cacert chain.pem --cert cert.pem --key cert.key
 ----
 
 Пример ответа:
@@ -339,7 +339,7 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
 
 [source,bash]
 ----
-curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/fastpayment -d "@fastpayment_saveorupdate.json" -H "Content-Type: application/json" -X POST --cacert chain.pem --cert cert.pem --key cert.key
+curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/fastpayment -d "@fastpayment_saveorupdate.json" -H "Content-Type: application/json-rpc" -X POST --cacert chain.pem --cert cert.pem --key cert.key
 ----
 
 Пример ответа:
@@ -370,7 +370,7 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
 
 [source,bash]
 ----
-curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/fastpayment -d "@fastpaymentfeed_analyze.json" -H "Content-Type: application/json" -X POST --cacert chain.pem --cert cert.pem --key cert.key
+curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/fastpayment -d "@fastpaymentfeed_analyze.json" -H "Content-Type: application/json-rpc" -X POST --cacert chain.pem --cert cert.pem --key cert.key
 ----
 
 Пример ответа:
@@ -462,7 +462,7 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
 
 [source,bash]
 ----
-curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/electronicreceipt -d "@electronicreceipt_saveorupdate.json" -H "Content-Type: application/json" -X POST --cacert chain.pem --cert cert.pem --key cert.key
+curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/electronicreceipt -d "@electronicreceipt_saveorupdate.json" -H "Content-Type: application/json-rpc" -X POST --cacert chain.pem --cert cert.pem --key cert.key
 ----
 
 Пример ответа:
@@ -493,7 +493,7 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
 
 [source,bash]
 ----
-curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/electronicreceipt -d "@electronicreceipt_send.json" -H "Content-Type: application/json" -X POST --cacert chain.pem --cert cert.pem --key cert.key
+curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/electronicreceipt -d "@electronicreceipt_send.json" -H "Content-Type: application/json-rpc" -X POST --cacert chain.pem --cert cert.pem --key cert.key
 ----
 
 Пример ответа:
@@ -591,7 +591,7 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
 
 [source,bash]
 ----
-curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/counterparty -d "@counterparty_send.json" -H "Content-Type: application/json" -X POST --cacert chain.pem --cert cert.pem --key cert.key
+curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/counterparty -d "@counterparty_send.json" -H "Content-Type: application/json-rpc" -X POST --cacert chain.pem --cert cert.pem --key cert.key
 ----
 
 Пример ответа:
@@ -747,7 +747,7 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
 
 [source,bash]
 ----
-curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/counterparty -d "@credit_send.json" -H "Content-Type: application/json" -X POST --cacert chain.pem --cert cert.pem --key cert.key
+curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/counterparty -d "@credit_send.json" -H "Content-Type: application/json-rpc" -X POST --cacert chain.pem --cert cert.pem --key cert.key
 ----
 
 Пример ответа:
@@ -859,7 +859,7 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
 
 [source,bash]
 ----
-curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/document/saveandsend -d "@document_saveorupdate.json" -H "Content-Type: application/json" -X POST --cacert chain.pem --cert cert.pem --key cert.key
+curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/document -d "@document_saveorupdate.json" -H "Content-Type: application/json-rpc" -X POST --cacert chain.pem --cert cert.pem --key cert.key
 ----
 
 Пример ответа:
@@ -891,7 +891,7 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
 
 [source,bash]
 ----
-curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/document/saveandsend -d "@document_send.json" -H "Content-Type: application/json" -X POST --cacert chain.pem --cert cert.pem --key cert.key
+curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/document -d "@document_send.json" -H "Content-Type: application/json-rpc" -X POST --cacert chain.pem --cert cert.pem --key cert.key
 ----
 
 Пример ответа:
@@ -1060,7 +1060,7 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
 
 [source,bash]
 ----
-curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/document/analyze -d "@document_analyze.json" -H "Content-Type: application/json" -X POST --cacert chain.pem --cert cert.pem --key cert.key
+curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/document/analyze -d "@document_analyze.json" -H "Content-Type: application/json-rpc" -X POST --cacert chain.pem --cert cert.pem --key cert.key
 ----
 
 Пример ответа:
@@ -1261,7 +1261,7 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
 
 [source,bash]
 ----
-curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/ipt -d "@ipt_analyze.json" -H "Content-Type: application/json" -X POST --cacert chain.pem --cert cert.pem --key cert.key
+curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.ru/antifraud/v2/ipt -d "@ipt_analyze.json" -H "Content-Type: application/json-rpc" -X POST --cacert chain.pem --cert cert.pem --key cert.key
 ----
 
 Пример ответа:

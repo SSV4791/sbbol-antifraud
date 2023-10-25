@@ -1,6 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.analyze.ipt;
 
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithOutSavingRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithoutSavingRequest;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Запрос отправки данных на анализ в ФП ИС/ФМ ЮЛ по продукту Исходящие платежные требования
  */
-public class IptSendToAnalyzeRq implements AnalyzeWithOutSavingRequest {
+public class IptSendToAnalyzeRq implements AnalyzeWithoutSavingRequest {
 
     /**
      * Заголовок сообщения

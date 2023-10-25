@@ -16,7 +16,7 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 import ru.dcbqa.allureee.annotations.export.customfield.JiraAC;
 import ru.sberbank.pprb.sbbol.antifraud.AntiFraudRunner;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithOutSavingRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithoutSavingRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendAfterSavingRq;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
@@ -113,7 +113,7 @@ public abstract class AbstractIntegrationTest {
         );
     }
 
-    protected AnalyzeResponse send(AnalyzeWithOutSavingRequest request) throws Throwable {
+    protected AnalyzeResponse send(AnalyzeWithoutSavingRequest request) throws Throwable {
         return jsonRpcRestClient.invoke(
                 "analyzeOperation",
                 Collections.singletonMap("analyzeparams", request),
@@ -129,7 +129,7 @@ public abstract class AbstractIntegrationTest {
         );
     }
 
-    protected FullAnalyzeResponse sendWithFullResponse(AnalyzeWithOutSavingRequest request) throws Throwable {
+    protected FullAnalyzeResponse sendWithFullResponse(AnalyzeWithoutSavingRequest request) throws Throwable {
         return jsonRpcRestClient.invoke(
                 "analyzeOperation",
                 Collections.singletonMap("analyzeparams", request),

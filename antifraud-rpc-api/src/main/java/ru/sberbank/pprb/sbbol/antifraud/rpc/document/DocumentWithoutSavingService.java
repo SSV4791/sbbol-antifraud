@@ -16,7 +16,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
  * Сервис отправки данных в ФП ИС для последующего анализа (универсальный API)
  */
 @JsonRpcService("/antifraud/v2/document/analyze")
-public interface DocumentWithOutSavingService {
+public interface DocumentWithoutSavingService {
 
     /**
      * Отправка данных для анализа

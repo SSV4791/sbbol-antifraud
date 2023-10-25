@@ -1,6 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.analyze.counterparty;
 
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithOutSavingRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithoutSavingRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator;
 
@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
  * Запрос отправки на анализ данных по счету доверенного контрагента (партнера) или
  * по контрагенту (партнеру), подлежащему удалению из справочника
  */
-public class CounterPartySendToAnalyzeRq implements AnalyzeWithOutSavingRequest {
+public class CounterPartySendToAnalyzeRq implements AnalyzeWithoutSavingRequest {
 
     /**
      * Сообщение заголовка

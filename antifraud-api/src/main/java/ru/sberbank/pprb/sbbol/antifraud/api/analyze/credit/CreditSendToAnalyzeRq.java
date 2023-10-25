@@ -1,6 +1,6 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.analyze.credit;
 
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithOutSavingRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithoutSavingRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ChannelIndicator;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ClientDefinedChannelIndicator;
 
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Запрос отправки на анализ данных в ФП ИС/ФМ ЮЛ по продукту Кредит или Банковская гарантия
  */
-public class CreditSendToAnalyzeRq implements AnalyzeWithOutSavingRequest {
+public class CreditSendToAnalyzeRq implements AnalyzeWithoutSavingRequest {
 
     /**
      * Заголовок сообщения

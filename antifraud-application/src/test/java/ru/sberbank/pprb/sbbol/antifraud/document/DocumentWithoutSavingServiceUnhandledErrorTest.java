@@ -8,7 +8,7 @@ import ru.dcbqa.allureee.annotations.layers.ApiTestLayer;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.UnhandledException;
 import ru.sberbank.pprb.sbbol.antifraud.common.AbstractIntegrationTest;
-import ru.sberbank.pprb.sbbol.antifraud.service.processor.document.DocumentWithOutSavingProcessor;
+import ru.sberbank.pprb.sbbol.antifraud.service.processor.document.DocumentWithoutSavingProcessor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -16,12 +16,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ApiTestLayer
-public class DocumentWithOutSavingServiceUnhandledErrorTest extends AbstractIntegrationTest {
+public class DocumentWithoutSavingServiceUnhandledErrorTest extends AbstractIntegrationTest {
 
     @MockBean
-    private DocumentWithOutSavingProcessor processor;
+    private DocumentWithoutSavingProcessor processor;
 
-    public DocumentWithOutSavingServiceUnhandledErrorTest() {
+    public DocumentWithoutSavingServiceUnhandledErrorTest() {
         super("/antifraud/v2/document/analyze");
     }
 

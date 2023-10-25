@@ -15,7 +15,7 @@ import java.util.Objects;
 /**
  * Сервис валидации наличия полей в запросе на отправку данных в ФП ИС/ФМ ЮЛ (универсальный API)
  */
-public class DocumentWithOutSavingValidator extends ModelValidator {
+public class DocumentWithoutSavingValidator extends ModelValidator {
 
     public static void validate(AnalyzeRequest request) {
         if (Objects.nonNull(request.getMessageHeader())) {

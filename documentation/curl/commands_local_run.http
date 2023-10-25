@@ -70,14 +70,14 @@ Content-Type: application/json-rpc
 
 ### Универсальный API
 
-POST http://127.0.0.1:8080/antifraud/v2/document/saveandsend
+POST http://127.0.0.1:8080/antifraud/v2/document
 Content-Type: application/json-rpc
 
 < document_saveorupdate.json
 
 ###
 
-POST http://127.0.0.1:8080/antifraud/v2/document/saveandsend
+POST http://127.0.0.1:8080/antifraud/v2/document
 Content-Type: application/json-rpc
 
 < document_send.json

@@ -27,15 +27,15 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 
 @ApiTestLayer
-public class DocumentWithOutSavingServiceTest extends AbstractIntegrationTest {
+public class DocumentWithoutSavingServiceTest extends AbstractIntegrationTest {
 
-    public DocumentWithOutSavingServiceTest() {
+    public DocumentWithoutSavingServiceTest() {
         super("/antifraud/v2/document/analyze");
     }
 
     @Test
     @DisplayName("Отправка данных на анализ без сохранения (универсальный API)")
-    void analyzeOperationWithOutSavingTest() throws Throwable {
+    void analyzeOperationWithoutSavingTest() throws Throwable {
         FullAnalyzeResponse expected = podamFactory().populatePojo(new FullAnalyzeResponse());
         mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
                 .andExpect(method(HttpMethod.POST))
@@ -50,7 +50,7 @@ public class DocumentWithOutSavingServiceTest extends AbstractIntegrationTest {
 
     @Test
     @DisplayName("Ошибка от ФП ИС при отправке данных на анализ без сохранения (универсальный API)")
-    void analyzeOperationWithOutSavingHttpStatusCodeErrorTest() {
+    void analyzeOperationWithoutSavingHttpStatusCodeErrorTest() {
         mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
                 .andExpect(method(HttpMethod.POST))
                 .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -66,7 +66,7 @@ public class DocumentWithOutSavingServiceTest extends AbstractIntegrationTest {
 
     @Test
     @DisplayName("Отправка данных на анализ без сохранения с минимальным набором атрибутов (универсальный API)")
-    void analyzeOperationWithOutSavingWithMinAttrsTest() throws Throwable {
+    void analyzeOperationWithoutSavingWithMinAttrsTest() throws Throwable {
         FullAnalyzeResponse expected = podamFactory().populatePojo(new FullAnalyzeResponse());
         mockServer().expect(ExpectedCount.once(), requestTo(endPoint()))
                 .andExpect(method(HttpMethod.POST))
