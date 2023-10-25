@@ -21,106 +21,106 @@ public class DocumentWithoutSavingValidator extends ModelValidator {
         if (Objects.nonNull(request.getMessageHeader())) {
             validateMessageHeader(request.getMessageHeader(), request.getClientTransactionId(), request.getDboOperation());
         } else {
-            logWarn(request.getMessageHeader(), request.getClientTransactionId(), request.getDboOperation(), "messageHeader");
+            logging(request.getMessageHeader(), request.getClientTransactionId(), request.getDboOperation(), "messageHeader");
         }
         if (Objects.nonNull(request.getIdentificationData())) {
             validateIdentificationData(request.getIdentificationData(), request.getClientTransactionId(), request.getDboOperation());
         } else {
-            logWarn(request.getIdentificationData(), request.getClientTransactionId(), request.getDboOperation(), "identificationData");
+            logging(request.getIdentificationData(), request.getClientTransactionId(), request.getDboOperation(), "identificationData");
         }
         if (Objects.nonNull(request.getDeviceRequest())) {
             validateDeviceRequest(request.getDeviceRequest(), request.getClientTransactionId(), request.getDboOperation());
         } else {
-            logWarn(request.getDeviceRequest(), request.getClientTransactionId(), request.getDboOperation(), "deviceRequest");
+            logging(request.getDeviceRequest(), request.getClientTransactionId(), request.getDboOperation(), "deviceRequest");
         }
         if (Objects.nonNull(request.getEventDataList())) {
             validateEventDataList(request.getEventDataList(), request.getClientTransactionId(), request.getDboOperation());
         } else {
-            logWarn(request.getEventDataList(), request.getClientTransactionId(), request.getDboOperation(), "eventData");
+            logging(request.getEventDataList(), request.getClientTransactionId(), request.getDboOperation(), "eventData");
         }
-        logWarn(request.getChannelIndicator(), request.getClientTransactionId(), request.getDboOperation(), "channelIndicator");
-        logWarn(request.getClientDefinedChannelIndicator(), request.getClientTransactionId(), request.getDboOperation(), "clientDefinedChannelIndicator");
+        logging(request.getChannelIndicator(), request.getClientTransactionId(), request.getDboOperation(), "channelIndicator");
+        logging(request.getClientDefinedChannelIndicator(), request.getClientTransactionId(), request.getDboOperation(), "clientDefinedChannelIndicator");
     }
 
     private static void validateMessageHeader(MessageHeader messageHeader, String docId, String dboOperation) {
-        logWarn(messageHeader.getRequestType(), docId, dboOperation, "messageHeader.requestType");
-        logWarn(messageHeader.getTimeStamp(), docId, dboOperation, "messageHeader.timeStamp");
+        logging(messageHeader.getRequestType(), docId, dboOperation, "messageHeader.requestType");
+        logging(messageHeader.getTimeStamp(), docId, dboOperation, "messageHeader.timeStamp");
     }
 
     private static void validateIdentificationData(IdentificationData identificationData, String docId, String dboOperation) {
-        logWarn(identificationData.getUserName(), docId, dboOperation, "identificationData.userName");
-        logWarn(identificationData.getClientTransactionId(), docId, dboOperation, "identificationData.clientTransactionId");
-        logWarn(identificationData.getUserLoginName(), docId, dboOperation, "identificationData.userLoginName");
-        logWarn(identificationData.getOrgName(), docId, dboOperation, "identificationData.orgName");
-        logWarn(identificationData.getDboOperation(), docId, dboOperation, "identificationData.dboOperation");
+        logging(identificationData.getUserName(), docId, dboOperation, "identificationData.userName");
+        logging(identificationData.getClientTransactionId(), docId, dboOperation, "identificationData.clientTransactionId");
+        logging(identificationData.getUserLoginName(), docId, dboOperation, "identificationData.userLoginName");
+        logging(identificationData.getOrgName(), docId, dboOperation, "identificationData.orgName");
+        logging(identificationData.getDboOperation(), docId, dboOperation, "identificationData.dboOperation");
     }
 
     private static void validateDeviceRequest(DeviceRequest deviceRequest, String docId, String dboOperation) {
         if (Objects.isNull(deviceRequest.getDevicePrint()) && Objects.isNull(deviceRequest.getMobSdkData())) {
-            logWarn(null, docId, dboOperation, "deviceRequest.devicePrint and deviceRequest.mobSdkData");
+            logging(null, docId, dboOperation, "deviceRequest.devicePrint and deviceRequest.mobSdkData");
         }
-        logWarn(deviceRequest.getHttpAccept(), docId, dboOperation, "deviceRequest.httpAccept");
-        logWarn(deviceRequest.getHttpAcceptChars(), docId, dboOperation, "deviceRequest.httpAcceptChars");
-        logWarn(deviceRequest.getHttpAcceptEncoding(), docId, dboOperation, "deviceRequest.httpAcceptEncoding");
-        logWarn(deviceRequest.getHttpAcceptLanguage(), docId, dboOperation, "deviceRequest.httpAcceptLanguage");
-        logWarn(deviceRequest.getHttpReferrer(), docId, dboOperation, "deviceRequest.httpReferrer");
-        logWarn(deviceRequest.getIpAddress(), docId, dboOperation, "deviceRequest.ipAddress");
-        logWarn(deviceRequest.getUserAgent(), docId, dboOperation, "deviceRequest.userAgent");
+        logging(deviceRequest.getHttpAccept(), docId, dboOperation, "deviceRequest.httpAccept");
+        logging(deviceRequest.getHttpAcceptChars(), docId, dboOperation, "deviceRequest.httpAcceptChars");
+        logging(deviceRequest.getHttpAcceptEncoding(), docId, dboOperation, "deviceRequest.httpAcceptEncoding");
+        logging(deviceRequest.getHttpAcceptLanguage(), docId, dboOperation, "deviceRequest.httpAcceptLanguage");
+        logging(deviceRequest.getHttpReferrer(), docId, dboOperation, "deviceRequest.httpReferrer");
+        logging(deviceRequest.getIpAddress(), docId, dboOperation, "deviceRequest.ipAddress");
+        logging(deviceRequest.getUserAgent(), docId, dboOperation, "deviceRequest.userAgent");
     }
 
     private static void validateEventDataList(EventDataList eventDataList, String docId, String dboOperation) {
         if (Objects.nonNull(eventDataList.getEventData())) {
             validateEventData(eventDataList.getEventData(), docId, dboOperation);
         } else {
-            logWarn(eventDataList.getEventData(), docId, dboOperation, "eventDataList.eventData");
+            logging(eventDataList.getEventData(), docId, dboOperation, "eventDataList.eventData");
         }
         if (Objects.nonNull(eventDataList.getTransactionData())) {
             validateTransactionData(eventDataList.getTransactionData(), docId, dboOperation);
         } else {
-            logWarn(eventDataList.getTransactionData(), docId, dboOperation, "eventDataList.transactionData");
+            logging(eventDataList.getTransactionData(), docId, dboOperation, "eventDataList.transactionData");
         }
         if (Objects.nonNull(eventDataList.getCustomersDataList())) {
             if (CollectionUtils.isEmpty(eventDataList.getCustomersDataList().getCustomer())) {
-                logWarn(null, docId, dboOperation, "eventDataList.customersDataList.customer");
+                logging(null, docId, dboOperation, "eventDataList.customersDataList.customer");
             }
         } else {
-            logWarn(eventDataList.getCustomersDataList(), docId, dboOperation, "eventDataList.customersDataList");
+            logging(eventDataList.getCustomersDataList(), docId, dboOperation, "eventDataList.customersDataList");
         }
         if (Objects.nonNull(eventDataList.getClientDefinedAttributeList())) {
             if (CollectionUtils.isEmpty(eventDataList.getClientDefinedAttributeList().getFact())) {
-                logWarn(null, docId, dboOperation, "eventDataList.clientDefinedAttributeList.fact");
+                logging(null, docId, dboOperation, "eventDataList.clientDefinedAttributeList.fact");
             }
         } else {
-            logWarn(eventDataList.getClientDefinedAttributeList(), docId, dboOperation, "eventDataList.clientDefinedAttributeList");
+            logging(eventDataList.getClientDefinedAttributeList(), docId, dboOperation, "eventDataList.clientDefinedAttributeList");
         }
     }
 
     private static void validateEventData(EventData eventData, String docId, String dboOperation) {
-        logWarn(eventData.getEventType(), docId, dboOperation, "eventDataList.eventData.eventType");
-        logWarn(eventData.getClientDefinedEventType(), docId, dboOperation, "eventDataList.eventData.clientDefinedEventType");
-        logWarn(eventData.getEventDescription(), docId, dboOperation, "eventDataList.eventData.eventDescription");
-        logWarn(eventData.getTimeOfOccurrence(), docId, dboOperation, "eventDataList.eventData.timeOfOccurrence");
+        logging(eventData.getEventType(), docId, dboOperation, "eventDataList.eventData.eventType");
+        logging(eventData.getClientDefinedEventType(), docId, dboOperation, "eventDataList.eventData.clientDefinedEventType");
+        logging(eventData.getEventDescription(), docId, dboOperation, "eventDataList.eventData.eventDescription");
+        logging(eventData.getTimeOfOccurrence(), docId, dboOperation, "eventDataList.eventData.timeOfOccurrence");
     }
 
     private static void validateTransactionData(TransactionData transactionData, String docId, String dboOperation) {
-        logWarn(transactionData.getAmount().getAmount(), docId, dboOperation, "eventDataList.transactionData.amount.amount");
-        logWarn(transactionData.getAmount().getCurrency(), docId, dboOperation, "eventDataList.transactionData.amount.currency");
-        logWarn(transactionData.getExecutionSpeed(), docId, dboOperation, "eventDataList.transactionData.executionSpeed");
-        logWarn(transactionData.getOtherAccountBankType(), docId, dboOperation, "eventDataList.transactionData.otherAccountBankType");
+        logging(transactionData.getAmount().getAmount(), docId, dboOperation, "eventDataList.transactionData.amount.amount");
+        logging(transactionData.getAmount().getCurrency(), docId, dboOperation, "eventDataList.transactionData.amount.currency");
+        logging(transactionData.getExecutionSpeed(), docId, dboOperation, "eventDataList.transactionData.executionSpeed");
+        logging(transactionData.getOtherAccountBankType(), docId, dboOperation, "eventDataList.transactionData.otherAccountBankType");
         if (Objects.nonNull(transactionData.getMyAccountData())) {
-            logWarn(transactionData.getMyAccountData().getAccountNumber(), docId, dboOperation, "eventDataList.transactionData.myAccountData.accountNumber");
+            logging(transactionData.getMyAccountData().getAccountNumber(), docId, dboOperation, "eventDataList.transactionData.myAccountData.accountNumber");
         } else {
-            logWarn(transactionData.getMyAccountData(), docId, dboOperation, "eventDataList.transactionData.myAccountData");
+            logging(transactionData.getMyAccountData(), docId, dboOperation, "eventDataList.transactionData.myAccountData");
         }
         if (Objects.nonNull(transactionData.getOtherAccountData())) {
-            logWarn(transactionData.getOtherAccountData().getAccountName(), docId, dboOperation, "eventDataList.transactionData.otherAccountData.accountName");
-            logWarn(transactionData.getOtherAccountData().getAccountNumber(), docId, dboOperation, "eventDataList.transactionData.otherAccountData.accountNumber");
-            logWarn(transactionData.getOtherAccountData().getRoutingCode(), docId, dboOperation, "eventDataList.transactionData.otherAccountData.routingCode");
-            logWarn(transactionData.getOtherAccountData().getOtherAccountOwnershipType(), docId, dboOperation, "eventDataList.transactionData.otherAccountData.otherAccountOwnershipType");
-            logWarn(transactionData.getOtherAccountData().getOtherAccountType(), docId, dboOperation, "eventDataList.transactionData.otherAccountData.otherAccountType");
-            logWarn(transactionData.getOtherAccountData().getTransferMediumType(), docId, dboOperation, "eventDataList.transactionData.otherAccountData.transferMediumType");
+            logging(transactionData.getOtherAccountData().getAccountName(), docId, dboOperation, "eventDataList.transactionData.otherAccountData.accountName");
+            logging(transactionData.getOtherAccountData().getAccountNumber(), docId, dboOperation, "eventDataList.transactionData.otherAccountData.accountNumber");
+            logging(transactionData.getOtherAccountData().getRoutingCode(), docId, dboOperation, "eventDataList.transactionData.otherAccountData.routingCode");
+            logging(transactionData.getOtherAccountData().getOtherAccountOwnershipType(), docId, dboOperation, "eventDataList.transactionData.otherAccountData.otherAccountOwnershipType");
+            logging(transactionData.getOtherAccountData().getOtherAccountType(), docId, dboOperation, "eventDataList.transactionData.otherAccountData.otherAccountType");
+            logging(transactionData.getOtherAccountData().getTransferMediumType(), docId, dboOperation, "eventDataList.transactionData.otherAccountData.transferMediumType");
         } else {
-            logWarn(transactionData.getOtherAccountData(), docId, dboOperation, "eventDataList.transactionData.otherAccountData");
+            logging(transactionData.getOtherAccountData(), docId, dboOperation, "eventDataList.transactionData.otherAccountData");
         }
     }
 
