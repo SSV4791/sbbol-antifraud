@@ -45,7 +45,7 @@ public class DocumentServiceTest extends AbstractIntegrationTest {
     private DocumentRepository documentRepository;
 
     public DocumentServiceTest() {
-        super("/antifraud/v2/document/saveandsend");
+        super("/antifraud/v2/document");
     }
 
     @Test

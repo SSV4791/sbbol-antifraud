@@ -9,11 +9,11 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.ipt.IptSendToAnalyzeRq;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.ipt.IptMapper;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeAbstractProcessor;
-import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeWithOutSavingProcessor;
+import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeWithoutSavingProcessor;
 import ru.sberbank.pprb.sbbol.antifraud.service.validator.ipt.IptModelValidator;
 
 @Service
-public class IptProcessor extends AnalyzeAbstractProcessor implements AnalyzeWithOutSavingProcessor<IptSendToAnalyzeRq> {
+public class IptProcessor extends AnalyzeAbstractProcessor implements AnalyzeWithoutSavingProcessor<IptSendToAnalyzeRq> {
 
     private final IptMapper mapper;
 

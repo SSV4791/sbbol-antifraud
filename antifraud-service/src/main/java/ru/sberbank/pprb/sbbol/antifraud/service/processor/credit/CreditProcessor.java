@@ -9,11 +9,11 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.credit.CreditSendToAnalyzeRq
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.credit.CreditMapper;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeAbstractProcessor;
-import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeWithOutSavingProcessor;
+import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeWithoutSavingProcessor;
 import ru.sberbank.pprb.sbbol.antifraud.service.validator.credit.CreditModelValidator;
 
 @Service
-public class CreditProcessor extends AnalyzeAbstractProcessor implements AnalyzeWithOutSavingProcessor<CreditSendToAnalyzeRq> {
+public class CreditProcessor extends AnalyzeAbstractProcessor implements AnalyzeWithoutSavingProcessor<CreditSendToAnalyzeRq> {
 
     private final CreditMapper mapper;
 

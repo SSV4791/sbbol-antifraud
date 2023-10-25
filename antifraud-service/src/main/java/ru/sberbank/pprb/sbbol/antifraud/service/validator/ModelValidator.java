@@ -16,29 +16,29 @@ public abstract class ModelValidator {
     protected ModelValidator() {
     }
 
-    protected static void logWarn(Object param, UUID docId, String dboOperation, String name) {
+    protected static void logging(Object param, UUID docId, String dboOperation, String name) {
         if (param == null) {
-            logger.warn(MESSAGE, docId, dboOperation, name);
+            logger.debug(MESSAGE, docId, dboOperation, name);
         }
     }
 
-    protected static void logWarn(String message, String docId, String dboOperation) {
-        logger.warn("DocId={}, dboOperation={}. {}", docId, dboOperation, message);
+    protected static void logging(String message, String docId, String dboOperation) {
+        logger.debug("DocId={}, dboOperation={}. {}", docId, dboOperation, message);
     }
 
-    protected static void logWarn(Object param, String docId, String dboOperation, String name) {
+    protected static void logging(Object param, String docId, String dboOperation, String name) {
         if (param == null) {
-            logger.warn(MESSAGE, docId, dboOperation, name);
+            logger.debug(MESSAGE, docId, dboOperation, name);
         }
     }
 
-    protected static void logWarn(String message, UUID docId, String dboOperation) {
-        logger.warn("DocId={}, dboOperation={}. {}", docId, dboOperation, message);
+    protected static void logging(String message, UUID docId, String dboOperation) {
+        logger.debug("DocId={}, dboOperation={}. {}", docId, dboOperation, message);
     }
 
-    protected static void logWarnSign(Object param, UUID docId, String dboOperation, String signName, String paramName) {
+    protected static void loggingSign(Object param, UUID docId, String dboOperation, String signName, String paramName) {
         if (param == null) {
-            logger.warn(SIGN_MESSAGE, docId, dboOperation, signName, paramName);
+            logger.debug(SIGN_MESSAGE, docId, dboOperation, signName, paramName);
         }
     }
 

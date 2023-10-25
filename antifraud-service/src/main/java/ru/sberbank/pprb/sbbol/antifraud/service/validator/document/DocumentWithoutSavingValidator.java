@@ -1,56 +1,53 @@
-package ru.sberbank.pprb.sbbol.antifraud.service.validator.paymentv3;
+package ru.sberbank.pprb.sbbol.antifraud.service.validator.document;
 
 import org.springframework.util.CollectionUtils;
-import ru.sberbank.pprb.sbbol.antifraud.api.data.paymentv3.PaymentOperationV3;
-import ru.sberbank.pprb.sbbol.antifraud.api.data.paymentv3.PaymentV3DeviceRequest;
-import ru.sberbank.pprb.sbbol.antifraud.api.data.paymentv3.PaymentV3EventData;
-import ru.sberbank.pprb.sbbol.antifraud.api.data.paymentv3.PaymentV3EventDataList;
-import ru.sberbank.pprb.sbbol.antifraud.api.data.paymentv3.PaymentV3IdentificationData;
-import ru.sberbank.pprb.sbbol.antifraud.api.data.paymentv3.PaymentV3MessageHeader;
-import ru.sberbank.pprb.sbbol.antifraud.api.data.paymentv3.PaymentV3TransactionData;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.DeviceRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.EventData;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.EventDataList;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.IdentificationData;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.MessageHeader;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.TransactionData;
 import ru.sberbank.pprb.sbbol.antifraud.service.validator.ModelValidator;
 
 import java.util.Objects;
 
 /**
- * Сервис валидации наличия полей в запросе на сохранение или обновление данных (РПП API v3)
+ * Сервис валидации наличия полей в запросе на отправку данных в ФП ИС/ФМ ЮЛ (универсальный API)
  */
-public class PaymentV3ModelValidator extends ModelValidator {
+public class DocumentWithoutSavingValidator extends ModelValidator {
 
-    private PaymentV3ModelValidator() {
-    }
-
-    public static void validate(PaymentOperationV3 request) {
+    public static void validate(AnalyzeRequest request) {
         if (Objects.nonNull(request.getMessageHeader())) {
-            validateMessageHeader(request.getMessageHeader(), request.getDocId(), request.getDboOperation());
+            validateMessageHeader(request.getMessageHeader(), request.getClientTransactionId(), request.getDboOperation());
         } else {
-            logging(request.getMessageHeader(), request.getDocId(), request.getDboOperation(), "messageHeader");
+            logging(request.getMessageHeader(), request.getClientTransactionId(), request.getDboOperation(), "messageHeader");
         }
         if (Objects.nonNull(request.getIdentificationData())) {
-            validateIdentificationData(request.getIdentificationData(), request.getDocId(), request.getDboOperation());
+            validateIdentificationData(request.getIdentificationData(), request.getClientTransactionId(), request.getDboOperation());
         } else {
-            logging(request.getIdentificationData(), request.getDocId(), request.getDboOperation(), "identificationData");
+            logging(request.getIdentificationData(), request.getClientTransactionId(), request.getDboOperation(), "identificationData");
         }
         if (Objects.nonNull(request.getDeviceRequest())) {
-            validateDeviceRequest(request.getDeviceRequest(), request.getDocId(), request.getDboOperation());
+            validateDeviceRequest(request.getDeviceRequest(), request.getClientTransactionId(), request.getDboOperation());
         } else {
-            logging(request.getDeviceRequest(), request.getDocId(), request.getDboOperation(), "deviceRequest");
+            logging(request.getDeviceRequest(), request.getClientTransactionId(), request.getDboOperation(), "deviceRequest");
         }
         if (Objects.nonNull(request.getEventDataList())) {
-            validateEventDataList(request.getEventDataList(), request.getDocId(), request.getDboOperation());
+            validateEventDataList(request.getEventDataList(), request.getClientTransactionId(), request.getDboOperation());
         } else {
-            logging(request.getEventDataList(), request.getDocId(), request.getDboOperation(), "eventData");
+            logging(request.getEventDataList(), request.getClientTransactionId(), request.getDboOperation(), "eventData");
         }
-        logging(request.getChannelIndicator(), request.getDocId(), request.getDboOperation(), "channelIndicator");
-        logging(request.getClientDefinedChannelIndicator(), request.getDocId(), request.getDboOperation(), "clientDefinedChannelIndicator");
+        logging(request.getChannelIndicator(), request.getClientTransactionId(), request.getDboOperation(), "channelIndicator");
+        logging(request.getClientDefinedChannelIndicator(), request.getClientTransactionId(), request.getDboOperation(), "clientDefinedChannelIndicator");
     }
 
-    private static void validateMessageHeader(PaymentV3MessageHeader messageHeader, String docId, String dboOperation) {
+    private static void validateMessageHeader(MessageHeader messageHeader, String docId, String dboOperation) {
         logging(messageHeader.getRequestType(), docId, dboOperation, "messageHeader.requestType");
         logging(messageHeader.getTimeStamp(), docId, dboOperation, "messageHeader.timeStamp");
     }
 
-    private static void validateIdentificationData(PaymentV3IdentificationData identificationData, String docId, String dboOperation) {
+    private static void validateIdentificationData(IdentificationData identificationData, String docId, String dboOperation) {
         logging(identificationData.getUserName(), docId, dboOperation, "identificationData.userName");
         logging(identificationData.getClientTransactionId(), docId, dboOperation, "identificationData.clientTransactionId");
         logging(identificationData.getUserLoginName(), docId, dboOperation, "identificationData.userLoginName");
@@ -58,7 +55,7 @@ public class PaymentV3ModelValidator extends ModelValidator {
         logging(identificationData.getDboOperation(), docId, dboOperation, "identificationData.dboOperation");
     }
 
-    private static void validateDeviceRequest(PaymentV3DeviceRequest deviceRequest, String docId, String dboOperation) {
+    private static void validateDeviceRequest(DeviceRequest deviceRequest, String docId, String dboOperation) {
         if (Objects.isNull(deviceRequest.getDevicePrint()) && Objects.isNull(deviceRequest.getMobSdkData())) {
             logging(null, docId, dboOperation, "deviceRequest.devicePrint and deviceRequest.mobSdkData");
         }
@@ -71,7 +68,7 @@ public class PaymentV3ModelValidator extends ModelValidator {
         logging(deviceRequest.getUserAgent(), docId, dboOperation, "deviceRequest.userAgent");
     }
 
-    private static void validateEventDataList(PaymentV3EventDataList eventDataList, String docId, String dboOperation) {
+    private static void validateEventDataList(EventDataList eventDataList, String docId, String dboOperation) {
         if (Objects.nonNull(eventDataList.getEventData())) {
             validateEventData(eventDataList.getEventData(), docId, dboOperation);
         } else {
@@ -82,6 +79,13 @@ public class PaymentV3ModelValidator extends ModelValidator {
         } else {
             logging(eventDataList.getTransactionData(), docId, dboOperation, "eventDataList.transactionData");
         }
+        if (Objects.nonNull(eventDataList.getCustomersDataList())) {
+            if (CollectionUtils.isEmpty(eventDataList.getCustomersDataList().getCustomer())) {
+                logging(null, docId, dboOperation, "eventDataList.customersDataList.customer");
+            }
+        } else {
+            logging(eventDataList.getCustomersDataList(), docId, dboOperation, "eventDataList.customersDataList");
+        }
         if (Objects.nonNull(eventDataList.getClientDefinedAttributeList())) {
             if (CollectionUtils.isEmpty(eventDataList.getClientDefinedAttributeList().getFact())) {
                 logging(null, docId, dboOperation, "eventDataList.clientDefinedAttributeList.fact");
@@ -91,14 +95,14 @@ public class PaymentV3ModelValidator extends ModelValidator {
         }
     }
 
-    private static void validateEventData(PaymentV3EventData eventData, String docId, String dboOperation) {
+    private static void validateEventData(EventData eventData, String docId, String dboOperation) {
         logging(eventData.getEventType(), docId, dboOperation, "eventDataList.eventData.eventType");
         logging(eventData.getClientDefinedEventType(), docId, dboOperation, "eventDataList.eventData.clientDefinedEventType");
         logging(eventData.getEventDescription(), docId, dboOperation, "eventDataList.eventData.eventDescription");
         logging(eventData.getTimeOfOccurrence(), docId, dboOperation, "eventDataList.eventData.timeOfOccurrence");
     }
 
-    private static void validateTransactionData(PaymentV3TransactionData transactionData, String docId, String dboOperation) {
+    private static void validateTransactionData(TransactionData transactionData, String docId, String dboOperation) {
         logging(transactionData.getAmount().getAmount(), docId, dboOperation, "eventDataList.transactionData.amount.amount");
         logging(transactionData.getAmount().getCurrency(), docId, dboOperation, "eventDataList.transactionData.amount.currency");
         logging(transactionData.getExecutionSpeed(), docId, dboOperation, "eventDataList.transactionData.executionSpeed");

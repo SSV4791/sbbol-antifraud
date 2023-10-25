@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Общий интерфейс для запросов отправки данных на анализ без предварительного сохранения
  */
-public interface AnalyzeWithOutSavingRequest extends Serializable {
+public interface AnalyzeWithoutSavingRequest extends Serializable {
 
     /**
      * Получить идентификатор клиентской транзакции

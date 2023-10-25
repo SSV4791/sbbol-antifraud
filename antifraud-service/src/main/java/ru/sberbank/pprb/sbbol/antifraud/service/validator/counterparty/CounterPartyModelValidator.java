@@ -22,102 +22,102 @@ public class CounterPartyModelValidator extends ModelValidator {
         if (Objects.nonNull(request.getMessageHeader())) {
             validateMessageHeader(request.getMessageHeader(), clientTransactionId, request.getDboOperation());
         } else {
-            logWarn(request.getMessageHeader(), clientTransactionId, request.getDboOperation(), "messageHeader");
+            logging(request.getMessageHeader(), clientTransactionId, request.getDboOperation(), "messageHeader");
         }
         if (Objects.nonNull(request.getIdentificationData())) {
             validateIdentificationData(request.getIdentificationData(), clientTransactionId, request.getDboOperation());
         } else {
-            logWarn(request.getIdentificationData(), clientTransactionId, request.getDboOperation(), "identificationData");
+            logging(request.getIdentificationData(), clientTransactionId, request.getDboOperation(), "identificationData");
         }
         if (Objects.nonNull(request.getDeviceRequest())) {
             validateDeviceRequest(request.getDeviceRequest(), clientTransactionId, request.getDboOperation());
         } else {
-            logWarn(request.getDeviceRequest(), clientTransactionId, request.getDboOperation(), "deviceRequest");
+            logging(request.getDeviceRequest(), clientTransactionId, request.getDboOperation(), "deviceRequest");
         }
         if (Objects.nonNull(request.getEventData())) {
             validateEventData(request.getEventData(), clientTransactionId, request.getDboOperation());
         } else {
-            logWarn(request.getEventData(), clientTransactionId, request.getDboOperation(), "eventData");
+            logging(request.getEventData(), clientTransactionId, request.getDboOperation(), "eventData");
         }
         if (Objects.nonNull(request.getClientDefinedAttributeList())) {
             validateClientDefinedAttributeList(request.getClientDefinedAttributeList(), clientTransactionId, request.getDboOperation());
         } else {
-            logWarn(request.getClientDefinedAttributeList(), clientTransactionId, request.getDboOperation(), "clientDefinedAttributeList");
+            logging(request.getClientDefinedAttributeList(), clientTransactionId, request.getDboOperation(), "clientDefinedAttributeList");
         }
-        logWarn(request.getChannelIndicator(), clientTransactionId, request.getDboOperation(), "channelIndicator");
-        logWarn(request.getClientDefinedChannelIndicator(), clientTransactionId, request.getDboOperation(), "clientDefinedChannelIndicator");
+        logging(request.getChannelIndicator(), clientTransactionId, request.getDboOperation(), "channelIndicator");
+        logging(request.getClientDefinedChannelIndicator(), clientTransactionId, request.getDboOperation(), "clientDefinedChannelIndicator");
     }
 
     private static void validateMessageHeader(CounterPartyMessageHeader messageHeader, UUID docId, String dboOperation) {
-        logWarn(messageHeader.getRequestType(), docId, dboOperation, "messageHeader.requestType");
-        logWarn(messageHeader.getTimeStamp(), docId, dboOperation, "messageHeader.timeStamp");
+        logging(messageHeader.getRequestType(), docId, dboOperation, "messageHeader.requestType");
+        logging(messageHeader.getTimeStamp(), docId, dboOperation, "messageHeader.timeStamp");
     }
 
     private static void validateIdentificationData(CounterPartyIdentificationData identificationData, UUID docId, String dboOperation) {
-        logWarn(identificationData.getUserName(), docId, dboOperation, "identificationData.userName");
-        logWarn(identificationData.getClientTransactionId(), docId, dboOperation, "identificationData.clientTransactionId");
-        logWarn(identificationData.getUserLoginName(), docId, dboOperation, "identificationData.userLoginName");
-        logWarn(identificationData.getOrgName(), docId, dboOperation, "identificationData.orgName");
-        logWarn(identificationData.getDboOperation(), docId, dboOperation, "identificationData.dboOperation");
+        logging(identificationData.getUserName(), docId, dboOperation, "identificationData.userName");
+        logging(identificationData.getClientTransactionId(), docId, dboOperation, "identificationData.clientTransactionId");
+        logging(identificationData.getUserLoginName(), docId, dboOperation, "identificationData.userLoginName");
+        logging(identificationData.getOrgName(), docId, dboOperation, "identificationData.orgName");
+        logging(identificationData.getDboOperation(), docId, dboOperation, "identificationData.dboOperation");
     }
 
     private static void validateDeviceRequest(CounterPartyDeviceRequest deviceRequest, UUID docId, String dboOperation) {
         if (Objects.isNull(deviceRequest.getDevicePrint()) && Objects.isNull(deviceRequest.getMobSdkData())) {
-            logWarn(null, docId, dboOperation, "deviceRequest.devicePrint and deviceRequest.mobSdkData");
+            logging(null, docId, dboOperation, "deviceRequest.devicePrint and deviceRequest.mobSdkData");
         }
-        logWarn(deviceRequest.getHttpAccept(), docId, dboOperation, "deviceRequest.httpAccept");
-        logWarn(deviceRequest.getHttpAcceptChars(), docId, dboOperation, "deviceRequest.httpAcceptChars");
-        logWarn(deviceRequest.getHttpAcceptEncoding(), docId, dboOperation, "deviceRequest.httpAcceptEncoding");
-        logWarn(deviceRequest.getHttpAcceptLanguage(), docId, dboOperation, "deviceRequest.httpAcceptLanguage");
-        logWarn(deviceRequest.getHttpReferrer(), docId, dboOperation, "deviceRequest.httpReferrer");
-        logWarn(deviceRequest.getIpAddress(), docId, dboOperation, "deviceRequest.ipAddress");
-        logWarn(deviceRequest.getUserAgent(), docId, dboOperation, "deviceRequest.userAgent");
+        logging(deviceRequest.getHttpAccept(), docId, dboOperation, "deviceRequest.httpAccept");
+        logging(deviceRequest.getHttpAcceptChars(), docId, dboOperation, "deviceRequest.httpAcceptChars");
+        logging(deviceRequest.getHttpAcceptEncoding(), docId, dboOperation, "deviceRequest.httpAcceptEncoding");
+        logging(deviceRequest.getHttpAcceptLanguage(), docId, dboOperation, "deviceRequest.httpAcceptLanguage");
+        logging(deviceRequest.getHttpReferrer(), docId, dboOperation, "deviceRequest.httpReferrer");
+        logging(deviceRequest.getIpAddress(), docId, dboOperation, "deviceRequest.ipAddress");
+        logging(deviceRequest.getUserAgent(), docId, dboOperation, "deviceRequest.userAgent");
     }
 
     private static void validateEventData(CounterPartyEventData eventData, UUID docId, String dboOperation) {
-        logWarn(eventData.getEventType(), docId, dboOperation, "eventData.eventType");
-        logWarn(eventData.getClientDefinedEventType(), docId, dboOperation, "eventData.clientDefinedEventType");
-        logWarn(eventData.getEventDescription(), docId, dboOperation, "eventData.eventDescription");
-        logWarn(eventData.getTimeOfOccurrence(), docId, dboOperation, "eventData.timeOfOccurrence");
+        logging(eventData.getEventType(), docId, dboOperation, "eventData.eventType");
+        logging(eventData.getClientDefinedEventType(), docId, dboOperation, "eventData.clientDefinedEventType");
+        logging(eventData.getEventDescription(), docId, dboOperation, "eventData.eventDescription");
+        logging(eventData.getTimeOfOccurrence(), docId, dboOperation, "eventData.timeOfOccurrence");
     }
 
     private static void validateClientDefinedAttributeList(CounterPartyClientDefinedAttributes clientDefinedAttributeList, UUID docId, String dboOperation) {
-        logWarn(clientDefinedAttributeList.getReceiverName(), docId, dboOperation, "clientDefinedAttributeList.receiverName");
-        logWarn(clientDefinedAttributeList.getCounterpartyId(), docId, dboOperation, "clientDefinedAttributeList.counterpartyId");
-        logWarn(clientDefinedAttributeList.getUserComment(), docId, dboOperation, "clientDefinedAttributeList.userComment");
-        logWarn(clientDefinedAttributeList.getReceiverInn(), docId, dboOperation, "clientDefinedAttributeList.receiverInn");
-        logWarn(clientDefinedAttributeList.getPayerInn(), docId, dboOperation, "clientDefinedAttributeList.payerInn");
-        logWarn(clientDefinedAttributeList.getReceiverBicSwift(), docId, dboOperation, "clientDefinedAttributeList.receiverBicSwift");
-        logWarn(clientDefinedAttributeList.getReceiverAccount(), docId, dboOperation, "clientDefinedAttributeList.receiverAccount");
-        logWarn(clientDefinedAttributeList.getOsbNumber(), docId, dboOperation, "clientDefinedAttributeList.osbNumber");
-        logWarn(clientDefinedAttributeList.getVspNumber(), docId, dboOperation, "clientDefinedAttributeList.vspNumber");
-        logWarn(clientDefinedAttributeList.getDboOperationName(), docId, dboOperation, "clientDefinedAttributeList.dboOperationName");
-        logWarn(clientDefinedAttributeList.getPayerName(), docId, dboOperation, "clientDefinedAttributeList.payerName");
-        logWarn(clientDefinedAttributeList.getFirstSignTime(), docId, dboOperation, "clientDefinedAttributeList.firstSignTime");
-        logWarn(clientDefinedAttributeList.getFirstSignIpAddress(), docId, dboOperation, "clientDefinedAttributeList.firstSignIpAddress");
-        logWarn(clientDefinedAttributeList.getFirstSignLogin(), docId, dboOperation, "clientDefinedAttributeList.firstSignLogin");
-        logWarn(clientDefinedAttributeList.getFirstSignCryptoprofile(), docId, dboOperation, "clientDefinedAttributeList.firstSignCryptoprofile");
-        logWarn(clientDefinedAttributeList.getFirstSignCryptoprofileType(), docId, dboOperation, "clientDefinedAttributeList.firstSignCryptoprofileType");
-        logWarn(clientDefinedAttributeList.getFirstSignChannel(), docId, dboOperation, "clientDefinedAttributeList.firstSignChannel");
-        logWarn(clientDefinedAttributeList.getFirstSignToken(), docId, dboOperation, "clientDefinedAttributeList.firstSignToken");
-        logWarn(clientDefinedAttributeList.getFirstSignType(), docId, dboOperation, "clientDefinedAttributeList.firstSignType");
-        logWarn(clientDefinedAttributeList.getFirstSignImsi(), docId, dboOperation, "clientDefinedAttributeList.firstSignImsi");
-        logWarn(clientDefinedAttributeList.getFirstSignCertId(), docId, dboOperation, "clientDefinedAttributeList.firstSignCertId");
-        logWarn(clientDefinedAttributeList.getFirstSignPhone(), docId, dboOperation, "clientDefinedAttributeList.firstSignPhone");
-        logWarn(clientDefinedAttributeList.getFirstSignEmail(), docId, dboOperation, "clientDefinedAttributeList.firstSignEmail");
-        logWarn(clientDefinedAttributeList.getFirstSignSource(), docId, dboOperation, "clientDefinedAttributeList.firstSignSource");
-        logWarn(clientDefinedAttributeList.getSenderIpAddress(), docId, dboOperation, "clientDefinedAttributeList.senderIpAddress");
-        logWarn(clientDefinedAttributeList.getSenderLogin(), docId, dboOperation, "clientDefinedAttributeList.senderLogin");
-        logWarn(clientDefinedAttributeList.getSenderPhone(), docId, dboOperation, "clientDefinedAttributeList.senderPhone");
-        logWarn(clientDefinedAttributeList.getSenderEmail(), docId, dboOperation, "clientDefinedAttributeList.senderEmail");
-        logWarn(clientDefinedAttributeList.getSenderSource(), docId, dboOperation, "clientDefinedAttributeList.senderSource");
-        logWarn(clientDefinedAttributeList.getPrivateIpAddress(), docId, dboOperation, "clientDefinedAttributeList.privateIpAddress");
-        logWarn(clientDefinedAttributeList.getEpkId(), docId, dboOperation, "clientDefinedAttributeList.epkId");
-        logWarn(clientDefinedAttributeList.getDigitalId(), docId, dboOperation, "clientDefinedAttributeList.digitalId");
-        logWarn(clientDefinedAttributeList.getSbbolGuid(), docId, dboOperation, "clientDefinedAttributeList.sbbolGuid");
-        logWarn(clientDefinedAttributeList.getReestrId(), docId, dboOperation, "clientDefinedAttributeList.reestrId");
-        logWarn(clientDefinedAttributeList.getReestrRowCount(), docId, dboOperation, "clientDefinedAttributeList.reestrRowCount");
-        logWarn(clientDefinedAttributeList.getReestrRowNumber(), docId, dboOperation, "clientDefinedAttributeList.reestrRowNumber");
+        logging(clientDefinedAttributeList.getReceiverName(), docId, dboOperation, "clientDefinedAttributeList.receiverName");
+        logging(clientDefinedAttributeList.getCounterpartyId(), docId, dboOperation, "clientDefinedAttributeList.counterpartyId");
+        logging(clientDefinedAttributeList.getUserComment(), docId, dboOperation, "clientDefinedAttributeList.userComment");
+        logging(clientDefinedAttributeList.getReceiverInn(), docId, dboOperation, "clientDefinedAttributeList.receiverInn");
+        logging(clientDefinedAttributeList.getPayerInn(), docId, dboOperation, "clientDefinedAttributeList.payerInn");
+        logging(clientDefinedAttributeList.getReceiverBicSwift(), docId, dboOperation, "clientDefinedAttributeList.receiverBicSwift");
+        logging(clientDefinedAttributeList.getReceiverAccount(), docId, dboOperation, "clientDefinedAttributeList.receiverAccount");
+        logging(clientDefinedAttributeList.getOsbNumber(), docId, dboOperation, "clientDefinedAttributeList.osbNumber");
+        logging(clientDefinedAttributeList.getVspNumber(), docId, dboOperation, "clientDefinedAttributeList.vspNumber");
+        logging(clientDefinedAttributeList.getDboOperationName(), docId, dboOperation, "clientDefinedAttributeList.dboOperationName");
+        logging(clientDefinedAttributeList.getPayerName(), docId, dboOperation, "clientDefinedAttributeList.payerName");
+        logging(clientDefinedAttributeList.getFirstSignTime(), docId, dboOperation, "clientDefinedAttributeList.firstSignTime");
+        logging(clientDefinedAttributeList.getFirstSignIpAddress(), docId, dboOperation, "clientDefinedAttributeList.firstSignIpAddress");
+        logging(clientDefinedAttributeList.getFirstSignLogin(), docId, dboOperation, "clientDefinedAttributeList.firstSignLogin");
+        logging(clientDefinedAttributeList.getFirstSignCryptoprofile(), docId, dboOperation, "clientDefinedAttributeList.firstSignCryptoprofile");
+        logging(clientDefinedAttributeList.getFirstSignCryptoprofileType(), docId, dboOperation, "clientDefinedAttributeList.firstSignCryptoprofileType");
+        logging(clientDefinedAttributeList.getFirstSignChannel(), docId, dboOperation, "clientDefinedAttributeList.firstSignChannel");
+        logging(clientDefinedAttributeList.getFirstSignToken(), docId, dboOperation, "clientDefinedAttributeList.firstSignToken");
+        logging(clientDefinedAttributeList.getFirstSignType(), docId, dboOperation, "clientDefinedAttributeList.firstSignType");
+        logging(clientDefinedAttributeList.getFirstSignImsi(), docId, dboOperation, "clientDefinedAttributeList.firstSignImsi");
+        logging(clientDefinedAttributeList.getFirstSignCertId(), docId, dboOperation, "clientDefinedAttributeList.firstSignCertId");
+        logging(clientDefinedAttributeList.getFirstSignPhone(), docId, dboOperation, "clientDefinedAttributeList.firstSignPhone");
+        logging(clientDefinedAttributeList.getFirstSignEmail(), docId, dboOperation, "clientDefinedAttributeList.firstSignEmail");
+        logging(clientDefinedAttributeList.getFirstSignSource(), docId, dboOperation, "clientDefinedAttributeList.firstSignSource");
+        logging(clientDefinedAttributeList.getSenderIpAddress(), docId, dboOperation, "clientDefinedAttributeList.senderIpAddress");
+        logging(clientDefinedAttributeList.getSenderLogin(), docId, dboOperation, "clientDefinedAttributeList.senderLogin");
+        logging(clientDefinedAttributeList.getSenderPhone(), docId, dboOperation, "clientDefinedAttributeList.senderPhone");
+        logging(clientDefinedAttributeList.getSenderEmail(), docId, dboOperation, "clientDefinedAttributeList.senderEmail");
+        logging(clientDefinedAttributeList.getSenderSource(), docId, dboOperation, "clientDefinedAttributeList.senderSource");
+        logging(clientDefinedAttributeList.getPrivateIpAddress(), docId, dboOperation, "clientDefinedAttributeList.privateIpAddress");
+        logging(clientDefinedAttributeList.getEpkId(), docId, dboOperation, "clientDefinedAttributeList.epkId");
+        logging(clientDefinedAttributeList.getDigitalId(), docId, dboOperation, "clientDefinedAttributeList.digitalId");
+        logging(clientDefinedAttributeList.getSbbolGuid(), docId, dboOperation, "clientDefinedAttributeList.sbbolGuid");
+        logging(clientDefinedAttributeList.getReestrId(), docId, dboOperation, "clientDefinedAttributeList.reestrId");
+        logging(clientDefinedAttributeList.getReestrRowCount(), docId, dboOperation, "clientDefinedAttributeList.reestrRowCount");
+        logging(clientDefinedAttributeList.getReestrRowNumber(), docId, dboOperation, "clientDefinedAttributeList.reestrRowNumber");
     }
 
 }

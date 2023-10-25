@@ -9,11 +9,11 @@ import ru.sberbank.pprb.sbbol.antifraud.api.analyze.counterparty.CounterPartySen
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.counterparty.CounterPartyMapper;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeAbstractProcessor;
-import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeWithOutSavingProcessor;
+import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeWithoutSavingProcessor;
 import ru.sberbank.pprb.sbbol.antifraud.service.validator.counterparty.CounterPartyModelValidator;
 
 @Service
-public class CounterPartyProcessor extends AnalyzeAbstractProcessor implements AnalyzeWithOutSavingProcessor<CounterPartySendToAnalyzeRq> {
+public class CounterPartyProcessor extends AnalyzeAbstractProcessor implements AnalyzeWithoutSavingProcessor<CounterPartySendToAnalyzeRq> {
 
     private final CounterPartyMapper mapper;
 

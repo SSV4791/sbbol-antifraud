@@ -5,14 +5,14 @@ import org.springframework.stereotype.Service;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.counterparty.CounterPartySendToAnalyzeRq;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.rpc.counterparty.CounterPartyService;
-import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeWithOutSavingProcessor;
-import ru.sberbank.pprb.sbbol.antifraud.service.rpc.AnalyzeWithOutSavingAbstractService;
+import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeWithoutSavingProcessor;
+import ru.sberbank.pprb.sbbol.antifraud.service.rpc.AnalyzeWithoutSavingAbstractService;
 
 @Service
 @AutoJsonRpcServiceImpl
-public class CounterPartyServiceImpl extends AnalyzeWithOutSavingAbstractService<CounterPartySendToAnalyzeRq> implements CounterPartyService {
+public class CounterPartyServiceImpl extends AnalyzeWithoutSavingAbstractService<CounterPartySendToAnalyzeRq> implements CounterPartyService {
 
-    public CounterPartyServiceImpl(AnalyzeWithOutSavingProcessor<CounterPartySendToAnalyzeRq> processor) {
+    public CounterPartyServiceImpl(AnalyzeWithoutSavingProcessor<CounterPartySendToAnalyzeRq> processor) {
         super(processor);
     }
 

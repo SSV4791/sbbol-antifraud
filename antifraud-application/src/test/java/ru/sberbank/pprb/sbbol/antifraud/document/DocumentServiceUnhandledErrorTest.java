@@ -23,7 +23,7 @@ public class DocumentServiceUnhandledErrorTest extends AbstractIntegrationTest {
     private DocumentProcessor processor;
 
     public DocumentServiceUnhandledErrorTest() {
-        super("/antifraud/v2/document/saveandsend");
+        super("/antifraud/v2/document");
     }
 
     @Test

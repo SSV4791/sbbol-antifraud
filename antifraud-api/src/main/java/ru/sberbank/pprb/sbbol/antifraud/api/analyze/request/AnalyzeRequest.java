@@ -1,7 +1,7 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.analyze.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithOutSavingRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithoutSavingRequest;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Модель отправки данных на анализ (универсальный API)
  */
-public class AnalyzeRequest implements AnalyzeWithOutSavingRequest {
+public class AnalyzeRequest implements AnalyzeWithoutSavingRequest {
 
     /**
      * Сообщение заголовка

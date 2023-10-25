@@ -3,23 +3,23 @@ package ru.sberbank.pprb.sbbol.antifraud.service.rpc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.HttpStatusCodeException;
-import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithOutSavingRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithoutSavingRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.Response;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.AnalyzeException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 import ru.sberbank.pprb.sbbol.antifraud.api.exception.UnhandledException;
-import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeWithOutSavingProcessor;
+import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeWithoutSavingProcessor;
 
 import javax.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
 
-public class AnalyzeWithOutSavingAbstractService<T extends AnalyzeWithOutSavingRequest> {
+public class AnalyzeWithoutSavingAbstractService<T extends AnalyzeWithoutSavingRequest> {
 
-    private static final Logger logger = LoggerFactory.getLogger(AnalyzeWithOutSavingAbstractService.class);
+    private static final Logger logger = LoggerFactory.getLogger(AnalyzeWithoutSavingAbstractService.class);
 
-    private final AnalyzeWithOutSavingProcessor<T> processor;
+    private final AnalyzeWithoutSavingProcessor<T> processor;
 
-    public AnalyzeWithOutSavingAbstractService(AnalyzeWithOutSavingProcessor<T> processor) {
+    public AnalyzeWithoutSavingAbstractService(AnalyzeWithoutSavingProcessor<T> processor) {
         this.processor = processor;
     }
 
