@@ -18,7 +18,7 @@ import ru.sberbank.pprb.sbbol.antifraud.api.exception.ModelArgumentException;
 /**
  * Сервис сохранения, обновления и отправки данных в ФП ИС для последующего анализа (универсальный API)
  */
-@JsonRpcService("/antifraud/v2/document/saveandsend")
+@JsonRpcService("/antifraud/v2/document")
 public interface DocumentService {
 
     /**
@@ -31,7 +31,7 @@ public interface DocumentService {
             @JsonRpcError(exception = ModelArgumentException.class, code = -32600),
             @JsonRpcError(exception = InvalidFormatException.class, code = -32600),
             @JsonRpcError(exception = InvalidTypeIdException.class, code = -32600),
-            @JsonRpcError(exception = UnhandledException.class, code = -32001)
+            @JsonRpcError(exception = UnhandledException.class, code = -32603)
     })
     RequestId saveOrUpdateData(@JsonRpcParam(value = "dataparams") DocumentSaveRequest request);
 
@@ -47,7 +47,7 @@ public interface DocumentService {
             @JsonRpcError(exception = InvalidTypeIdException.class, code = -32600),
             @JsonRpcError(exception = ApplicationException.class, code = -32001),
             @JsonRpcError(exception = AnalyzeException.class, code = -32001),
-            @JsonRpcError(exception = UnhandledException.class, code = -32001)
+            @JsonRpcError(exception = UnhandledException.class, code = -32603)
     })
     FullAnalyzeResponse analyzeOperation(@JsonRpcParam(value = "analyzeparams") DocumentSendToAnalyzeRq request);
 
