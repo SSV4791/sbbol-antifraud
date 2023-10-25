@@ -159,6 +159,26 @@ public class PaymentV3MapperTest extends AbstractIntegrationTest {
         );
     }
 
+    @Test
+    @DisplayName("Создание запроса на анализ в ФП ИС из dto (РПП API v3)")
+    void toAnalyzeRequestFromDtoTest() {
+        PodamFactory podamFactory = podamFactory();
+        PaymentOperationV3 dto = podamFactory.populatePojo(new PaymentOperationV3());
+        // проверяем, что будет браться первая попавшаяся подпись с указанным signNumber
+        dto.setSigns(List.of(
+                new PaymentV3TypedSign(0, VALID_SIGN),
+                new PaymentV3TypedSign(0, INVALID_SIGN),
+                new PaymentV3TypedSign(1, VALID_SIGN),
+                new PaymentV3TypedSign(1, INVALID_SIGN),
+                new PaymentV3TypedSign(2, VALID_SIGN),
+                new PaymentV3TypedSign(2, INVALID_SIGN),
+                new PaymentV3TypedSign(3, VALID_SIGN),
+                new PaymentV3TypedSign(3, INVALID_SIGN)
+        ));
+        AnalyzeRequest analyzeRequest = MAPPER.toAnalyzeRequest(dto);
+        validateRequest(analyzeRequest, dto, 4);
+    }
+
     private void validateEntity(PaymentV3 entity, PaymentOperationV3 dto, int validSigns) {
         assertAll(
                 () -> assertNotNull(entity.getRequestId()),
@@ -198,6 +218,48 @@ public class PaymentV3MapperTest extends AbstractIntegrationTest {
                 () -> assertEquals(validSigns * 17 + dto.getEventDataList().getClientDefinedAttributeList().getFact().size(), entity.getCustomFacts().size()),
                 () -> entity.getCustomFacts().stream().filter(attr -> attr.getName().contains("Логин")).forEach(attr -> assertEquals("valid", attr.getValue())),
                 () -> entity.getCustomFacts().stream().filter(attr -> attr.getName().contains("Время подписи")).forEach(attr -> assertEquals(LocalDateTime.parse("2023-05-02T13:57:25.561427").plusHours(3).toString(), attr.getValue()))
+        );
+    }
+
+    private void validateRequest(AnalyzeRequest request, PaymentOperationV3 dto, int validSigns) {
+        assertAll(
+                () -> assertNotNull(request.getIdentificationData().getRequestId()),
+                () -> assertEquals(dto.getMessageHeader().getRequestType(), request.getMessageHeader().getRequestType()),
+                () -> assertEquals(dto.getMessageHeader().getTimeStamp().atZoneSameInstant(ZoneOffset.of("+03:00")).toLocalDateTime(), request.getMessageHeader().getTimeStamp()),
+                () -> assertEquals(dto.getIdentificationData().getUserName(), request.getIdentificationData().getUserName()),
+                () -> assertEquals(dto.getIdentificationData().getClientTransactionId(), request.getIdentificationData().getClientTransactionId()),
+                () -> assertEquals(dto.getIdentificationData().getOrgName(), request.getIdentificationData().getOrgName()),
+                () -> assertEquals(dto.getIdentificationData().getUserLoginName(), request.getIdentificationData().getUserLoginName()),
+                () -> assertEquals(dto.getIdentificationData().getDboOperation(), request.getIdentificationData().getDboOperation()),
+                () -> assertEquals(dto.getDeviceRequest().getHttpAccept(), request.getDeviceRequest().getHttpAccept()),
+                () -> assertEquals(dto.getDeviceRequest().getHttpReferrer(), request.getDeviceRequest().getHttpReferrer()),
+                () -> assertEquals(dto.getDeviceRequest().getHttpAcceptChars(), request.getDeviceRequest().getHttpAcceptChars()),
+                () -> assertEquals(dto.getDeviceRequest().getHttpAcceptEncoding(), request.getDeviceRequest().getHttpAcceptEncoding()),
+                () -> assertEquals(dto.getDeviceRequest().getHttpAcceptLanguage(), request.getDeviceRequest().getHttpAcceptLanguage()),
+                () -> assertEquals(dto.getDeviceRequest().getIpAddress(), request.getDeviceRequest().getIpAddress()),
+                () -> assertEquals(dto.getDeviceRequest().getUserAgent(), request.getDeviceRequest().getUserAgent()),
+                () -> assertEquals(dto.getDeviceRequest().getDevicePrint(), request.getDeviceRequest().getDevicePrint()),
+                () -> assertEquals(dto.getDeviceRequest().getMobSdkData(), request.getDeviceRequest().getMobSdkData()),
+                () -> assertEquals(dto.getEventDataList().getEventData().getEventType(), request.getEventDataList().getEventData().getEventType()),
+                () -> assertEquals(dto.getEventDataList().getEventData().getClientDefinedEventType(), request.getEventDataList().getEventData().getClientDefinedEventType()),
+                () -> assertEquals(dto.getEventDataList().getEventData().getEventDescription(), request.getEventDataList().getEventData().getEventDescription()),
+                () -> assertEquals(dto.getEventDataList().getEventData().getTimeOfOccurrence().atZoneSameInstant(ZoneOffset.of("+03:00")).toLocalDateTime(), request.getEventDataList().getEventData().getTimeOfOccurrence()),
+                () -> assertEquals(dto.getEventDataList().getTransactionData().getAmount().getAmount(), request.getEventDataList().getTransactionData().getAmount().getAmount()),
+                () -> assertEquals(dto.getEventDataList().getTransactionData().getAmount().getCurrency(), request.getEventDataList().getTransactionData().getAmount().getCurrency()),
+                () -> assertEquals(dto.getEventDataList().getTransactionData().getExecutionSpeed(), request.getEventDataList().getTransactionData().getExecutionSpeed()),
+                () -> assertEquals(dto.getEventDataList().getTransactionData().getOtherAccountBankType(), request.getEventDataList().getTransactionData().getOtherAccountBankType()),
+                () -> assertEquals(dto.getEventDataList().getTransactionData().getMyAccountData().getAccountNumber(), request.getEventDataList().getTransactionData().getMyAccountData().getAccountNumber()),
+                () -> assertEquals(dto.getEventDataList().getTransactionData().getOtherAccountData().getAccountName(), request.getEventDataList().getTransactionData().getOtherAccountData().getAccountName()),
+                () -> assertEquals(dto.getEventDataList().getTransactionData().getOtherAccountData().getAccountNumber(), request.getEventDataList().getTransactionData().getOtherAccountData().getAccountNumber()),
+                () -> assertEquals(dto.getEventDataList().getTransactionData().getOtherAccountData().getRoutingCode(), request.getEventDataList().getTransactionData().getOtherAccountData().getRoutingCode()),
+                () -> assertEquals(dto.getEventDataList().getTransactionData().getOtherAccountData().getOtherAccountOwnershipType(), request.getEventDataList().getTransactionData().getOtherAccountData().getOtherAccountOwnershipType()),
+                () -> assertEquals(dto.getEventDataList().getTransactionData().getOtherAccountData().getOtherAccountType(), request.getEventDataList().getTransactionData().getOtherAccountData().getOtherAccountType()),
+                () -> assertEquals(dto.getEventDataList().getTransactionData().getOtherAccountData().getTransferMediumType(), request.getEventDataList().getTransactionData().getOtherAccountData().getTransferMediumType()),
+                () -> assertEquals(dto.getChannelIndicator(), request.getChannelIndicator()),
+                () -> assertEquals(dto.getClientDefinedChannelIndicator(), request.getClientDefinedChannelIndicator()),
+                () -> assertEquals(validSigns * 17 + dto.getEventDataList().getClientDefinedAttributeList().getFact().size(), request.getEventDataList().getClientDefinedAttributeList().getFact().size()),
+                () -> request.getEventDataList().getClientDefinedAttributeList().getFact().stream().filter(attr -> attr.getName().contains("Логин")).forEach(attr -> assertEquals("valid", attr.getValue())),
+                () -> request.getEventDataList().getClientDefinedAttributeList().getFact().stream().filter(attr -> attr.getName().contains("Время подписи")).forEach(attr -> assertEquals(LocalDateTime.parse("2023-05-02T13:57:25.561427").plusHours(3).toString(), attr.getValue()))
         );
     }
 

@@ -136,8 +136,21 @@ public abstract class PaymentV3Mapper implements CommonMapper<PaymentV3> {
     @Mapping(target = "clientDefinedChannelIndicator", source = "clientDefinedChannelIndicator")
     public abstract AnalyzeRequest toAnalyzeRequest(PaymentV3 entity);
 
+    @Mapping(target = "identificationData.requestId", expression = "java(UUID.randomUUID())")
+    @Mapping(target = "eventDataList.customersDataList", ignore = true)
+    public abstract AnalyzeRequest toAnalyzeRequest(PaymentOperationV3 dto);
+
     @AfterMapping
-    protected void addSignsInCustomFacts(@MappingTarget PaymentV3 entity, PaymentOperationV3 dto) {
+    protected void addSignsInEntityCustomFacts(@MappingTarget AnalyzeRequest request, PaymentOperationV3 dto) {
+        addSignsInCustomFacts(request.getEventDataList().getClientDefinedAttributeList().getFact(), dto);
+    }
+
+    @AfterMapping
+    protected void addSignsInEntityCustomFacts(@MappingTarget PaymentV3 entity, PaymentOperationV3 dto) {
+        addSignsInCustomFacts(entity.getCustomFacts(), dto);
+    }
+
+    private void addSignsInCustomFacts(List<Attribute> customFacts, PaymentOperationV3 dto) {
         if (dto.getSigns() == null) {
             return;
         }
@@ -151,25 +164,25 @@ public abstract class PaymentV3Mapper implements CommonMapper<PaymentV3> {
             switch (typedSign.getSignNumber()) {
                 case 0 -> {
                     if (!isSenderSignAdded) {
-                        entity.getCustomFacts().addAll(convertSignToCustomFacts(typedSign, "Отправивший "));
+                        customFacts.addAll(convertSignToCustomFacts(typedSign, "Отправивший "));
                         isSenderSignAdded = true;
                     }
                 }
                 case 1 -> {
                     if (!isFirstSignAdded) {
-                        entity.getCustomFacts().addAll(convertSignToCustomFacts(typedSign, "1-я подпись "));
+                        customFacts.addAll(convertSignToCustomFacts(typedSign, "1-я подпись "));
                         isFirstSignAdded = true;
                     }
                 }
                 case 2 -> {
                     if (!isSecondSignAdded) {
-                        entity.getCustomFacts().addAll(convertSignToCustomFacts(typedSign, "2-я подпись "));
+                        customFacts.addAll(convertSignToCustomFacts(typedSign, "2-я подпись "));
                         isSecondSignAdded = true;
                     }
                 }
                 case 3 -> {
                     if (!isSingleSignAdded) {
-                        entity.getCustomFacts().addAll(convertSignToCustomFacts(typedSign, "Единственная подпись "));
+                        customFacts.addAll(convertSignToCustomFacts(typedSign, "Единственная подпись "));
                         isSingleSignAdded = true;
                     }
                 }

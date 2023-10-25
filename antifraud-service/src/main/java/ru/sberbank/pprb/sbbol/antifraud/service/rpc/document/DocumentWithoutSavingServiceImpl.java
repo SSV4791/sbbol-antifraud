@@ -4,15 +4,15 @@ import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImpl;
 import org.springframework.stereotype.Service;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.FullAnalyzeResponse;
-import ru.sberbank.pprb.sbbol.antifraud.rpc.document.DocumentWithOutSavingService;
-import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeWithOutSavingProcessor;
-import ru.sberbank.pprb.sbbol.antifraud.service.rpc.AnalyzeWithOutSavingAbstractService;
+import ru.sberbank.pprb.sbbol.antifraud.rpc.document.DocumentWithoutSavingService;
+import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeWithoutSavingProcessor;
+import ru.sberbank.pprb.sbbol.antifraud.service.rpc.AnalyzeWithoutSavingAbstractService;
 
 @Service
 @AutoJsonRpcServiceImpl
-public class DocumentWithOutSavingServiceImpl extends AnalyzeWithOutSavingAbstractService<AnalyzeRequest> implements DocumentWithOutSavingService {
+public class DocumentWithoutSavingServiceImpl extends AnalyzeWithoutSavingAbstractService<AnalyzeRequest> implements DocumentWithoutSavingService {
 
-    public DocumentWithOutSavingServiceImpl(AnalyzeWithOutSavingProcessor<AnalyzeRequest> processor) {
+    public DocumentWithoutSavingServiceImpl(AnalyzeWithoutSavingProcessor<AnalyzeRequest> processor) {
         super(processor);
     }
 

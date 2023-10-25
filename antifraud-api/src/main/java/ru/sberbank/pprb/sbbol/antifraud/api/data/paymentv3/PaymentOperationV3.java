@@ -1,10 +1,10 @@
 package ru.sberbank.pprb.sbbol.antifraud.api.data.paymentv3;
 
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.AnalyzeWithoutSavingRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.Operation;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Модель РПП для API v3 (сохранение данных)
  */
-public class PaymentOperationV3 implements Operation {
+public class PaymentOperationV3 implements Operation, AnalyzeWithoutSavingRequest {
 
     /**
      * Заголовок сообщения
@@ -76,6 +76,11 @@ public class PaymentOperationV3 implements Operation {
     @Override
     public String getDboOperation() {
         return getIdentificationData().getDboOperation();
+    }
+
+    @Override
+    public String getClientTransactionId() {
+        return getIdentificationData().getClientTransactionId();
     }
 
     public PaymentV3MessageHeader getMessageHeader() {

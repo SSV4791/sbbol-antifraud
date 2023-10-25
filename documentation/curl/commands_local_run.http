@@ -26,6 +26,13 @@ Content-Type: application/json-rpc
 
 < paymentV3_send.json
 
+###
+
+POST http://127.0.0.1:8080/antifraud/v3/payment/withoutsaving
+Content-Type: application/json-rpc
+
+< paymentv3_send_without_saving.json
+
 ### СБП
 
 POST http://127.0.0.1:8080/antifraud/v2/fastpayment

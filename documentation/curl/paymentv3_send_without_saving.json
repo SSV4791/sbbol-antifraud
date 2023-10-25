@@ -1,0 +1,99 @@
+{
+  "jsonrpc": "2.0",
+  "method": "analyzeOperation",
+  "id": 1,
+  "params": {
+    "analyzeparams": {
+      "messageHeader": {
+        "timeStamp": "2023-05-03T17:03:25.911225+03:00",
+        "requestType": "ANALYZE"
+      },
+      "identificationData": {
+        "userName": "123454334312",
+        "clientTransactionId": "36ff1f5f-a0d2-4337-a4bd-1f620ac3462b",
+        "orgName": "38",
+        "userLoginName": "ivanov05",
+        "dboOperation": "PAYMENT_DT_0401060"
+      },
+      "deviceRequest": {
+        "httpAccept": "text/javascript, text/html, application/xml, text/xml, */*",
+        "httpReferrer": "http://localhost:8000/reference_application/Login.do",
+        "httpAcceptChars": "ISO-8859-1,utf-8;q=0.7,*;q=0.7",
+        "httpAcceptEncoding": "gzip, deflate",
+        "httpAcceptLanguage": "en,en-us;q=0.5",
+        "ipAddress": "78.245.9.87",
+        "userAgent": "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; InfoPath.1; .NET CLR 2.0.50727)",
+        "devicePrint": "version%3D3%2E4%2E1%2E0%5F1%26pm%5Ffpua%3Dmozilla%2F4%2E0%20%28compatible%3B%20",
+        "mobSdkData": "version%20nt%206%2E1%3B%20win64%3B%20x64%3B%20trident%2F4%2E0%3B%20%2Enet"
+      },
+      "eventDataList": {
+        "eventData": {
+          "eventType": "PAYMENT",
+          "clientDefinedEventType": "BROWSER_PAYDOCRU",
+          "eventDescription": "Платежное поручение",
+          "timeOfOccurrence": "2023-05-03T17:03:25.919692+03:00"
+        },
+        "transactionData": {
+          "amount": {
+            "amount": 525000,
+            "currency": "RUB"
+          },
+          "myAccountData": {
+            "accountNumber": "40702810500112958634"
+          },
+          "otherAccountData": {
+            "accountName": "ООО Рога и копыта",
+            "accountNumber": "45678667897655789978",
+            "routingCode": "040012002",
+            "otherAccountOwnershipType": "ME_TO_YOU",
+            "otherAccountType": "BILLER",
+            "transferMediumType": "WIRE"
+          },
+          "executionSpeed": "FEW_HOURS",
+          "otherAccountBankType": "OTHER_BANK"
+        },
+        "clientDefinedAttributeList": {
+          "fact": [
+            {
+              "name": "Личный кабинет",
+              "value": "12245431453312232",
+              "dataType": "STRING"
+            },
+            {
+              "name": "ИНН отправителя",
+              "value": "7704681547",
+              "dataType": "STRING"
+            },
+            {
+              "name": "Номер платежного документа",
+              "value": "2311",
+              "dataType": "STRING"
+            },
+            {
+              "name": "Дата платежного документа",
+              "value": "2023-05-03",
+              "dataType": "STRING"
+            },
+            {
+              "name": "Назначение платежа",
+              "value": "Возврат денежных средств по заказу 123412-93",
+              "dataType": "STRING"
+            }
+          ]
+        }
+      },
+      "signs": [
+        {
+          "signNumber": 0,
+          "sign": "{\"signTime\":\"2023-05-02T13:57:25.561427\",\"signIp\":\"172.16.0.0\",\"signLogin\":\"ivanov05\",\"signCryptoprofile\":\"Иванов Иван Иванович\",\"signCryptoprofileType\":\"OneTimePassword\",\"signToken\":\"token\",\"signType\":\"Единственная подпись\",\"signImsi\":\"6176CB3B83F33108E0CBD9F411CAF608\",\"signCertId\":\"certId\",\"signPhone\":\"903 158-55-12\",\"signEmail\":\"iv@glavbaza36.ru\",\"signChannel\":\"TOKEN\",\"signSource\":\"SMS\",\"signDigitalUserId\":\"signDigitalUserId\",\"signMacAddress\":\"signMacAddress\",\"signGeoLocation\":\"signGeoLocation\",\"signPkProperty\":\"signPkProperty\"}"
+        },
+        {
+          "signNumber": 3,
+          "sign": "{\"signTime\":\"2023-05-02T13:57:25.561427\",\"signIp\":\"172.16.0.0\",\"signLogin\":\"ivanov05\",\"signCryptoprofile\":\"Иванов Иван Иванович\",\"signCryptoprofileType\":\"OneTimePassword\",\"signToken\":\"token\",\"signType\":\"Единственная подпись\",\"signImsi\":\"6176CB3B83F33108E0CBD9F411CAF608\",\"signCertId\":\"certId\",\"signPhone\":\"903 158-55-12\",\"signEmail\":\"iv@glavbaza36.ru\",\"signChannel\":\"TOKEN\",\"signSource\":\"SMS\",\"signDigitalUserId\":\"signDigitalUserId\",\"signMacAddress\":\"signMacAddress\",\"signGeoLocation\":\"signGeoLocation\",\"signPkProperty\":\"signPkProperty\"}"
+        }
+      ],
+      "channelIndicator": "WEB",
+      "clientDefinedChannelIndicator": "PPRB_BROWSER"
+    }
+  }
+}

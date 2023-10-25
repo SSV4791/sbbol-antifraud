@@ -30,6 +30,13 @@ Content-Type: application/json-rpc
 
 < paymentV3_send.json
 
+###
+
+POST https://ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru/antifraud/v3/payment/withoutsaving
+Content-Type: application/json-rpc
+
+< paymentv3_send_without_saving.json
+
 ### СБП
 
 POST https://ingress-ci02281165-antifraud-tls.apps.dev-terra000006-idm.ocp.delta.sbrf.ru/antifraud/v2/fastpayment
