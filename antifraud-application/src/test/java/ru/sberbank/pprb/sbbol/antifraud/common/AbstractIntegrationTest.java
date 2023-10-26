@@ -137,4 +137,12 @@ public abstract class AbstractIntegrationTest {
         );
     }
 
+    protected AnalyzeResponse sendPaymentV3(AnalyzeWithoutSavingRequest request) throws Throwable {
+        return jsonRpcRestClient.invoke(
+                "analyzeOperation",
+                Collections.singletonMap("dataparams", request),
+                AnalyzeResponse.class
+        );
+    }
+
 }

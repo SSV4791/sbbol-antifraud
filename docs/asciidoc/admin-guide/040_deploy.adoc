@@ -286,7 +286,7 @@ curl -v https://ingress-ci03045533-sbbol-antifraud-tls.apps.dev-gen2.sigma.sbrf.
   "method": "analyzeOperation",
   "id": 1,
   "params": {
-    "analyzeparams": {
+    "dataparams": {
       "messageHeader": {
         "timeStamp": "2023-05-03T17:03:25.911225+03:00",
         "requestType": "ANALYZE"

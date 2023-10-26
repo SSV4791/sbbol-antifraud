@@ -68,7 +68,7 @@ public class PaymentV3WithoutSavingTest extends AbstractIntegrationTest {
                 new PaymentV3TypedSign(3, SIGN)
         ));
 
-        AnalyzeResponse actual = send(request);
+        AnalyzeResponse actual = sendPaymentV3(request);
         assertAll(
                 () -> assertEquals(expected.getIdentificationData().getTransactionId(), actual.getTransactionId()),
                 () -> assertEquals(expected.getRiskResult().getTriggeredRule().getActionCode(), actual.getActionCode()),
@@ -93,7 +93,7 @@ public class PaymentV3WithoutSavingTest extends AbstractIntegrationTest {
                 new PaymentV3TypedSign(3, SIGN)
         ));
 
-        AnalyzeException ex = assertThrows(AnalyzeException.class, () -> send(request));
+        AnalyzeException ex = assertThrows(AnalyzeException.class, () -> sendPaymentV3(request));
         String msg = ex.getMessage();
         assertEquals("ClientTransactionId=" + request.getClientTransactionId() + ", dboOperation=" + request.getDboOperation() + ". Analysis error. Status code: 500 INTERNAL_SERVER_ERROR. ERROR", msg);
     }

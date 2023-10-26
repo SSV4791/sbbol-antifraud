@@ -33,6 +33,6 @@ public interface PaymentWithoutSavingServiceV3 {
             @JsonRpcError(exception = AnalyzeException.class, code = -32001),
             @JsonRpcError(exception = UnhandledException.class, code = -32603)
     })
-    AnalyzeResponse analyzeOperation(@JsonRpcParam(value = "analyzeparams") PaymentOperationV3 request);
+    AnalyzeResponse analyzeOperation(@JsonRpcParam(value = "dataparams") PaymentOperationV3 request);
 
 }
