@@ -32,6 +32,7 @@ data:
         Add moduleVersion ${moduleVersion}
         Add nodeId ${nodeId}
         Add standId ${standId}
+        Add namespace ${namespace}
     [OUTPUT]
         Name stdout
         Match *
@@ -42,6 +43,13 @@ data:
 
         Topics CI03045533.as_antifraud_logs
         rdkafka.security.protocol PLAINTEXT
+{% if fluentbit.kafka.app.enabled is defined and fluentbit.kafka.app.enabled | bool %}
+    [OUTPUT]
+        Name kafka
+        Match *
+        Topics {{ fluentbit.kafka.app.topic }}
+        Brokers {% for entry in int_entry.logs %}{{ entry.ip }}:{{ entry.port }}{% if not loop.last %},{% endif %}{% endfor %}
+{% endif %}
   parsers.conf: |-
     [PARSER]
         Name custom

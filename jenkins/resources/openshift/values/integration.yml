@@ -11,7 +11,6 @@ int:
           ott: false
           mtls: false
           protocol: TCP
-
     db_si:
       v1_0:
         - name: db-si
@@ -23,7 +22,6 @@ int:
           mtls: false
           protocol: TCP
           resolution: STATIC
-
     appjournal:
       v1_0:
         - name: appjournal1
@@ -45,7 +43,6 @@ int:
           protocol: TCP
           url: dummy
           resolution: STATIC
-
     ci2809205_kafka_tengri:
       v1_0:
         - name: tvlds-tgr000533
@@ -228,7 +225,6 @@ int:
           ip: 10.49.147.112
           port: 9093
           egress_port: 3019
-
     CI1099171_antifraud_integration_service:
       v1_0:
         name: antifraud_integration_service # ФП ИС: Антифрод ФЛ. Интеграционный сервис(1099171)
@@ -238,7 +234,39 @@ int:
         mtls: true
         protocol: TLS
         subjectAltNames: []
-
+  sbbol:
+    monitoring:
+      v1_0:
+        - name: tkldq-efs000217-monitoring
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          url: http://10.53.164.226
+          host: tkldq-efs000217.vm.mos.cloud.sbrf.ru
+          ip: 10.53.164.226
+          port: 9093
+          egress_port: 2093
+        - name: tkldq-efs000218-monitoring
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          url: http://10.53.164.47
+          host: tkldq-efs000218.vm.mos.cloud.sbrf.ru
+          ip: 10.53.164.47
+          port: 9093
+          egress_port: 2094
+        - name: tkldq-efs000219-monitoring
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          url: http://10.53.164.224
+          host: tkldq-efs000219.vm.mos.cloud.sbrf.ru
+          ip: 10.53.164.224
+          port: 9093
+          egress_port: 2095
   ott:
     hosts:
       - 10.53.99.178

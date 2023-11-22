@@ -155,6 +155,6 @@ release:
   default_values:
     type: release
     checkmarx: true
-    params_folder: release/02.004.00
+    params_folder: release/02.005.01
     istio_tag: '2.5'
 

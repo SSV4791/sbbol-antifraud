@@ -10,6 +10,9 @@
 ====
 [source,properties]
 ----
+custom_var:
+  logging_fb_topic: CI02473994.CI03045533.PPRB.DCB.FRAUD.LOGS
+
 openshift:
   os_host: "dev-terra000006-idm.ocp.delta.sbrf.ru"
   io_control_panel: ci02281165-control-plane
@@ -199,6 +202,10 @@ fluentbit:
     cpu: 200m
     memory: 256Mi
     ephemeral_storage: 600Mi
+  kafka:
+    app:
+      enabled: true
+      topic: "{{ custom_var.logging_fb_topic }}"
 
 app_journal:
   secret: secret-appjournalstubsettings
@@ -663,6 +670,39 @@ int:
           ip: 10.49.147.112
           port: 9093
           egress_port: 3019
+  sbbol:
+    monitoring:
+      v1_0:
+        - name: tkldq-efs000217-monitoring
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          url: http://10.53.164.226
+          host: tkldq-efs000217.vm.mos.cloud.sbrf.ru
+          ip: 10.53.164.226
+          port: 9093
+          egress_port: 2093
+        - name: tkldq-efs000218-monitoring
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          url: http://10.53.164.47
+          host: tkldq-efs000218.vm.mos.cloud.sbrf.ru
+          ip: 10.53.164.47
+          port: 9093
+          egress_port: 2094
+        - name: tkldq-efs000219-monitoring
+          protocol: TCP
+          resolution: STATIC
+          ott: false
+          mtls: true
+          url: http://10.53.164.224
+          host: tkldq-efs000219.vm.mos.cloud.sbrf.ru
+          ip: 10.53.164.224
+          port: 9093
+          egress_port: 2095
   ott:
     v2_0:
       - name: ott-1
