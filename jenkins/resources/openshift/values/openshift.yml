@@ -1,4 +1,7 @@
 ---
+custom_var:
+  logging_fb_topic: CI02473994.CI03045533.PPRB.DCB.FRAUD.LOGS
+
 openshift:
   env: dev
   os_host: "dev-terra000006-idm.ocp.delta.sbrf.ru"
@@ -193,6 +196,10 @@ fluentbit:
     cpu: 200m
     memory: 256Mi
     ephemeral_storage: 600Mi
+  kafka:
+    app:
+      enabled: true
+      topic: "{{ custom_var.logging_fb_topic }}"
 
 app_journal:
   secret: secret-appjournalstubsettings
