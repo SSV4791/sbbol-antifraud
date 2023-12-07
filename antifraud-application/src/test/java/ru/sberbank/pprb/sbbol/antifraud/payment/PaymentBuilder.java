@@ -59,7 +59,7 @@ public class PaymentBuilder {
         payment.getDocument().setNumber(docNumber != null ? docNumber : Math.abs(RandomUtils.nextInt()));
         payment.getDocument().setDate(docDate != null ? docDate : LocalDate.now());
         payment.getDocument().setAmount(amount != null ? amount : Math.abs(RandomUtils.nextLong()));
-        payment.getDocument().setCurrency(currency != null ? currency : "RUB");
+        payment.getDocument().setCurrency(currency != null ? currency : RandomStringUtils.randomAlphabetic(20));
         payment.getDocument().setExecutionSpeed(executionSpeed != null ? executionSpeed : RandomStringUtils.randomAlphabetic(30));
         payment.getDocument().setOtherAccBankType(otherAccBankType != null ? otherAccBankType : RandomStringUtils.randomAlphabetic(20));
         payment.getDocument().setOtherAccOwnershipType(otherAccOwnershipType != null ? otherAccOwnershipType : RandomStringUtils.randomAlphabetic(15));

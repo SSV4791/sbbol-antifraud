@@ -159,7 +159,7 @@ public class Document extends BaseEntity {
     /**
      * Валюта перевода, буквенный код валюты перевода в соответствии со стандартом ISO
      */
-    @Column(length = 3)
+    @Column(length = 20)
     private String currency;
 
     /**

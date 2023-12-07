@@ -134,7 +134,7 @@ public class ElectronicReceipt extends BaseEntity {
     /**
      * Валюта перевода, буквенный код в соответствии со стандартом ISO
      */
-    @Column(length = 3)
+    @Column(length = 20)
     private String currency;
 
     /**

@@ -99,7 +99,7 @@ class ElectronicReceiptBuilder {
         operation.getDocument().setNumber(docNumber != null ? docNumber : RandomStringUtils.randomNumeric(10));
         operation.getDocument().setDate(docDate != null ? docDate : LocalDate.now().minusDays(3));
         operation.getDocument().setAmount(amount != null ? amount : Math.abs(RandomUtils.nextLong()));
-        operation.getDocument().setCurrency(currency != null ? currency : "RUB");
+        operation.getDocument().setCurrency(currency != null ? currency : RandomStringUtils.randomAlphabetic(20));
         operation.getDocument().setDestination(destination != null ? destination : RandomStringUtils.randomAlphabetic(15));
 
         operation.getDocument().setPayer(new ReceiptPayer());
