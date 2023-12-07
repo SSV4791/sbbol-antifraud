@@ -93,7 +93,7 @@ public class Payment extends BaseEntity {
     /**
      * HTTP request ->ip-address
      */
-    @Column(length = 15)
+    @Column(length = 50)
     private String ipAddress;
 
     /**
@@ -233,7 +233,7 @@ public class Payment extends BaseEntity {
     /**
      * 1-я подпись IP адрес
      */
-    @Column(length = 15)
+    @Column(length = 50)
     private String firstSignIp;
 
     /**
@@ -305,7 +305,7 @@ public class Payment extends BaseEntity {
     /**
      * Локальный IP адрес сервера
      */
-    @Column(length = 15)
+    @Column(length = 50)
     private String privateIpAddress;
 
     /**
@@ -316,7 +316,7 @@ public class Payment extends BaseEntity {
     /**
      * Отправивший IP адрес
      */
-    @Column(length = 15)
+    @Column(length = 50)
     private String senderIp;
 
     /**
@@ -393,7 +393,7 @@ public class Payment extends BaseEntity {
     /**
      * 2-я подпись IP адрес
      */
-    @Column(length = 15)
+    @Column(length = 50)
     private String secondSignIp;
 
     /**
@@ -470,7 +470,7 @@ public class Payment extends BaseEntity {
     /**
      * 3-я подпись IP адрес
      */
-    @Column(length = 15)
+    @Column(length = 50)
     private String thirdSignIp;
 
     /**

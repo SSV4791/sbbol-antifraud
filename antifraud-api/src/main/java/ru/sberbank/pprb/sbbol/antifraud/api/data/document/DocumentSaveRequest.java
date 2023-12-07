@@ -107,7 +107,7 @@ public class DocumentSaveRequest implements Operation {
     /**
      * IP адрес
      */
-    @Size(message = "Attribute \"ipAddress\" cannot contain more than 15 characters", max = 15)
+    @Size(message = "Attribute \"ipAddress\" cannot contain more than 50 characters", max = 50)
     private String ipAddress;
 
     /**

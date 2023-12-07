@@ -89,7 +89,7 @@ public class ElectronicReceipt extends BaseEntity {
     /**
      * HTTP request ->ip-address
      */
-    @Column(length = 15)
+    @Column(length = 50)
     private String ipAddress;
 
     /**
@@ -268,7 +268,7 @@ public class ElectronicReceipt extends BaseEntity {
     /**
      * 1-я подпись IP адрес
      */
-    @Column(length = 15)
+    @Column(length = 50)
     private String firstSignIp;
 
     /**
@@ -334,7 +334,7 @@ public class ElectronicReceipt extends BaseEntity {
     /**
      * Локальный IP адрес сервера
      */
-    @Column(length = 15)
+    @Column(length = 50)
     private String privateIpAddress;
 
     /**
@@ -345,7 +345,7 @@ public class ElectronicReceipt extends BaseEntity {
     /**
      * Отправивший IP адрес
      */
-    @Column(length = 15)
+    @Column(length = 50)
     private String senderIp;
 
     /**
@@ -416,7 +416,7 @@ public class ElectronicReceipt extends BaseEntity {
     /**
      * 2-я подпись IP адрес
      */
-    @Column(length = 15)
+    @Column(length = 50)
     private String secondSignIp;
 
     /**

@@ -41,7 +41,7 @@ public class PaymentV3DeviceRequest implements Serializable {
     /**
      * IP адрес
      */
-    @Size(message = "Attribute \"deviceRequest.ipAddress\" cannot contain more than 15 characters", max = 15)
+    @Size(message = "Attribute \"deviceRequest.ipAddress\" cannot contain more than 50 characters", max = 50)
     private String ipAddress;
 
     /**

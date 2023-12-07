@@ -136,7 +136,7 @@ class ElectronicReceiptBuilder {
         operation.getDeviceRequest().setHttpAcceptChars(httpAcceptChars != null ? httpAcceptChars : RandomStringUtils.randomAlphabetic(25));
         operation.getDeviceRequest().setHttpAcceptEncoding(httpAcceptEncoding != null ? httpAcceptEncoding : RandomStringUtils.randomAlphabetic(25));
         operation.getDeviceRequest().setHttpAcceptLanguage(httpAcceptLanguage != null ? httpAcceptLanguage : RandomStringUtils.randomAlphabetic(25));
-        operation.getDeviceRequest().setIpAddress(ipAddress != null ? ipAddress : generateIpAddress());
+        operation.getDeviceRequest().setIpAddress(ipAddress != null ? ipAddress : RandomStringUtils.randomNumeric(50));
         operation.getDeviceRequest().setUserAgent(userAgent != null ? userAgent : RandomStringUtils.randomAlphabetic(25));
 
         operation.setSign(new ReceiptSign());

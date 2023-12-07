@@ -119,7 +119,7 @@ public class Document extends BaseEntity {
     /**
      * IP адрес
      */
-    @Column(length = 15)
+    @Column(length = 50)
     private String ipAddress;
 
     /**

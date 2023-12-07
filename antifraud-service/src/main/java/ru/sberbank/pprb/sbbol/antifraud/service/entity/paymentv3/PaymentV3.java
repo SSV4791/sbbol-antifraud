@@ -103,7 +103,7 @@ public class PaymentV3 extends BaseEntity {
     /**
      * HTTP request ->ip-address
      */
-    @Column(length = 15)
+    @Column(length = 50)
     private String ipAddress;
 
     /**
