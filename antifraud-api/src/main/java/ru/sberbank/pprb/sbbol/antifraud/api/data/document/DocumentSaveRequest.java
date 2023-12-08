@@ -107,7 +107,7 @@ public class DocumentSaveRequest implements Operation {
     /**
      * IP адрес
      */
-    @Size(message = "Attribute \"ipAddress\" cannot contain more than 15 characters", max = 15)
+    @Size(message = "Attribute \"ipAddress\" cannot contain more than 50 characters", max = 50)
     private String ipAddress;
 
     /**
@@ -151,7 +151,7 @@ public class DocumentSaveRequest implements Operation {
     /**
      * Валюта перевода, буквенный код валюты перевода в соответствии со стандартом ISO
      */
-    @Size(message = "Attribute \"currency\" cannot contain more than 3 characters", max = 3)
+    @Size(message = "Attribute \"currency\" cannot contain more than 20 characters", max = 20)
     private String currency;
 
     /**

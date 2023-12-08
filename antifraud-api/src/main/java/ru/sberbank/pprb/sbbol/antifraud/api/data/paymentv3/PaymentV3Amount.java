@@ -20,7 +20,7 @@ public class PaymentV3Amount implements Serializable {
     /**
      * Валюта. Буквенный код в соответствии со стандартом ISO
      */
-    @Size(message = "Attribute \"eventDataList.transactionData.amount.currency\" cannot contain more than 3 characters", max = 3)
+    @Size(message = "Attribute \"eventDataList.transactionData.amount.currency\" cannot contain more than 20 characters", max = 20)
     private String currency;
 
     @JsonCreator

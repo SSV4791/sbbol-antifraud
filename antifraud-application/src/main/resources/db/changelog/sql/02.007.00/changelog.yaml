@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: 1701957031253_change_currency_size.sql
+      relativeToChangelogFile: true
+  - include:
+      file: 1701958715852_change_ip_address_size.sql
+      relativeToChangelogFile: true

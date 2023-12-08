@@ -74,14 +74,14 @@ public class DocumentServiceTest extends AbstractIntegrationTest {
     @DisplayName("Валидация запроса на сохранение (универсальный API)")
     void validateSaveRequestTest() {
         DocumentSaveRequest saveRequest = new DocumentSaveRequest();
-        saveRequest.setCurrency(RandomStringUtils.random(4));
+        saveRequest.setCurrency(RandomStringUtils.random(21));
         ModelArgumentException ex = assertThrows(ModelArgumentException.class, () -> saveOrUpdate(saveRequest));
 
         String msg = ex.getMessage();
         assertAll(
                 () -> assertTrue(msg.contains("The attribute \"docId\" must be filled")),
                 () -> assertTrue(msg.contains("The attribute \"dboOperation\" must be filled")),
-                () -> assertTrue(msg.contains("Attribute \"currency\" cannot contain more than 3 characters"))
+                () -> assertTrue(msg.contains("Attribute \"currency\" cannot contain more than 20 characters"))
         );
     }
 

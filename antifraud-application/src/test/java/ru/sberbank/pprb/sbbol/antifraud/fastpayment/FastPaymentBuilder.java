@@ -71,7 +71,7 @@ public class FastPaymentBuilder {
         operation.getDocument().setNumber(docNumber != null ? docNumber : Math.abs(RandomUtils.nextInt()));
         operation.getDocument().setDate(docDate != null ? docDate : LocalDate.now());
         operation.getDocument().setAmount(amount != null ? amount : Math.abs(RandomUtils.nextLong()));
-        operation.getDocument().setCurrency(currency != null ? currency : "RUB");
+        operation.getDocument().setCurrency(currency != null ? currency : RandomStringUtils.randomAlphabetic(20));
         operation.getDocument().setIdOperationOPKC(idOperationOPKC != null ? idOperationOPKC : RandomStringUtils.randomAlphanumeric(25));
         operation.getDocument().setDestination(destination != null ? destination : RandomStringUtils.randomAlphabetic(25));
 
