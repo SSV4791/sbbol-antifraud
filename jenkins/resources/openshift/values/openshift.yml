@@ -9,6 +9,8 @@ openshift:
   mesh_discovery_address: istiod-basic-install.ci02281165-control-plane.svc
 
 os_project:
+  app:
+    javaToolOptions: "--add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED"
   ports:
     - port: 8080
   host: "https://api.dev-terra000006-idm.ocp.delta.sbrf.ru:6443"

@@ -1,6 +1,17 @@
 project_name: antifraud
 allure_project_id: '37'
 
+documentation:
+  build:
+    outputdir: build/docs
+    command: >-
+      ./gradlew
+      -PtokenName=${env.TOKEN_NAME}
+      -PtokenPassword=${env.TOKEN_PASSWORD}
+      -Dgradle.wrapperUser=${env.TOKEN_NAME}
+      -Dgradle.wrapperPassword=${env.TOKEN_PASSWORD}
+      build -x test
+
 liquibase:
   changelog:
     path: antifraud-application/src/main/resources/db/changelog/changelog.yaml
@@ -105,6 +116,7 @@ release:
   image_name: 'CI02473994/CI03045533/antifraud'
   doc_path: 'docs/build/docs'
   params_folder: antifraud
+  folder_jar: 'antifraud-application/build/libs'
   qgm:
     repository: maven-distr
   build_gradle:
@@ -155,6 +167,6 @@ release:
   default_values:
     type: release
     checkmarx: true
-    params_folder: release/02.005.01
+    params_folder: release/02.006.00
     istio_tag: '2.5'
 
