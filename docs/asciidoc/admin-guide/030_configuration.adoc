@@ -23,6 +23,8 @@ openshift:
     enabled: true
 
 os_project:
+  app:
+    javaToolOptions: "--add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED"
   host: "https://api.dev-terra000006-idm.ocp.delta.sbrf.ru:6443"
   project: ci02281165-antifraud
   pods: 8

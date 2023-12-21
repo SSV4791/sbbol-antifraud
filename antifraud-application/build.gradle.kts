@@ -75,10 +75,12 @@ dependencies {
 tasks.register<Test>("generateVectorTest") {
     useJUnitPlatform()
     filter { includeTestsMatching("**changevector.generate.*") }
+    jvmArgs  ("--add-opens", "java.base/java.time=ALL-UNNAMED")
 }
 tasks.register<Test>("applyVectorTest") {
     useJUnitPlatform()
     filter { includeTestsMatching("**changevector.apply.*") }
+    jvmArgs  ("--add-opens", "java.base/java.time=ALL-UNNAMED")
 }
 
 tasks.test {
