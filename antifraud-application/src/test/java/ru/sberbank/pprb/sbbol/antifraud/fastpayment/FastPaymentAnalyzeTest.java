@@ -104,7 +104,7 @@ class FastPaymentAnalyzeTest extends FastPaymentIntegrationTest {
         String docId = UUID.randomUUID().toString();
         ApplicationException ex = assertThrows(ApplicationException.class, () -> send(new SendToAnalyzeRequest(docId)));
         String message = ex.getMessage();
-        Assertions.assertTrue(message.contains("DocId=" + docId + ", dboOperation=null entity not found"));
+        Assertions.assertTrue(message.contains("DocId=" + docId + ". Fast payment not found"));
     }
 
     @Test

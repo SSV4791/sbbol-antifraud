@@ -1,16 +1,20 @@
 package ru.sberbank.pprb.sbbol.antifraud.service.processor.payment;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.SendToAnalyzeRequest;
+import ru.sberbank.pprb.sbbol.antifraud.api.analyze.request.AnalyzeRequest;
 import ru.sberbank.pprb.sbbol.antifraud.api.analyze.response.AnalyzeResponse;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.RequestId;
 import ru.sberbank.pprb.sbbol.antifraud.api.data.payment.PaymentOperation;
+import ru.sberbank.pprb.sbbol.antifraud.api.exception.ApplicationException;
 import ru.sberbank.pprb.sbbol.antifraud.service.entity.payment.Payment;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.payment.PaymentMapper;
 import ru.sberbank.pprb.sbbol.antifraud.service.mapper.payment.PaymentSignMapper;
-import ru.sberbank.pprb.sbbol.antifraud.service.processor.ApiVersion;
-import ru.sberbank.pprb.sbbol.antifraud.service.processor.CommonPaymentAnalyzeProcessor;
+import ru.sberbank.pprb.sbbol.antifraud.service.processor.AnalyzeAbstractProcessor;
 import ru.sberbank.pprb.sbbol.antifraud.service.processor.Processor;
 import ru.sberbank.pprb.sbbol.antifraud.service.repository.payment.PaymentRepository;
 import ru.sberbank.pprb.sbbol.antifraud.service.validator.payment.PaymentModelValidator;
@@ -23,16 +27,19 @@ import java.util.UUID;
  * Осуществляет отправку данных в ФП ИС.
  */
 @Service
-public class PaymentProcessor implements Processor<PaymentOperation, SendToAnalyzeRequest> {
+public class PaymentProcessor extends AnalyzeAbstractProcessor implements Processor<PaymentOperation, SendToAnalyzeRequest> {
 
     private final PaymentRepository repository;
     private final PaymentMapper mapper;
-    private final CommonPaymentAnalyzeProcessor processor;
 
-    public PaymentProcessor(PaymentRepository repository, PaymentMapper mapper, CommonPaymentAnalyzeProcessor processor) {
+    public PaymentProcessor(PaymentRepository repository,
+                            PaymentMapper mapper,
+                            RestTemplate restTemplate,
+                            ObjectMapper objectMapper,
+                            HttpHeaders httpHeaders) {
+        super(mapper, restTemplate, httpHeaders, objectMapper);
         this.repository = repository;
         this.mapper = mapper;
-        this.processor = processor;
     }
 
     @Override
@@ -53,7 +60,15 @@ public class PaymentProcessor implements Processor<PaymentOperation, SendToAnaly
 
     @Override
     public AnalyzeResponse send(SendToAnalyzeRequest request) throws JsonProcessingException {
-        return processor.send(request, ApiVersion.PAYMENT_V2);
+        return sendToAnalyze(createPaymentAnalyzeRequest(request.getDocId()));
+    }
+
+    private AnalyzeRequest createPaymentAnalyzeRequest(String docId) {
+        Optional<Payment> searchResult = repository.findFirstByDocId(docId);
+        if (searchResult.isEmpty()) {
+            throw new ApplicationException("DocId=" + docId + ". Payment not found");
+        }
+        return mapper.toAnalyzeRequest(searchResult.get());
     }
 
 }
